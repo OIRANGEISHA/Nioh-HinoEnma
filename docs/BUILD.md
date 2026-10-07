@@ -13,6 +13,8 @@ On Windows x64 with the .NET Framework C# compiler:
 
 Output is under `artifacts/<configuration>/`. The optimized Release uses x64, Windows GUI subsystem and `asInvoker`; build outputs are ignored by Git.
 
+Packaged release assets use the separate `artifacts/dist/` directory. Windows paths are case-insensitive, so `Release` and `release` cannot name separate directories.
+
 ## Regenerate and compare payloads
 
 Python 3.10+ is optional for developer verification. Keep packages in the project directory:
