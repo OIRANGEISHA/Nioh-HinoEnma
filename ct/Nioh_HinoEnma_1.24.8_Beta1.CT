@@ -1,0 +1,2486 @@
+<?xml version='1.0' encoding='utf-8'?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>1000</ID>
+      <Description>"飞缘魔 Beta 1：在标题菜单启用"</Description>
+      <Options moHideChildren="1" moDeactivateChildrenAsWell="1" />
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+if syntaxcheck then return end
+if getAddressSafe("HE_Prototype_Code") then error("飞缘魔测试版已启用。") end
+local module
+for _, item in pairs(enumModules()) do if item.Name:lower()=="nioh.exe" then module=item end end
+if not module then error("请先选择 nioh.exe 进程。") end
+if getModuleSize("nioh.exe")~=50782208 then error("游戏模块与测试版不匹配。") end
+if md5file(module.PathToFile):lower()~="4870ca50224e886984cef33c251e92d6" then error("本表只适配已核对的 Steam 1.24.8 程序。") end
+_G.HE_Prototype_PID=getOpenedProcessID()
+{$asm}
+assert(nioh.exe+89B424,45 33 C0 8B D0 8B C8 E8 B0 5F 01 00)
+assert(nioh.exe+8A28FB,45 33 C0 8D 4A 63 E8 5A 28 EB FF)
+assert(nioh.exe+760B33,83 FB 64 75 76)
+assert(nioh.exe+7BC3E9,8B 83 08 53 0B 00)
+assert(nioh.exe+8A2A31,80 BB 01 01 00 00 00)
+assert(nioh.exe+882639,44 38 B6 CD 05 00 00)
+assert(nioh.exe+721044,44 0F BE 42 0C)
+assert(nioh.exe+721099,44 0F BE 47 0E)
+assert(nioh.exe+751156,83 78 48 FF 0F 85 E2 00 00 00)
+assert(nioh.exe+75129F,48 C7 87 30 05 00 00 FF FF FF FF)
+assert(nioh.exe+855FF7,8B 01 48 C1 E8 0A)
+assert(nioh.exe+75185D,45 84 F6 75 2D)
+assert(nioh.exe+751160,49 8B C5 4D 85 C0 48 0F 45 C2)
+assert(nioh.exe+751862,83 BF 4C 05 00 00 00 74 24)
+assert(nioh.exe+7C7F75,48 8D BE D8 09 00 00)
+assert(nioh.exe+7C82DB,E8 A0 00 FF FF)
+assert(nioh.exe+C801D7,48 89 B4 24 88 00 00 00)
+assert(nioh.exe+C8226D,48 8D AE 28 01 00 00)
+assert(nioh.exe+C81FCB,48 8B 4B 60 BA 18 00 00 00)
+assert(nioh.exe+C81C19,48 8B 4B 60 BA 16 00 00 00)
+assert(nioh.exe+751296,48 8B 44 24 50 48 89 43 18)
+alloc(HE_Prototype_Code,10000,nioh.exe+89B424)
+define(HE_Prototype_Data,HE_Prototype_Code+F000)
+registersymbol(HE_Prototype_Code)
+registersymbol(HE_Prototype_Data)
+label(HE_Preload)
+registersymbol(HE_Preload)
+label(HE_Spawn)
+registersymbol(HE_Spawn)
+label(HE_PlayerInit)
+registersymbol(HE_PlayerInit)
+label(HE_Skin)
+registersymbol(HE_Skin)
+label(HE_Equipment)
+registersymbol(HE_Equipment)
+label(HE_EquipmentPrepare)
+registersymbol(HE_EquipmentPrepare)
+label(HE_InputA)
+registersymbol(HE_InputA)
+label(HE_InputB)
+registersymbol(HE_InputB)
+label(HE_Interaction)
+registersymbol(HE_Interaction)
+label(HE_QueuedDoor)
+registersymbol(HE_QueuedDoor)
+label(HE_ActionCamera)
+registersymbol(HE_ActionCamera)
+label(HE_HimorogiFragment)
+registersymbol(HE_HimorogiFragment)
+label(HE_Kodama)
+registersymbol(HE_Kodama)
+label(HE_Consumables)
+registersymbol(HE_Consumables)
+label(HE_AttributeInit)
+registersymbol(HE_AttributeInit)
+label(HE_AttributeOverlay)
+registersymbol(HE_AttributeOverlay)
+label(HE_WeaponHud)
+registersymbol(HE_WeaponHud)
+label(HE_WeaponHudRefresh)
+registersymbol(HE_WeaponHudRefresh)
+label(HE_WeaponHudMeleeSwitch)
+registersymbol(HE_WeaponHudMeleeSwitch)
+label(HE_WeaponHudRangedSwitch)
+registersymbol(HE_WeaponHudRangedSwitch)
+label(HE_Revenant)
+registersymbol(HE_Revenant)
+label(preload_selected)
+label(preload_done)
+label(spawn_original)
+label(player_init_no)
+label(player_init_yes)
+label(skin_original)
+label(skin_done)
+label(equipment_original)
+label(equipment_prepare_original)
+label(input_a_attack)
+label(input_a_mode_two)
+label(input_a_remap)
+label(input_a_done)
+label(input_b_attack)
+label(input_b_mode_two)
+label(input_b_remap)
+label(input_b_done)
+label(generic_player_check)
+label(generic_object_check)
+label(generic_scoped_key)
+label(generic_extended_check)
+label(generic_immediate)
+label(generic_ready)
+label(generic_original)
+label(queued_door_object)
+label(queued_door_done)
+label(action_camera_role)
+label(action_camera_done)
+label(fragment_role)
+label(fragment_original)
+label(kodama_player)
+label(kodama_original)
+label(consumable_role)
+label(consumable_effect)
+label(consumable_high_type)
+label(consumable_approved)
+label(consumable_next)
+label(consumable_original)
+label(attr_init_done_template)
+label(attr_init_failed)
+label(attr_init_done)
+label(attr_overlay_done_template)
+label(attr_copy_boss)
+label(attr_copy_reference)
+label(attr_sole_weapon_second)
+label(attr_sole_weapon_done)
+label(attr_restore_boss_weapon)
+label(attr_save_player_thresholds)
+label(attr_restore_boss_status_records)
+label(attr_overlay_done)
+label(weapon_hud_template)
+label(hud_sole_weapon_second)
+label(hud_sole_weapon_done)
+label(weapon_hud_done)
+label(hud_refresh_template)
+label(hud_refresh_sole_weapon_second)
+label(hud_refresh_sole_weapon_done)
+label(hud_refresh_done)
+label(hud_melee_switch_template)
+label(hud_melee_switch_sole_weapon_second)
+label(hud_melee_switch_sole_weapon_done)
+label(hud_melee_switch_done)
+label(hud_ranged_switch_template)
+label(hud_ranged_switch_sole_weapon_second)
+label(hud_ranged_switch_sole_weapon_done)
+label(hud_ranged_switch_done)
+label(revenant_role)
+label(revenant_done)
+HE_Prototype_Code+0:
+HE_Preload:
+
+sub rsp, 30
+mov dword ptr [rsp+20], eax
+xor r8d, r8d
+mov edx, eax
+mov ecx, eax
+call nioh.exe+8B13E0
+mov qword ptr [rsp+28], rax
+cmp dword ptr [rsp+20], 64
+jne preload_done
+mov r11, HE_Prototype_Data
+mov dword ptr [r11+04], 0
+mov ecx, dword ptr [r11]
+cmp ecx, 58E5E
+je preload_selected
+cmp ecx, 51BE1
+jne preload_done
+preload_selected:
+call nioh.exe+8B0560
+mov r11, HE_Prototype_Data
+mov dword ptr [r11+04], eax
+mov ecx, eax
+mov edx, eax
+xor r8d, r8d
+call nioh.exe+8B13E0
+mov r11, HE_Prototype_Data
+inc dword ptr [r11+18]
+preload_done:
+mov rax, qword ptr [rsp+28]
+add rsp, 30
+jmp nioh.exe+89B430
+
+HE_Prototype_Code+400:
+HE_Spawn:
+
+xor r8d, r8d
+lea ecx, [rdx+63]
+mov r11, HE_Prototype_Data
+cmp dword ptr [r11+04], 0
+je spawn_original
+mov ecx, dword ptr [r11+04]
+spawn_original:
+call nioh.exe+755160
+mov r11, HE_Prototype_Data
+mov qword ptr [r11+10], rax
+inc dword ptr [r11+1C]
+jmp nioh.exe+8A2906
+
+HE_Prototype_Code+800:
+HE_PlayerInit:
+
+cmp ebx, 64
+je player_init_yes
+push rax
+mov rax, HE_Prototype_Data
+cmp dword ptr [rax+04], 0
+je player_init_no
+cmp ebx, dword ptr [rax+04]
+jne player_init_no
+cmp word ptr [rsi+06], 1
+jne player_init_no
+mov qword ptr [rax+10], rsi
+inc dword ptr [rax+20]
+pop rax
+jmp player_init_yes
+player_init_no:
+pop rax
+jmp nioh.exe+760BAE
+player_init_yes:
+jmp nioh.exe+760B38
+
+HE_Prototype_Code+C00:
+HE_Skin:
+
+pushfq
+push rcx
+mov rcx, HE_Prototype_Data
+cmp dword ptr [rcx+04], 0
+je skin_original
+xor eax, eax
+jmp skin_done
+skin_original:
+mov eax, dword ptr [rbx+B5308]
+skin_done:
+pop rcx
+popfq
+jmp nioh.exe+7BC3EF
+
+HE_Prototype_Code+1000:
+HE_Equipment:
+
+push rax
+mov rax, HE_Prototype_Data
+cmp dword ptr [rax+04], 0
+je equipment_original
+cmp rdi, qword ptr [rax+10]
+jne equipment_original
+pop rax
+jmp nioh.exe+8A2A9A
+equipment_original:
+pop rax
+cmp byte ptr [rbx+101], 0
+jmp nioh.exe+8A2A38
+
+HE_Prototype_Code+1400:
+HE_EquipmentPrepare:
+
+push rax
+mov rax, HE_Prototype_Data
+cmp dword ptr [rax+04], 0
+je equipment_prepare_original
+pop rax
+jmp nioh.exe+882642
+equipment_prepare_original:
+pop rax
+cmp byte ptr [rsi+5CD], r14b
+jmp nioh.exe+882640
+
+HE_Prototype_Code+1800:
+HE_InputA:
+
+movsx r8d, byte ptr [rdx+0C]
+push rax
+mov rax, HE_Prototype_Data
+mov rdx, qword ptr [rbx+50]
+test rdx, rdx
+je input_a_done
+cmp dword ptr [rax+04], 0
+je input_a_done
+cmp rdx, qword ptr [rax+10]
+jne input_a_done
+cmp word ptr [rdx+06], 1
+jne input_a_done
+cmp dword ptr [rdx+EF0], 0
+jne input_a_done
+mov rdx, qword ptr [rdx+E90]
+test rdx, rdx
+je input_a_done
+test byte ptr [rdx+04], 1
+jne input_a_done
+test byte ptr [rdx+04], 2
+jne input_a_done
+test r10d, r10d
+jne input_a_done
+cmp r8d, 1
+jne input_a_done
+cmp byte ptr [rdi+0E], 1
+jne input_a_done
+cmp byte ptr [rdi+12], 0
+jne input_a_done
+inc dword ptr [rax+24]
+xor edx, edx
+cmp byte ptr [rax+28], 1
+cmove r8d, edx
+cmp byte ptr [rdi+0D], 6
+jne input_a_attack
+cmp byte ptr [rax+29], 2
+je input_a_done
+mov edx, 2D
+cmp ecx, 0
+cmove ecx, edx
+mov edx, 2E
+cmp ecx, 1
+cmove ecx, edx
+jmp input_a_done
+input_a_attack:
+cmp ecx, 6
+jne input_a_done
+cmp byte ptr [rax+29], 2
+je input_a_mode_two
+cmp byte ptr [rax+29], 1
+jne input_a_done
+mov edx, 0B
+jmp input_a_remap
+input_a_mode_two:
+mov edx, 26
+input_a_remap:
+cmp byte ptr [rdi+0D], 0
+cmove ecx, edx
+cmp byte ptr [rdi+0D], 1
+cmove ecx, edx
+input_a_done:
+pop rax
+jmp nioh.exe+721049
+
+HE_Prototype_Code+1C00:
+HE_InputB:
+
+movsx r8d, byte ptr [rdi+0E]
+push rax
+mov rax, HE_Prototype_Data
+mov rdx, qword ptr [rbx+50]
+test rdx, rdx
+je input_b_done
+cmp dword ptr [rax+04], 0
+je input_b_done
+cmp rdx, qword ptr [rax+10]
+jne input_b_done
+cmp word ptr [rdx+06], 1
+jne input_b_done
+cmp dword ptr [rdx+EF0], 0
+jne input_b_done
+mov rdx, qword ptr [rdx+E90]
+test rdx, rdx
+je input_b_done
+test byte ptr [rdx+04], 1
+jne input_b_done
+test byte ptr [rdx+04], 2
+jne input_b_done
+test r10d, r10d
+jne input_b_done
+cmp r8d, 1
+jne input_b_done
+cmp byte ptr [rdi+0C], 1
+jne input_b_done
+cmp byte ptr [rdi+10], 0
+jne input_b_done
+inc dword ptr [rax+24]
+xor edx, edx
+cmp byte ptr [rax+28], 1
+cmove r8d, edx
+cmp byte ptr [rdi+0B], 6
+jne input_b_attack
+cmp byte ptr [rax+29], 2
+je input_b_done
+mov edx, 2D
+cmp ecx, 0
+cmove ecx, edx
+mov edx, 2E
+cmp ecx, 1
+cmove ecx, edx
+jmp input_b_done
+input_b_attack:
+cmp ecx, 6
+jne input_b_done
+cmp byte ptr [rax+29], 2
+je input_b_mode_two
+cmp byte ptr [rax+29], 1
+jne input_b_done
+mov edx, 0B
+jmp input_b_remap
+input_b_mode_two:
+mov edx, 26
+input_b_remap:
+cmp byte ptr [rdi+0B], 0
+cmove ecx, edx
+cmp byte ptr [rdi+0B], 1
+cmove ecx, edx
+input_b_done:
+pop rax
+jmp nioh.exe+72109E
+
+HE_Prototype_Code+2000:
+HE_Interaction:
+
+push r10
+push r11
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+2A], 1
+je generic_player_check
+cmp byte ptr [r11+2A], 2
+jne generic_original
+generic_player_check:
+cmp dword ptr [r11+04], 0
+je generic_original
+mov r10, qword ptr [rdi+50]
+test r10, r10
+je generic_original
+cmp r10, qword ptr [r11+10]
+jne generic_original
+cmp word ptr [r10+06], 1
+jne generic_original
+cmp dword ptr [r10], 58E5E
+je generic_object_check
+cmp dword ptr [r10], 51BE1
+jne generic_original
+generic_object_check:
+test r8, r8
+je generic_original
+cmp word ptr [r8+04], 2
+jne generic_original
+cmp byte ptr [r11+2A], 2
+je generic_extended_check
+cmp dword ptr [rax+48], 6
+jne generic_scoped_key
+inc dword ptr [r11+2C]
+jmp generic_ready
+generic_scoped_key:
+cmp dword ptr [rax+48], 0
+jne generic_original
+cmp dword ptr [r8], 1
+jne generic_original
+cmp word ptr [r8+06], 1
+jne generic_original
+inc dword ptr [r11+30]
+jmp generic_ready
+generic_extended_check:
+cmp byte ptr [rax+0A], 0
+jne generic_original
+cmp dword ptr [rax+48], 0
+jl generic_original
+cmp qword ptr [rax+4C], 0
+jne generic_original
+cmp dword ptr [rax+48], 15
+jne generic_immediate
+cmp dword ptr [r8], 2
+je generic_original
+generic_immediate:
+inc dword ptr [r11+34]
+mov r10d, dword ptr [rax+48]
+mov dword ptr [r11+38], r10d
+mov r10d, dword ptr [r8]
+mov dword ptr [r11+3C], r10d
+generic_ready:
+pop r11
+pop r10
+jmp nioh.exe+751160
+generic_original:
+pop r11
+pop r10
+cmp dword ptr [rax+48], -1
+jne nioh.exe+751242
+jmp nioh.exe+751160
+
+HE_Prototype_Code+2400:
+HE_QueuedDoor:
+
+mov qword ptr [rdi+530], -1
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+pushfq
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+2A], 2
+jne queued_door_done
+cmp dword ptr [r11+04], 0
+je queued_door_done
+mov rdx, qword ptr [rdi+50]
+test rdx, rdx
+je queued_door_done
+cmp rdx, qword ptr [r11+10]
+jne queued_door_done
+cmp word ptr [rdx+06], 1
+jne queued_door_done
+cmp dword ptr [rdx], 58E5E
+je queued_door_object
+cmp dword ptr [rdx], 51BE1
+jne queued_door_done
+queued_door_object:
+mov rcx, qword ptr [rdi+510]
+test rcx, rcx
+je queued_door_done
+cmp word ptr [rcx+04], 2
+jne queued_door_done
+cmp dword ptr [rcx], 2
+jne queued_door_done
+mov r10, qword ptr [rdi+528]
+test r10, r10
+je queued_door_done
+cmp qword ptr [r10], rcx
+jne queued_door_done
+cmp word ptr [r10+08], 0101
+jne queued_door_done
+cmp byte ptr [r10+0A], 0
+jne queued_door_done
+cmp dword ptr [r10+48], 15
+jne queued_door_done
+cmp qword ptr [r10+4C], 0
+jne queued_door_done
+sub rsp, 80
+movdqu xmmword ptr [rsp+20], xmm0
+movdqu xmmword ptr [rsp+30], xmm1
+movdqu xmmword ptr [rsp+40], xmm2
+movdqu xmmword ptr [rsp+50], xmm3
+movdqu xmmword ptr [rsp+60], xmm4
+movdqu xmmword ptr [rsp+70], xmm5
+mov byte ptr [r10+0A], 1
+call nioh.exe+744D50
+mov r11, HE_Prototype_Data
+inc dword ptr [r11+40]
+movdqu xmm0, xmmword ptr [rsp+20]
+movdqu xmm1, xmmword ptr [rsp+30]
+movdqu xmm2, xmmword ptr [rsp+40]
+movdqu xmm3, xmmword ptr [rsp+50]
+movdqu xmm4, xmmword ptr [rsp+60]
+movdqu xmm5, xmmword ptr [rsp+70]
+add rsp, 80
+queued_door_done:
+popfq
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+jmp nioh.exe+7512AA
+
+HE_Prototype_Code+2800:
+HE_ActionCamera:
+
+mov eax, dword ptr [rcx]
+shr rax, 0A
+pushfq
+push r10
+push r11
+mov r11, HE_Prototype_Data
+cmp dword ptr [r11+04], 0
+je action_camera_done
+cmp rdx, qword ptr [r11+10]
+jne action_camera_done
+test rdx, rdx
+je action_camera_done
+cmp word ptr [rdx+06], 1
+jne action_camera_done
+cmp dword ptr [rdx], 58E5E
+je action_camera_role
+cmp dword ptr [rdx], 51BE1
+jne action_camera_done
+action_camera_role:
+cmp dword ptr [rdx+EF0], 0
+jne action_camera_done
+mov r10, qword ptr [rdx+E90]
+test r10, r10
+je action_camera_done
+cmp dword ptr [r10+0C], 1
+jne action_camera_done
+test al, 1
+je action_camera_done
+and eax, FFFFFFFE
+inc dword ptr [r11+44]
+action_camera_done:
+pop r11
+pop r10
+popfq
+jmp nioh.exe+855FFD
+
+HE_Prototype_Code+2C00:
+HE_HimorogiFragment:
+
+test r14b, r14b
+jne nioh.exe+75188F
+pushfq
+push rax
+push r10
+push r11
+mov r11, HE_Prototype_Data
+cmp dword ptr [r11+04], 0
+je fragment_original
+mov r10, qword ptr [rdi+50]
+test r10, r10
+je fragment_original
+cmp r10, qword ptr [r11+10]
+jne fragment_original
+mov rax, nioh.exe+18A0490
+cmp r10, qword ptr [rax]
+jne fragment_original
+cmp word ptr [r10+06], 1
+jne fragment_original
+cmp dword ptr [r10], 58E5E
+je fragment_role
+cmp dword ptr [r10], 51BE1
+jne fragment_original
+fragment_role:
+cmp dword ptr [r10+EF0], 0
+jne fragment_original
+mov rax, qword ptr [r10+E90]
+test rax, rax
+je fragment_original
+cmp dword ptr [rax+0C], 1
+jne fragment_original
+cmp byte ptr [rdi+555], 1
+jne fragment_original
+cmp dword ptr [rdi+548], 1817
+jne fragment_original
+cmp dword ptr [rdi+54C], 1
+jne fragment_original
+cmp dword ptr [rdi+550], 1
+jne fragment_original
+cmp byte ptr [rdi+554], 0
+jne fragment_original
+inc dword ptr [r11+48]
+pop r11
+pop r10
+pop rax
+popfq
+jmp nioh.exe+75188F
+fragment_original:
+pop r11
+pop r10
+pop rax
+popfq
+jmp nioh.exe+751862
+
+HE_Prototype_Code+3000:
+HE_Kodama:
+
+mov rax, r13
+test r8, r8
+cmovne rax, rdx
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+pushfq
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+2A], 2
+jne kodama_original
+cmp dword ptr [r11+04], 0
+je kodama_original
+mov r10, qword ptr [rdi+50]
+test r10, r10
+je kodama_original
+cmp r10, qword ptr [r11+10]
+jne kodama_original
+mov rcx, nioh.exe+18A0490
+cmp r10, qword ptr [rcx]
+jne kodama_original
+cmp word ptr [r10+06], 1
+jne kodama_original
+cmp dword ptr [r10], 58E5E
+je kodama_player
+cmp dword ptr [r10], 51BE1
+jne kodama_original
+kodama_player:
+cmp dword ptr [r10+EF0], 0
+jne kodama_original
+mov rcx, qword ptr [r10+E90]
+test rcx, rcx
+je kodama_original
+cmp dword ptr [rcx+0C], 1
+jne kodama_original
+test r8, r8
+je kodama_original
+test rax, rax
+je kodama_original
+cmp word ptr [r8+04], 2
+jne kodama_original
+cmp qword ptr [rax], r8
+jne kodama_original
+cmp word ptr [rax+08], 0101
+jne kodama_original
+cmp byte ptr [rax+0A], 0
+jne kodama_original
+cmp dword ptr [rax+48], 36
+jne kodama_original
+cmp qword ptr [rax+4C], 0
+jne kodama_original
+cmp byte ptr [rdi+4E9], 1
+jne kodama_original
+sub rsp, 80
+movdqu xmmword ptr [rsp+20], xmm0
+movdqu xmmword ptr [rsp+30], xmm1
+movdqu xmmword ptr [rsp+40], xmm2
+movdqu xmmword ptr [rsp+50], xmm3
+movdqu xmmword ptr [rsp+60], xmm4
+movdqu xmmword ptr [rsp+70], xmm5
+mov byte ptr [rax+0A], 1
+mov rcx, r8
+mov rdx, r10
+call nioh.exe+744D50
+mov r11, HE_Prototype_Data
+inc dword ptr [r11+4C]
+movdqu xmm0, xmmword ptr [rsp+20]
+movdqu xmm1, xmmword ptr [rsp+30]
+movdqu xmm2, xmmword ptr [rsp+40]
+movdqu xmm3, xmmword ptr [rsp+50]
+movdqu xmm4, xmmword ptr [rsp+60]
+movdqu xmm5, xmmword ptr [rsp+70]
+add rsp, 80
+popfq
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+jmp nioh.exe+751242
+kodama_original:
+popfq
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+jmp nioh.exe+75116A
+
+HE_Prototype_Code+3400:
+HE_Consumables:
+
+cmp dword ptr [rdi+54C], 0
+je nioh.exe+75188F
+pushfq
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+push rbx
+push rsi
+sub rsp, 90
+movdqu xmmword ptr [rsp+20], xmm0
+movdqu xmmword ptr [rsp+30], xmm1
+movdqu xmmword ptr [rsp+40], xmm2
+movdqu xmmword ptr [rsp+50], xmm3
+movdqu xmmword ptr [rsp+60], xmm4
+movdqu xmmword ptr [rsp+70], xmm5
+mov byte ptr [rsp+80], 0
+mov r11, HE_Prototype_Data
+cmp dword ptr [r11+04], 0
+je consumable_original
+mov r10, qword ptr [rdi+50]
+test r10, r10
+je consumable_original
+cmp r10, qword ptr [r11+10]
+jne consumable_original
+mov rax, nioh.exe+18A0490
+cmp r10, qword ptr [rax]
+jne consumable_original
+cmp word ptr [r10+06], 1
+jne consumable_original
+cmp dword ptr [r10], 58E5E
+je consumable_role
+cmp dword ptr [r10], 51BE1
+jne consumable_original
+consumable_role:
+cmp dword ptr [r10+EF0], 0
+jne consumable_original
+mov rax, qword ptr [r10+E90]
+test rax, rax
+je consumable_original
+cmp dword ptr [rax+0C], 1
+jne consumable_original
+cmp byte ptr [rdi+555], 1
+jne consumable_original
+cmp dword ptr [rdi+548], 0
+jl consumable_original
+cmp dword ptr [rdi+550], 1
+jne consumable_original
+cmp byte ptr [rdi+554], 0
+jne consumable_original
+mov eax, dword ptr [rdi+54C]
+sub eax, 1
+cmp eax, 2
+ja consumable_original
+mov rcx, nioh.exe+1871720
+mov rcx, qword ptr [rcx]
+test rcx, rcx
+je consumable_original
+mov rcx, qword ptr [rcx+20]
+test rcx, rcx
+je consumable_original
+mov rcx, qword ptr [rcx+428]
+test rcx, rcx
+je consumable_original
+mov edx, dword ptr [rdi+548]
+call nioh.exe+7324E0
+test rax, rax
+je consumable_original
+mov ecx, dword ptr [rdi+548]
+cmp dword ptr [rax], ecx
+jne consumable_original
+cmp word ptr [rax+04], 1
+jne consumable_original
+test byte ptr [rax+104], 1
+je consumable_original
+mov ecx, dword ptr [rdi+54C]
+cmp dword ptr [rax+10C], ecx
+jne consumable_original
+mov rsi, rax
+xor ebx, ebx
+consumable_effect:
+mov edx, dword ptr [rsi+rbx*4+110]
+test edx, edx
+je consumable_next
+mov dword ptr [rsp+84], edx
+mov rcx, nioh.exe+1871720
+mov rcx, qword ptr [rcx]
+test rcx, rcx
+je consumable_original
+mov rcx, qword ptr [rcx+148]
+test rcx, rcx
+je consumable_original
+mov rcx, qword ptr [rcx+428]
+test rcx, rcx
+je consumable_original
+call nioh.exe+7656B0
+test rax, rax
+je consumable_original
+mov ecx, dword ptr [rsp+84]
+cmp dword ptr [rax], ecx
+jne consumable_original
+mov ecx, dword ptr [rax+04]
+cmp ecx, 64
+jae consumable_high_type
+mov rdx, 60c2042780800006
+bt rdx, rcx
+jnc consumable_original
+jmp consumable_approved
+consumable_high_type:
+cmp ecx, 71
+je consumable_approved
+cmp ecx, 226
+jne consumable_original
+consumable_approved:
+mov byte ptr [rsp+80], 1
+consumable_next:
+inc ebx
+cmp ebx, 3
+jb consumable_effect
+cmp byte ptr [rsp+80], 1
+jne consumable_original
+mov r11, HE_Prototype_Data
+inc dword ptr [r11+50]
+mov eax, dword ptr [rdi+548]
+mov dword ptr [r11+54], eax
+
+movdqu xmm0, xmmword ptr [rsp+20]
+movdqu xmm1, xmmword ptr [rsp+30]
+movdqu xmm2, xmmword ptr [rsp+40]
+movdqu xmm3, xmmword ptr [rsp+50]
+movdqu xmm4, xmmword ptr [rsp+60]
+movdqu xmm5, xmmword ptr [rsp+70]
+add rsp, 90
+pop rsi
+pop rbx
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+jmp nioh.exe+75188F
+consumable_original:
+
+movdqu xmm0, xmmword ptr [rsp+20]
+movdqu xmm1, xmmword ptr [rsp+30]
+movdqu xmm2, xmmword ptr [rsp+40]
+movdqu xmm3, xmmword ptr [rsp+50]
+movdqu xmm4, xmmword ptr [rsp+60]
+movdqu xmm5, xmmword ptr [rsp+70]
+add rsp, 90
+pop rsi
+pop rbx
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+jmp nioh.exe+75186B
+
+HE_Prototype_Code+3800:
+HE_AttributeInit:
+
+pushfq
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+sub rsp, 80
+movups xmmword ptr [rsp+20], xmm0
+movups xmmword ptr [rsp+30], xmm1
+movups xmmword ptr [rsp+40], xmm2
+movups xmmword ptr [rsp+50], xmm3
+movups xmmword ptr [rsp+60], xmm4
+movups xmmword ptr [rsp+70], xmm5
+
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+58], 1
+jne attr_init_done
+cmp r14, qword ptr [r11+10]
+jne attr_init_done
+mov rax, nioh.exe+18A0490
+cmp r14, qword ptr [rax]
+jne attr_init_done
+mov eax, dword ptr [r14]
+cmp eax, 58E5E
+je attr_init_done_template
+cmp eax, 51BE1
+jne attr_init_done
+attr_init_done_template:
+cmp eax, dword ptr [r11+04]
+jne attr_init_done
+cmp word ptr [r14+06], 1
+jne attr_init_done
+cmp dword ptr [r14+EF0], 0
+jne attr_init_done
+cmp r14, qword ptr [rsi]
+jne attr_init_done
+cmp rsi, qword ptr [r14+240]
+jne attr_init_done
+cmp qword ptr [rsi+B98], 0
+jne attr_init_done
+mov rax, qword ptr [r14+E90]
+test rax, rax
+je attr_init_done
+test byte ptr [rax+04], 3
+jne attr_init_done
+cmp dword ptr [rax+0C], 1
+jne attr_init_done
+
+mov rax, qword ptr [rsi+B70]
+or rax, qword ptr [rsi+B78]
+or rax, qword ptr [rsi+B80]
+or rax, qword ptr [rsi+B88]
+jne attr_init_done
+lea rcx, [rsi+9D8]
+mov edx, 1
+call nioh.exe+7AE650
+mov r11, HE_Prototype_Data
+cmp qword ptr [rsi+B70], 0
+je attr_init_failed
+cmp qword ptr [rsi+B80], 0
+je attr_init_failed
+inc dword ptr [r11+5C]
+jmp attr_init_done
+attr_init_failed:
+inc dword ptr [r11+88]
+attr_init_done:
+
+movups xmm0, xmmword ptr [rsp+20]
+movups xmm1, xmmword ptr [rsp+30]
+movups xmm2, xmmword ptr [rsp+40]
+movups xmm3, xmmword ptr [rsp+50]
+movups xmm4, xmmword ptr [rsp+60]
+movups xmm5, xmmword ptr [rsp+70]
+add rsp, 80
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+
+lea rdi, [rsi+9D8]
+jmp nioh.exe+7C7F7C
+
+HE_Prototype_Code+3C00:
+HE_AttributeOverlay:
+call nioh.exe+7B8380
+
+pushfq
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+sub rsp, C80
+movups xmmword ptr [rsp+20], xmm0
+movups xmmword ptr [rsp+30], xmm1
+movups xmmword ptr [rsp+40], xmm2
+movups xmmword ptr [rsp+50], xmm3
+movups xmmword ptr [rsp+60], xmm4
+movups xmmword ptr [rsp+70], xmm5
+
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+58], 1
+jne attr_overlay_done
+cmp r14, qword ptr [r11+10]
+jne attr_overlay_done
+mov rax, nioh.exe+18A0490
+cmp r14, qword ptr [rax]
+jne attr_overlay_done
+mov eax, dword ptr [r14]
+cmp eax, 58E5E
+je attr_overlay_done_template
+cmp eax, 51BE1
+jne attr_overlay_done
+attr_overlay_done_template:
+cmp eax, dword ptr [r11+04]
+jne attr_overlay_done
+cmp word ptr [r14+06], 1
+jne attr_overlay_done
+cmp dword ptr [r14+EF0], 0
+jne attr_overlay_done
+cmp r14, qword ptr [rsi]
+jne attr_overlay_done
+cmp rsi, qword ptr [r14+240]
+jne attr_overlay_done
+cmp qword ptr [rsi+B98], 0
+jne attr_overlay_done
+mov rax, qword ptr [r14+E90]
+test rax, rax
+je attr_overlay_done
+test byte ptr [rax+04], 3
+jne attr_overlay_done
+cmp dword ptr [rax+0C], 1
+jne attr_overlay_done
+
+lea rax, [rsi+9D8]
+cmp rax, r12
+jne attr_overlay_done
+cmp qword ptr [r12+198], 0
+je attr_overlay_done
+cmp qword ptr [r12+1A8], 0
+je attr_overlay_done
+xor ecx, ecx
+attr_copy_boss:
+mov eax, dword ptr [r12+rcx]
+mov dword ptr [rsp+rcx+80], eax
+add ecx, 4
+cmp ecx, 198
+jb attr_copy_boss
+lea rcx, [rsp+3C0]
+call nioh.exe+7AE4B0
+mov rcx, qword ptr [r12+1A8]
+call nioh.exe+7B3230
+mov r10, qword ptr [r12+1A8]
+mov dword ptr [r10], 1
+mov rax, 0005000500050005
+mov qword ptr [r10+04], rax
+mov qword ptr [r10+0C], rax
+lea rdx, [rsp+3C0]
+mov rcx, r12
+xor r8d, r8d
+xor r9d, r9d
+call nioh.exe+7B8FA0
+xor ecx, ecx
+attr_copy_reference:
+mov eax, dword ptr [r12+rcx]
+mov dword ptr [rsp+rcx+220], eax
+add ecx, 4
+cmp ecx, 198
+jb attr_copy_reference
+mov rcx, qword ptr [r12+1A8]
+call nioh.exe+7BC440
+mov byte ptr [r12+1B8], 0
+lea rcx, [rsp+3C0]
+call nioh.exe+7BBB20
+mov al, byte ptr [rsi+9CC]
+
+test al, al
+je attr_sole_weapon_second
+cmp dword ptr [rsp+3C0], -1
+jne attr_sole_weapon_done
+cmp dword ptr [rsp+3C0+C8], -1
+je attr_sole_weapon_done
+xor eax, eax
+jmp attr_sole_weapon_done
+attr_sole_weapon_second:
+cmp dword ptr [rsp+3C0+C8], -1
+jne attr_sole_weapon_done
+cmp dword ptr [rsp+3C0], -1
+je attr_sole_weapon_done
+mov al, 1
+attr_sole_weapon_done:
+mov byte ptr [rsp+C64], al
+lea rdx, [rsp+3C0]
+mov rcx, r12
+xor r8d, r8d
+xor r9d, r9d
+call nioh.exe+7B8FA0
+
+mov r11, HE_Prototype_Data
+inc dword ptr [r11+60]
+mov eax, dword ptr [rsp+80]
+mov dword ptr [r11+64], eax
+mov eax, dword ptr [r12]
+sub eax, dword ptr [rsp+220]
+mov dword ptr [r11+68], eax
+mov eax, dword ptr [rsp+84]
+mov dword ptr [r11+6C], eax
+mov eax, dword ptr [r12+4]
+sub eax, dword ptr [rsp+224]
+mov dword ptr [r11+70], eax
+mov eax, dword ptr [rsp+160]
+mov dword ptr [r11+74], eax
+mov eax, dword ptr [r12+E0]
+sub eax, dword ptr [rsp+300]
+mov dword ptr [r11+78], eax
+mov eax, dword ptr [rsp+88]
+mov dword ptr [r11+7C], eax
+mov eax, dword ptr [r12+8]
+sub eax, dword ptr [rsp+228]
+mov dword ptr [r11+80], eax
+
+xor edx, edx
+cmp byte ptr [rsp+C64], 0
+sete dl
+mov dword ptr [r11+8C], edx
+imul eax, edx, C8
+mov eax, dword ptr [rsp+rax+3C0]
+mov dword ptr [r11+98], eax
+imul edx, edx, 28
+mov eax, dword ptr [r12+rdx+8]
+mov dword ptr [r11+90], eax
+mov ecx, dword ptr [rsp+rdx+228]
+mov dword ptr [r11+94], ecx
+sub eax, ecx
+mov dword ptr [r11+80], eax
+inc dword ptr [r11+9C]
+mov edx, 8
+attr_restore_boss_weapon:
+mov r8d, dword ptr [r11+80]
+xor eax, eax
+test r8d, r8d
+cmovs r8d, eax
+add r8d, dword ptr [rsp+rdx+80]
+movups xmm0, xmmword ptr [rsp+rdx+80]
+movups xmm1, xmmword ptr [rsp+rdx+90]
+mov rax, qword ptr [rsp+rdx+A0]
+movups xmmword ptr [r12+rdx], xmm0
+movups xmmword ptr [r12+rdx+10], xmm1
+mov qword ptr [r12+rdx+20], rax
+mov dword ptr [r12+rdx], r8d
+add edx, 28
+cmp edx, D0
+jb attr_restore_boss_weapon
+
+mov edx, 124
+mov ecx, C70
+attr_save_player_thresholds:
+mov ax, word ptr [r12+rdx]
+mov word ptr [rsp+rcx], ax
+add edx, 8
+add ecx, 2
+cmp edx, 15C
+jb attr_save_player_thresholds
+mov ax, word ptr [r12+15C]
+mov word ptr [rsp+C7E], ax
+mov edx, 124
+attr_restore_boss_status_records:
+mov eax, dword ptr [rsp+rdx+80]
+mov dword ptr [r12+rdx], eax
+add edx, 4
+cmp edx, 170
+jb attr_restore_boss_status_records
+
+
+mov eax, dword ptr [r12+0]
+sub eax, dword ptr [rsp+220]
+add eax, dword ptr [rsp+80]
+mov dword ptr [r12+0], eax
+
+mov eax, dword ptr [r12+4]
+sub eax, dword ptr [rsp+224]
+add eax, dword ptr [rsp+84]
+mov dword ptr [r12+4], eax
+
+mov eax, dword ptr [r12+D0]
+sub eax, dword ptr [rsp+2F0]
+add eax, dword ptr [rsp+150]
+mov dword ptr [r12+D0], eax
+
+mov eax, dword ptr [r12+D4]
+sub eax, dword ptr [rsp+2F4]
+add eax, dword ptr [rsp+154]
+mov dword ptr [r12+D4], eax
+
+mov eax, dword ptr [r12+D8]
+sub eax, dword ptr [rsp+2F8]
+add eax, dword ptr [rsp+158]
+mov dword ptr [r12+D8], eax
+
+mov eax, dword ptr [r12+E0]
+sub eax, dword ptr [rsp+300]
+add eax, dword ptr [rsp+160]
+mov dword ptr [r12+E0], eax
+
+mov eax, dword ptr [r12+E4]
+sub eax, dword ptr [rsp+304]
+add eax, dword ptr [rsp+164]
+mov dword ptr [r12+E4], eax
+
+mov eax, dword ptr [r12+E8]
+sub eax, dword ptr [rsp+308]
+add eax, dword ptr [rsp+168]
+mov dword ptr [r12+E8], eax
+
+mov eax, dword ptr [r12+EC]
+sub eax, dword ptr [rsp+30C]
+add eax, dword ptr [rsp+16C]
+mov dword ptr [r12+EC], eax
+
+mov eax, dword ptr [r12+F0]
+sub eax, dword ptr [rsp+310]
+add eax, dword ptr [rsp+170]
+mov dword ptr [r12+F0], eax
+
+mov eax, dword ptr [r12+F4]
+sub eax, dword ptr [rsp+314]
+add eax, dword ptr [rsp+174]
+mov dword ptr [r12+F4], eax
+
+mov eax, dword ptr [r12+F8]
+sub eax, dword ptr [rsp+318]
+add eax, dword ptr [rsp+178]
+mov dword ptr [r12+F8], eax
+
+mov eax, dword ptr [r12+FC]
+sub eax, dword ptr [rsp+31C]
+add eax, dword ptr [rsp+17C]
+mov dword ptr [r12+FC], eax
+
+mov eax, dword ptr [r12+100]
+sub eax, dword ptr [rsp+320]
+add eax, dword ptr [rsp+180]
+mov dword ptr [r12+100], eax
+
+mov eax, dword ptr [r12+104]
+sub eax, dword ptr [rsp+324]
+add eax, dword ptr [rsp+184]
+mov dword ptr [r12+104], eax
+
+mov eax, dword ptr [r12+108]
+sub eax, dword ptr [rsp+328]
+add eax, dword ptr [rsp+188]
+mov dword ptr [r12+108], eax
+
+mov eax, dword ptr [r12+10C]
+sub eax, dword ptr [rsp+32C]
+add eax, dword ptr [rsp+18C]
+mov dword ptr [r12+10C], eax
+
+mov eax, dword ptr [r12+110]
+sub eax, dword ptr [rsp+330]
+add eax, dword ptr [rsp+190]
+mov dword ptr [r12+110], eax
+
+mov eax, dword ptr [r12+114]
+sub eax, dword ptr [rsp+334]
+add eax, dword ptr [rsp+194]
+mov dword ptr [r12+114], eax
+
+mov eax, dword ptr [r12+118]
+sub eax, dword ptr [rsp+338]
+add eax, dword ptr [rsp+198]
+mov dword ptr [r12+118], eax
+
+mov eax, dword ptr [r12+11C]
+sub eax, dword ptr [rsp+33C]
+add eax, dword ptr [rsp+19C]
+mov dword ptr [r12+11C], eax
+
+mov eax, dword ptr [r12+120]
+sub eax, dword ptr [rsp+340]
+add eax, dword ptr [rsp+1A0]
+mov dword ptr [r12+120], eax
+
+movzx eax, word ptr [rsp+C70]
+movzx ecx, word ptr [rsp+344]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1A4]
+add eax, ecx
+mov word ptr [r12+124], ax
+
+movzx eax, word ptr [rsp+C72]
+movzx ecx, word ptr [rsp+34C]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1AC]
+add eax, ecx
+mov word ptr [r12+12C], ax
+
+movzx eax, word ptr [rsp+C74]
+movzx ecx, word ptr [rsp+354]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1B4]
+add eax, ecx
+mov word ptr [r12+134], ax
+
+movzx eax, word ptr [rsp+C76]
+movzx ecx, word ptr [rsp+35C]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1BC]
+add eax, ecx
+mov word ptr [r12+13C], ax
+
+movzx eax, word ptr [rsp+C78]
+movzx ecx, word ptr [rsp+364]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1C4]
+add eax, ecx
+mov word ptr [r12+144], ax
+
+movzx eax, word ptr [rsp+C7A]
+movzx ecx, word ptr [rsp+36C]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1CC]
+add eax, ecx
+mov word ptr [r12+14C], ax
+
+movzx eax, word ptr [rsp+C7C]
+movzx ecx, word ptr [rsp+374]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1D4]
+add eax, ecx
+mov word ptr [r12+154], ax
+
+movzx eax, word ptr [rsp+C7E]
+movzx ecx, word ptr [rsp+37C]
+sub eax, ecx
+movzx ecx, word ptr [rsp+1DC]
+add eax, ecx
+mov word ptr [r12+15C], ax
+
+movss xmm0, dword ptr [r12+DC]
+divss xmm0, dword ptr [rsp+2FC]
+mulss xmm0, dword ptr [rsp+15C]
+movss dword ptr [r12+DC], xmm0
+
+movss xmm0, dword ptr [r12+174]
+divss xmm0, dword ptr [rsp+394]
+mulss xmm0, dword ptr [rsp+1F4]
+movss dword ptr [r12+174], xmm0
+
+mov eax, dword ptr [rsp+1F8]
+add dword ptr [r12+178], eax
+
+mov eax, dword ptr [rsp+1FC]
+add dword ptr [r12+17C], eax
+
+mov eax, dword ptr [rsp+200]
+add dword ptr [r12+180], eax
+
+mov eax, dword ptr [rsp+204]
+add dword ptr [r12+184], eax
+
+mov eax, dword ptr [rsp+208]
+add dword ptr [r12+188], eax
+
+mov eax, dword ptr [rsp+20C]
+add dword ptr [r12+18C], eax
+
+mov eax, dword ptr [rsp+210]
+add dword ptr [r12+190], eax
+
+mov eax, dword ptr [rsp+214]
+add dword ptr [r12+194], eax
+
+mov eax, dword ptr [rsp+1F0]
+mov dword ptr [r12+170], eax
+attr_overlay_done:
+
+movups xmm0, xmmword ptr [rsp+20]
+movups xmm1, xmmword ptr [rsp+30]
+movups xmm2, xmmword ptr [rsp+40]
+movups xmm3, xmmword ptr [rsp+50]
+movups xmm4, xmmword ptr [rsp+60]
+movups xmm5, xmmword ptr [rsp+70]
+add rsp, C80
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+jmp nioh.exe+7C82E0
+
+HE_Prototype_Code+4800:
+HE_WeaponHud:
+mov qword ptr [rsp+88], rsi
+
+pushfq
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+sub rsp, 80
+movups xmmword ptr [rsp+20], xmm0
+movups xmmword ptr [rsp+30], xmm1
+movups xmmword ptr [rsp+40], xmm2
+movups xmmword ptr [rsp+50], xmm3
+movups xmmword ptr [rsp+60], xmm4
+movups xmmword ptr [rsp+70], xmm5
+
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+58], 1
+jne weapon_hud_done
+mov r10, qword ptr [rdi]
+cmp r10, qword ptr [r11+10]
+jne weapon_hud_done
+mov rax, nioh.exe+18A0490
+cmp r10, qword ptr [rax]
+jne weapon_hud_done
+mov eax, dword ptr [r10]
+cmp eax, 58E5E
+je weapon_hud_template
+cmp eax, 51BE1
+jne weapon_hud_done
+weapon_hud_template:
+cmp eax, dword ptr [r11+4]
+jne weapon_hud_done
+cmp word ptr [r10+6], 1
+jne weapon_hud_done
+cmp dword ptr [r10+EF0], 0
+jne weapon_hud_done
+cmp rdi, qword ptr [r10+240]
+jne weapon_hud_done
+cmp qword ptr [rdi+B98], 0
+jne weapon_hud_done
+mov rax, qword ptr [r10+E90]
+test rax, rax
+je weapon_hud_done
+test byte ptr [rax+4], 3
+jne weapon_hud_done
+cmp dword ptr [rax+0C], 1
+jne weapon_hud_done
+
+lea rcx, [r11+328]
+call nioh.exe+7AE4B0
+mov r11, HE_Prototype_Data
+lea rcx, [r11+328]
+call nioh.exe+7BBB20
+mov r11, HE_Prototype_Data
+mov ax, word ptr [rdi+9CC]
+mov word ptr [r11+BCC], ax
+mov ax, word ptr [rdi+9CE]
+mov word ptr [r11+BCE], ax
+mov al, byte ptr [rdi+9CC]
+
+test al, al
+je hud_sole_weapon_second
+cmp dword ptr [r11+328], -1
+jne hud_sole_weapon_done
+cmp dword ptr [r11+328+C8], -1
+je hud_sole_weapon_done
+xor eax, eax
+jmp hud_sole_weapon_done
+hud_sole_weapon_second:
+cmp dword ptr [r11+328+C8], -1
+jne hud_sole_weapon_done
+cmp dword ptr [r11+328], -1
+je hud_sole_weapon_done
+mov al, 1
+hud_sole_weapon_done:
+mov byte ptr [r11+BCC], al
+
+inc dword ptr [r11+A0]
+lea rdi, [r11+200]
+weapon_hud_done:
+
+movups xmm0, xmmword ptr [rsp+20]
+movups xmm1, xmmword ptr [rsp+30]
+movups xmm2, xmmword ptr [rsp+40]
+movups xmm3, xmmword ptr [rsp+50]
+movups xmm4, xmmword ptr [rsp+60]
+movups xmm5, xmmword ptr [rsp+70]
+add rsp, 80
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+jmp nioh.exe+C801DF
+
+HE_Prototype_Code+4C00:
+HE_WeaponHudRefresh:
+lea rbp, [rsi+128]
+
+pushfq
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+sub rsp, 80
+movups xmmword ptr [rsp+20], xmm0
+movups xmmword ptr [rsp+30], xmm1
+movups xmmword ptr [rsp+40], xmm2
+movups xmmword ptr [rsp+50], xmm3
+movups xmmword ptr [rsp+60], xmm4
+movups xmmword ptr [rsp+70], xmm5
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+58], 1
+jne hud_refresh_done
+mov r10, qword ptr [rsi]
+cmp r10, qword ptr [r11+10]
+jne hud_refresh_done
+mov rax, nioh.exe+18A0490
+cmp r10, qword ptr [rax]
+jne hud_refresh_done
+mov eax, dword ptr [r10]
+cmp eax, 58E5E
+je hud_refresh_template
+cmp eax, 51BE1
+jne hud_refresh_done
+hud_refresh_template:
+cmp eax, dword ptr [r11+4]
+jne hud_refresh_done
+cmp word ptr [r10+6], 1
+jne hud_refresh_done
+cmp dword ptr [r10+EF0], 0
+jne hud_refresh_done
+cmp rsi, qword ptr [r10+240]
+jne hud_refresh_done
+cmp qword ptr [rsi+B98], 0
+jne hud_refresh_done
+mov rax, qword ptr [r10+E90]
+test rax, rax
+je hud_refresh_done
+test byte ptr [rax+4], 3
+jne hud_refresh_done
+cmp dword ptr [rax+0C], 1
+jne hud_refresh_done
+
+lea rcx, [r11+328]
+call nioh.exe+7AE4B0
+mov r11, HE_Prototype_Data
+lea rcx, [r11+328]
+call nioh.exe+7BBB20
+mov r11, HE_Prototype_Data
+mov ax, word ptr [rsi+9CC]
+mov word ptr [r11+BCC], ax
+mov ax, word ptr [rsi+9CE]
+mov word ptr [r11+BCE], ax
+mov al, byte ptr [rsi+9CC]
+
+test al, al
+je hud_refresh_sole_weapon_second
+cmp dword ptr [r11+328], -1
+jne hud_refresh_sole_weapon_done
+cmp dword ptr [r11+328+C8], -1
+je hud_refresh_sole_weapon_done
+xor eax, eax
+jmp hud_refresh_sole_weapon_done
+hud_refresh_sole_weapon_second:
+cmp dword ptr [r11+328+C8], -1
+jne hud_refresh_sole_weapon_done
+cmp dword ptr [r11+328], -1
+je hud_refresh_sole_weapon_done
+mov al, 1
+hud_refresh_sole_weapon_done:
+mov byte ptr [r11+BCC], al
+
+inc dword ptr [r11+A4]
+mov qword ptr [r11+B0], rdi
+lea rbp, [r11+328]
+hud_refresh_done:
+
+movups xmm0, xmmword ptr [rsp+20]
+movups xmm1, xmmword ptr [rsp+30]
+movups xmm2, xmmword ptr [rsp+40]
+movups xmm3, xmmword ptr [rsp+50]
+movups xmm4, xmmword ptr [rsp+60]
+movups xmm5, xmmword ptr [rsp+70]
+add rsp, 80
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+jmp nioh.exe+C82274
+
+HE_Prototype_Code+5000:
+HE_WeaponHudMeleeSwitch:
+mov rcx, qword ptr [rbx+60]
+mov edx, 18
+
+pushfq
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+sub rsp, 80
+movups xmmword ptr [rsp+20], xmm0
+movups xmmword ptr [rsp+30], xmm1
+movups xmmword ptr [rsp+40], xmm2
+movups xmmword ptr [rsp+50], xmm3
+movups xmmword ptr [rsp+60], xmm4
+movups xmmword ptr [rsp+70], xmm5
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+58], 1
+jne hud_melee_switch_done
+mov r10, qword ptr [rsi]
+cmp r10, qword ptr [r11+10]
+jne hud_melee_switch_done
+mov rax, nioh.exe+18A0490
+cmp r10, qword ptr [rax]
+jne hud_melee_switch_done
+mov eax, dword ptr [r10]
+cmp eax, 58E5E
+je hud_melee_switch_template
+cmp eax, 51BE1
+jne hud_melee_switch_done
+hud_melee_switch_template:
+cmp eax, dword ptr [r11+4]
+jne hud_melee_switch_done
+cmp word ptr [r10+6], 1
+jne hud_melee_switch_done
+cmp dword ptr [r10+EF0], 0
+jne hud_melee_switch_done
+cmp rsi, qword ptr [r10+240]
+jne hud_melee_switch_done
+cmp qword ptr [rsi+B98], 0
+jne hud_melee_switch_done
+mov rax, qword ptr [r10+E90]
+test rax, rax
+je hud_melee_switch_done
+test byte ptr [rax+4], 3
+jne hud_melee_switch_done
+cmp dword ptr [rax+0C], 1
+jne hud_melee_switch_done
+
+lea rcx, [r11+328]
+call nioh.exe+7AE4B0
+mov r11, HE_Prototype_Data
+lea rcx, [r11+328]
+call nioh.exe+7BBB20
+mov r11, HE_Prototype_Data
+mov ax, word ptr [rsi+9CC]
+mov word ptr [r11+BCC], ax
+mov ax, word ptr [rsi+9CE]
+mov word ptr [r11+BCE], ax
+mov al, byte ptr [rsi+9CC]
+
+test al, al
+je hud_melee_switch_sole_weapon_second
+cmp dword ptr [r11+328], -1
+jne hud_melee_switch_sole_weapon_done
+cmp dword ptr [r11+328+C8], -1
+je hud_melee_switch_sole_weapon_done
+xor eax, eax
+jmp hud_melee_switch_sole_weapon_done
+hud_melee_switch_sole_weapon_second:
+cmp dword ptr [r11+328+C8], -1
+jne hud_melee_switch_sole_weapon_done
+cmp dword ptr [r11+328], -1
+je hud_melee_switch_sole_weapon_done
+mov al, 1
+hud_melee_switch_sole_weapon_done:
+mov byte ptr [r11+BCC], al
+
+inc dword ptr [r11+A8]
+mov qword ptr [r11+B0], rbx
+lea rsi, [r11+200]
+hud_melee_switch_done:
+
+movups xmm0, xmmword ptr [rsp+20]
+movups xmm1, xmmword ptr [rsp+30]
+movups xmm2, xmmword ptr [rsp+40]
+movups xmm3, xmmword ptr [rsp+50]
+movups xmm4, xmmword ptr [rsp+60]
+movups xmm5, xmmword ptr [rsp+70]
+add rsp, 80
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+jmp nioh.exe+C81FD4
+
+HE_Prototype_Code+5400:
+HE_WeaponHudRangedSwitch:
+mov rcx, qword ptr [rbx+60]
+mov edx, 16
+
+pushfq
+push rax
+push rcx
+push rdx
+push r8
+push r9
+push r10
+push r11
+sub rsp, 80
+movups xmmword ptr [rsp+20], xmm0
+movups xmmword ptr [rsp+30], xmm1
+movups xmmword ptr [rsp+40], xmm2
+movups xmmword ptr [rsp+50], xmm3
+movups xmmword ptr [rsp+60], xmm4
+movups xmmword ptr [rsp+70], xmm5
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+58], 1
+jne hud_ranged_switch_done
+mov r10, qword ptr [rsi]
+cmp r10, qword ptr [r11+10]
+jne hud_ranged_switch_done
+mov rax, nioh.exe+18A0490
+cmp r10, qword ptr [rax]
+jne hud_ranged_switch_done
+mov eax, dword ptr [r10]
+cmp eax, 58E5E
+je hud_ranged_switch_template
+cmp eax, 51BE1
+jne hud_ranged_switch_done
+hud_ranged_switch_template:
+cmp eax, dword ptr [r11+4]
+jne hud_ranged_switch_done
+cmp word ptr [r10+6], 1
+jne hud_ranged_switch_done
+cmp dword ptr [r10+EF0], 0
+jne hud_ranged_switch_done
+cmp rsi, qword ptr [r10+240]
+jne hud_ranged_switch_done
+cmp qword ptr [rsi+B98], 0
+jne hud_ranged_switch_done
+mov rax, qword ptr [r10+E90]
+test rax, rax
+je hud_ranged_switch_done
+test byte ptr [rax+4], 3
+jne hud_ranged_switch_done
+cmp dword ptr [rax+0C], 1
+jne hud_ranged_switch_done
+
+lea rcx, [r11+328]
+call nioh.exe+7AE4B0
+mov r11, HE_Prototype_Data
+lea rcx, [r11+328]
+call nioh.exe+7BBB20
+mov r11, HE_Prototype_Data
+mov ax, word ptr [rsi+9CC]
+mov word ptr [r11+BCC], ax
+mov ax, word ptr [rsi+9CE]
+mov word ptr [r11+BCE], ax
+mov al, byte ptr [rsi+9CC]
+
+test al, al
+je hud_ranged_switch_sole_weapon_second
+cmp dword ptr [r11+328], -1
+jne hud_ranged_switch_sole_weapon_done
+cmp dword ptr [r11+328+C8], -1
+je hud_ranged_switch_sole_weapon_done
+xor eax, eax
+jmp hud_ranged_switch_sole_weapon_done
+hud_ranged_switch_sole_weapon_second:
+cmp dword ptr [r11+328+C8], -1
+jne hud_ranged_switch_sole_weapon_done
+cmp dword ptr [r11+328], -1
+je hud_ranged_switch_sole_weapon_done
+mov al, 1
+hud_ranged_switch_sole_weapon_done:
+mov byte ptr [r11+BCC], al
+
+inc dword ptr [r11+AC]
+mov qword ptr [r11+B0], rbx
+lea rsi, [r11+200]
+hud_ranged_switch_done:
+
+movups xmm0, xmmword ptr [rsp+20]
+movups xmm1, xmmword ptr [rsp+30]
+movups xmm2, xmmword ptr [rsp+40]
+movups xmm3, xmmword ptr [rsp+50]
+movups xmm4, xmmword ptr [rsp+60]
+movups xmm5, xmmword ptr [rsp+70]
+add rsp, 80
+pop r11
+pop r10
+pop r9
+pop r8
+pop rdx
+pop rcx
+pop rax
+popfq
+jmp nioh.exe+C81C22
+
+HE_Prototype_Code+5800:
+HE_Revenant:
+
+mov rax, qword ptr [rsp+50]
+mov qword ptr [rbx+18], rax
+pushfq
+push r10
+push r11
+mov r11, HE_Prototype_Data
+cmp byte ptr [r11+2A], 2
+jne revenant_done
+cmp dword ptr [r11+04], 0
+je revenant_done
+lea r10, [rdi+510]
+cmp rbx, r10
+jne revenant_done
+mov r10, qword ptr [rdi+50]
+test r10, r10
+je revenant_done
+cmp r10, qword ptr [r11+10]
+jne revenant_done
+push rax
+mov rax, nioh.exe+18A0490
+cmp r10, qword ptr [rax]
+pop rax
+jne revenant_done
+cmp word ptr [r10+06], 1
+jne revenant_done
+cmp dword ptr [r10], 58E5E
+je revenant_role
+cmp dword ptr [r10], 51BE1
+jne revenant_done
+revenant_role:
+cmp dword ptr [r10+EF0], 0
+jne revenant_done
+mov r10, qword ptr [r10+E90]
+test r10, r10
+je revenant_done
+test byte ptr [r10+04], 3
+jne revenant_done
+cmp dword ptr [r10+0C], 1
+jne revenant_done
+mov r10, qword ptr [rbx]
+test r10, r10
+je revenant_done
+cmp word ptr [r10+04], 5
+jne revenant_done
+cmp dword ptr [r10], 190
+jne revenant_done
+test rax, rax
+je revenant_done
+cmp qword ptr [rax], r10
+jne revenant_done
+cmp word ptr [rax+08], 0101
+jne revenant_done
+cmp byte ptr [rax+0A], 0
+jne revenant_done
+cmp dword ptr [rax+48], 22
+jne revenant_done
+cmp qword ptr [rax+4C], 0
+jne revenant_done
+inc dword ptr [r11+C8]
+push r10
+movzx r10d, word ptr [rdi+4E8]
+mov dword ptr [r11+CC], r10d
+pop r10
+cmp byte ptr [rdi+4E9], 1
+jne revenant_done
+mov byte ptr [rax+0A], 1
+inc dword ptr [r11+B8]
+mov qword ptr [r11+C0], r10
+movzx r10d, word ptr [r10+06]
+mov dword ptr [r11+BC], r10d
+revenant_done:
+pop r11
+pop r10
+popfq
+jmp nioh.exe+75129F
+
+HE_Prototype_Data:
+dd 00058E5E
+dd 00000000
+HE_Prototype_Data+28:
+db 00 00 02
+HE_Prototype_Data+58:
+db 01
+nioh.exe+89B424:
+jmp HE_Preload
+db 90 90 90 90 90 90 90
+nioh.exe+8A28FB:
+jmp HE_Spawn
+db 90 90 90 90 90 90
+nioh.exe+760B33:
+jmp HE_PlayerInit
+nioh.exe+7BC3E9:
+jmp HE_Skin
+db 90
+nioh.exe+8A2A31:
+jmp HE_Equipment
+db 90 90
+nioh.exe+882639:
+jmp HE_EquipmentPrepare
+db 90 90
+nioh.exe+721044:
+jmp HE_InputA
+nioh.exe+721099:
+jmp HE_InputB
+nioh.exe+751156:
+jmp HE_Interaction
+db 90 90 90 90 90
+nioh.exe+75129F:
+jmp HE_QueuedDoor
+db 90 90 90 90 90 90
+nioh.exe+855FF7:
+jmp HE_ActionCamera
+db 90
+nioh.exe+75185D:
+jmp HE_HimorogiFragment
+nioh.exe+751160:
+jmp HE_Kodama
+db 90 90 90 90 90
+nioh.exe+751862:
+jmp HE_Consumables
+db 90 90 90 90
+nioh.exe+7C7F75:
+jmp HE_AttributeInit
+db 90 90
+nioh.exe+7C82DB:
+jmp HE_AttributeOverlay
+nioh.exe+C801D7:
+jmp HE_WeaponHud
+db 90 90 90
+nioh.exe+C8226D:
+jmp HE_WeaponHudRefresh
+db 90 90
+nioh.exe+C81FCB:
+jmp HE_WeaponHudMeleeSwitch
+db 90 90 90 90
+nioh.exe+C81C19:
+jmp HE_WeaponHudRangedSwitch
+db 90 90 90 90
+nioh.exe+751296:
+jmp HE_Revenant
+db 90 90 90 90
+[DISABLE]
+{$lua}
+if syntaxcheck then return end
+if _G.HE_Prototype_PID~=getOpenedProcessID() then error("游戏进程已变化，请重新打开测试表。") end
+local site=getAddress("nioh.exe+89B424")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Preload 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Preload") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+8A28FB")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Spawn 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Spawn") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+760B33")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_PlayerInit 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_PlayerInit") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+7BC3E9")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Skin 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Skin") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+8A2A31")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Equipment 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Equipment") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+882639")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_EquipmentPrepare 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_EquipmentPrepare") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+721044")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_InputA 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_InputA") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+721099")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_InputB 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_InputB") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+751156")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Interaction 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Interaction") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+75129F")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_QueuedDoor 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_QueuedDoor") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+855FF7")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_ActionCamera 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_ActionCamera") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+75185D")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_HimorogiFragment 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_HimorogiFragment") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+751160")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Kodama 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Kodama") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+751862")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Consumables 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Consumables") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+7C7F75")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_AttributeInit 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_AttributeInit") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+7C82DB")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_AttributeOverlay 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_AttributeOverlay") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+C801D7")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_WeaponHud 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_WeaponHud") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+C8226D")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_WeaponHudRefresh 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_WeaponHudRefresh") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+C81FCB")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_WeaponHudMeleeSwitch 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_WeaponHudMeleeSwitch") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+C81C19")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_WeaponHudRangedSwitch 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_WeaponHudRangedSwitch") then error("跳转目标已变化，停止恢复。") end
+local site=getAddress("nioh.exe+751296")
+local bytes=readBytes(site,5,true)
+if not bytes or bytes[1]~=0xE9 then error("HE_Revenant 已被其他脚本改动。") end
+local delta=bytes[2]+bytes[3]*256+bytes[4]*65536+bytes[5]*16777216
+if delta&gt;=2147483648 then delta=delta-4294967296 end
+if site+5+delta~=getAddress("HE_Revenant") then error("跳转目标已变化，停止恢复。") end
+{$asm}
+nioh.exe+89B424:
+db 45 33 C0 8B D0 8B C8 E8 B0 5F 01 00
+unregistersymbol(HE_Preload)
+nioh.exe+8A28FB:
+db 45 33 C0 8D 4A 63 E8 5A 28 EB FF
+unregistersymbol(HE_Spawn)
+nioh.exe+760B33:
+db 83 FB 64 75 76
+unregistersymbol(HE_PlayerInit)
+nioh.exe+7BC3E9:
+db 8B 83 08 53 0B 00
+unregistersymbol(HE_Skin)
+nioh.exe+8A2A31:
+db 80 BB 01 01 00 00 00
+unregistersymbol(HE_Equipment)
+nioh.exe+882639:
+db 44 38 B6 CD 05 00 00
+unregistersymbol(HE_EquipmentPrepare)
+nioh.exe+721044:
+db 44 0F BE 42 0C
+unregistersymbol(HE_InputA)
+nioh.exe+721099:
+db 44 0F BE 47 0E
+unregistersymbol(HE_InputB)
+nioh.exe+751156:
+db 83 78 48 FF 0F 85 E2 00 00 00
+unregistersymbol(HE_Interaction)
+nioh.exe+75129F:
+db 48 C7 87 30 05 00 00 FF FF FF FF
+unregistersymbol(HE_QueuedDoor)
+nioh.exe+855FF7:
+db 8B 01 48 C1 E8 0A
+unregistersymbol(HE_ActionCamera)
+nioh.exe+75185D:
+db 45 84 F6 75 2D
+unregistersymbol(HE_HimorogiFragment)
+nioh.exe+751160:
+db 49 8B C5 4D 85 C0 48 0F 45 C2
+unregistersymbol(HE_Kodama)
+nioh.exe+751862:
+db 83 BF 4C 05 00 00 00 74 24
+unregistersymbol(HE_Consumables)
+nioh.exe+7C7F75:
+db 48 8D BE D8 09 00 00
+unregistersymbol(HE_AttributeInit)
+nioh.exe+7C82DB:
+db E8 A0 00 FF FF
+unregistersymbol(HE_AttributeOverlay)
+nioh.exe+C801D7:
+db 48 89 B4 24 88 00 00 00
+unregistersymbol(HE_WeaponHud)
+nioh.exe+C8226D:
+db 48 8D AE 28 01 00 00
+unregistersymbol(HE_WeaponHudRefresh)
+nioh.exe+C81FCB:
+db 48 8B 4B 60 BA 18 00 00 00
+unregistersymbol(HE_WeaponHudMeleeSwitch)
+nioh.exe+C81C19:
+db 48 8B 4B 60 BA 16 00 00 00
+unregistersymbol(HE_WeaponHudRangedSwitch)
+nioh.exe+751296:
+db 48 8B 44 24 50 48 89 43 18
+unregistersymbol(HE_Revenant)
+unregistersymbol(HE_Prototype_Data)
+unregistersymbol(HE_Prototype_Code)
+// Prototype allocations are reclaimed when nioh.exe exits.
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>1001</ID>
+          <Description>"下次载入的角色"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+0</Address>
+          <ShowAsHex>1</ShowAsHex>
+          <DropDownList DisplayValueAsItem="1">00000000:威廉
+00058E5E:飞缘魔 A
+00051BE1:飞缘魔 B</DropDownList>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1002</ID>
+          <Description>"操控辅助 A（沿用旧表）"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>HE_Prototype_Data+28</Address>
+          <ShowAsHex>1</ShowAsHex>
+          <DropDownList DisplayValueAsItem="1">00:默认
+01:开启</DropDownList>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1003</ID>
+          <Description>"操控辅助 B（沿用旧表）"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>HE_Prototype_Data+29</Address>
+          <ShowAsHex>1</ShowAsHex>
+          <DropDownList DisplayValueAsItem="1">00:默认
+01:模式 1
+02:模式 2</DropDownList>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1004</ID>
+          <Description>"交互兼容模式"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>HE_Prototype_Data+2A</Address>
+          <ShowAsHex>1</ShowAsHex>
+          <DropDownList DisplayValueAsItem="1">00:关闭
+01:原有箱子与当前钥匙门
+02:通用物件启动（实验）</DropDownList>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1010</ID>
+          <Description>"检查：已加载的模板"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+4</Address>
+          <ShowAsHex>1</ShowAsHex>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1011</ID>
+          <Description>"检查：资源加载次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+18</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1012</ID>
+          <Description>"检查：玩家生成次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+1C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1013</ID>
+          <Description>"检查：玩家组件初始化次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+20</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1014</ID>
+          <Description>"检查：辅助输入命中次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+24</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1015</ID>
+          <Description>"检查：箱子交互兼容次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+2C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1016</ID>
+          <Description>"检查：当前钥匙门兼容次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+30</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1017</ID>
+          <Description>"检查：通用物件启动次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+34</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1018</ID>
+          <Description>"检查：最近交互请求编号"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+38</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1019</ID>
+          <Description>"检查：最近物件编号"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+3C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1020</ID>
+          <Description>"检查：单侧门开始事件次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+40</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1021</ID>
+          <Description>"检查：动作镜头兼容次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+44</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1022</ID>
+          <Description>"检查：神篱碎片使用兼容次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+48</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1023</ID>
+          <Description>"检查：木灵回家交互兼容次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+4C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1024</ID>
+          <Description>"检查：恢复与增益道具使用兼容次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+50</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1025</ID>
+          <Description>"检查：最近兼容的恢复或增益道具"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+54</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1026</ID>
+          <Description>"成长与装备叠加（保留 Boss 基础）"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>HE_Prototype_Data+58</Address>
+          <ShowAsHex>1</ShowAsHex>
+          <DropDownList DisplayValueAsItem="1">00:关闭
+01:开启</DropDownList>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1027</ID>
+          <Description>"检查：原生成长与效果缓冲区初始化次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+5C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1028</ID>
+          <Description>"检查：成长与装备重新计算次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+60</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1029</ID>
+          <Description>"检查：本次 Boss 基础生命"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+64</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1030</ID>
+          <Description>"检查：本次生命成长与装备加成"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+68</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1031</ID>
+          <Description>"检查：本次 Boss 基础精力"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+6C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1032</ID>
+          <Description>"检查：本次精力成长与装备加成"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+70</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1033</ID>
+          <Description>"检查：本次 Boss 基础防御"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+74</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1034</ID>
+          <Description>"检查：本次防具防御加成"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+78</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1035</ID>
+          <Description>"检查：Boss 基础攻击"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+7C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1036</ID>
+          <Description>"检查：当前武器与成长攻击加成"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+80</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1037</ID>
+          <Description>"检查：当前近战武器槽"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+8C</Address>
+          <DropDownList DisplayValueAsItem="1">0:第一槽
+1:第二槽</DropDownList>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1038</ID>
+          <Description>"检查：当前武器的原生计算攻击"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+90</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1039</ID>
+          <Description>"检查：空装基准攻击"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+94</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1040</ID>
+          <Description>"检查：当前武器编号"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+98</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1041</ID>
+          <Description>"检查：武器攻击更新次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+9C</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1042</ID>
+          <Description>"检查：武器图标更新次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+A0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1043</ID>
+          <Description>"检查：武器图标逐帧读取次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+A4</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1044</ID>
+          <Description>"检查：近战武器图标切换读取次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+A8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1045</ID>
+          <Description>"检查：远程武器图标切换读取次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+AC</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1046</ID>
+          <Description>"检查：血刀冢启动事件补回次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+B8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1047</ID>
+          <Description>"检查：最近血刀冢实例编号"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+BC</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1048</ID>
+          <Description>"检查：血刀冢已接受请求次数"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+C8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1049</ID>
+          <Description>"检查：最近血刀冢按住与完成状态"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>HE_Prototype_Data+CC</Address>
+          <ShowAsHex>1</ShowAsHex>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <Comments>飞缘魔 1.0.0 Beta 1，适配已核对的 Steam《仁王 完全版》1.24.8（窗口 1.24.08）。
+人物替换机制根据 Bryanyora 的 Character Change CT 重新适配，保留原作者署名。
+成长、防具与近战武器攻击增量叠加在 Boss 基础数值上，保留飞缘魔模型和招式。
+角色替换、当前已测箱子与门、尸体取物、飞行镜头、背包神篱碎片、木灵、御神水和当前血刀冢已实测。
+非人形 Boss 吸血、快捷键冲突、全部交互、每种词条与道具效果尚未全部解决或验证。
+武器 HUD 缓存修正已核对，屏幕实际显示仍待明确确认。
+推荐独立 EXE；本 CT 在 CE 内直接启用尚未实测。在主菜单启用，之后载入关卡。
+本表不能与同类人物替换工具同时启用。程序、使用说明与已知问题见项目 README。
+</Comments>
+</CheatTable>

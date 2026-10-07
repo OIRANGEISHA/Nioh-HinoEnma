@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "public_version": "1.0.0-beta.1",
+  "verification_date": "2026-10-07",
+  "basis": "Local gameplay-tested 0.14 adaptation; user confirmed current blood-tomb summon",
+  "game_sha256": "0c3508c6b4d0696d84423949df9faccb3f9c6d93833854e1e17a78d66defc389",
+  "native_hooks_unchanged": 21,
+  "native_targets_unchanged": true,
+  "injector_native_and_self_test_source_unchanged": true,
+  "public_changes": [
+    "Version/UI labels",
+    "Windows assembly metadata",
+    "Build/release tooling",
+    "Documentation"
+  ],
+  "baseline_native_payloads": [
+    {
+      "name": "HE_Preload",
+      "bytes": 128,
+      "sha256": "a07e46997a8cd5b7f53d88aff8ea39d0b1ae4307d39829f3d019fc61cf8790f6"
+    },
+    {
+      "name": "HE_Spawn",
+      "bytes": 55,
+      "sha256": "7a51fe5a418123e5e847a2a6c4f7c98e59a26731a873d94da530b02641adc895"
+    },
+    {
+      "name": "HE_PlayerInit",
+      "bytes": 55,
+      "sha256": "3dad8d5706fedd61088a9c8b4ad8df73e03905b9f094edb691e6ae7e021bef10"
+    },
+    {
+      "name": "HE_Skin",
+      "bytes": 35,
+      "sha256": "3c08ea178aabc0cdac557cf16ac60cb52d412d5fc6f0ed8375700b7c6f08cefa"
+    },
+    {
+      "name": "HE_Equipment",
+      "bytes": 42,
+      "sha256": "8fe91795dc1854dcf2f7ae301a4fcc8b300e9d4784678b91d7cdb7bb0e6390ac"
+    },
+    {
+      "name": "HE_EquipmentPrepare",
+      "bytes": 36,
+      "sha256": "fe155c2a79e43c9e59ddc6e6188b8b92240edec7084c8cee71c0da02baa1e4c3"
+    },
+    {
+      "name": "HE_InputA",
+      "bytes": 218,
+      "sha256": "acf86c8dfecc1c5f1eefdd75536c949cd7ab1a899c2bbdbc6e2dbf14fee9389b"
+    },
+    {
+      "name": "HE_InputB",
+      "bytes": 218,
+      "sha256": "4c6493b0da5bd6f712cf887af131d1279db64b162cc343c9d3ec64a6310e567c"
+    },
+    {
+      "name": "HE_Interaction",
+      "bytes": 232,
+      "sha256": "95e0b8ec093fcd2695cf1e21ab2d7bba36504513c0ac188e2754f80fd2731364"
+    },
+    {
+      "name": "HE_QueuedDoor",
+      "bytes": 331,
+      "sha256": "e762359792b88c94060f3990554438264bae985b75cf039a17c3d404c843c0d2"
+    },
+    {
+      "name": "HE_ActionCamera",
+      "bytes": 111,
+      "sha256": "e8d21adc13088c11e93d14af5e0e6897f27465b6417c21cc701946f33245d3c8"
+    },
+    {
+      "name": "HE_HimorogiFragment",
+      "bytes": 202,
+      "sha256": "18cd841a4764c0a9a9fc511145ecf9b1120de9e32056a3075867dab1f9795847"
+    },
+    {
+      "name": "HE_Kodama",
+      "bytes": 414,
+      "sha256": "3cfcf584f4cbb762c633f8a106f77bb0b00db1ad03ab176e96949d54be14980e"
+    },
+    {
+      "name": "HE_Consumables",
+      "bytes": 742,
+      "sha256": "65b2ad3eb6be3b4462b5cd66c5e228302f1d38e4ef32e29fe0f02ee972541186"
+    },
+    {
+      "name": "HE_AttributeInit",
+      "bytes": 359,
+      "sha256": "ff40c1cca338086cf0e6e5fe621b1afa9877aa1e542e5d8fa14fd85f9f90ba8e"
+    },
+    {
+      "name": "HE_AttributeOverlay",
+      "bytes": 2108,
+      "sha256": "78da1e184b02044a534942fca762de6a0b99d804a3ff1ccf9371da6b6d1cacf7"
+    },
+    {
+      "name": "HE_WeaponHud",
+      "bytes": 435,
+      "sha256": "823235afdb4b6036d709bf81860dd8d55635238cce5a358f1b2eb2f4e2393ee0"
+    },
+    {
+      "name": "HE_WeaponHudRefresh",
+      "bytes": 441,
+      "sha256": "5b1699abba19e52b80c5dba98214254c444e35fa8dce077acb38dcd382f067d7"
+    },
+    {
+      "name": "HE_WeaponHudMeleeSwitch",
+      "bytes": 443,
+      "sha256": "234a5c505a9cfced2cb6dd0e0053afc8a5e61e941ec38dafb0508b5b130c7a91"
+    },
+    {
+      "name": "HE_WeaponHudRangedSwitch",
+      "bytes": 443,
+      "sha256": "cab2a9d439b4b6d33a9e0e9d85720b05c332e1699eac8367cbd1468d2b652c2f"
+    },
+    {
+      "name": "HE_Revenant",
+      "bytes": 325,
+      "sha256": "6d8e046114d017e2244e13c63d29ea510550defe1ce4b9559b3531e08289c6ba"
+    }
+  ],
+  "portable_public_checks_per_configuration": {
+    "csharp_self_checks": 12,
+    "relocation_comparisons": 252,
+    "layouts": 12
+  },
+  "gameplay_verification_scope": [
+    "Visible replacement and basic moves",
+    "Reported boxes, doors and corpse loot",
+    "Flight camera",
+    "Bag Himorogi Fragment",
+    "Kodama guide-home",
+    "Bag Sacred Water",
+    "Armor recalculation",
+    "Reported blood-tomb summon"
+  ],
+  "pending": [
+    "Non-humanoid life-drain grab",
+    "Final visible weapon icon",
+    "Every recovery/buff item and affix",
+    "All interactions and mission/save transitions",
+    "Direct CE enable",
+    "Cold first-enable of final public EXE"
+  ],
+  "private_research_exported": false,
+  "proprietary_game_files_exported": false
+}
