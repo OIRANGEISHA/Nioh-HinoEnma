@@ -50,7 +50,7 @@ def main() -> None:
                 or build["file_version"] != version["file_version"]):
             raise ValueError("Build or verification metadata does not match: " + configuration)
         reports[configuration], builds[configuration] = report, build
-    destination = ROOT / "artifacts/release"
+    destination = ROOT / "artifacts/dist"
     destination.mkdir(parents=True, exist_ok=True)
     if any(destination.iterdir()):
         raise ValueError("Release output is not empty; do not overwrite a prepared asset set")
