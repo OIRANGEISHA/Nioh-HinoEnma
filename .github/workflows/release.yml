@@ -1,0 +1,122 @@
+name: Prepare Beta release
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_commit:
+        description: Exact reviewed main commit SHA (40 lowercase hex characters)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: prepare-beta-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main' && github.repository == 'OIRANGEISHA/Nioh-HinoEnma'
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out reviewed source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Require exact source and unused release version
+        env:
+          EXPECTED_COMMIT: ${{ inputs.expected_commit }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:EXPECTED_COMMIT -cnotmatch '^[0-9a-f]{40}$' -or (git rev-parse HEAD) -cne $env:EXPECTED_COMMIT) { throw 'Reviewed source commit mismatch.' }
+          if (git status --porcelain) { throw 'Checkout is not clean.' }
+          $version = Get-Content version.json -Raw | ConvertFrom-Json
+          if ($version.version -cne '1.0.0-beta.1' -or $version.tag -cne 'v1.0.0-beta.1') { throw 'Unexpected release version.' }
+          git show-ref --verify --quiet "refs/tags/$($version.tag)"
+          if ($LASTEXITCODE -eq 0) { throw 'Tag already exists; public versions must never be overwritten.' }
+          $releases = gh api "repos/$env:GITHUB_REPOSITORY/releases?per_page=100" | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0) { throw 'Could not inspect existing releases.' }
+          if ($releases | Where-Object tag_name -eq $version.tag) { throw 'Release already exists; inspect instead of replacing it.' }
+          "RELEASE_TAG=$($version.tag)" >> $env:GITHUB_ENV
+          "RELEASE_NAME=Nioh Hino-Enma $($version.display_version)" >> $env:GITHUB_ENV
+
+      - name: Set up verification Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install isolated verification dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --target artifacts/python-deps -r requirements-dev.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Verification dependency installation failed.' }
+          "PYTHONPATH=$((Resolve-Path artifacts/python-deps).Path)" >> $env:GITHUB_ENV
+
+      - name: Verify generated profile and build Debug and Release
+        run: |
+          python tools/build_profile.py --check
+          if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
+          ./tools/build.ps1 -Configuration Debug
+          ./tools/build.ps1 -Configuration Release
+
+      - name: Run portable checks on both builds
+        run: |
+          python tools/verify.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.1-windows-x64.exe --report artifacts/Debug/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
+          python tools/verify.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.1-windows-x64.exe --report artifacts/Release/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }
+
+      - name: Package versioned assets and provenance
+        run: |
+          python tools/package.py --source-commit "$env:GITHUB_SHA" --build-origin github-actions --publisher 'github-actions[bot]' --workflow-url "https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+          if ($LASTEXITCODE -ne 0) { throw 'Packaging failed.' }
+
+      - name: Attest exact CI-built assets
+        id: attest
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            artifacts/release/*.exe
+            artifacts/release/*.zip
+            artifacts/release/*.CT
+
+      - name: Include attestation bundle and checksum
+        env:
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+          ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
+        run: |
+          $bundle = 'artifacts/release/Nioh-HinoEnma-1.0.0-beta.1-attestation.jsonl'
+          Copy-Item -LiteralPath $env:BUNDLE_PATH -Destination $bundle
+          $hash = (Get-FileHash -LiteralPath $bundle -Algorithm SHA256).Hash.ToLowerInvariant()
+          [IO.File]::WriteAllText($bundle + '.sha256', $hash + '  ' + (Split-Path -Leaf $bundle) + "`n", (New-Object Text.UTF8Encoding($false)))
+          Add-Content -LiteralPath artifacts/release-notes.md -Value "`nBuild attestation: $env:ATTESTATION_URL"
+
+      - name: Prepare immutable annotated tag and Draft Pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (git status --porcelain) { throw 'Tracked source changed during build.' }
+          $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
+          if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed; do not publish an unreviewed head.' }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -a "$env:RELEASE_TAG" "$env:GITHUB_SHA" -m "Nioh Hino-Enma 1.0.0 Beta 1; Release Owner: OIRANGEISHA; prepared by authorized repository workflow"
+          if ($LASTEXITCODE -ne 0) { throw 'Annotated tag creation failed.' }
+          git push --atomic origin "refs/tags/$env:RELEASE_TAG"
+          if ($LASTEXITCODE -ne 0) { throw 'Tag push failed.' }
+          $assets = @(Get-ChildItem -LiteralPath artifacts/release -File | ForEach-Object FullName)
+          gh release create "$env:RELEASE_TAG" @assets --repo "$env:GITHUB_REPOSITORY" --verify-tag --draft --prerelease --latest=false --title "$env:RELEASE_NAME" --notes-file artifacts/release-notes.md
+          if ($LASTEXITCODE -ne 0) { throw 'Draft preparation failed; inspect the existing tag before any retry.' }
+          'Draft prepared. Inspect source, identities, asset checksums and attestation before final publication.' >> $env:GITHUB_STEP_SUMMARY

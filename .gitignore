@@ -1,0 +1,15 @@
+/artifacts/
+/.devdeps/
+/.venv/
+/research/
+/release/
+/references/
+/旧ct文件/
+__pycache__/
+*.py[cod]
+*.exe
+*.zip
+*.pdb
+*.log
+*.user
+.env*
