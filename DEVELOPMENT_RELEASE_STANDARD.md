@@ -4,9 +4,9 @@ Adapted for this Windows game tool from [RapidBench DEVELOPMENT_RELEASE_STANDARD
 
 ## Required publication controls
 
-- Use Semantic Versioning, increasing Beta numbers and immutable public versions. Beta 1 is `1.0.0-beta.1`, tag `v1.0.0-beta.1`, GitHub Pre-release.
+- Use Semantic Versioning, increasing Beta numbers and immutable public versions. Beta 1 is `1.0.0-beta.1`, tag `v1.0.0-beta.1`; Beta 2 is `1.0.0-beta.2`, tag `v1.0.0-beta.2`. Both are GitHub Pre-releases.
 - Release Owner: **OIRANGEISHA**. Source author/tagger are the owner. The owner-authorized repository Actions publisher can prepare tag/draft/assets; record its actual identity instead of presenting the upload as a human upload.
-- Use Conventional Commits; record the exact source commit and a clean, reviewed file tree. This is a new repository's initial public release; no prior public Nioh tag exists.
+- Use Conventional Commits; record the exact source commit and a clean, reviewed file tree. For subsequent releases, retain prior public tags, assets and historical release records unchanged.
 - Keep source, requirements, compatibility, bilingual README, changelog and release notes consistent with the shipped version.
 - Preserve relevant regression coverage. Build Debug and optimized x64 Release, run portable checks, and distinguish actual gameplay reports from offline simulation and prior-version checks.
 - Publish only explicitly selected tool/source/documentation files. Do not publish credentials, private logs, game resources, old CT archives or memory/code dumps.

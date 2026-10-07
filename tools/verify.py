@@ -14,6 +14,8 @@ from build_profile import ROOT, assemble, generate, load_plan
 
 def verify(executable: Path, report: Path, preview: bool = False) -> dict:
     plan = load_plan()
+    if len(plan["hooks"]) != 40:
+        raise ValueError("Expected the reviewed 40-hook profile")
     if (ROOT / "launcher/Profile.generated.cs").read_text("utf-8") != generate(plan):
         raise ValueError("Generated source differs")
     report.parent.mkdir(parents=True, exist_ok=True)
@@ -30,7 +32,9 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
         if completed.returncode or not target.is_file():
             raise ValueError("Offline executable check failed: " + mode + ": " + completed.stderr)
     self_test = json.loads(targets["--self-test"].read_text("utf-8"))
-    if not self_test["success"] or self_test["count"] != 12:
+    if (not self_test["success"] or self_test.get("game_access") is not False
+            or self_test["count"] != 19 or len(self_test["checks"]) != 19
+            or len(set(self_test["checks"])) != 19):
         raise ValueError("Offline refusal/transaction checks failed")
     exported = json.loads(targets["--export-payloads"].read_text("utf-8"))
     cache, names = {}, set()
@@ -47,6 +51,13 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
         names.add(unique)
     if len(cache) != 12 or len(exported) != len(plan["hooks"]) * 12:
         raise ValueError("Incomplete relocation export")
+    expected_layouts = {
+        (module, ((module + plan["image_size"] + 0xFFFF) & ~0xFFFF) + slot * 0x10000)
+        for module in (0x140000000, 0x7FF83AA00000, 0x7FFA01000000)
+        for slot in (0, 1, 37, 511)
+    }
+    if set(cache) != expected_layouts:
+        raise ValueError("Relocation layout set differs from the reviewed export")
     raw = executable.read_bytes()
     pe = struct.unpack_from("<I", raw, 0x3C)[0]
     if raw[:2] != b"MZ" or raw[pe:pe+4] != b"PE\0\0" or struct.unpack_from("<H", raw, pe+4)[0] != 0x8664:

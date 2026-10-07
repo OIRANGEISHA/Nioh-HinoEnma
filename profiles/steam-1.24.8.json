@@ -1,7 +1,10 @@
 {
   "schema": 1,
-  "profile_kind": "experimental_type2",
-  "tool_version": "1.0.0-beta.1",
+  "tool_version": "1.0.0-beta.2",
+  "actual_living_weapon_activation_added": true,
+  "manual_purification": true,
+  "yokai_grab": true,
+  "automatic_grab": true,
   "attribute_overlay": true,
   "weapon_stats_overlay": true,
   "weapon_hud_view": true,
@@ -13,8 +16,6 @@
   "disk_md5": "4870ca50224e886984cef33c251e92d6",
   "image_size": 50782208,
   "pe_timestamp_hex": "0x6307A81B",
-  "upstream": "Bryanyora's_nioh_2019_12_19_work.CT, Character Change entries 74 and 76",
-  "upstream_sha256": "251c47b2b9ba5ce61d19cf0663fbd3661b8b20144c878926b7f0c1a205993c62",
   "allocation_size": 65536,
   "data_offset": 61440,
   "hooks": [
@@ -165,6 +166,152 @@
       "length": 9,
       "code_offset": 22528,
       "original": "48 8B 44 24 50 48 89 43 18"
+    },
+    {
+      "name": "HE_YokaiGrab",
+      "rva": 7572371,
+      "length": 10,
+      "code_offset": 24576,
+      "code_capacity": 2048,
+      "original": "83 78 0C 00 0F 85 14 1F 00 00"
+    },
+    {
+      "name": "HE_ConsumableNotice",
+      "rva": 7674182,
+      "length": 11,
+      "code_offset": 26624,
+      "original": "48 C7 87 48 05 00 00 FF FF FF FF"
+    },
+    {
+      "name": "HE_TutorialReceipt",
+      "rva": 9085714,
+      "length": 6,
+      "code_offset": 27648,
+      "original": "8B 88 7C 02 00 00"
+    },
+    {
+      "name": "HE_TutorialClearReceipt",
+      "rva": 9084735,
+      "length": 7,
+      "code_offset": 28672,
+      "original": "48 89 88 50 02 00 00"
+    },
+    {
+      "name": "HE_DefenseHintRecovery",
+      "rva": 13932585,
+      "length": 5,
+      "code_offset": 29696,
+      "original": "8B 49 60 85 C9"
+    },
+    {
+      "name": "HE_KiPulseHintSpace",
+      "rva": 13932576,
+      "length": 6,
+      "code_offset": 30720,
+      "original": "40 53 48 83 EC 30"
+    },
+    {
+      "name": "HE_PurificationHintSpace",
+      "rva": 13932590,
+      "length": 6,
+      "code_capacity": 2048,
+      "code_offset": 31744,
+      "original": "0F 84 17 01 00 00"
+    },
+    {
+      "name": "HE_PurificationPlayerTick",
+      "rva": 7429435,
+      "length": 8,
+      "code_capacity": 2048,
+      "code_offset": 33792,
+      "original": "4C 8D 9C 24 B0 00 00 00"
+    },
+    {
+      "name": "HE_PurificationOrigin",
+      "rva": 7618728,
+      "length": 10,
+      "code_offset": 35840,
+      "original": "66 0F 7F 45 D7 4C 89 6C 24 20"
+    },
+    {
+      "name": "HE_PurificationCollisionOrigin",
+      "rva": 8248885,
+      "length": 5,
+      "code_capacity": 2048,
+      "code_offset": 36864,
+      "original": "E8 B6 1B 00 00"
+    },
+    {
+      "name": "HE_ManualPurification",
+      "rva": 7429443,
+      "length": 8,
+      "code_capacity": 2048,
+      "code_offset": 38912,
+      "original": "49 8B 5B 28 49 8B 6B 30"
+    },
+    {
+      "name": "HE_WeaponHintSwitch",
+      "rva": 13932596,
+      "length": 9,
+      "code_offset": 40960,
+      "code_capacity": 3072,
+      "original": "83 E9 01 0F 84 E3 00 00 00"
+    },
+    {
+      "name": "HE_ShotHintAimLeftMouse",
+      "rva": 13932605,
+      "length": 5,
+      "code_offset": 44032,
+      "code_capacity": 3072,
+      "original": "83 E9 01 74 7E"
+    },
+    {
+      "name": "HE_RoarDigitFive",
+      "rva": 7475216,
+      "length": 5,
+      "code_offset": 47104,
+      "code_capacity": 3072,
+      "original": "48 89 5C 24 08"
+    },
+    {
+      "name": "HE_LivingWeaponHintT",
+      "rva": 13932736,
+      "length": 8,
+      "code_offset": 50176,
+      "code_capacity": 3072,
+      "original": "48 83 BB C8 00 00 00 00"
+    },
+    {
+      "name": "HE_LivingWeaponDigitNine",
+      "rva": 7429451,
+      "length": 9,
+      "code_offset": 53248,
+      "code_capacity": 4096,
+      "original": "49 8B 73 38 41 0F 28 73 F0"
+    },
+    {
+      "name": "HE_LivingWeaponBossAttachmentGuard",
+      "rva": 8085440,
+      "length": 11,
+      "code_offset": 57344,
+      "code_capacity": 1024,
+      "original": "48 8B C4 53 48 81 EC B0 00 00 00"
+    },
+    {
+      "name": "HE_LivingWeaponElementVisualParameter",
+      "rva": 8084391,
+      "length": 5,
+      "code_offset": 58368,
+      "code_capacity": 1024,
+      "original": "40 88 74 24 20"
+    },
+    {
+      "name": "HE_LadderCommonLookup",
+      "rva": 7600704,
+      "length": 5,
+      "code_offset": 59392,
+      "code_capacity": 2048,
+      "original": "48 89 5C 24 08"
     }
   ],
   "targets": {
@@ -187,6 +334,35 @@
     "growth_reset": 8073776,
     "growth_load": 8111168,
     "equipment_load": 8108832,
-    "player_stats": 8097696
+    "player_stats": 8097696,
+    "grab_native_reject": 7580337,
+    "tutorial_manager": 25630176,
+    "tutorial_ui_owner": 25818112,
+    "native_input_manager": 28804696,
+    "native_window_owner": 26411152,
+    "native_key_settings": 25818144,
+    "native_stance_key_vector": 25118416,
+    "purification_hint_hidden": 13932875,
+    "native_purification_wave": 7618144,
+    "native_purification_visual": 7488992,
+    "native_purification_actor_manager": 25818104,
+    "native_shot_resource_manager": 25630024,
+    "native_controller_special_query": 7590592,
+    "native_purification_set_collision_origin": 8255984,
+    "weapon_hint_state_one": 13932832,
+    "shot_hint_state_two": 13932736,
+    "native_mouse_pointer": 28804680,
+    "native_guardian_selected_model": 7546800,
+    "native_guardian_combat_spawn": 7489424,
+    "native_guardian_database_manager": 25630496,
+    "native_guardian_database_hash": 25930960,
+    "native_guardian_allocator": 16412656,
+    "native_guardian_vtable": 18504624,
+    "native_default_vector": 7677280,
+    "native_identity_matrix": 7246352,
+    "native_guardian_set_mode": 7863072,
+    "native_living_weapon_start": 8084192,
+    "native_ladder_set_action": 7364720,
+    "native_ladder_motion_index": 9532672
   }
 }

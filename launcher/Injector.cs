@@ -119,12 +119,52 @@ namespace HinoEnmaTool
                 byte[] settings = read(candidate + Profile.DataOffset, 0x40);
                 uint selected = BitConverter.ToUInt32(settings, 0);
                 uint loaded = BitConverter.ToUInt32(settings, 4);
-                if ((selected != 0x58E5E && selected != 0x51BE1) ||
+                if (!CharacterSelection.Supported(selected) ||
                     (loaded != 0 && loaded != 0x58E5E && loaded != 0x51BE1) || settings[0x2A] > 2) return HookState.Other;
             }
             catch (System.ComponentModel.Win32Exception) { return HookState.Other; }
             allocation = candidate;
             return HookState.Ours;
+        }
+    }
+
+    internal static class CharacterSelection
+    {
+        internal static bool Supported(uint value)
+        { return value == 0 || value == 0x58E5E || value == 0x51BE1; }
+
+        internal static string Name(uint value)
+        { return value == 0 ? "威廉" : "飞缘魔"; }
+
+        // Only the next-load selector changes. In particular, leave the
+        // resolved template and current actor intact until native preload.
+        internal static bool Apply(Func<long, int, byte[]> read, Action<long, byte[]> write,
+                                   long moduleBase, long allocation, uint value)
+        {
+            if (!Supported(value)) throw new InvalidOperationException("角色选择无效。");
+            long recognized;
+            if (Checks.Inspect(read, moduleBase, out recognized) != HookState.Ours || recognized != allocation)
+                throw new InvalidOperationException("当前接入状态已变化，请重新检查。");
+            long address = allocation + Profile.DataOffset;
+            byte[] previous = read(address, 4), selected = BitConverter.GetBytes(value);
+            if (Checks.Equal(previous, selected)) return false;
+            try
+            {
+                write(address, selected);
+                if (!Checks.Equal(read(address, 4), selected)) throw new IOException("角色选择未完整写入。");
+            }
+            catch (Exception failure)
+            {
+                try
+                {
+                    write(address, previous);
+                    if (!Checks.Equal(read(address, 4), previous)) throw new IOException("角色选择恢复检查失败。");
+                }
+                catch (Exception)
+                { throw new InvalidOperationException("角色选择未能恢复，请退出并重新启动游戏。", failure); }
+                throw;
+            }
+            return true;
         }
     }
 
@@ -134,6 +174,9 @@ namespace HinoEnmaTool
         public int Pid;
         public bool ReadOnly;
         public string Template;
+        public uint SelectedTemplate;
+        public string SelectedCharacter, CurrentCharacter;
+        public bool CharacterChangePending;
         public uint Starts;
         public uint QueuedDoorStarts;
         public uint CameraSuppressions;
@@ -148,6 +191,7 @@ namespace HinoEnmaTool
         public uint WeaponHudUpdates, WeaponHudRefreshUpdates, WeaponHudMeleeSwitchUpdates, WeaponHudRangedSwitchUpdates;
         public long WeaponHudWidget;
         public uint RevenantStarts, RevenantInstance, RevenantQueuedRequests, RevenantHoldFlags;
+        public uint YokaiGrabPasses;
         public long RevenantObject;
         public int AttackBonus, NativeWeaponId;
         public long ModuleBase, Allocation;
@@ -267,6 +311,8 @@ namespace HinoEnmaTool
                 Report result = new Report("enabled", "本次游戏已启用飞缘魔。可以关闭工具，继续游玩。", Pid, true);
                 result.ModuleBase = Base; result.Allocation = allocation;
                 byte[] data = Read(allocation + Profile.DataOffset, Profile.RevenantInteraction ? 0xD0 : Profile.WeaponHudRefreshView ? 0xB8 : Profile.WeaponHudView ? 0xA4 : Profile.WeaponStatsOverlay ? 0xA0 : Profile.AttributeOverlay ? 0x90 : 0x58);
+                result.SelectedTemplate = BitConverter.ToUInt32(data, 0);
+                result.SelectedCharacter = CharacterSelection.Name(result.SelectedTemplate);
                 result.Starts = BitConverter.ToUInt32(data, 0x34);
                 result.QueuedDoorStarts = BitConverter.ToUInt32(data, 0x40);
                 result.CameraSuppressions = BitConverter.ToUInt32(data, 0x44);
@@ -313,12 +359,44 @@ namespace HinoEnmaTool
                     result.RevenantQueuedRequests = BitConverter.ToUInt32(data, 0xC8);
                     result.RevenantHoldFlags = BitConverter.ToUInt32(data, 0xCC);
                 }
+                if (Profile.YokaiGrab)
+                    result.YokaiGrabPasses = BitConverter.ToUInt32(Read(allocation + Profile.DataOffset + 0xF00, 4), 0);
                 if (actor != 0) result.Template = BitConverter.ToUInt32(Read(actor, 8), 0).ToString("X8");
-                if (actor == 0 || result.Template == "00000064") result.Message = "飞缘魔已接入。请从主菜单载入关卡，替换在人物生成后生效。";
+                bool william = result.Template == "00000064";
+                bool hinoenma = result.Template == "00058E5E" || result.Template == "00051BE1";
+                result.CurrentCharacter = actor == 0 ? "等待载入关卡" : william ? "威廉" : hinoenma ? "飞缘魔" : "其他角色";
+                result.CharacterChangePending = (william && result.SelectedTemplate != 0) || (hinoenma && result.SelectedTemplate == 0);
+                if (actor == 0) result.Message = "下次载入角色为" + result.SelectedCharacter + "。从主菜单继续游戏即可，可以关闭本工具。";
+                else if (result.CharacterChangePending) result.Message = "已选择" + result.SelectedCharacter + "。请返回 NEW GAME / CONTINUE 主菜单，再继续游戏，角色切换后生效。";
+                else result.Message = "当前角色为" + result.CurrentCharacter + "。可以关闭工具，继续游玩；也可以选择下次载入的角色。";
                 return result;
             }
             if (actor != 0) return new Report("needs_menu", "请先返回 NEW GAME / CONTINUE 主菜单，再点“重新检查”。人物替换需要重新载入关卡。", Pid, true);
             return new Report("ready", "请确保已停在 NEW GAME / CONTINUE 主菜单。", Pid, true);
+        }
+
+        internal Report SelectCharacter(uint selection, Report expected)
+        {
+            if (!writable) throw new InvalidOperationException("只读检查不能切换角色。");
+            if (!CharacterSelection.Supported(selection)) throw new InvalidOperationException("角色选择无效。");
+            Report before = Inspect();
+            if (before.State != "enabled") return before;
+            if (expected.Pid != Pid || expected.ModuleBase != Base || expected.Allocation != before.Allocation)
+                throw new InvalidOperationException("游戏进程已变化，请重新检查。");
+            privateAllocation = before.Allocation;
+            bool changed;
+            using (GameThreads threads = new GameThreads(Pid, Base))
+            {
+                Alive(); VerifyHeader();
+                changed = CharacterSelection.Apply(Read,
+                    delegate(long address, byte[] bytes) { Write(address, bytes, false); },
+                    Base, privateAllocation, selection);
+            }
+            Report result = Inspect();
+            if (result.State != "enabled" || result.SelectedTemplate != selection)
+                throw new InvalidOperationException("角色选择后的检查未通过，请重新检查。");
+            result.ReadOnly = !changed;
+            return result;
         }
 
         internal Report Enable()

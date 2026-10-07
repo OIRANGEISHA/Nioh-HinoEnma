@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "public_version": "1.0.0-beta.2",
+  "verification_date": "2026-10-08",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08"
+  },
+  "native_hook_count": 40,
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.2",
+      "success": true,
+      "game_access": false,
+      "self_checks": 19,
+      "payload_comparisons": 480,
+      "layout_count": 12,
+      "hook_count": 40
+    },
+    "Release": {
+      "version": "1.0.0-beta.2",
+      "success": true,
+      "game_access": false,
+      "self_checks": 19,
+      "payload_comparisons": 480,
+      "layout_count": 12,
+      "hook_count": 40
+    }
+  },
+  "native_payload_equivalence_summary": {
+    "success": true,
+    "payload_comparisons": 480,
+    "layouts": 12,
+    "scope": "Public native payloads and patches match the gameplay-tested local adaptation; internal research records and fingerprints are not published"
+  },
+  "prior_private_research_summary": {
+    "python_tests": 413,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "game_access": false,
+    "inputs_distributed": false,
+    "portable_public_ci": false,
+    "scope": "Private verified game-code inputs were used locally; count is a historical research result, not portable repository CI"
+  },
+  "gameplay_verification_scope": [
+    "Visible replacement and basic moves",
+    "Reported boxes, doors and corpse loot",
+    "Flight camera",
+    "Bag Himorogi Fragment",
+    "Kodama guide-home",
+    "Bag Sacred Water",
+    "Armor recalculation",
+    "Reported blood-tomb summon",
+    "Complete grabs on reported yokai and Onryoki",
+    "Bag skill locks and Spirit Stones",
+    "Reported dojo teaching progression",
+    "F6 Tokoyo purification",
+    "Ground and airborne digit-5 roar",
+    "Native Living Weapon startup/end and guardian combat summon",
+    "Native up/down ladder movement and exit; retained movement, J/I and digit 5"
+  ],
+  "guardian_start_attack_retirement_repeat_user_confirmed": true,
+  "ladder_up_down_exit_user_confirmed": true,
+  "final_public_enabled_session_readonly_recognition": true,
+  "final_public_cold_injection_tested": false,
+  "pending": [
+    "Final visible weapon icon",
+    "Every recovery/buff item and affix",
+    "All interactions and mission/save transitions",
+    "Direct CE enable",
+    "Cold first-enable of final public EXE",
+    "Every guardian and measured combat damage",
+    "Actual ranged shooting and Boss weapon-slot switching"
+  ],
+  "publication_scope": {
+    "public_record": "Verification results, user-confirmed scope and known limitations only",
+    "raw_private_checks_exported": false,
+    "private_research_fingerprints_exported": false,
+    "per_payload_hashes_exported": false,
+    "game_files_exported": false,
+    "note": "Private source fingerprints, native layout/position proofs and full research records are excluded from this public summary"
+  },
+  "limits": [
+    "User-confirmed features do not establish whole-game coverage",
+    "Read-only recognition of an enabled session does not establish cold first-injection success",
+    "Observed native Living Weapon reinforcement and guardian attack do not establish measured damage or every guardian",
+    "Direct CE enabling and final visible weapon icon remain unverified"
+  ]
+}

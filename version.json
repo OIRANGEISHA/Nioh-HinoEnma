@@ -1,11 +1,14 @@
 {
-  "version": "1.0.0-beta.1",
-  "display_version": "1.0.0 Beta 1",
-  "tag": "v1.0.0-beta.1",
-  "file_version": "1.0.0.1",
-  "release_date": "2026-10-07",
+  "version": "1.0.0-beta.2",
+  "display_version": "1.0.0 Beta 2",
+  "tag": "v1.0.0-beta.2",
+  "file_version": "1.0.0.2",
+  "release_date": "2026-10-08",
   "repository": "OIRANGEISHA/Nioh-HinoEnma",
   "release_owner": "OIRANGEISHA",
-  "upstream_private_profile_version": "0.14",
-  "channel": "beta"
+  "upstream_private_profile_version": "0.35",
+  "upstream_private_profile_revision": 1,
+  "ct_file": "Nioh_HinoEnma_1.24.8_Beta2.CT",
+  "channel": "beta",
+  "upstream_private_ladder_revision": 2
 }

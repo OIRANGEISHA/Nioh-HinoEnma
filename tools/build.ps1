@@ -21,7 +21,7 @@ $selfTest = Join-Path $destination 'self-tests.json'
 $process = Start-Process -FilePath $executable -ArgumentList '--self-test', ('"' + $selfTest + '"') -WindowStyle Hidden -Wait -PassThru
 if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $selfTest)) { throw 'Offline self-tests failed.' }
 $result = Get-Content -LiteralPath $selfTest -Raw | ConvertFrom-Json
-if (-not $result.success -or $result.count -ne 12) { throw 'Unexpected self-test result.' }
+if (-not $result.success -or $result.game_access -or $result.count -ne 19 -or @($result.checks).Count -ne 19) { throw 'Unexpected self-test result.' }
 $details = @{
     configuration = $Configuration
     compiler = 'Windows .NET Framework C# compiler'
@@ -36,4 +36,4 @@ $details = @{
 }
 $json = $details | ConvertTo-Json
 [IO.File]::WriteAllText((Join-Path $destination 'build.json'), $json + "`n", (New-Object Text.UTF8Encoding($false)))
-Write-Output "$Configuration built; 12 offline checks passed: $executable"
+Write-Output "$Configuration built; $($result.count) offline checks passed: $executable"
