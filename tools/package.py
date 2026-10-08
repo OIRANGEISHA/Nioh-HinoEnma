@@ -135,7 +135,7 @@ def main() -> None:
     if args.exe is not None:
         raise ValueError("--exe is only used with --verify-source-zip")
     version = json.loads((ROOT / "version.json").read_text("utf-8"))
-    match = re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.([1-9][0-9]*)", version["version"])
+    match = re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.([1-9][0-9]*(?:\.[1-9][0-9]*)?)", version["version"])
     if (not match or version["tag"] != "v" + version["version"] or version["channel"] != "beta"
             or version["repository"] != "OIRANGEISHA/Nioh-HinoEnma" or version["release_owner"] != "OIRANGEISHA"):
         raise ValueError("Expected consistent owner, repository and Semantic Versioning Beta metadata")
@@ -180,7 +180,8 @@ def main() -> None:
         platform_dependencies_not_embedded=["Windows x64", "Windows .NET Framework", "Win32 APIs"],
         development_dependencies_not_embedded=[
             dict(name="keystone-engine", version="0.9.2", purpose="independent x64 assembly verification", license="GPL-2.0 or commercial (development only)"),
-            dict(name="capstone", version="5.0.9", purpose="instruction decoding and relocation analysis", license="BSD (development only)")],
+            dict(name="capstone", version="5.0.9", purpose="instruction decoding and relocation analysis", license="BSD (development only)"),
+            dict(name="unicorn", version="2.1.4", purpose="CPU regression checks with explicit Win64 native-call stubs", license="GPL-2.0 (development only)")],
         upstream_mechanism="Bryanyora's Nioh CT character change; see NOTICE.md",
         not_included=["Nioh executable or assets", "original third-party CT", "private memory dumps", "Python runtime", "development packages"],
         authenticode=builds["Release"]["authenticode_status"])

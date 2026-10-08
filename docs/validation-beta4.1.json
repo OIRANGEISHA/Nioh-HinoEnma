@@ -1,0 +1,115 @@
+{
+  "schema": 2,
+  "public_version": "1.0.0-beta.4.1",
+  "verification_date": "2026-10-09",
+  "upstream_local_version": "0.51",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08"
+  },
+  "native_hook_count": 49,
+  "portable_public_validation_pending": false,
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.4.1",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 19,
+      "payload_comparisons": 588,
+      "layout_count": 12,
+      "hook_count": 49,
+      "pe_machine": "x64",
+      "executable_bytes": 169472,
+      "executable_sha256": "b1d027cb7e2e45e03f8589c6c6a60da6afcb1f7949cf13a9f0ea803d16172170"
+    },
+    "Release": {
+      "version": "1.0.0-beta.4.1",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 19,
+      "payload_comparisons": 588,
+      "layout_count": 12,
+      "hook_count": 49,
+      "pe_machine": "x64",
+      "executable_bytes": 166912,
+      "executable_sha256": "c55f160895fefaeca2d2b9bfcdf4b3885c6499d8b70bab8beb7d7bad8f8f7dfd"
+    }
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "hook_count": 49,
+    "payload_comparisons": 588,
+    "layout_count": 12,
+    "ct_unique_local_labels": 359,
+    "negative_rejection_cases": 3
+  },
+  "native_payload_equivalence_summary": {
+    "success": true,
+    "payload_comparisons": 588,
+    "layouts": 12,
+    "scope": "Public compiled payloads and entry patches match gameplay-tested local 0.51 in all 12 layouts; no private inputs distributed"
+  },
+  "local_rescue_regression_summary": {
+    "tests": 8,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "game_access": false,
+    "prior_tests_rerun": false
+  },
+  "gameplay_verification_scope": [
+    "Reported signpost placement, compass marker and repeated use",
+    "Reported enemy Hino-Enma drain kill, camera, cleanup and subsequent mission reload",
+    "Reported barred door raising and restored moves",
+    "Two reported NPC conversations and gesture-step progression",
+    "Reported Ginchiyo downed rescue and restored movement/J/I/digit5",
+    "Reported Shigisan spider-mission latched door opening after instance compatibility fix"
+  ],
+  "rescue": {
+    "reported_ginchiyo_user_confirmed": true,
+    "other_npcs_and_repeated_rescues_verified": false
+  },
+  "known_limits": [
+    "Some non-critical item use remains unfixed; item/affix coverage is incomplete",
+    "Digits1-4 conflict with shortcut items; use compatible items from the inventory",
+    "Gestures can still display a fixed laugh animation",
+    "Not all NPC/mission/interaction variants tested",
+    "Public version labels and packaging do not constitute new cold-injection gameplay"
+  ],
+  "source_assets_include_game_resources": false,
+  "public_ct_direct_enable_gameplay_verified": false,
+  "local_latched_door_instance_regression_summary": {
+    "tests": 8,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "game_access": false,
+    "prior_tests_rerun": false,
+    "scope": "Local native CodeImage regression with frozen private native-code inputs; distinct from public CPU stubs"
+  },
+  "public_latched_door_instance_cpu_regression_summary": {
+    "tests": 8,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "game_access": false,
+    "private_code_or_research_inputs": false,
+    "command": "python tests/test_latched_door_instances.py -v",
+    "native_calls": "Explicit Win64 stubs for common-action lookup, motion index and set-action",
+    "scope": "Public assembled helper and entry payloads, guards, fallback, ABI and same-length delta",
+    "not_executed": [
+      "Proprietary native queue/query115",
+      "Door scripts",
+      "Rendered animation"
+    ]
+  },
+  "latched_door_instances": {
+    "reported_shigisan_door_user_confirmed": true,
+    "all_map_or_instance_variants_verified": false
+  }
+}

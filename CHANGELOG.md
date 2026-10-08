@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.4.1] - 2026-10-09
+
+### Fixed
+
+- Fix the reported latched door in the Shigisan spider mission. Replace the fixed-instance check with the native latched-door type check. The user confirmed that the reported door opens; existing request, ownership and resource guards remain.
+
+### Validation and limits
+
+- Based on local 0.51. Eight new native-CPU regression checks, 19 EXE self-checks and 588 EXE/source payload comparisons passed (49 patches × 12 layouts). Earlier regression evidence remains frozen; this does not claim a rerun of all historical checks.
+- Retain Beta 4's features and keyboard bindings. Some non-critical item use remains unfixed; not every map, door variant or interaction is verified.
+- Publish only the Windows x64 EXE and complete source ZIP. Beta 4 and earlier tags/assets/records remain unchanged. Unsigned Pre-release; public cold first-enable remains unverified.
+
 ## [1.0.0-beta.4] - 2026-10-09
 
 ### Added
@@ -87,7 +99,8 @@
 
 - Non-humanoid Boss life-drain grabs, shortcut conflicts, complete interaction coverage, individual item/affix effects and cold first-enable verification of the final public EXE remain open.
 
-[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.4...HEAD
+[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.4.1...HEAD
+[1.0.0-beta.4.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4.1
 [1.0.0-beta.4]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.2

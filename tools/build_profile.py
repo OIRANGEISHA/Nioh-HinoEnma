@@ -49,6 +49,7 @@ from hinoenma_same_template_unload_safe_entry import apply_safe_entry
 from hinoenma_latched_door import apply_latched_door
 from hinoenma_talk import apply_talk
 from hinoenma_rescue import apply_rescue
+from hinoenma_latched_door_instances import apply_latched_door_instances
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
@@ -82,7 +83,7 @@ def baseline_specs() -> tuple[list[dict], dict]:
     return specs, targets
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_v050(frozen: dict) -> dict:
     """Apply each pure revision to the public signatures and source basis.
 
     The small entry signatures in the frozen public profile are the only
@@ -117,6 +118,14 @@ def source_plan(frozen: dict) -> dict:
     if baseline['tool_version'] != '0.50' or len(baseline['hooks']) != 49:
         raise ValueError('Expected the complete 49-hook current source revision')
     return baseline
+
+
+def source_plan(frozen: dict) -> dict:
+    """Extend the complete 0.50 source with the same-length object-kind fix."""
+    plan = apply_latched_door_instances(source_plan_v050(frozen))
+    if plan['tool_version'] != '0.51' or len(plan['hooks']) != 49:
+        raise ValueError('Expected the complete 49-hook local 0.51 source revision')
+    return plan
 
 
 def source_specs() -> tuple[list[dict], dict]:

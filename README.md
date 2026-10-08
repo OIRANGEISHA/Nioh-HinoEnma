@@ -2,13 +2,13 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 4 / Pre-release.**
+**Current version: 1.0.0 Beta 4.1 / Pre-release.**
 
-A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 4 incorporates local 0.50 and the fixes after Beta 3: Signpost Talisman compatibility, enemy Hino-Enma cleanup, latched doors, NPC dialogue and rescuing the reported fallen Ginchiyo. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
+A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 4.1 corresponds to local 0.51 and fixes the reported latched door in the Shigisan spider mission. It retains Beta 4's interaction and NPC fixes. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
 
 ## Download and use
 
-Get the Windows x64 EXE or source archive from [Beta 4](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.4-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.4-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
+Get the Windows x64 EXE or source archive from [Beta 4.1](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4.1). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.4.1-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.4.1-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
 
 1. Start the Steam game normally and stop at **NEW GAME / CONTINUE**.
 2. Run the tool. After it reports that the next character will be Hino-Enma, load a mission.
@@ -24,7 +24,12 @@ Repeated runs recognize the existing installation and retain the character choic
 - Epic and other executable builds have not been adapted. Matching a version label alone is insufficient.
 - The EXE changes the current process; game installation files do not need replacement. Game saves continue through the game's normal behavior; complete save/load and mission-transition coverage remains unverified.
 
-## New in Beta 4
+## New in Beta 4.1
+
+- Fix the latched door in the reported Shigisan spider mission. Replace the fixed-instance check with the native latched-door type check, retaining request, ownership and resource guards. The user confirmed that the reported door opens; other maps and door variants are not all verified.
+- Retain Beta 4's features, keyboard bindings and item-use limitations.
+
+## Retained Beta 4 fixes
 
 - Restore the accepted rescue request’s native action entry for the reported fallen Ginchiyo. The game handles the rescue animation, NPC recovery and interaction exit. The user confirmed that Ginchiyo can be revived and movement, J/I and digit 5 work afterward. Other NPCs and repeated rescues remain unverified.
 - Retain local 0.49 NPC dialogue compatibility. At the reported small Yokai gesture prompt, selecting “交给我吧” and performing it once is confirmed to allow progress. Hino-Enma’s displayed gesture can still remain laughter; the full set of gesture animations is not adapted.
@@ -84,14 +89,14 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 - Ladder and dojo results cover the reported locations. NPC dialogue and rescue cover the reported cases; other NPCs, repeated rescues, ladders, shrines, scripted events, all mission transitions and interactable variants have not all been verified. Gesture animations may remain laughter. Weapon-switch teaching support does not implement actual Boss weapon switching; native shooting is not implemented.
 - Living Weapon retains Hino-Enma's body and moves without William's full startup animation or weapon appearance. Guardian summoning does not reproduce William's additional ki cost. Other guardians, controllers and full combat/transition coverage remain unverified.
 - The [CT source](ct/) uses the same scoped hooks; enabling it directly inside Cheat Engine has not been tested. Use either the CT or EXE for a game session. Mixing different versions in one process is not supported.
-- The final public Beta 4 EXE’s first enable in a fresh game process remains pending. Offline checks and enabled-session recognition do not establish cold first-enable.
+- The final public Beta 4.1 EXE’s first enable in a fresh game process remains pending. Offline checks and enabled-session recognition do not establish cold first-enable.
 - This Beta is unsigned with Authenticode. Build provenance and file checksums describe origin and integrity; they are separate from Windows code signing.
 
 ## Validation and development
 
-See [Beta 4 release record](docs/releases/1.0.0-beta.4.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 3's release record](docs/releases/1.0.0-beta.3.md) and earlier release records remain historical.
+See [Beta 4.1 release record](docs/releases/1.0.0-beta.4.1.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 4's release record](docs/releases/1.0.0-beta.4.md) and earlier release records remain historical.
 
-Local 0.50 passed **8 new offline regression checks**. The EXE passed **19 self-checks and 588 EXE/source payload comparisons** (49 patches across 12 address layouts), without game access. Earlier research evidence remains frozen; these results do not claim that all previous checks were rerun. Private game-code inputs/raw reports are excluded and are not portable CI. Ginchiyo rescue and post-rescue movement/J/I/digit 5 are separately confirmed by the user. Final source commit, shipped hashes and actual publisher are recorded in provenance. Beta 1, Beta 2 and Beta 3 historical releases remain unchanged.
+Local 0.51 passed **8 new native-CPU regression checks** using private verified native-code inputs. The public source has **8 separate CPU checks with explicit Win64 stubs** for native calls; these do not reproduce the full native-code coverage. The EXE passed **19 self-checks and 588 EXE/source payload comparisons** (49 patches across 12 address layouts), without game access. Earlier research evidence remains frozen; these results do not claim that all previous checks were rerun. Private game-code inputs/raw reports are excluded and are not portable CI. The reported Shigisan door opening is separately user-confirmed. Final source commit, shipped hashes and actual publisher are recorded in provenance. Earlier public releases remain unchanged.
 
 Character replacement is adapted from the user-supplied **Bryanyora CharacterChange CT**. This tool does not redistribute game assets; original author credits are retained in [NOTICE.md](NOTICE.md).
 

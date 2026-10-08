@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "profile_kind": "experimental_type2",
-  "tool_version": "1.0.0-beta.4",
+  "tool_version": "1.0.0-beta.4.1",
   "scoped_living_weapon_hint": true,
   "living_weapon_teaching_revision": 1,
   "living_weapon_teaching_key": "T",
@@ -96,152 +96,169 @@
       "name": "HE_Preload",
       "rva": 9024548,
       "length": 12,
+      "original": "45 33 C0 8B D0 8B C8 E8 B0 5F 01 00",
       "code_offset": 0,
-      "original": "45 33 C0 8B D0 8B C8 E8 B0 5F 01 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_Spawn",
       "rva": 9054459,
       "length": 11,
-      "code_offset": 1024,
       "original": "45 33 C0 8D 4A 63 E8 5A 28 EB FF",
+      "code_offset": 1024,
       "code_capacity": 256
     },
     {
       "name": "HE_PlayerInit",
       "rva": 7736115,
       "length": 5,
-      "code_offset": 2048,
       "original": "83 FB 64 75 76",
+      "code_offset": 2048,
       "code_capacity": 256
     },
     {
       "name": "HE_Skin",
       "rva": 8111081,
       "length": 6,
-      "code_offset": 3072,
       "original": "8B 83 08 53 0B 00",
+      "code_offset": 3072,
       "code_capacity": 256
     },
     {
       "name": "HE_Equipment",
       "rva": 9054769,
       "length": 7,
+      "original": "80 BB 01 01 00 00 00",
       "code_offset": 4096,
-      "original": "80 BB 01 01 00 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_EquipmentPrepare",
       "rva": 8922681,
       "length": 7,
+      "original": "44 38 B6 CD 05 00 00",
       "code_offset": 5120,
-      "original": "44 38 B6 CD 05 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_InputA",
       "rva": 7475268,
       "length": 5,
+      "original": "44 0F BE 42 0C",
       "code_offset": 6144,
-      "original": "44 0F BE 42 0C"
+      "code_capacity": 1024
     },
     {
       "name": "HE_InputB",
       "rva": 7475353,
       "length": 5,
+      "original": "44 0F BE 47 0E",
       "code_offset": 7168,
-      "original": "44 0F BE 47 0E"
+      "code_capacity": 1024
     },
     {
       "name": "HE_Interaction",
       "rva": 7672150,
       "length": 10,
+      "original": "83 78 48 FF 0F 85 E2 00 00 00",
       "code_offset": 8192,
-      "original": "83 78 48 FF 0F 85 E2 00 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_QueuedDoor",
       "rva": 7672479,
       "length": 11,
+      "original": "48 C7 87 30 05 00 00 FF FF FF FF",
       "code_offset": 9216,
-      "original": "48 C7 87 30 05 00 00 FF FF FF FF"
+      "code_capacity": 1024
     },
     {
       "name": "HE_ActionCamera",
       "rva": 8740855,
       "length": 6,
+      "original": "8B 01 48 C1 E8 0A",
       "code_offset": 10240,
-      "original": "8B 01 48 C1 E8 0A"
+      "code_capacity": 1024
     },
     {
       "name": "HE_HimorogiFragment",
       "rva": 7673949,
       "length": 5,
+      "original": "45 84 F6 75 2D",
       "code_offset": 11264,
-      "original": "45 84 F6 75 2D"
+      "code_capacity": 1024
     },
     {
       "name": "HE_Kodama",
       "rva": 7672160,
       "length": 10,
+      "original": "49 8B C5 4D 85 C0 48 0F 45 C2",
       "code_offset": 12288,
-      "original": "49 8B C5 4D 85 C0 48 0F 45 C2"
+      "code_capacity": 1024
     },
     {
       "name": "HE_Consumables",
       "rva": 7673954,
       "length": 9,
+      "original": "83 BF 4C 05 00 00 00 74 24",
       "code_offset": 13312,
-      "original": "83 BF 4C 05 00 00 00 74 24"
+      "code_capacity": 1024
     },
     {
       "name": "HE_AttributeInit",
       "rva": 8159093,
       "length": 7,
+      "original": "48 8D BE D8 09 00 00",
       "code_offset": 14336,
-      "original": "48 8D BE D8 09 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_AttributeOverlay",
       "rva": 8159963,
       "length": 5,
       "code_capacity": 3072,
-      "code_offset": 15360,
-      "original": "E8 A0 00 FF FF"
+      "original": "E8 A0 00 FF FF",
+      "code_offset": 15360
     },
     {
       "name": "HE_WeaponHud",
       "rva": 13107671,
       "length": 8,
+      "original": "48 89 B4 24 88 00 00 00",
       "code_offset": 18432,
-      "original": "48 89 B4 24 88 00 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_WeaponHudRefresh",
       "rva": 13116013,
       "length": 7,
+      "original": "48 8D AE 28 01 00 00",
       "code_offset": 19456,
-      "original": "48 8D AE 28 01 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_WeaponHudMeleeSwitch",
       "rva": 13115339,
       "length": 9,
+      "original": "48 8B 4B 60 BA 18 00 00 00",
       "code_offset": 20480,
-      "original": "48 8B 4B 60 BA 18 00 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_WeaponHudRangedSwitch",
       "rva": 13114393,
       "length": 9,
+      "original": "48 8B 4B 60 BA 16 00 00 00",
       "code_offset": 21504,
-      "original": "48 8B 4B 60 BA 16 00 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_Revenant",
       "rva": 7672470,
       "length": 9,
+      "original": "48 8B 44 24 50 48 89 43 18",
       "code_offset": 22528,
-      "original": "48 8B 44 24 50 48 89 43 18"
+      "code_capacity": 1024
     },
     {
       "name": "HE_YokaiGrab",
@@ -255,75 +272,81 @@
       "name": "HE_ConsumableNotice",
       "rva": 7674182,
       "length": 11,
+      "original": "48 C7 87 48 05 00 00 FF FF FF FF",
       "code_offset": 26624,
-      "original": "48 C7 87 48 05 00 00 FF FF FF FF"
+      "code_capacity": 1024
     },
     {
       "name": "HE_TutorialReceipt",
       "rva": 9085714,
       "length": 6,
+      "original": "8B 88 7C 02 00 00",
       "code_offset": 27648,
-      "original": "8B 88 7C 02 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_TutorialClearReceipt",
       "rva": 9084735,
       "length": 7,
+      "original": "48 89 88 50 02 00 00",
       "code_offset": 28672,
-      "original": "48 89 88 50 02 00 00"
+      "code_capacity": 1024
     },
     {
       "name": "HE_DefenseHintRecovery",
       "rva": 13932585,
       "length": 5,
+      "original": "8B 49 60 85 C9",
       "code_offset": 29696,
-      "original": "8B 49 60 85 C9"
+      "code_capacity": 1024
     },
     {
       "name": "HE_KiPulseHintSpace",
       "rva": 13932576,
       "length": 6,
+      "original": "40 53 48 83 EC 30",
       "code_offset": 30720,
-      "original": "40 53 48 83 EC 30"
+      "code_capacity": 1024
     },
     {
       "name": "HE_PurificationHintSpace",
       "rva": 13932590,
       "length": 6,
       "code_capacity": 2048,
-      "code_offset": 31744,
-      "original": "0F 84 17 01 00 00"
+      "original": "0F 84 17 01 00 00",
+      "code_offset": 31744
     },
     {
       "name": "HE_PurificationPlayerTick",
       "rva": 7429435,
       "length": 8,
       "code_capacity": 2048,
-      "code_offset": 33792,
-      "original": "4C 8D 9C 24 B0 00 00 00"
+      "original": "4C 8D 9C 24 B0 00 00 00",
+      "code_offset": 33792
     },
     {
       "name": "HE_PurificationOrigin",
       "rva": 7618728,
       "length": 10,
+      "original": "66 0F 7F 45 D7 4C 89 6C 24 20",
       "code_offset": 35840,
-      "original": "66 0F 7F 45 D7 4C 89 6C 24 20"
+      "code_capacity": 1024
     },
     {
       "name": "HE_PurificationCollisionOrigin",
       "rva": 8248885,
       "length": 5,
       "code_capacity": 2048,
-      "code_offset": 36864,
-      "original": "E8 B6 1B 00 00"
+      "original": "E8 B6 1B 00 00",
+      "code_offset": 36864
     },
     {
       "name": "HE_ManualPurification",
       "rva": 7429443,
       "length": 8,
       "code_capacity": 2048,
-      "code_offset": 38912,
-      "original": "49 8B 5B 28 49 8B 6B 30"
+      "original": "49 8B 5B 28 49 8B 6B 30",
+      "code_offset": 38912
     },
     {
       "name": "HE_WeaponHintSwitch",
@@ -681,16 +704,14 @@
   "same_template_unload_gameplay_confirmation_pending": true,
   "same_template_unload_child_safe_entry": true,
   "same_template_unload_child_preserved_internal_entry": 9115768,
-  "latched_door_revision": 1,
+  "latched_door_revision": 2,
   "latched_door_changed_hook_indices": [
-    8,
-    9,
     45
   ],
   "latched_door_object": {
     "id": 15,
     "kind": 2,
-    "instance": 1
+    "instance": "native_object_identity_not_restricted"
   },
   "latched_door_dispatch": 16,
   "latched_door_native_query": 115,
@@ -783,5 +804,6 @@
   "rescue_resource_failure_fallback": "previous_accepted_native_queue",
   "rescue_direct_interaction_npc_hp_script_save_writes": false,
   "rescue_native_state_and_other_features_preserved": true,
-  "rescue_gameplay_confirmation_pending": true
+  "rescue_gameplay_confirmation_pending": true,
+  "latched_door_instance_guard_matches_native_word_kind": true
 }

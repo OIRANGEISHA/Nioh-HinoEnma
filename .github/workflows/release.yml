@@ -1,7 +1,7 @@
 name: Prepare Beta release
 
 on:
-  # One-time path for the authorized Beta 4 uploads; other versions never publish on push.
+  # One-time path for the authorized Beta 4.1 uploads; other versions never publish on push.
   push:
     branches: [main]
     paths: [version.json]
@@ -38,7 +38,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-      - name: Limit push publication to the first authorized Beta 4 only
+      - name: Limit push publication to the first authorized Beta 4.1 only
         id: scope
         shell: pwsh
         env:
@@ -55,8 +55,8 @@ jobs:
           $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
           if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
           if ($env:EVENT_NAME -ceq 'push') {
-            if ($version.version -cne '1.0.0-beta.4' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $version.upstream_private_profile_version -cne '0.50') {
-              'Push publication skipped: this one-time path is only for the authorized 1.0.0-beta.4 / local 0.50.' >> $env:GITHUB_STEP_SUMMARY
+            if ($version.version -cne '1.0.0-beta.4.1' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $version.upstream_private_profile_version -cne '0.51') {
+              'Push publication skipped: this one-time path is only for the authorized 1.0.0-beta.4.1 / local 0.51.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
             git show-ref --verify --quiet "refs/tags/$($version.tag)"
@@ -106,7 +106,7 @@ jobs:
           if ($env:EXPECTED_COMMIT -cnotmatch '^[0-9a-f]{40}$' -or (git rev-parse HEAD) -cne $env:EXPECTED_COMMIT) { throw 'Reviewed source commit mismatch.' }
           if (git status --porcelain) { throw 'Checkout is not clean.' }
           $version = Get-Content version.json -Raw | ConvertFrom-Json
-          if ($version.version -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.[1-9][0-9]*$' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta') { throw 'Unexpected release version.' }
+          if ($version.version -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.[1-9][0-9]*(\.[1-9][0-9]*)?$' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta') { throw 'Unexpected release version.' }
           if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
           git show-ref --verify --quiet "refs/tags/$($version.tag)"
           if ($LASTEXITCODE -eq 0) { throw 'Tag already exists; public versions must never be overwritten.' }
@@ -137,6 +137,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
           python tools/check_source.py
           if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
+          python tests/test_latched_door_instances.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Public latched-door CPU regressions failed.' }
           ./tools/build.ps1 -Configuration Debug
           ./tools/build.ps1 -Configuration Release
 
@@ -204,7 +206,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Draft preparation failed; inspect the existing tag before any retry.' }
           'Draft prepared for exact source and asset readback inspection.' >> $env:GITHUB_STEP_SUMMARY
 
-      - name: Verify Draft readback and publish only the one-time authorized Beta 4 upload
+      - name: Verify Draft readback and publish only the one-time authorized Beta 4.1 upload
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -317,11 +319,11 @@ jobs:
             'Verified Draft retained. Manual dispatch does not publish automatically.' >> $env:GITHUB_STEP_SUMMARY
             exit 0
           }
-          # This mutation is authorized only for the first exact Beta 4 push above.
-          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cne '1.0.0-beta.4' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
+          # This mutation is authorized only for the first exact Beta 4.1 push above.
+          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cne '1.0.0-beta.4.1' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
           if (git status --porcelain) { throw 'Source changed after Draft inspection.' }
           if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed after Draft inspection.' }
-          if ($version.upstream_private_profile_version -cne '0.50') { throw 'Authorized Beta 4 must identify local 0.50.' }
+          if ($version.upstream_private_profile_version -cne '0.51') { throw 'Authorized Beta 4.1 must identify local 0.51.' }
           $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
           if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed after Draft inspection.' }
           gh release edit "$env:RELEASE_TAG" --repo "$env:GITHUB_REPOSITORY" --draft=false --prerelease --latest=false
