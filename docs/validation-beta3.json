@@ -1,0 +1,162 @@
+{
+  "schema": 2,
+  "public_version": "1.0.0-beta.3",
+  "verification_date": "2026-10-08",
+  "upstream_local_version": "0.44",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08"
+  },
+  "native_hook_count": 45,
+  "portable_public_validation_pending": false,
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.3",
+      "success": true,
+      "game_access": false,
+      "self_checks": 19,
+      "payload_comparisons": 540,
+      "layout_count": 12,
+      "hook_count": 45,
+      "generated_source_matches": true
+    },
+    "Release": {
+      "version": "1.0.0-beta.3",
+      "success": true,
+      "game_access": false,
+      "self_checks": 19,
+      "payload_comparisons": 540,
+      "layout_count": 12,
+      "hook_count": 45,
+      "generated_source_matches": true
+    }
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "hook_count": 45,
+    "payload_comparisons": 540,
+    "layout_count": 12,
+    "ct_unique_local_labels": 275,
+    "negative_rejection_cases": 3
+  },
+  "offscreen_public_ui_review": {
+    "reviewed": true,
+    "text_clipping_observed": false
+  },
+  "native_payload_equivalence_summary": {
+    "success": true,
+    "payload_comparisons": 540,
+    "layouts": 12,
+    "scope": "Public payloads, patches, slots and targets match local 0.44; private reports and fingerprints are excluded"
+  },
+  "prior_private_research_summary": {
+    "frozen_baseline_version": "0.43",
+    "frozen_baseline_checks": 499,
+    "baseline_checks_rerun_for_hot_spring": false,
+    "new_hot_spring_checks": 8,
+    "new_hot_spring_errors": 0,
+    "new_hot_spring_failures": 0,
+    "new_hot_spring_skipped": 0,
+    "game_access": false,
+    "inputs_distributed": false,
+    "portable_public_ci": false,
+    "scope": "499 frozen prior checks plus eight new local checks, not 507 checks rerun"
+  },
+  "gameplay_verification_scope": [
+    "Visible replacement/basic moves and previously reported interactions, bag items, flight camera, Kodama/revenant",
+    "Previously reported grabs, dojo progress, purification, roar, native ladders and Living Weapon summons",
+    "Reported Lightning/Fire Talismans and Travel Amulet, with repeated elemental-talisman use",
+    "User-confirmed Living Weapon elements on needles, body charge and life drain",
+    "Kato shrine recall/death-grave pickup, followed by digit-9 startup and attacks",
+    "Four-stat normal re-equipping refresh and continued play",
+    "Current-pool hot-spring animation, Buff and restored movement/J/I",
+    "Same-version William short automatic stand at the reported pool"
+  ],
+  "hot_spring": {
+    "current_pool_animation_buff_exit_user_confirmed": true,
+    "current_pool_william_auto_stand_comparison_passed": true,
+    "william_comparison_pending": false,
+    "hino_wait_samples_seconds": [
+      0.062,
+      0.063
+    ],
+    "william_wait_sample_seconds": 0.079,
+    "precise_duration_equality_established": false,
+    "older_hino_exit_branch_identified": false,
+    "other_pools_verified": false
+  },
+  "guardian_recovery": {
+    "tested_guardian": "Kato",
+    "shrine_recall_user_confirmed": true,
+    "death_grave_pickup_user_confirmed": true,
+    "post_recovery_start_and_attack_user_confirmed": true,
+    "other_guardians_verified": false
+  },
+  "elemental_skills": {
+    "needles_body_charge_life_drain_living_weapon_user_confirmed": true,
+    "per_skill_received_hit_measurement_recorded": false,
+    "needle_original_paralysis_strength_measured": false,
+    "roar_intrinsic_effect_preserved": true,
+    "roar_additional_element_implemented": false,
+    "signpost_marking_resolved": false
+  },
+  "growth": {
+    "stats": [
+      "HP",
+      "ki",
+      "attack",
+      "defense"
+    ],
+    "valid_saved_level_range": [
+      1,
+      750
+    ],
+    "mapped_level_cap": 400,
+    "level1_index": 1,
+    "level400_index": 1410,
+    "mapping": "1 + floor((min(saved_level, 400) - 1) * 1409 / 399)",
+    "higher_native_scene_index_retained": true,
+    "native_growth_equipment_bonuses_additive": true,
+    "normal_re_equip_and_play_user_confirmed": true,
+    "actual_level_up_spending_verified": false,
+    "new_growth_save_load_verified": false,
+    "combat_damage_quantified": false,
+    "trainer_runtime_overrides_separate": true
+  },
+  "final_public_enabled_session_readonly_recognition": false,
+  "final_public_cold_injection_tested": false,
+  "direct_ct_enable_tested": false,
+  "pending": [
+    "Final public enabled-session recognition and cold first-enable",
+    "Direct CE enable",
+    "Other hot springs/precise timing equality",
+    "Signpost marking",
+    "Additional element for the roar",
+    "Needle paralysis strength, damage and healing measurements",
+    "Actual level-up spending/new growth save-load",
+    "Final visible weapon icon, all items/affixes",
+    "Other guardians/full Living Weapon protection/controllers/airborne moves",
+    "All interactions/mission-save transitions, native shooting and actual Boss weapon switching"
+  ],
+  "publication_scope": {
+    "public_record": "Sanitized results, user-confirmed scope and limitations only",
+    "raw_private_checks_exported": false,
+    "private_research_fingerprints_exported": false,
+    "per_payload_hashes_exported": false,
+    "process_identifiers_or_addresses_exported": false,
+    "machine_absolute_paths_exported": false,
+    "saves_or_game_resources_exported": false,
+    "game_files_exported": false
+  },
+  "limits": [
+    "Local gameplay/portable checks do not establish public cold first-enable",
+    "Current-pool comparison does not establish exact durations, older Hino exit branch or all pools",
+    "Skill confirmation is user feedback, not per-hit damage/status measurement",
+    "Attack scalars/derived ki are not per-hit damage/final ki-bar measurements",
+    "Unsigned Beta; provenance/attestation are not Authenticode signing or gameplay certification"
+  ],
+  "candidate_plan_metadata_note": "Frozen candidate-plan pending/older guardian or ladder booleans are source-generation metadata, not final gameplay acceptance. Current scoped user confirmations are recorded here; final public artifact hashes belong to actual verification/provenance."
+}

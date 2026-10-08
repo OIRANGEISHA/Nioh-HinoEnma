@@ -4,7 +4,7 @@ Adapted for this Windows game tool from [RapidBench DEVELOPMENT_RELEASE_STANDARD
 
 ## Required publication controls
 
-- Use Semantic Versioning, increasing Beta numbers and immutable public versions. Beta 1 is `1.0.0-beta.1`, tag `v1.0.0-beta.1`; Beta 2 is `1.0.0-beta.2`, tag `v1.0.0-beta.2`. Both are GitHub Pre-releases.
+- Use Semantic Versioning, increasing Beta numbers and immutable public versions. Beta 1 is `1.0.0-beta.1`, tag `v1.0.0-beta.1`; Beta 2 is `1.0.0-beta.2`, tag `v1.0.0-beta.2`; Beta 3 is `1.0.0-beta.3`, tag `v1.0.0-beta.3`. Each targets a GitHub Pre-release. Beta 3 incorporates local 0.44; prior public versions remain unchanged.
 - Release Owner: **OIRANGEISHA**. Source author/tagger are the owner. The owner-authorized repository Actions publisher can prepare tag/draft/assets; record its actual identity instead of presenting the upload as a human upload.
 - Use Conventional Commits; record the exact source commit and a clean, reviewed file tree. For subsequent releases, retain prior public tags, assets and historical release records unchanged.
 - Keep source, requirements, compatibility, bilingual README, changelog and release notes consistent with the shipped version.

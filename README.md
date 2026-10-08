@@ -2,13 +2,13 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 2 / Pre-release.**
+**Current version: 1.0.0 Beta 3 / Pre-release.**
 
-A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 2 includes the local 0.35 fixes, native ladder movement and Living Weapon support. Player growth, armor and selected melee-weapon bonuses are added to the Boss baseline.
+A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 3 incorporates local 0.44 and the fixes after Beta 2’s local 0.35 baseline: bag talismans, elemental skills, guardian recovery, level-based Boss stats and native hot-spring animation. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
 
 ## Download and use
 
-Get the Windows x64 EXE or ZIP from [Beta 2](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.2). The ZIP includes the EXE and Chinese instructions. You do not need Cheat Engine or Python to use the EXE.
+When its assets are available, get the Windows x64 EXE or ZIP from [Beta 3](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.3). The ZIP includes the EXE and Chinese instructions. You do not need Cheat Engine or Python to use the EXE.
 
 1. Start the Steam game normally and stop at **NEW GAME / CONTINUE**.
 2. Run the tool. After it reports that the next character will be Hino-Enma, load a mission.
@@ -24,7 +24,14 @@ Repeated runs recognize the existing installation and retain the character choic
 - Epic and other executable builds have not been adapted. Matching a version label alone is insufficient.
 - The EXE changes the current process; game installation files do not need replacement. Game saves continue through the game's normal behavior; complete save/load and mission-transition coverage remains unverified.
 
-## Implemented and tested
+## New in Beta 3
+
+- Restore native hot-spring sit/wait/stand/exit. Current-pool animation, Buff and restored movement/J/I are confirmed. Same-version William also automatically stands after a short wait there; exact durations and all pools are not claimed.
+- Reported bag Lightning/Fire Talismans and Travel Amulet, including repeated elemental-talisman use. The user confirmed Living Weapon elements on needles, body charge and life drain. Original roar status and auxiliary effects are preserved; a second added element for the roar is excluded.
+- Native Kato guardian recovery through shrine recall and death-grave pickup, followed by digit-9 startup and attacks. Other guardians remain pending.
+- Native Boss HP/ki/attack/defense curves use a linear mapping from level 1/index 1 to level 400/index 1410, rounding down. Valid saved levels 1–750 are read, mapped levels above 400 are capped, and higher native scene indices are retained. Native growth/equipment/selected-weapon bonuses remain additive. Re-equip armor and close the menu, or reload the character, for normal refresh; no saved levels/points/scene indices or current HP are directly edited. Repeated refresh recomputes base plus bonuses.
+
+## Retained features and tested scope
 
 - Visible Hino-Enma replacement and basic movement, kick, umbrella attack and evasion.
 - Locally tested boxes, key doors, prison doors, a door opened from one side and corpse loot.
@@ -42,19 +49,22 @@ The recorded keyboard bindings are the tester's current settings: **J** kick, **
 
 ## Known limitations
 
+- Signpost Talisman marking is unresolved; roar plus an additional element is excluded. Needle paralysis strength, exact elemental damage/healing and all airborne variants remain unmeasured/unverified.
+- Hot-spring wait samples were about 0.062/0.063 seconds for Hino-Enma and 0.079 seconds for William at the reported pool. These do not establish precise timing equality or the exit branch used in older Hino-Enma traces; other pools remain pending.
+- Actual level-up spending, new growth save/load and combat-damage quantification remain pending. Attack scalars are not per-hit damage, and derived ki is not measured final ki-bar capacity. Trainers can independently override runtime values.
 - Use items from the bag: digits 1–4 conflict with Boss skills. Sacred Water, the reported locks and Small Spirit Stone are confirmed; not every recovery/buff effect or ninjutsu item has been individually verified.
 - Weapon HUD data and isolated rendering paths were checked, but the final on-screen icon still awaits explicit confirmation.
 - Individual armor/weapon affixes, elemental effects and measured hit-damage differences have not all been tested.
 - Ladder and dojo results cover the reported locations; other ladders, dialogue, shrines, scripted events, all mission transitions and interactable variants have not all been verified. Weapon-switch teaching support does not implement actual Boss weapon switching; native shooting is not implemented.
 - Living Weapon retains Hino-Enma's body and moves without William's full startup animation or weapon appearance. Guardian summoning does not reproduce William's additional ki cost. Other guardians, controllers and full combat/transition coverage remain unverified.
-- The included [CT](ct/Nioh_HinoEnma_1.24.8_Beta2.CT) uses the same scoped hooks; enabling it directly inside Cheat Engine has not been tested. Use either the CT or EXE for a game session. Mixing different versions in one process is not supported.
-- The final public Beta 2 EXE's first injection into a fresh game process has not been separately tested. Public version/UI metadata changes are checked against the current local native payloads; the public EXE's read-only diagnosis recognizes the installed local 0.35 code without modifying the game.
+- The included [CT](ct/Nioh_HinoEnma_1.24.8_Beta3.CT) uses the same scoped hooks; enabling it directly inside Cheat Engine has not been tested. Use either the CT or EXE for a game session. Mixing different versions in one process is not supported.
+- The final public Beta 3 EXE’s first enable in a fresh game process remains pending. Offline checks and enabled-session recognition do not establish cold first-enable.
 - This Beta is unsigned with Authenticode. Build provenance and file checksums describe origin and integrity; they are separate from Windows code signing.
 
 ## Validation and development
 
-See [Beta 2 release record](docs/releases/1.0.0-beta.2.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 1's release record](docs/releases/1.0.0-beta.1.md) remains historical.
+See [Beta 3 release record](docs/releases/1.0.0-beta.3.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 1's release record](docs/releases/1.0.0-beta.1.md) remains historical.
 
-The local 0.35 adaptation passed **413 Python research checks**. Portable verification covers **19 C# checks** and **480 relocation comparisons** (40 hooks across 12 layouts). The Python research checks use private verified game-code snapshots and are not portable CI tests or included game resources. The public source can regenerate the profile and run the 19 C# checks and all 480 relocation comparisons without game resources. Public Beta packaging changes version labels and release metadata; its native payloads are compared with the current local adaptation. Final build results, hashes and source commit are recorded with the release assets.
+The local 0.43 baseline’s **499 Python research checks are frozen**; local 0.44 passed **8 new hot-spring checks**, not 507 checks rerun. Private game-code inputs/raw reports are excluded and are not portable CI. New public Beta 3 Debug and optimized x64 Release each passed **19 C# checks and 540 payload/patch comparisons** (45 hooks across 12 layouts), with generated source exact and no game access. Pure-source/CT checks passed, including 275 unique labels and three rejection cases; the offscreen UI was reviewed without clipping. Final source commit, shipped hashes and actual publisher are recorded in provenance. Beta 1 and Beta 2 historical releases remain unchanged.
 
 Report an issue with the game build, mission, interaction object, expected result and actual response. Do not attach saves or process dumps unless you intentionally want to share them.

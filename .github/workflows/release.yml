@@ -1,7 +1,7 @@
 name: Prepare Beta release
 
 on:
-  # One-time path for this authorized Beta 2 upload; other versions never publish on push.
+  # One-time path for the authorized Beta 2/Beta 3 uploads; other versions never publish on push.
   push:
     branches: [main]
     paths: [version.json]
@@ -30,7 +30,7 @@ jobs:
       contents: read
     outputs:
       run_release: ${{ steps.scope.outputs.run_release }}
-      one_time_beta2_publish: ${{ steps.scope.outputs.one_time_beta2_publish }}
+      one_time_current_release_publish: ${{ steps.scope.outputs.one_time_current_release_publish }}
       source_sha: ${{ steps.scope.outputs.source_sha }}
     steps:
       - name: Read the exact source for the publication scope check
@@ -38,7 +38,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-      - name: Limit push publication to the first authorized Beta 2 only
+      - name: Limit push publication to the first authorized Beta 2 or Beta 3 only
         id: scope
         shell: pwsh
         env:
@@ -48,33 +48,33 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           'run_release=false' >> $env:GITHUB_OUTPUT
-          'one_time_beta2_publish=false' >> $env:GITHUB_OUTPUT
+          'one_time_current_release_publish=false' >> $env:GITHUB_OUTPUT
           $head = git rev-parse HEAD
           if ($LASTEXITCODE -ne 0 -or $env:EXPECTED_COMMIT -cnotmatch '^[0-9a-f]{40}$' -or $head -cne $env:EXPECTED_COMMIT -or $head -cne $env:GITHUB_SHA) { throw 'Exact source mismatch.' }
           if (git status --porcelain) { throw 'Scope checkout is not clean.' }
           $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
           if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
           if ($env:EVENT_NAME -ceq 'push') {
-            if ($version.version -cne '1.0.0-beta.2' -or $version.tag -cne 'v1.0.0-beta.2' -or $version.channel -cne 'beta') {
-              'Push publication skipped: this one-time path is only for 1.0.0-beta.2.' >> $env:GITHUB_STEP_SUMMARY
+            if ($version.version -cnotin @('1.0.0-beta.2', '1.0.0-beta.3') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta') {
+              'Push publication skipped: this one-time path is only for the authorized 1.0.0-beta.2 or 1.0.0-beta.3.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
-            git show-ref --verify --quiet 'refs/tags/v1.0.0-beta.2'
+            git show-ref --verify --quiet "refs/tags/$($version.tag)"
             $tagStatus = $LASTEXITCODE
             if ($tagStatus -eq 0) {
-              'Beta 2 tag already exists; release work skipped without changing it.' >> $env:GITHUB_STEP_SUMMARY
+              'Reviewed release tag already exists; release work skipped without changing it.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
             if ($tagStatus -ne 1) { throw 'Could not inspect tags.' }
             $pages = gh api --paginate --slurp "repos/$env:GITHUB_REPOSITORY/releases?per_page=100"
             if ($LASTEXITCODE -ne 0) { throw 'Could not inspect releases.' }
             $releasePages = $pages | ConvertFrom-Json
-            $existing = @(foreach ($page in $releasePages) { foreach ($release in $page) { if ($release.tag_name -ceq 'v1.0.0-beta.2') { $release } } })
+            $existing = @(foreach ($page in $releasePages) { foreach ($release in $page) { if ($release.tag_name -ceq $version.tag) { $release } } })
             if ($existing.Count -ne 0) {
-              'Beta 2 release already exists; release work skipped without changing it.' >> $env:GITHUB_STEP_SUMMARY
+              'Reviewed release already exists; release work skipped without changing it.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
-            'one_time_beta2_publish=true' >> $env:GITHUB_OUTPUT
+            'one_time_current_release_publish=true' >> $env:GITHUB_OUTPUT
           } elseif ($env:EVENT_NAME -cne 'workflow_dispatch') { throw 'Unexpected release event.' }
           "source_sha=$head" >> $env:GITHUB_OUTPUT
           'run_release=true' >> $env:GITHUB_OUTPUT
@@ -86,7 +86,7 @@ jobs:
     timeout-minutes: 20
     env:
       PYTHONUTF8: '1'
-      ONE_TIME_BETA2_PUBLISH: ${{ needs.gate.outputs.one_time_beta2_publish }}
+      ONE_TIME_CURRENT_RELEASE_PUBLISH: ${{ needs.gate.outputs.one_time_current_release_publish }}
     defaults:
       run:
         shell: pwsh
@@ -135,6 +135,8 @@ jobs:
         run: |
           python tools/build_profile.py --check
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
+          python tools/check_source.py
+          if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
           ./tools/build.ps1 -Configuration Debug
           ./tools/build.ps1 -Configuration Release
 
@@ -194,7 +196,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Draft preparation failed; inspect the existing tag before any retry.' }
           'Draft prepared for exact source and asset readback inspection.' >> $env:GITHUB_STEP_SUMMARY
 
-      - name: Verify Draft readback and publish only the one-time Beta 2 upload
+      - name: Verify Draft readback and publish only the one-time authorized Beta 2/Beta 3 upload
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -284,11 +286,11 @@ jobs:
             }
             $components = Get-Content -LiteralPath (Join-Path $readback "${env:RELEASE_STEM}-components.json") -Raw | ConvertFrom-Json
             $verification = Get-Content -LiteralPath (Join-Path $readback "${env:RELEASE_STEM}-verification.json") -Raw | ConvertFrom-Json
-            if ($components.source_commit -cne $env:GITHUB_SHA -or $components.version -cne $version.version -or $components.runtime_embedded_components[0].native_hook_count -ne 40) { throw 'Component manifest source/version differs.' }
+            if ($components.source_commit -cne $env:GITHUB_SHA -or $components.version -cne $version.version -or $components.runtime_embedded_components[0].native_hook_count -ne 45) { throw 'Component manifest source/version differs.' }
             if ($verification.source_commit -cne $env:GITHUB_SHA -or $verification.game_access) { throw 'Verification manifest source differs.' }
             foreach ($configuration in @('Debug', 'Release')) {
               $check = $verification.checks.$configuration
-              if (-not $check.success -or $check.game_access -or $check.version -cne $version.version -or $check.self_checks -ne 19 -or $check.hook_count -ne 40 -or $check.payload_comparisons -ne 480 -or $check.layout_count -ne 12) { throw 'Verification manifest checks differ.' }
+              if (-not $check.success -or $check.game_access -or $check.version -cne $version.version -or $check.self_checks -ne 19 -or $check.hook_count -ne 45 -or $check.payload_comparisons -ne 540 -or $check.layout_count -ne 12) { throw 'Verification manifest checks differ.' }
             }
             if ($verification.checks.Release.executable_sha256 -cne $localByName["${env:RELEASE_STEM}-windows-x64.exe"].Sha256) { throw 'Executable hash differs from verification manifest.' }
             foreach ($assetName in @("${env:RELEASE_STEM}-windows-x64.exe", "${env:RELEASE_STEM}-windows-x64.zip", "${env:RELEASE_STEM}.CT", "${env:RELEASE_STEM}-attestation.jsonl")) {
@@ -319,19 +321,19 @@ jobs:
             return [pscustomobject]@{ ReleaseId = $release.id; TagObject = $ref.object.sha; AssetIds = $assetIds; Url = $release.html_url }
           }
           $draft = Test-ReleaseReadback $true 'draft'
-          if ($env:ONE_TIME_BETA2_PUBLISH -cne 'true') {
+          if ($env:ONE_TIME_CURRENT_RELEASE_PUBLISH -cne 'true') {
             'Verified Draft retained. Manual dispatch does not publish automatically.' >> $env:GITHUB_STEP_SUMMARY
             exit 0
           }
-          # This mutation is authorized only for the first Beta 2 push above.
-          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cne '1.0.0-beta.2' -or $version.tag -cne 'v1.0.0-beta.2' -or $env:RELEASE_TAG -cne 'v1.0.0-beta.2') { throw 'One-time Beta 2 publication scope mismatch.' }
+          # This mutation is authorized only for the first exact Beta 2/Beta 3 push above.
+          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cnotin @('1.0.0-beta.2', '1.0.0-beta.3') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
           $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
           if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed after Draft inspection.' }
-          gh release edit 'v1.0.0-beta.2' --repo "$env:GITHUB_REPOSITORY" --draft=false --prerelease --latest=false
+          gh release edit "$env:RELEASE_TAG" --repo "$env:GITHUB_REPOSITORY" --draft=false --prerelease --latest=false
           if ($LASTEXITCODE -ne 0) { throw 'One-time publication failed; inspect the existing Draft before any manual retry.' }
           $published = Test-ReleaseReadback $false 'published'
           if ($published.ReleaseId -ne $draft.ReleaseId -or $published.TagObject -cne $draft.TagObject) { throw 'Release or tag identity changed during publication.' }
           foreach ($name in $expectedNames) {
             if ($published.AssetIds[$name] -ne $draft.AssetIds[$name]) { throw 'Asset identity changed during publication.' }
           }
-          "One-time Beta 2 Pre-release published and verified: $($published.Url). Exact source, publisher, annotated tag and all $($localAssets.Count) downloaded asset hashes match. Future versions remain manual Draft-only." >> $env:GITHUB_STEP_SUMMARY
+          "One-time authorized Beta Pre-release published and verified: $($published.Url). Exact source, publisher, annotated tag and all $($localAssets.Count) downloaded asset hashes match. Future versions remain manual Draft-only." >> $env:GITHUB_STEP_SUMMARY

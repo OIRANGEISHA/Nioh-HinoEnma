@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+from copy import deepcopy
 import json
 from pathlib import Path
 import re
@@ -33,15 +34,27 @@ from hinoenma_guardian_spirit import GUARDIAN_TARGETS
 from hinoenma_guardian_combat import GUARDIAN_COMBAT_TARGETS
 from hinoenma_nine_handles import guardian_handle_width_hooks
 from hinoenma_ladder import queued_ladder_hook, common_ladder_lookup_hook, LADDER_TARGETS
+from hinoenma_talisman_items import apply_talisman_items
+from hinoenma_element_eligibility import apply_element_eligibility
+from hinoenma_projectile_elements import apply_projectile_elements
+from hinoenma_grab_elements import apply_grab_elements
+from hinoenma_projectile_intrinsic import apply_projectile_intrinsic_protection
+from hinoenma_guardian_recovery import apply_guardian_recovery
+from hinoenma_hp_growth import apply_hp_growth
+from hinoenma_combat_growth import apply_combat_growth
+from hinoenma_hot_spring import apply_hot_spring
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
 BASE = 0x140000000
 ALLOCATION = 0x144000000
+IDENTIFIER = r'[A-Za-z_][A-Za-z0-9_]*'
+LABEL_DEFINITION = re.compile(r'(?m)^\s*(' + IDENTIFIER + r'):')
+LABEL_DECLARATION = re.compile(r'(?m)^label\((' + IDENTIFIER + r')\)$')
 
 
-def source_specs() -> tuple[list[dict], dict]:
-    """Reconstruct the reviewed hooks using pure tool source only."""
+def baseline_specs() -> tuple[list[dict], dict]:
+    """Reconstruct the original 40-hook source basis without game files."""
     specs = [skill_locks_hook() if item["name"] == "HE_Consumables" else item
              for item in EXPERIMENTAL_HOOKS]
     specs = [spirit_stones_hook(item) if item["name"] == "HE_Consumables" else item
@@ -63,32 +76,76 @@ def source_specs() -> tuple[list[dict], dict]:
     return specs, targets
 
 
+def source_plan(frozen: dict) -> dict:
+    """Apply each pure revision to the public signatures and source basis.
+
+    The small entry signatures in the frozen public profile are the only
+    external input. No private verifier, process snapshot or game file is read.
+    Source controls every ASM body, native target and code-slot layout.
+    """
+    specs, targets = baseline_specs()
+    signatures = {hook['name']: hook for hook in frozen['hooks']}
+    baseline = deepcopy(frozen)
+    baseline.update(tool_version='0.35', targets=targets, hooks=[])
+    offset = 0
+    for source in specs:
+        hook = deepcopy(source)
+        original = signatures.get(hook['name'])
+        if original is None or any(hook[key] != original[key] for key in ('rva', 'length')):
+            raise ValueError('Public entry signature differs from source: ' + hook['name'])
+        hook['original'] = original['original']
+        hook['code_offset'] = hook.get('code_offset', offset)
+        hook['code_capacity'] = hook.get('code_capacity', BLOCK_SIZE)
+        if hook['code_offset'] < offset:
+            raise ValueError('Original source code slots overlap')
+        offset = hook['code_offset'] + hook['code_capacity']
+        baseline['hooks'].append(hook)
+    for apply_revision in (apply_talisman_items, apply_element_eligibility,
+            apply_projectile_elements, apply_grab_elements,
+            apply_projectile_intrinsic_protection, apply_guardian_recovery,
+            apply_hp_growth, apply_combat_growth, apply_hot_spring):
+        baseline = apply_revision(baseline)
+    if baseline['tool_version'] != '0.44' or len(baseline['hooks']) != 45:
+        raise ValueError('Expected the complete 45-hook current source revision')
+    return baseline
+
+
+def source_specs() -> tuple[list[dict], dict]:
+    frozen = json.loads((ROOT / 'profiles/steam-1.24.8.json').read_text('utf-8'))
+    plan = source_plan(frozen)
+    return plan['hooks'], plan['targets']
+
+
 def load_plan() -> dict:
     plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
     version = json.loads((ROOT / "version.json").read_text("utf-8"))
     if plan["tool_version"] != version["version"]:
         raise ValueError("Manifest and release version differ")
-    specs, targets = source_specs()
+    rebuilt = source_plan(plan)
+    specs, targets = rebuilt['hooks'], rebuilt['targets']
     if len(specs) != len(plan["hooks"]):
         raise ValueError("Frozen hook list differs from source")
     if plan["targets"] != targets:
         raise ValueError("Frozen native targets differ from source")
-    offset = 0
     md = Cs(CS_ARCH_X86, CS_MODE_64)
     for frozen, source in zip(plan["hooks"], specs):
-        for key in ("name", "rva", "length"):
+        for key in ("name", "rva", "length", "original"):
             if frozen[key] != source[key]:
                 raise ValueError("Frozen hook specification differs: " + frozen["name"])
-        source_offset = source.get("code_offset", offset)
-        if (source_offset < offset or frozen["code_offset"] != source_offset
+        source_offset = source['code_offset']
+        if (frozen["code_offset"] != source_offset
                 or frozen.get("code_capacity", BLOCK_SIZE) != source.get("code_capacity", BLOCK_SIZE)):
             raise ValueError("Frozen hook code slot differs")
         original = bytes.fromhex(frozen["original"])
         if len(original) != frozen["length"] or sum(i.size for i in md.disasm(original, BASE + frozen["rva"])) != len(original):
             raise ValueError("Frozen signature truncates a native instruction")
         frozen["asm"] = source["asm"]
-        offset = source_offset + source.get("code_capacity", BLOCK_SIZE)
-    if offset > plan["data_offset"] or plan["data_offset"] + 0x1000 > plan["allocation_size"]:
+    code_ranges = sorted((hook['code_offset'], hook['code_offset']
+                          + hook.get('code_capacity', BLOCK_SIZE)) for hook in plan['hooks'])
+    if (not code_ranges or code_ranges[0][0] < 0
+            or any(left[1] > right[0] for left, right in zip(code_ranges, code_ranges[1:]))
+            or code_ranges[-1][1] > plan['data_offset']
+            or plan['data_offset'] + 0x1000 > plan['allocation_size']):
         raise ValueError("Code and data slots overlap")
     native_ranges = sorted((hook["rva"], hook["rva"] + hook["length"]) for hook in plan["hooks"])
     if any(left[1] > right[0] for left, right in zip(native_ranges, native_ranges[1:])):
@@ -181,7 +238,38 @@ def generate(plan: dict) -> str:
     return '\n'.join(lines + ['};', '} }']) + '\n'
 
 
+def ct_render_plan(plan: dict) -> tuple[dict, list[str]]:
+    """Give all source labels a unique CT-wide namespace, including digits."""
+    rendered = deepcopy(plan)
+    local_labels = []
+    for hook in rendered['hooks']:
+        labels = LABEL_DEFINITION.findall(hook['asm'])
+        if len(labels) != len({label.casefold() for label in labels}):
+            raise ValueError('Duplicate local label in ' + hook['name'])
+        mapping = {label: 'ct_' + hook['name'].lower() + '_' + label for label in labels}
+        if mapping:
+            pattern = re.compile(r'\b(' + '|'.join(re.escape(label) for label in mapping) + r')\b')
+            hook['asm'] = pattern.sub(lambda match: mapping[match.group(0)], hook['asm'])
+        local_labels.extend(mapping.values())
+    if len(local_labels) != len({label.casefold() for label in local_labels}):
+        raise ValueError('Duplicate CT local label')
+    return rendered, local_labels
+
+
+def validate_ct_labels(source: str, local_labels: list[str]) -> None:
+    definitions = LABEL_DEFINITION.findall(source)
+    declarations = LABEL_DECLARATION.findall(source)
+    for names in (definitions, declarations):
+        if len(names) != len({name.casefold() for name in names}):
+            raise ValueError('Duplicate CT label definition or declaration')
+    if (not set(local_labels) <= set(definitions)
+            or not set(local_labels) <= set(declarations)
+            or not set(declarations) <= set(definitions)):
+        raise ValueError('CT labels are not all defined and declared')
+
+
 def aa_source(plan: dict) -> str:
+    plan, local_labels = ct_render_plan(plan)
     checks = [
         "[ENABLE]", "{$lua}", "if syntaxcheck then return end",
         'if getAddressSafe("HE_Prototype_Code") then error("飞缘魔测试版已启用。") end',
@@ -200,11 +288,8 @@ def aa_source(plan: dict) -> str:
         'define(HE_Prototype_Data,HE_Prototype_Code+F000)',
         'registersymbol(HE_Prototype_Code)', 'registersymbol(HE_Prototype_Data)',
     ]
-    local_labels = []
     for hook in plan["hooks"]:
         checks += [f'label({hook["name"]})', f'registersymbol({hook["name"]})']
-        for label in re.findall(r"(?m)^([a-z_]+):$", hook["asm"]):
-            local_labels.append(label)
     checks += [f"label({label})" for label in local_labels]
     for hook in plan["hooks"]:
         values = {key: f"nioh.exe+{rva:X}" for key, rva in plan["targets"].items()}
@@ -237,7 +322,9 @@ def aa_source(plan: dict) -> str:
         checks += [f'nioh.exe+{hook["rva"]:X}:', f'db {hook["original"]}', f'unregistersymbol({hook["name"]})']
     checks += ['unregistersymbol(HE_Prototype_Data)', 'unregistersymbol(HE_Prototype_Code)',
                '// Prototype allocations are reclaimed when nioh.exe exits.']
-    return "\n".join(checks) + "\n"
+    result = "\n".join(checks) + "\n"
+    validate_ct_labels(result, local_labels)
+    return result
 
 
 def ct_source(plan: dict, display_version: str) -> str:
@@ -330,7 +417,21 @@ def ct_source(plan: dict, display_version: str) -> str:
             ET.SubElement(child, "ShowAsHex").text = "1"
         if dropdown:
             ET.SubElement(child, "DropDownList", DisplayValueAsItem="1").text = dropdown
-    ET.SubElement(doc, "Comments").text = '飞缘魔 1.0.0 Beta 2，适配已核对的 Steam《仁王 完全版》1.24.8（窗口 1.24.08）。\n根据 Bryanyora 的 Character Change CT 重新适配，保留原作者署名。\n使用同一套 40 处处理：Boss 基础数值叠加成长与装备加成，保留飞缘魔模型和招式。\n支持已测试的箱门、尸体、木灵、血刀冢与背包神篱碎片等交互；道具从背包使用。\n数字 1 吸血；5 地面及空中吼叫；9 原生九十九与守护灵战斗召唤；F6 净化常世。\n当前已测试原生上下梯、离梯后的移动、J/I 和数字 5；全部梯子与关卡尚未逐一验证。\n角色选择在主菜单重新载入后生效，威廉为 00000000。\n数字 1—4 与快捷道具冲突；恢复、增益、遗发及灵石请从背包使用。\n武器切换只补教学操作，不代表 Boss 实际武器槽切换。实际射击、全部词条及伤害幅度未全部验证。\n九十九保留飞缘魔招式，不恢复威廉完整起手/武器外观；守护灵召唤未执行威廉挥刀的额外精力费用。\n推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n本表不包含游戏程序、游戏资源、私有研究快照或旧 CT。'
+    ET.SubElement(doc, "Comments").text = (
+        f'飞缘魔 {display_version}，适配已核对的 Steam《仁王 完全版》1.24.8（窗口 1.24.08）。\n'
+        '根据 Bryanyora 的 Character Change CT 重新适配，保留原作者署名。\n'
+        f'同一套 {len(plan["hooks"])} 处处理保留飞缘魔模型、招式、原生 Buff 和成长与装备加成。\n'
+        '生命、精力、攻击和防御按神社等级 1—400 映射到 Boss 成长档位 1—1410；保留更高原生档位。\n'
+        '数字 1 吸血；5 地面及空中吼叫；9 原生九十九与守护灵战斗召唤；F6 净化常世。\n'
+        '支持已测试的元素符、道祖神护符、守护灵取回、梯子及温泉坐下和起身；道具从背包使用。\n'
+        '当前这处温泉中，飞缘魔与同版本威廉对照均在松开输入后短暂停留再起身，保留原生流程。\n'
+        '未声称等待时长完全相同；所有温泉、交互、关卡、敌人、词条和伤害幅度尚未逐一验证。\n'
+        '保留吼叫与俯冲物件的原有属性，未给这些受保护通道强行叠加第二元素；路标符尚未修复。\n'
+        '角色选择在主菜单重新载入后生效，威廉为 00000000。数字 1—4 与快捷道具冲突。\n'
+        '武器切换只补教学操作。实际射击和 Boss 实际武器槽切换尚未实现。\n'
+        '九十九保留飞缘魔招式；守护灵召唤未执行威廉挥刀的额外精力费用。\n'
+        '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'
+        '本表不包含游戏程序、游戏资源、私有研究快照或旧 CT。')
     ET.indent(doc, space="  ")
     return ET.tostring(doc, encoding="unicode", xml_declaration=True) + "\n"
 

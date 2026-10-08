@@ -1,0 +1,74 @@
+"""Check portable source regeneration and CT labels without game files.
+
+These checks exercise the public source chain and assembly layout only.
+They do not reproduce the private native-CPU or gameplay verification.
+"""
+from __future__ import annotations
+
+from copy import deepcopy
+import json
+import sys
+
+from build_profile import (
+    ROOT, assemble, aa_source, ct_render_plan, load_plan, source_plan,
+    validate_ct_labels,
+)
+
+
+def rejects(callback, message: str) -> None:
+    try:
+        callback()
+    except ValueError:
+        return
+    raise AssertionError(message)
+
+
+def main() -> None:
+    frozen = json.loads((ROOT / 'profiles/steam-1.24.8.json').read_text('utf-8'))
+    original = deepcopy(frozen)
+    plan = load_plan()
+    if len(plan['hooks']) != 45 or source_plan(frozen)['tool_version'] != '0.44':
+        raise AssertionError('Expected the complete current source chain')
+    if frozen != original:
+        raise AssertionError('Source reconstruction changed its frozen input')
+    forbidden_imports = ('nioh_probe', 'runtime_probe', 'code_inspect')
+    if any(name in sys.modules for name in forbidden_imports) or any(
+            name.startswith('verify_hinoenma_') for name in sys.modules):
+        raise AssertionError('Public source reconstruction imported a private dependency')
+    for name, module in list(sys.modules.items()):
+        if name.startswith('hinoenma_'):
+            path = getattr(module, '__file__', None)
+            if path is None or not str(path).lower().startswith(str(ROOT / 'src').lower()):
+                raise AssertionError('Hino-Enma source escaped the public tree: ' + name)
+    rendered, labels = ct_render_plan(plan)
+    if len(labels) != 275:
+        raise AssertionError('Current CT local-label inventory changed')
+    text = aa_source(plan)
+    validate_ct_labels(text, labels)
+    comparisons = 0
+    layouts = 0
+    for module in (0x140000000, 0x7FF600000000, 0x180000000):
+        for slot in (0, 1, 37, 511):
+            allocation = module + 0x4000000 + slot * 0x10000
+            before = assemble(plan, module, allocation)
+            after = assemble(rendered, module, allocation)
+            for left, right in zip(before, after):
+                if left['payload'] != right['payload'] or left['patched'] != right['patched']:
+                    raise AssertionError('CT namespace changed assembled code: ' + left['name'])
+                comparisons += 1
+            layouts += 1
+    invalid = deepcopy(frozen)
+    invalid['hooks'][0]['length'] += 1
+    rejects(lambda: source_plan(invalid), 'Changed entry signature was accepted')
+    rejects(lambda: validate_ct_labels(text + '\n' + labels[0] + ':\n', labels),
+            'Duplicate CT definition was accepted')
+    missing = text.replace('label(' + labels[0] + ')\n', '', 1)
+    rejects(lambda: validate_ct_labels(missing, labels), 'Missing CT declaration was accepted')
+    print(json.dumps(dict(success=True, game_access=False,
+        private_dependencies_imported=False, hook_count=45, ct_local_labels=len(labels),
+        source_input_unchanged=True, layout_count=layouts,
+        ct_namespace_payload_comparisons=comparisons, negative_guards=3)))
+
+
+if __name__ == '__main__':
+    main()

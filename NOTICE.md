@@ -1,5 +1,6 @@
 # Credits and components
 
+- Public Beta 3 corresponds to local 0.44 with 45 scoped hooks. Prior public records retain their versions. Provenance records the actual source commit, publisher and shipped hashes.
 - Character-change mechanism adapted from the user-provided **Bryanyora Character Change CT** (2019-12-19). Original attribution is retained. The historical CT is not bundled.
 - Nioh and its game resources belong to their respective rightsholders. This repository ships tool source, scoped patch signatures and the new CT, not the game executable, resource archives or process dumps.
 - The Windows EXE uses the installed Microsoft .NET Framework and Win32 APIs. No Python interpreter, third-party native assembler, disassembler or emulator is embedded in the EXE.
@@ -7,3 +8,5 @@
 - No blanket license is assigned to historical third-party material. This repository does not relicense the upstream CT or game code.
 
 Upstream dependency information: [Keystone](https://github.com/keystone-engine/keystone), [Capstone](https://github.com/capstone-engine/capstone).
+
+Private research inputs/raw reports, process identifiers/addresses, saves and game resources are excluded. Public validation is sanitized. Checksums/attestation are not Authenticode signing or gameplay certification.

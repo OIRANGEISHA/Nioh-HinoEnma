@@ -45,8 +45,8 @@ def main() -> None:
     if not match or version["tag"] != "v" + version["version"] or version["channel"] != "beta":
         raise ValueError("Expected consistent Semantic Versioning Beta metadata")
     plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
-    if plan["tool_version"] != version["version"] or len(plan["hooks"]) != 40:
-        raise ValueError("Release metadata differs from the reviewed 40-hook profile")
+    if plan["tool_version"] != version["version"] or len(plan["hooks"]) != 45:
+        raise ValueError("Release metadata differs from the reviewed 45-hook profile")
     ct_name = version["ct_file"]
     if Path(ct_name).name != ct_name or not ct_name.endswith(".CT"):
         raise ValueError("Expected a CT filename within the public ct directory")
@@ -66,7 +66,7 @@ def main() -> None:
         build = json.loads((directory / "build.json").read_text("utf-8"))
         config_exe = directory / executable.name
         if (not report["success"] or report["game_access"] or report["self_checks"] != 19
-                or report["payload_comparisons"] != 480 or report["hook_count"] != 40
+                or report["payload_comparisons"] != 540 or report["hook_count"] != 45
                 or report["layout_count"] != 12 or not report["generated_source_matches"]
                 or report["version"] != version["version"]
                 or report["executable_sha256"] != sha256(config_exe)
