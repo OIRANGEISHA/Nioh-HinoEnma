@@ -1,10 +1,10 @@
-"""Pure runtime helper used by Beta 2 for native guardian combat summons.
+"""Candidate: digit9 dispatches the native Living Weapon child summon.
 
-The fixed 128-byte, pointer-free functional call descriptor comes from the
-native common event parameters. It supplies the selected guardian's summon
-arguments; it is not a complete game resource or a live memory snapshot.
+William action4008 local44 calls724790 with a selected guardian model, the
+pointer-free common spawn descriptor, slot0 and the child's action1505.
 The child's controller receives its real owner through the native holder.
 No William action, direct damage, gauge or actor-stat write is requested.
+This module is not selected by the builder until its review and tests pass.
 """
 import struct
 

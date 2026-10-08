@@ -43,6 +43,12 @@ from hinoenma_guardian_recovery import apply_guardian_recovery
 from hinoenma_hp_growth import apply_hp_growth
 from hinoenma_combat_growth import apply_combat_growth
 from hinoenma_hot_spring import apply_hot_spring
+from hinoenma_signpost import apply_signpost
+from hinoenma_same_template_unload import apply_same_template_unload
+from hinoenma_same_template_unload_safe_entry import apply_safe_entry
+from hinoenma_latched_door import apply_latched_door
+from hinoenma_talk import apply_talk
+from hinoenma_rescue import apply_rescue
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
@@ -86,7 +92,8 @@ def source_plan(frozen: dict) -> dict:
     specs, targets = baseline_specs()
     signatures = {hook['name']: hook for hook in frozen['hooks']}
     baseline = deepcopy(frozen)
-    baseline.update(tool_version='0.35', targets=targets, hooks=[])
+    baseline.update(tool_version='0.35', allocation_size=0x10000, data_offset=0xF000,
+                    targets=targets, hooks=[])
     offset = 0
     for source in specs:
         hook = deepcopy(source)
@@ -103,10 +110,12 @@ def source_plan(frozen: dict) -> dict:
     for apply_revision in (apply_talisman_items, apply_element_eligibility,
             apply_projectile_elements, apply_grab_elements,
             apply_projectile_intrinsic_protection, apply_guardian_recovery,
-            apply_hp_growth, apply_combat_growth, apply_hot_spring):
+            apply_hp_growth, apply_combat_growth, apply_hot_spring, apply_signpost,
+            apply_same_template_unload, apply_safe_entry, apply_latched_door,
+            apply_talk, apply_rescue):
         baseline = apply_revision(baseline)
-    if baseline['tool_version'] != '0.44' or len(baseline['hooks']) != 45:
-        raise ValueError('Expected the complete 45-hook current source revision')
+    if baseline['tool_version'] != '0.50' or len(baseline['hooks']) != 49:
+        raise ValueError('Expected the complete 49-hook current source revision')
     return baseline
 
 
@@ -144,8 +153,11 @@ def load_plan() -> dict:
                           + hook.get('code_capacity', BLOCK_SIZE)) for hook in plan['hooks'])
     if (not code_ranges or code_ranges[0][0] < 0
             or any(left[1] > right[0] for left, right in zip(code_ranges, code_ranges[1:]))
-            or code_ranges[-1][1] > plan['data_offset']
-            or plan['data_offset'] + 0x1000 > plan['allocation_size']):
+            or code_ranges[-1][1] > plan['allocation_size']
+            or (plan['data_offset'], plan['allocation_size']) != (0xF000, 0x14000)
+            or any(max(start, protected_start) < min(end, protected_end)
+                   for start,end in code_ranges
+                   for protected_start,protected_end in ((0xF000,0x10000),(0x13000,0x14000)))):
         raise ValueError("Code and data slots overlap")
     native_ranges = sorted((hook["rva"], hook["rva"] + hook["length"]) for hook in plan["hooks"])
     if any(left[1] > right[0] for left, right in zip(native_ranges, native_ranges[1:])):
@@ -284,7 +296,7 @@ def aa_source(plan: dict) -> str:
     for hook in plan["hooks"]:
         checks.append(f'assert(nioh.exe+{hook["rva"]:X},{hook["original"]})')
     checks += [
-        'alloc(HE_Prototype_Code,10000,nioh.exe+89B424)',
+        f'alloc(HE_Prototype_Code,{plan["allocation_size"]:X},nioh.exe+89B424)',
         'define(HE_Prototype_Data,HE_Prototype_Code+F000)',
         'registersymbol(HE_Prototype_Code)', 'registersymbol(HE_Prototype_Data)',
     ]
@@ -426,7 +438,9 @@ def ct_source(plan: dict, display_version: str) -> str:
         '支持已测试的元素符、道祖神护符、守护灵取回、梯子及温泉坐下和起身；道具从背包使用。\n'
         '当前这处温泉中，飞缘魔与同版本威廉对照均在松开输入后短暂停留再起身，保留原生流程。\n'
         '未声称等待时长完全相同；所有温泉、交互、关卡、敌人、词条和伤害幅度尚未逐一验证。\n'
-        '保留吼叫与俯冲物件的原有属性，未给这些受保护通道强行叠加第二元素；路标符尚未修复。\n'
+        '保留吼叫与俯冲物件的原有属性，未给这些受保护通道强行叠加第二元素；路标符投放与罗盘标记已获实测确认。\n'
+        '门闩门、NPC交谈与誾千代倒地救助已获实测；其他NPC/交互变体尚未全部验证。\n'
+        '部分非关键道具使用仍未修复；快捷道具与技能存在冲突，请从背包使用。\n'
         '角色选择在主菜单重新载入后生效，威廉为 00000000。数字 1—4 与快捷道具冲突。\n'
         '武器切换只补教学操作。实际射击和 Boss 实际武器槽切换尚未实现。\n'
         '九十九保留飞缘魔招式；守护灵召唤未执行威廉挥刀的额外精力费用。\n'

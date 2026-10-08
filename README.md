@@ -2,13 +2,13 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 3 / Pre-release.**
+**Current version: 1.0.0 Beta 4 / Pre-release.**
 
-A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 3 incorporates local 0.44 and the fixes after Beta 2’s local 0.35 baseline: bag talismans, elemental skills, guardian recovery, level-based Boss stats and native hot-spring animation. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
+A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 4 incorporates local 0.50 and the fixes after Beta 3: Signpost Talisman compatibility, enemy Hino-Enma cleanup, latched doors, NPC dialogue and rescuing the reported fallen Ginchiyo. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
 
 ## Download and use
 
-When its assets are available, get the Windows x64 EXE or ZIP from [Beta 3](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.3). The ZIP includes the EXE and Chinese instructions. You do not need Cheat Engine or Python to use the EXE.
+Get the Windows x64 EXE or source archive from [Beta 4](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.4-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.4-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
 
 1. Start the Steam game normally and stop at **NEW GAME / CONTINUE**.
 2. Run the tool. After it reports that the next character will be Hino-Enma, load a mission.
@@ -24,7 +24,14 @@ Repeated runs recognize the existing installation and retain the character choic
 - Epic and other executable builds have not been adapted. Matching a version label alone is insufficient.
 - The EXE changes the current process; game installation files do not need replacement. Game saves continue through the game's normal behavior; complete save/load and mission-transition coverage remains unverified.
 
-## New in Beta 3
+## New in Beta 4
+
+- Restore the accepted rescue request’s native action entry for the reported fallen Ginchiyo. The game handles the rescue animation, NPC recovery and interaction exit. The user confirmed that Ginchiyo can be revived and movement, J/I and digit 5 work afterward. Other NPCs and repeated rescues remain unverified.
+- Retain local 0.49 NPC dialogue compatibility. At the reported small Yokai gesture prompt, selecting “交给我吧” and performing it once is confirmed to allow progress. Hino-Enma’s displayed gesture can still remain laughter; the full set of gesture animations is not adapted.
+- Retain local 0.48 latched-door interaction, local 0.47 enemy Hino-Enma death cleanup, Signpost Talisman compatibility and earlier public-action fixes.
+- Document the current tested keyboard layout below. **Some non-critical item use remains unfixed**; digits 1–4 conflict with shortcut items, so use compatible items from the bag.
+
+## Retained Beta 3 fixes
 
 - Restore native hot-spring sit/wait/stand/exit. Current-pool animation, Buff and restored movement/J/I are confirmed. Same-version William also automatically stands after a short wait there; exact durations and all pools are not claimed.
 - Reported bag Lightning/Fire Talismans and Travel Amulet, including repeated elemental-talisman use. The user confirmed Living Weapon elements on needles, body charge and life drain. Original roar status and auxiliary effects are preserved; a second added element for the roar is excluded.
@@ -45,26 +52,47 @@ Repeated runs recognize the existing installation and retain the character choic
 - Digit 9 starts native Living Weapon at full charge while retaining Hino-Enma's moves. Native attribute reinforcement is confirmed. Guardian attacks and repeated summons, including use with the tester's infinite-Living-Weapon trainer, are confirmed; measured hit damage remains untested.
 - Fix the reported digit 9 full-charge startup refusal by reading the native resource ID as a 32-bit value. The earlier 64-bit read included unrelated padding. Offline regression passed, and the user confirmed startup, guardian attack and repeat summons after retirement in the corrected version.
 
-The recorded keyboard bindings are the tester's current settings: **J** kick, **I** umbrella, **K** evade, **Shift** restore ki, **Q + Space** flight, **1** life drain, **5** roar, **F6** purification, **9** native Living Weapon/guardian summon. Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switch combinations are Space + 2/3 for melee and Space + 1/4 for ranged; T handles the reported Living Weapon teaching step while preserving its Boss attack. Other bindings may differ.
+The following bindings use the tester’s current game keyboard settings; other settings may differ. Number keys refer to the main keyboard row.
+
+| Key | Action |
+| --- | --- |
+| W / A / S / D | Move |
+| J | Kick |
+| I | Umbrella attack |
+| K | Backstep / evade |
+| Shift | Restore ki |
+| Q + Space | Take flight |
+| Alt | Flight charge / dive |
+| 1 | Life drain |
+| 5 | Ground / airborne roar |
+| F6 | Purify nearby Yokai Realm pools; holding triggers once, release and press again to repeat |
+| 9 | At full guardian charge while idle on the ground, start native Living Weapon and summon a guardian attack |
+
+During Living Weapon, after the guardian retires and Hino-Enma is idle on the ground again, release and press 9 to repeat the summon. Use the game’s interaction key to enter a ladder, W to climb up and S to climb down; her moves resume after leaving. **Digits 1–4 conflict with shortcut items; select “Use” in the bag for compatible items.**
+
+Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switch combinations are Space + 2/3 for melee and Space + 1/4 for ranged; T handles the reported Living Weapon teaching step while preserving its Boss attack.
 
 ## Known limitations
 
-- Signpost Talisman marking is unresolved; roar plus an additional element is excluded. Needle paralysis strength, exact elemental damage/healing and all airborne variants remain unmeasured/unverified.
+- Some non-critical item use remains unfixed. Recovery/buff and ninjutsu items have not all been individually verified; compatibility for specific reported items does not establish complete item support.
+- An additional element for the roar is excluded. Needle paralysis strength, exact elemental damage/healing and all airborne variants remain unmeasured/unverified.
 - Hot-spring wait samples were about 0.062/0.063 seconds for Hino-Enma and 0.079 seconds for William at the reported pool. These do not establish precise timing equality or the exit branch used in older Hino-Enma traces; other pools remain pending.
 - Actual level-up spending, new growth save/load and combat-damage quantification remain pending. Attack scalars are not per-hit damage, and derived ki is not measured final ki-bar capacity. Trainers can independently override runtime values.
 - Use items from the bag: digits 1–4 conflict with Boss skills. Sacred Water, the reported locks and Small Spirit Stone are confirmed; not every recovery/buff effect or ninjutsu item has been individually verified.
 - Weapon HUD data and isolated rendering paths were checked, but the final on-screen icon still awaits explicit confirmation.
 - Individual armor/weapon affixes, elemental effects and measured hit-damage differences have not all been tested.
-- Ladder and dojo results cover the reported locations; other ladders, dialogue, shrines, scripted events, all mission transitions and interactable variants have not all been verified. Weapon-switch teaching support does not implement actual Boss weapon switching; native shooting is not implemented.
+- Ladder and dojo results cover the reported locations. NPC dialogue and rescue cover the reported cases; other NPCs, repeated rescues, ladders, shrines, scripted events, all mission transitions and interactable variants have not all been verified. Gesture animations may remain laughter. Weapon-switch teaching support does not implement actual Boss weapon switching; native shooting is not implemented.
 - Living Weapon retains Hino-Enma's body and moves without William's full startup animation or weapon appearance. Guardian summoning does not reproduce William's additional ki cost. Other guardians, controllers and full combat/transition coverage remain unverified.
-- The included [CT](ct/Nioh_HinoEnma_1.24.8_Beta3.CT) uses the same scoped hooks; enabling it directly inside Cheat Engine has not been tested. Use either the CT or EXE for a game session. Mixing different versions in one process is not supported.
-- The final public Beta 3 EXE’s first enable in a fresh game process remains pending. Offline checks and enabled-session recognition do not establish cold first-enable.
+- The [CT source](ct/) uses the same scoped hooks; enabling it directly inside Cheat Engine has not been tested. Use either the CT or EXE for a game session. Mixing different versions in one process is not supported.
+- The final public Beta 4 EXE’s first enable in a fresh game process remains pending. Offline checks and enabled-session recognition do not establish cold first-enable.
 - This Beta is unsigned with Authenticode. Build provenance and file checksums describe origin and integrity; they are separate from Windows code signing.
 
 ## Validation and development
 
-See [Beta 3 release record](docs/releases/1.0.0-beta.3.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 1's release record](docs/releases/1.0.0-beta.1.md) remains historical.
+See [Beta 4 release record](docs/releases/1.0.0-beta.4.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 3's release record](docs/releases/1.0.0-beta.3.md) and earlier release records remain historical.
 
-The local 0.43 baseline’s **499 Python research checks are frozen**; local 0.44 passed **8 new hot-spring checks**, not 507 checks rerun. Private game-code inputs/raw reports are excluded and are not portable CI. New public Beta 3 Debug and optimized x64 Release each passed **19 C# checks and 540 payload/patch comparisons** (45 hooks across 12 layouts), with generated source exact and no game access. Pure-source/CT checks passed, including 275 unique labels and three rejection cases; the offscreen UI was reviewed without clipping. Final source commit, shipped hashes and actual publisher are recorded in provenance. Beta 1 and Beta 2 historical releases remain unchanged.
+Local 0.50 passed **8 new offline regression checks**. The EXE passed **19 self-checks and 588 EXE/source payload comparisons** (49 patches across 12 address layouts), without game access. Earlier research evidence remains frozen; these results do not claim that all previous checks were rerun. Private game-code inputs/raw reports are excluded and are not portable CI. Ginchiyo rescue and post-rescue movement/J/I/digit 5 are separately confirmed by the user. Final source commit, shipped hashes and actual publisher are recorded in provenance. Beta 1, Beta 2 and Beta 3 historical releases remain unchanged.
+
+Character replacement is adapted from the user-supplied **Bryanyora CharacterChange CT**. This tool does not redistribute game assets; original author credits are retained in [NOTICE.md](NOTICE.md).
 
 Report an issue with the game build, mission, interaction object, expected result and actual response. Do not attach saves or process dumps unless you intentionally want to share them.

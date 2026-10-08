@@ -29,7 +29,7 @@ namespace HinoEnmaTool
             Font = new Font("Microsoft YaHei UI", 10);
             BackColor = Color.FromArgb(248, 249, 252);
             Label title = new Label { Text = "飞缘魔 · 启用与角色切换", Location = new Point(24, 22), Size = new Size(430, 35), Font = new Font(Font.FontFamily, 17, FontStyle.Bold) };
-            Label version = new Label { Text = "Steam 1.24.8  /  " + Profile.DisplayVersion, Location = new Point(25, 63), Size = new Size(425, 24), ForeColor = Color.DimGray };
+            Label version = new Label { Text = "Steam 1.24.8  /  实验版 " + Profile.DisplayVersion, Location = new Point(25, 63), Size = new Size(425, 24), ForeColor = Color.DimGray };
             status.Location = new Point(24, 105); status.Size = new Size(430, 30); status.Font = new Font(Font.FontFamily, 12, FontStyle.Bold);
             detail.Location = new Point(24, 144); detail.Size = new Size(430, 78);
             character.Location = new Point(24, 236); character.Size = new Size(430, 48); character.ForeColor = Color.DimGray;

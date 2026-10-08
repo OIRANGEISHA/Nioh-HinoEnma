@@ -1,7 +1,7 @@
 name: Prepare Beta release
 
 on:
-  # One-time path for the authorized Beta 2/Beta 3 uploads; other versions never publish on push.
+  # One-time path for the authorized Beta 4 uploads; other versions never publish on push.
   push:
     branches: [main]
     paths: [version.json]
@@ -38,7 +38,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-      - name: Limit push publication to the first authorized Beta 2 or Beta 3 only
+      - name: Limit push publication to the first authorized Beta 4 only
         id: scope
         shell: pwsh
         env:
@@ -55,8 +55,8 @@ jobs:
           $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
           if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
           if ($env:EVENT_NAME -ceq 'push') {
-            if ($version.version -cnotin @('1.0.0-beta.2', '1.0.0-beta.3') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta') {
-              'Push publication skipped: this one-time path is only for the authorized 1.0.0-beta.2 or 1.0.0-beta.3.' >> $env:GITHUB_STEP_SUMMARY
+            if ($version.version -cne '1.0.0-beta.4' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $version.upstream_private_profile_version -cne '0.50') {
+              'Push publication skipped: this one-time path is only for the authorized 1.0.0-beta.4 / local 0.50.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
             git show-ref --verify --quiet "refs/tags/$($version.tag)"
@@ -147,7 +147,7 @@ jobs:
           python tools/verify.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }
 
-      - name: Package versioned assets and provenance
+      - name: Package exactly the EXE and Git-tracked source ZIP
         run: |
           python tools/package.py --source-commit "$env:GITHUB_SHA" --build-origin github-actions --publisher 'github-actions[bot]' --workflow-url "https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
           if ($LASTEXITCODE -ne 0) { throw 'Packaging failed.' }
@@ -158,15 +158,14 @@ jobs:
         with:
           subject-path: |
             artifacts/dist/*.exe
-            artifacts/dist/*.zip
-            artifacts/dist/*.CT
+            artifacts/dist/*-source.zip
 
-      - name: Include attestation bundle and checksum
+      - name: Record attestation without an extra Release attachment
         env:
           BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
           ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
         run: |
-          $bundle = "artifacts/dist/${env:RELEASE_STEM}-attestation.jsonl"
+          $bundle = "artifacts/${env:RELEASE_STEM}-attestation.jsonl"
           Copy-Item -LiteralPath $env:BUNDLE_PATH -Destination $bundle
           $hash = (Get-FileHash -LiteralPath $bundle -Algorithm SHA256).Hash.ToLowerInvariant()
           [IO.File]::WriteAllText($bundle + '.sha256', $hash + '  ' + (Split-Path -Leaf $bundle) + "`n", (New-Object Text.UTF8Encoding($false)))
@@ -184,6 +183,15 @@ jobs:
           $remoteTag = git ls-remote origin "refs/tags/$env:RELEASE_TAG" "refs/tags/${env:RELEASE_TAG}^{}"
           if ($LASTEXITCODE -ne 0) { throw 'Could not inspect remote tags.' }
           if ($remoteTag) { throw 'Remote tag already exists; public versions must never be overwritten.' }
+          $prepared = Get-Content -LiteralPath artifacts/release-manifest.json -Raw | ConvertFrom-Json
+          if ($prepared.source_commit -cne $env:GITHUB_SHA -or $prepared.source_tree -cne (git rev-parse 'HEAD^{tree}') -or @($prepared.assets).Count -ne 2) { throw 'Prepared release manifest source/tree/assets differ.' }
+          $allowedNames = @("$($env:RELEASE_STEM)-windows-x64.exe", "$($env:RELEASE_STEM)-source.zip")
+          $distFiles = @(Get-ChildItem -LiteralPath artifacts/dist -File)
+          if ($distFiles.Count -ne 2) { throw 'Release must have exactly the EXE and source ZIP.' }
+          foreach ($file in $distFiles) {
+            $record = @($prepared.assets | Where-Object { $_.name -ceq $file.Name })
+            if ($file.Name -cnotin $allowedNames -or $record.Count -ne 1 -or $record[0].bytes -ne $file.Length -or $record[0].sha256 -cne (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()) { throw 'Prepared release asset differs.' }
+          }
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git tag -a "$env:RELEASE_TAG" "$env:GITHUB_SHA" -m "$env:RELEASE_NAME; Release Owner: $env:RELEASE_OWNER; prepared by authorized repository workflow"
@@ -196,7 +204,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Draft preparation failed; inspect the existing tag before any retry.' }
           'Draft prepared for exact source and asset readback inspection.' >> $env:GITHUB_STEP_SUMMARY
 
-      - name: Verify Draft readback and publish only the one-time authorized Beta 2/Beta 3 upload
+      - name: Verify Draft readback and publish only the one-time authorized Beta 4 upload
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -239,12 +247,7 @@ jobs:
           if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed before inspection.' }
           $sourceTree = git rev-parse 'HEAD^{tree}'
           if ($LASTEXITCODE -ne 0) { throw 'Could not read the reviewed source tree.' }
-          $expectedNames = @(
-            "${env:RELEASE_STEM}-windows-x64.exe", "${env:RELEASE_STEM}-windows-x64.zip", "${env:RELEASE_STEM}.CT",
-            "${env:RELEASE_STEM}-windows-x64.exe.sha256", "${env:RELEASE_STEM}-windows-x64.zip.sha256", "${env:RELEASE_STEM}.CT.sha256",
-            "${env:RELEASE_STEM}-components.json", "${env:RELEASE_STEM}-verification.json", "${env:RELEASE_STEM}-build-provenance.md",
-            "${env:RELEASE_STEM}-attestation.jsonl", "${env:RELEASE_STEM}-attestation.jsonl.sha256"
-          )
+          $expectedNames = @("$($env:RELEASE_STEM)-windows-x64.exe", "$($env:RELEASE_STEM)-source.zip")
           $localAssets = @(Get-ChildItem -LiteralPath artifacts/dist -File)
           if ($localAssets.Count -ne $expectedNames.Count) { throw 'Unexpected prepared asset inventory.' }
           $localByName = [System.Collections.Generic.Dictionary[string,object]]::new([System.StringComparer]::Ordinal)
@@ -261,12 +264,16 @@ jobs:
             $release = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/releases/$($matches[0].id)"
             if ($release.draft -ne $expectDraft -or -not $release.prerelease -or $release.tag_name -cne $env:RELEASE_TAG -or $release.name -cne $env:RELEASE_NAME) { throw 'Release state, tag or title differs.' }
             if ($release.author.login -cne 'github-actions[bot]' -or $release.target_commitish -cne $env:GITHUB_SHA) { throw 'Release publisher or target commit differs.' }
+            $expectedBody = (Get-Content -LiteralPath artifacts/release-notes.md -Raw).Replace(([string][char]13 + [char]10), [string][char]10).TrimEnd()
+            if ($release.body.Replace(([string][char]13 + [char]10), [string][char]10).TrimEnd() -cne $expectedBody) { throw 'Release body source and asset checksum records differ.' }
             if (-not $expectDraft -and -not $release.published_at) { throw 'Release is not published.' }
             $ref = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/git/ref/tags/$env:RELEASE_TAG"
             if ($ref.object.type -cne 'tag') { throw 'Release tag is not annotated.' }
             $tag = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/git/tags/$($ref.object.sha)"
             if ($tag.object.type -cne 'commit' -or $tag.object.sha -cne $env:GITHUB_SHA -or $tag.tag -cne $env:RELEASE_TAG) { throw 'Annotated tag does not identify the reviewed source.' }
             if ($tag.tagger.name -cne 'github-actions[bot]' -or $tag.tagger.email -cne '41898282+github-actions[bot]@users.noreply.github.com') { throw 'Unexpected tag publisher identity.' }
+            $remoteCommit = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/git/commits/$env:GITHUB_SHA"
+            if ($remoteCommit.sha -cne $env:GITHUB_SHA -or $remoteCommit.tree.sha -cne $sourceTree) { throw 'Remote commit/tree differs from the reviewed source.' }
             $assets = @(Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/releases/$($release.id)/assets?per_page=100")
             if ($assets.Count -ne $localAssets.Count) { throw 'Remote and local asset counts differ.' }
             $readback = Join-Path artifacts ("readback-" + $phase)
@@ -284,26 +291,15 @@ jobs:
               if ((Get-Item -LiteralPath $destination).Length -ne $expected.Bytes -or (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash.ToLowerInvariant() -cne $expected.Sha256) { throw "Downloaded bytes differ: $($asset.name)" }
               $assetIds.Add($asset.name, $asset.id)
             }
-            $components = Get-Content -LiteralPath (Join-Path $readback "${env:RELEASE_STEM}-components.json") -Raw | ConvertFrom-Json
-            $verification = Get-Content -LiteralPath (Join-Path $readback "${env:RELEASE_STEM}-verification.json") -Raw | ConvertFrom-Json
-            if ($components.source_commit -cne $env:GITHUB_SHA -or $components.version -cne $version.version -or $components.runtime_embedded_components[0].native_hook_count -ne 45) { throw 'Component manifest source/version differs.' }
-            if ($verification.source_commit -cne $env:GITHUB_SHA -or $verification.game_access) { throw 'Verification manifest source differs.' }
-            foreach ($configuration in @('Debug', 'Release')) {
-              $check = $verification.checks.$configuration
-              if (-not $check.success -or $check.game_access -or $check.version -cne $version.version -or $check.self_checks -ne 19 -or $check.hook_count -ne 45 -or $check.payload_comparisons -ne 540 -or $check.layout_count -ne 12) { throw 'Verification manifest checks differ.' }
-            }
-            if ($verification.checks.Release.executable_sha256 -cne $localByName["${env:RELEASE_STEM}-windows-x64.exe"].Sha256) { throw 'Executable hash differs from verification manifest.' }
-            foreach ($assetName in @("${env:RELEASE_STEM}-windows-x64.exe", "${env:RELEASE_STEM}-windows-x64.zip", "${env:RELEASE_STEM}.CT", "${env:RELEASE_STEM}-attestation.jsonl")) {
-              $sidecar = (Get-Content -LiteralPath (Join-Path $readback ($assetName + '.sha256')) -Raw).Trim()
-              if ($sidecar -cne ($localByName[$assetName].Sha256 + '  ' + $assetName)) { throw 'Checksum sidecar differs.' }
-            }
-            $bundle = Get-Content -LiteralPath (Join-Path $readback "${env:RELEASE_STEM}-attestation.jsonl") -Raw | ConvertFrom-Json
+            $sourceReadback = python tools/package.py --source-commit "$env:GITHUB_SHA" --verify-source-zip (Join-Path $readback "$($env:RELEASE_STEM)-source.zip") --exe (Join-Path $readback "$($env:RELEASE_STEM)-windows-x64.exe")
+            if ($LASTEXITCODE -ne 0) { throw 'Downloaded source ZIP files and embedded build evidence differ.' }
+            $bundle = Get-Content -LiteralPath (Join-Path artifacts "$($env:RELEASE_STEM)-attestation.jsonl") -Raw | ConvertFrom-Json
             if (-not $bundle.dsseEnvelope.payload) { throw 'Attestation bundle has no statement.' }
             $statement = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($bundle.dsseEnvelope.payload)) | ConvertFrom-Json
             if ($statement.predicateType -cne 'https://slsa.dev/provenance/v1') { throw 'Unexpected attestation predicate.' }
             $subjects = @($statement.subject)
             $subjectNames = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
-            $binaryNames = @("${env:RELEASE_STEM}-windows-x64.exe", "${env:RELEASE_STEM}-windows-x64.zip", "${env:RELEASE_STEM}.CT")
+            $binaryNames = $expectedNames
             if ($subjects.Count -ne $binaryNames.Count) { throw 'Attestation subject count differs.' }
             foreach ($subject in $subjects) {
               $name = [System.IO.Path]::GetFileName($subject.name)
@@ -314,10 +310,6 @@ jobs:
             if ($workflow.repository -cne "https://github.com/$env:GITHUB_REPOSITORY" -or $workflow.path -cne '.github/workflows/release.yml' -or $workflow.ref -cne 'refs/heads/main') { throw 'Attestation workflow identity differs.' }
             $dependencies = @($definition.resolvedDependencies | Where-Object { $_.digest.gitCommit -ceq $env:GITHUB_SHA -and $_.uri -clike "git+https://github.com/$env:GITHUB_REPOSITORY@*" })
             if ($dependencies.Count -ne 1) { throw 'Attestation source commit differs.' }
-            $provenance = Get-Content -LiteralPath (Join-Path $readback "${env:RELEASE_STEM}-build-provenance.md") -Raw
-            foreach ($line in @(('- Source commit: `' + $env:GITHUB_SHA + '`'), ('- Source tree: `' + $sourceTree + '`'), '- Build origin: github-actions', '- Prepared asset uploader: github-actions[bot]')) {
-              if (-not $provenance.Contains($line)) { throw 'Build provenance differs from the inspected source.' }
-            }
             return [pscustomobject]@{ ReleaseId = $release.id; TagObject = $ref.object.sha; AssetIds = $assetIds; Url = $release.html_url }
           }
           $draft = Test-ReleaseReadback $true 'draft'
@@ -325,8 +317,11 @@ jobs:
             'Verified Draft retained. Manual dispatch does not publish automatically.' >> $env:GITHUB_STEP_SUMMARY
             exit 0
           }
-          # This mutation is authorized only for the first exact Beta 2/Beta 3 push above.
-          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cnotin @('1.0.0-beta.2', '1.0.0-beta.3') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
+          # This mutation is authorized only for the first exact Beta 4 push above.
+          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cne '1.0.0-beta.4' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
+          if (git status --porcelain) { throw 'Source changed after Draft inspection.' }
+          if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed after Draft inspection.' }
+          if ($version.upstream_private_profile_version -cne '0.50') { throw 'Authorized Beta 4 must identify local 0.50.' }
           $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
           if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed after Draft inspection.' }
           gh release edit "$env:RELEASE_TAG" --repo "$env:GITHUB_REPOSITORY" --draft=false --prerelease --latest=false

@@ -423,6 +423,22 @@ namespace HinoEnmaTool
                 uint old;
                 if (!Native.VirtualProtectEx(handle, new IntPtr(privateAllocation), (UIntPtr)Profile.DataOffset, Native.ExecuteRead, out old)) throw Native.Error("无法准备工具代码。");
                 if (!Native.FlushInstructionCache(handle, new IntPtr(privateAllocation), (UIntPtr)Profile.DataOffset)) throw Native.Error("无法刷新工具代码。");
+                // New code may follow the original 4 KiB data page. Protect
+                // only its occupied pages; the data and trace pages stay RW.
+                foreach (HookSpec hook in Profile.Hooks)
+                {
+                    if (hook.CodeOffset < Profile.DataOffset) continue;
+                    byte[] payload = hook.Payload(Base, privateAllocation);
+                    int firstPage = hook.CodeOffset & ~0xFFF;
+                    int lastPage = checked((hook.CodeOffset + payload.Length + 0xFFF) & ~0xFFF);
+                    if (firstPage < Profile.DataOffset + 0x1000 || lastPage > Profile.AllocationSize)
+                        throw new InvalidOperationException("扩展工具代码与数据区重叠。");
+                    UIntPtr length = (UIntPtr)(lastPage - firstPage);
+                    if (!Native.VirtualProtectEx(handle, new IntPtr(privateAllocation + firstPage), length, Native.ExecuteRead, out old))
+                        throw Native.Error("无法准备扩展工具代码。");
+                    if (!Native.FlushInstructionCache(handle, new IntPtr(privateAllocation + firstPage), length))
+                        throw Native.Error("无法刷新扩展工具代码。");
+                }
                 using (GameThreads threads = new GameThreads(Pid, Base))
                 {
                     Alive();

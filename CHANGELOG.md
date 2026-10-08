@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.4] - 2026-10-09
+
+### Added
+
+- Fourth public Beta based on local 0.50, incorporating local 0.45–0.50 after Beta 3. Earlier tags/assets/historical records remain unchanged.
+- Publish only the standalone Windows x64 EXE and source archive as release attachments. The source archive includes usage and keyboard documentation; GitHub's automatic source downloads remain available.
+- Document the tester’s current bindings: W/A/S/D movement, J kick, I umbrella, K evade, Shift ki recovery, Q + Space flight, Alt flight charge/dive, digit 1 life drain, digit 5 ground/air roar, F6 purification and digit 9 native Living Weapon/guardian attack. Digits 1–4 conflict with shortcut items; compatible items must be used from the bag.
+
+### Fixed
+
+- Restore the accepted fallen-NPC rescue request’s native action entry. The user confirmed that the reported Ginchiyo can be revived and movement/J/I/digit 5 work afterward; native rescue animation, NPC recovery and interaction exit remain under the game’s control.
+- Retain local 0.49 NPC dialogue compatibility. The reported small Yokai gesture prompt can continue after selecting “交给我吧” and performing it once.
+- Retain local 0.48 latched-door interaction, local 0.47 enemy Hino-Enma death cleanup, Signpost Talisman compatibility and earlier public-action fixes.
+
+### Validation and limits
+
+- Local 0.50 passed 8 new offline regression checks. The EXE passed 19 self-checks and 588 EXE/source payload comparisons (49 patches × 12 address layouts), without game access. Earlier research proof remains frozen; this is not a rerun of every historical check.
+- Ginchiyo rescue and restored post-rescue movement/J/I/digit 5 are separately user-confirmed. Other NPCs and repeated rescues of the same NPC remain unverified.
+- Some non-critical item use remains unfixed. Reported item compatibility does not establish support for every recovery/buff or ninjutsu item; shortcut-item conflicts remain.
+- Hino-Enma’s displayed gesture can still remain laughter; the full set of gesture animations is not adapted. Additional roar elements, other guardians, native shooting, actual Boss weapon switching, full affix/interaction/transition coverage and final-public-EXE cold first-enable remain outside confirmed scope. Unsigned Beta.
+
 ## [1.0.0-beta.3] - 2026-10-08
 
 ### Added
@@ -66,7 +87,8 @@
 
 - Non-humanoid Boss life-drain grabs, shortcut conflicts, complete interaction coverage, individual item/affix effects and cold first-enable verification of the final public EXE remain open.
 
-[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.3...HEAD
+[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.4...HEAD
+[1.0.0-beta.4]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.1

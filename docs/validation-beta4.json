@@ -1,0 +1,85 @@
+{
+  "schema": 2,
+  "public_version": "1.0.0-beta.4",
+  "verification_date": "2026-10-09",
+  "upstream_local_version": "0.50",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08"
+  },
+  "native_hook_count": 49,
+  "portable_public_validation_pending": false,
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.4",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 19,
+      "payload_comparisons": 588,
+      "layout_count": 12,
+      "hook_count": 49,
+      "pe_machine": "x64",
+      "executable_bytes": 169472,
+      "executable_sha256": "cf39dbb5d97d013a1475331f278135b3fa41a47978e74bed6dc02970a13a0e61"
+    },
+    "Release": {
+      "version": "1.0.0-beta.4",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 19,
+      "payload_comparisons": 588,
+      "layout_count": 12,
+      "hook_count": 49,
+      "pe_machine": "x64",
+      "executable_bytes": 166912,
+      "executable_sha256": "32c0391acf5e23aacfb563d6ebef15a8fd0b35b2748241f1723d1f898dbf44a3"
+    }
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "hook_count": 49,
+    "payload_comparisons": 588,
+    "layout_count": 12,
+    "ct_unique_local_labels": 359,
+    "negative_rejection_cases": 3
+  },
+  "native_payload_equivalence_summary": {
+    "success": true,
+    "payload_comparisons": 588,
+    "layouts": 12,
+    "scope": "Public payloads, patches, slots and targets match gameplay-tested local 0.50; no private snapshots distributed"
+  },
+  "local_rescue_regression_summary": {
+    "tests": 8,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "game_access": false,
+    "prior_tests_rerun": false
+  },
+  "gameplay_verification_scope": [
+    "Reported signpost placement, compass marker and repeated use",
+    "Reported enemy Hino-Enma drain kill, camera, cleanup and subsequent mission reload",
+    "Reported barred door raising and restored moves",
+    "Two reported NPC conversations and gesture-step progression",
+    "Reported Ginchiyo downed rescue and restored movement/J/I/digit5"
+  ],
+  "rescue": {
+    "reported_ginchiyo_user_confirmed": true,
+    "other_npcs_and_repeated_rescues_verified": false
+  },
+  "known_limits": [
+    "Some non-critical item use remains unfixed; item/affix coverage is incomplete",
+    "Digits1-4 conflict with shortcut items; use compatible items from the inventory",
+    "Gestures can still display a fixed laugh animation",
+    "Not all NPC/mission/interaction variants tested",
+    "Public version labels and packaging do not constitute new cold-injection gameplay"
+  ],
+  "source_assets_include_game_resources": false,
+  "public_ct_direct_enable_gameplay_verified": false
+}

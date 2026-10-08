@@ -14,8 +14,8 @@ from build_profile import ROOT, assemble, generate, load_plan
 
 def verify(executable: Path, report: Path, preview: bool = False) -> dict:
     plan = load_plan()
-    if len(plan["hooks"]) != 45:
-        raise ValueError("Expected the reviewed 45-hook profile")
+    if len(plan["hooks"]) != 49:
+        raise ValueError("Expected the reviewed 49-hook profile")
     if (ROOT / "launcher/Profile.generated.cs").read_text("utf-8") != generate(plan):
         raise ValueError("Generated source differs")
     report.parent.mkdir(parents=True, exist_ok=True)

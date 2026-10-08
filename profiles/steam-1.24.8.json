@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "profile_kind": "experimental_type2",
-  "tool_version": "1.0.0-beta.3",
+  "tool_version": "1.0.0-beta.4",
   "scoped_living_weapon_hint": true,
   "living_weapon_teaching_revision": 1,
   "living_weapon_teaching_key": "T",
@@ -89,8 +89,379 @@
   "pe_timestamp_hex": "0x6307A81B",
   "upstream": "Bryanyora's_nioh_2019_12_19_work.CT, Character Change entries 74 and 76",
   "upstream_sha256": "251c47b2b9ba5ce61d19cf0663fbd3661b8b20144c878926b7f0c1a205993c62",
-  "allocation_size": 65536,
+  "allocation_size": 81920,
   "data_offset": 61440,
+  "hooks": [
+    {
+      "name": "HE_Preload",
+      "rva": 9024548,
+      "length": 12,
+      "code_offset": 0,
+      "original": "45 33 C0 8B D0 8B C8 E8 B0 5F 01 00"
+    },
+    {
+      "name": "HE_Spawn",
+      "rva": 9054459,
+      "length": 11,
+      "code_offset": 1024,
+      "original": "45 33 C0 8D 4A 63 E8 5A 28 EB FF",
+      "code_capacity": 256
+    },
+    {
+      "name": "HE_PlayerInit",
+      "rva": 7736115,
+      "length": 5,
+      "code_offset": 2048,
+      "original": "83 FB 64 75 76",
+      "code_capacity": 256
+    },
+    {
+      "name": "HE_Skin",
+      "rva": 8111081,
+      "length": 6,
+      "code_offset": 3072,
+      "original": "8B 83 08 53 0B 00",
+      "code_capacity": 256
+    },
+    {
+      "name": "HE_Equipment",
+      "rva": 9054769,
+      "length": 7,
+      "code_offset": 4096,
+      "original": "80 BB 01 01 00 00 00"
+    },
+    {
+      "name": "HE_EquipmentPrepare",
+      "rva": 8922681,
+      "length": 7,
+      "code_offset": 5120,
+      "original": "44 38 B6 CD 05 00 00"
+    },
+    {
+      "name": "HE_InputA",
+      "rva": 7475268,
+      "length": 5,
+      "code_offset": 6144,
+      "original": "44 0F BE 42 0C"
+    },
+    {
+      "name": "HE_InputB",
+      "rva": 7475353,
+      "length": 5,
+      "code_offset": 7168,
+      "original": "44 0F BE 47 0E"
+    },
+    {
+      "name": "HE_Interaction",
+      "rva": 7672150,
+      "length": 10,
+      "code_offset": 8192,
+      "original": "83 78 48 FF 0F 85 E2 00 00 00"
+    },
+    {
+      "name": "HE_QueuedDoor",
+      "rva": 7672479,
+      "length": 11,
+      "code_offset": 9216,
+      "original": "48 C7 87 30 05 00 00 FF FF FF FF"
+    },
+    {
+      "name": "HE_ActionCamera",
+      "rva": 8740855,
+      "length": 6,
+      "code_offset": 10240,
+      "original": "8B 01 48 C1 E8 0A"
+    },
+    {
+      "name": "HE_HimorogiFragment",
+      "rva": 7673949,
+      "length": 5,
+      "code_offset": 11264,
+      "original": "45 84 F6 75 2D"
+    },
+    {
+      "name": "HE_Kodama",
+      "rva": 7672160,
+      "length": 10,
+      "code_offset": 12288,
+      "original": "49 8B C5 4D 85 C0 48 0F 45 C2"
+    },
+    {
+      "name": "HE_Consumables",
+      "rva": 7673954,
+      "length": 9,
+      "code_offset": 13312,
+      "original": "83 BF 4C 05 00 00 00 74 24"
+    },
+    {
+      "name": "HE_AttributeInit",
+      "rva": 8159093,
+      "length": 7,
+      "code_offset": 14336,
+      "original": "48 8D BE D8 09 00 00"
+    },
+    {
+      "name": "HE_AttributeOverlay",
+      "rva": 8159963,
+      "length": 5,
+      "code_capacity": 3072,
+      "code_offset": 15360,
+      "original": "E8 A0 00 FF FF"
+    },
+    {
+      "name": "HE_WeaponHud",
+      "rva": 13107671,
+      "length": 8,
+      "code_offset": 18432,
+      "original": "48 89 B4 24 88 00 00 00"
+    },
+    {
+      "name": "HE_WeaponHudRefresh",
+      "rva": 13116013,
+      "length": 7,
+      "code_offset": 19456,
+      "original": "48 8D AE 28 01 00 00"
+    },
+    {
+      "name": "HE_WeaponHudMeleeSwitch",
+      "rva": 13115339,
+      "length": 9,
+      "code_offset": 20480,
+      "original": "48 8B 4B 60 BA 18 00 00 00"
+    },
+    {
+      "name": "HE_WeaponHudRangedSwitch",
+      "rva": 13114393,
+      "length": 9,
+      "code_offset": 21504,
+      "original": "48 8B 4B 60 BA 16 00 00 00"
+    },
+    {
+      "name": "HE_Revenant",
+      "rva": 7672470,
+      "length": 9,
+      "code_offset": 22528,
+      "original": "48 8B 44 24 50 48 89 43 18"
+    },
+    {
+      "name": "HE_YokaiGrab",
+      "rva": 7572371,
+      "length": 10,
+      "code_offset": 24576,
+      "code_capacity": 2048,
+      "original": "83 78 0C 00 0F 85 14 1F 00 00"
+    },
+    {
+      "name": "HE_ConsumableNotice",
+      "rva": 7674182,
+      "length": 11,
+      "code_offset": 26624,
+      "original": "48 C7 87 48 05 00 00 FF FF FF FF"
+    },
+    {
+      "name": "HE_TutorialReceipt",
+      "rva": 9085714,
+      "length": 6,
+      "code_offset": 27648,
+      "original": "8B 88 7C 02 00 00"
+    },
+    {
+      "name": "HE_TutorialClearReceipt",
+      "rva": 9084735,
+      "length": 7,
+      "code_offset": 28672,
+      "original": "48 89 88 50 02 00 00"
+    },
+    {
+      "name": "HE_DefenseHintRecovery",
+      "rva": 13932585,
+      "length": 5,
+      "code_offset": 29696,
+      "original": "8B 49 60 85 C9"
+    },
+    {
+      "name": "HE_KiPulseHintSpace",
+      "rva": 13932576,
+      "length": 6,
+      "code_offset": 30720,
+      "original": "40 53 48 83 EC 30"
+    },
+    {
+      "name": "HE_PurificationHintSpace",
+      "rva": 13932590,
+      "length": 6,
+      "code_capacity": 2048,
+      "code_offset": 31744,
+      "original": "0F 84 17 01 00 00"
+    },
+    {
+      "name": "HE_PurificationPlayerTick",
+      "rva": 7429435,
+      "length": 8,
+      "code_capacity": 2048,
+      "code_offset": 33792,
+      "original": "4C 8D 9C 24 B0 00 00 00"
+    },
+    {
+      "name": "HE_PurificationOrigin",
+      "rva": 7618728,
+      "length": 10,
+      "code_offset": 35840,
+      "original": "66 0F 7F 45 D7 4C 89 6C 24 20"
+    },
+    {
+      "name": "HE_PurificationCollisionOrigin",
+      "rva": 8248885,
+      "length": 5,
+      "code_capacity": 2048,
+      "code_offset": 36864,
+      "original": "E8 B6 1B 00 00"
+    },
+    {
+      "name": "HE_ManualPurification",
+      "rva": 7429443,
+      "length": 8,
+      "code_capacity": 2048,
+      "code_offset": 38912,
+      "original": "49 8B 5B 28 49 8B 6B 30"
+    },
+    {
+      "name": "HE_WeaponHintSwitch",
+      "rva": 13932596,
+      "length": 9,
+      "code_offset": 40960,
+      "code_capacity": 3072,
+      "original": "83 E9 01 0F 84 E3 00 00 00"
+    },
+    {
+      "name": "HE_ShotHintAimLeftMouse",
+      "rva": 13932605,
+      "length": 5,
+      "code_offset": 44032,
+      "code_capacity": 3072,
+      "original": "83 E9 01 74 7E"
+    },
+    {
+      "name": "HE_RoarDigitFive",
+      "rva": 7475216,
+      "length": 5,
+      "code_offset": 47104,
+      "code_capacity": 3072,
+      "original": "48 89 5C 24 08"
+    },
+    {
+      "name": "HE_LivingWeaponHintT",
+      "rva": 13932736,
+      "length": 8,
+      "code_offset": 50176,
+      "code_capacity": 3072,
+      "original": "48 83 BB C8 00 00 00 00"
+    },
+    {
+      "name": "HE_LivingWeaponDigitNine",
+      "rva": 7429451,
+      "length": 9,
+      "code_offset": 53248,
+      "code_capacity": 4096,
+      "original": "49 8B 73 38 41 0F 28 73 F0"
+    },
+    {
+      "name": "HE_LivingWeaponBossAttachmentGuard",
+      "rva": 8085440,
+      "length": 11,
+      "code_offset": 57344,
+      "code_capacity": 1024,
+      "original": "48 8B C4 53 48 81 EC B0 00 00 00"
+    },
+    {
+      "name": "HE_LivingWeaponElementVisualParameter",
+      "rva": 8084391,
+      "length": 5,
+      "code_offset": 58368,
+      "code_capacity": 1024,
+      "original": "40 88 74 24 20"
+    },
+    {
+      "name": "HE_LadderCommonLookup",
+      "rva": 7600704,
+      "length": 5,
+      "code_offset": 59392,
+      "code_capacity": 2048,
+      "original": "48 89 5C 24 08"
+    },
+    {
+      "name": "HE_TalismanElementVisualParameter",
+      "rva": 11027903,
+      "length": 5,
+      "original": "C6 44 24 20 00",
+      "code_offset": 23552,
+      "code_capacity": 640
+    },
+    {
+      "name": "HE_ElementalItemEligibility",
+      "rva": 11063939,
+      "length": 9,
+      "original": "8B 48 04 81 F9 73 01 00 00",
+      "code_offset": 24192,
+      "code_capacity": 384
+    },
+    {
+      "name": "HE_ProjectileElementInheritance",
+      "rva": 8268121,
+      "length": 8,
+      "original": "0F 10 4D 07 0F 11 4F 18",
+      "code_offset": 1280,
+      "code_capacity": 768
+    },
+    {
+      "name": "HE_GrabElementDamage",
+      "rva": 7501940,
+      "length": 8,
+      "original": "0F B6 48 1D 66 0F 6E C9",
+      "code_offset": 2304,
+      "code_capacity": 768
+    },
+    {
+      "name": "HE_GrabElementAccumulation",
+      "rva": 7502134,
+      "length": 8,
+      "original": "0F B6 48 1D 66 0F 6E D1",
+      "code_offset": 3328,
+      "code_capacity": 768
+    },
+    {
+      "name": "HE_SameTemplateUnloadChild",
+      "rva": 9115752,
+      "length": 7,
+      "code_offset": 65536,
+      "code_capacity": 2048,
+      "original": "4C 8D 89 20 FF FF FF"
+    },
+    {
+      "name": "HE_SameTemplateUnloadActor",
+      "rva": 9115849,
+      "length": 11,
+      "code_offset": 67584,
+      "code_capacity": 2048,
+      "original": "39 31 75 26 48 8B 81 40 02 00 00"
+    },
+    {
+      "name": "HE_SameTemplateUnloadWorldActor",
+      "rva": 9115989,
+      "length": 8,
+      "code_offset": 69632,
+      "code_capacity": 2048,
+      "original": "39 30 75 09 48 8D 4F 20"
+    },
+    {
+      "name": "HE_SameTemplateUnloadResources",
+      "rva": 9116176,
+      "length": 5,
+      "code_offset": 71680,
+      "code_capacity": 2048,
+      "original": "E8 0B FF 6D 00"
+    }
+  ],
   "targets": {
     "variant": 9110880,
     "preload": 9114592,
@@ -153,7 +524,15 @@
     "combat_growth_percent": 22579044,
     "combat_growth_attack_high_factor": 18483116,
     "combat_growth_attack_factor_table": 18485728,
-    "combat_growth_defense_factor_table": 18485752
+    "combat_growth_defense_factor_table": 18485752,
+    "signpost_action_lookup": 7600704,
+    "same_template_script_return": 9027757,
+    "same_template_object_match": 9115798,
+    "same_template_actor_next": 9115891,
+    "same_template_world_next": 9116002,
+    "same_template_resource_release": 16324896,
+    "same_template_unload_epilogue": 9116702,
+    "same_template_object_next": 9115768
   },
   "guardian_combat_native_revision": 1,
   "guardian_combat_native_slot": 0,
@@ -171,7 +550,7 @@
   "talisman_items_revision": 1,
   "elemental_talismans": true,
   "shrine_return_talisman": true,
-  "signpost_talisman": false,
+  "signpost_talisman": true,
   "elemental_eligibility_revision": 1,
   "projectile_element_inheritance_revision": 1,
   "projectile_element_templates": [
@@ -262,343 +641,147 @@
   "hot_spring_resource_failure_fallback": "previous_native_immediate_interaction",
   "hot_spring_native_buff_and_level_growth_preserved": true,
   "hot_spring_gameplay_confirmation_pending": true,
-  "hooks": [
-    {
-      "name": "HE_Preload",
-      "rva": 9024548,
-      "length": 12,
-      "original": "45 33 C0 8B D0 8B C8 E8 B0 5F 01 00",
-      "code_offset": 0
-    },
-    {
-      "name": "HE_Spawn",
-      "rva": 9054459,
-      "length": 11,
-      "original": "45 33 C0 8D 4A 63 E8 5A 28 EB FF",
-      "code_offset": 1024,
-      "code_capacity": 256
-    },
-    {
-      "name": "HE_PlayerInit",
-      "rva": 7736115,
-      "length": 5,
-      "original": "83 FB 64 75 76",
-      "code_offset": 2048,
-      "code_capacity": 256
-    },
-    {
-      "name": "HE_Skin",
-      "rva": 8111081,
-      "length": 6,
-      "original": "8B 83 08 53 0B 00",
-      "code_offset": 3072,
-      "code_capacity": 256
-    },
-    {
-      "name": "HE_Equipment",
-      "rva": 9054769,
-      "length": 7,
-      "original": "80 BB 01 01 00 00 00",
-      "code_offset": 4096
-    },
-    {
-      "name": "HE_EquipmentPrepare",
-      "rva": 8922681,
-      "length": 7,
-      "original": "44 38 B6 CD 05 00 00",
-      "code_offset": 5120
-    },
-    {
-      "name": "HE_InputA",
-      "rva": 7475268,
-      "length": 5,
-      "original": "44 0F BE 42 0C",
-      "code_offset": 6144
-    },
-    {
-      "name": "HE_InputB",
-      "rva": 7475353,
-      "length": 5,
-      "original": "44 0F BE 47 0E",
-      "code_offset": 7168
-    },
-    {
-      "name": "HE_Interaction",
-      "rva": 7672150,
-      "length": 10,
-      "original": "83 78 48 FF 0F 85 E2 00 00 00",
-      "code_offset": 8192
-    },
-    {
-      "name": "HE_QueuedDoor",
-      "rva": 7672479,
-      "length": 11,
-      "original": "48 C7 87 30 05 00 00 FF FF FF FF",
-      "code_offset": 9216
-    },
-    {
-      "name": "HE_ActionCamera",
-      "rva": 8740855,
-      "length": 6,
-      "original": "8B 01 48 C1 E8 0A",
-      "code_offset": 10240
-    },
-    {
-      "name": "HE_HimorogiFragment",
-      "rva": 7673949,
-      "length": 5,
-      "original": "45 84 F6 75 2D",
-      "code_offset": 11264
-    },
-    {
-      "name": "HE_Kodama",
-      "rva": 7672160,
-      "length": 10,
-      "original": "49 8B C5 4D 85 C0 48 0F 45 C2",
-      "code_offset": 12288
-    },
-    {
-      "name": "HE_Consumables",
-      "rva": 7673954,
-      "length": 9,
-      "original": "83 BF 4C 05 00 00 00 74 24",
-      "code_offset": 13312
-    },
-    {
-      "name": "HE_AttributeInit",
-      "rva": 8159093,
-      "length": 7,
-      "original": "48 8D BE D8 09 00 00",
-      "code_offset": 14336
-    },
-    {
-      "name": "HE_AttributeOverlay",
-      "rva": 8159963,
-      "length": 5,
-      "original": "E8 A0 00 FF FF",
-      "code_offset": 15360,
-      "code_capacity": 3072
-    },
-    {
-      "name": "HE_WeaponHud",
-      "rva": 13107671,
-      "length": 8,
-      "original": "48 89 B4 24 88 00 00 00",
-      "code_offset": 18432
-    },
-    {
-      "name": "HE_WeaponHudRefresh",
-      "rva": 13116013,
-      "length": 7,
-      "original": "48 8D AE 28 01 00 00",
-      "code_offset": 19456
-    },
-    {
-      "name": "HE_WeaponHudMeleeSwitch",
-      "rva": 13115339,
-      "length": 9,
-      "original": "48 8B 4B 60 BA 18 00 00 00",
-      "code_offset": 20480
-    },
-    {
-      "name": "HE_WeaponHudRangedSwitch",
-      "rva": 13114393,
-      "length": 9,
-      "original": "48 8B 4B 60 BA 16 00 00 00",
-      "code_offset": 21504
-    },
-    {
-      "name": "HE_Revenant",
-      "rva": 7672470,
-      "length": 9,
-      "original": "48 8B 44 24 50 48 89 43 18",
-      "code_offset": 22528
-    },
-    {
-      "name": "HE_YokaiGrab",
-      "rva": 7572371,
-      "length": 10,
-      "original": "83 78 0C 00 0F 85 14 1F 00 00",
-      "code_offset": 24576,
-      "code_capacity": 2048
-    },
-    {
-      "name": "HE_ConsumableNotice",
-      "rva": 7674182,
-      "length": 11,
-      "original": "48 C7 87 48 05 00 00 FF FF FF FF",
-      "code_offset": 26624
-    },
-    {
-      "name": "HE_TutorialReceipt",
-      "rva": 9085714,
-      "length": 6,
-      "original": "8B 88 7C 02 00 00",
-      "code_offset": 27648
-    },
-    {
-      "name": "HE_TutorialClearReceipt",
-      "rva": 9084735,
-      "length": 7,
-      "original": "48 89 88 50 02 00 00",
-      "code_offset": 28672
-    },
-    {
-      "name": "HE_DefenseHintRecovery",
-      "rva": 13932585,
-      "length": 5,
-      "original": "8B 49 60 85 C9",
-      "code_offset": 29696
-    },
-    {
-      "name": "HE_KiPulseHintSpace",
-      "rva": 13932576,
-      "length": 6,
-      "original": "40 53 48 83 EC 30",
-      "code_offset": 30720
-    },
-    {
-      "name": "HE_PurificationHintSpace",
-      "rva": 13932590,
-      "length": 6,
-      "original": "0F 84 17 01 00 00",
-      "code_offset": 31744,
-      "code_capacity": 2048
-    },
-    {
-      "name": "HE_PurificationPlayerTick",
-      "rva": 7429435,
-      "length": 8,
-      "original": "4C 8D 9C 24 B0 00 00 00",
-      "code_offset": 33792,
-      "code_capacity": 2048
-    },
-    {
-      "name": "HE_PurificationOrigin",
-      "rva": 7618728,
-      "length": 10,
-      "original": "66 0F 7F 45 D7 4C 89 6C 24 20",
-      "code_offset": 35840
-    },
-    {
-      "name": "HE_PurificationCollisionOrigin",
-      "rva": 8248885,
-      "length": 5,
-      "original": "E8 B6 1B 00 00",
-      "code_offset": 36864,
-      "code_capacity": 2048
-    },
-    {
-      "name": "HE_ManualPurification",
-      "rva": 7429443,
-      "length": 8,
-      "original": "49 8B 5B 28 49 8B 6B 30",
-      "code_offset": 38912,
-      "code_capacity": 2048
-    },
-    {
-      "name": "HE_WeaponHintSwitch",
-      "rva": 13932596,
-      "length": 9,
-      "original": "83 E9 01 0F 84 E3 00 00 00",
-      "code_offset": 40960,
-      "code_capacity": 3072
-    },
-    {
-      "name": "HE_ShotHintAimLeftMouse",
-      "rva": 13932605,
-      "length": 5,
-      "original": "83 E9 01 74 7E",
-      "code_offset": 44032,
-      "code_capacity": 3072
-    },
-    {
-      "name": "HE_RoarDigitFive",
-      "rva": 7475216,
-      "length": 5,
-      "original": "48 89 5C 24 08",
-      "code_offset": 47104,
-      "code_capacity": 3072
-    },
-    {
-      "name": "HE_LivingWeaponHintT",
-      "rva": 13932736,
-      "length": 8,
-      "original": "48 83 BB C8 00 00 00 00",
-      "code_offset": 50176,
-      "code_capacity": 3072
-    },
-    {
-      "name": "HE_LivingWeaponDigitNine",
-      "rva": 7429451,
-      "length": 9,
-      "original": "49 8B 73 38 41 0F 28 73 F0",
-      "code_offset": 53248,
-      "code_capacity": 4096
-    },
-    {
-      "name": "HE_LivingWeaponBossAttachmentGuard",
-      "rva": 8085440,
-      "length": 11,
-      "original": "48 8B C4 53 48 81 EC B0 00 00 00",
-      "code_offset": 57344,
-      "code_capacity": 1024
-    },
-    {
-      "name": "HE_LivingWeaponElementVisualParameter",
-      "rva": 8084391,
-      "length": 5,
-      "original": "40 88 74 24 20",
-      "code_offset": 58368,
-      "code_capacity": 1024
-    },
-    {
-      "name": "HE_LadderCommonLookup",
-      "rva": 7600704,
-      "length": 5,
-      "original": "48 89 5C 24 08",
-      "code_offset": 59392,
-      "code_capacity": 2048
-    },
-    {
-      "name": "HE_TalismanElementVisualParameter",
-      "rva": 11027903,
-      "length": 5,
-      "original": "C6 44 24 20 00",
-      "code_offset": 23552,
-      "code_capacity": 640
-    },
-    {
-      "name": "HE_ElementalItemEligibility",
-      "rva": 11063939,
-      "length": 9,
-      "original": "8B 48 04 81 F9 73 01 00 00",
-      "code_offset": 24192,
-      "code_capacity": 384
-    },
-    {
-      "name": "HE_ProjectileElementInheritance",
-      "rva": 8268121,
-      "length": 8,
-      "original": "0F 10 4D 07 0F 11 4F 18",
-      "code_offset": 1280,
-      "code_capacity": 768
-    },
-    {
-      "name": "HE_GrabElementDamage",
-      "rva": 7501940,
-      "length": 8,
-      "original": "0F B6 48 1D 66 0F 6E C9",
-      "code_offset": 2304,
-      "code_capacity": 768
-    },
-    {
-      "name": "HE_GrabElementAccumulation",
-      "rva": 7502134,
-      "length": 8,
-      "original": "0F B6 48 1D 66 0F 6E D1",
-      "code_offset": 3328,
-      "code_capacity": 768
-    }
-  ]
+  "signpost_revision": 1,
+  "signpost_changed_hook_indices": [
+    5,
+    6,
+    7,
+    11
+  ],
+  "signpost_item_id": 34765,
+  "signpost_use_category": 21,
+  "signpost_common_actions": [
+    172,
+    609
+  ],
+  "signpost_main_motion_id": 123,
+  "signpost_helper_offsets": {
+    "entry": 11520,
+    "resources": 5376
+  },
+  "signpost_resource_failure_fallback": "previous_native_item_animation_gate",
+  "signpost_direct_inventory_position_writes": false,
+  "signpost_gameplay_confirmation_pending": true,
+  "same_template_unload_revision": 2,
+  "same_template_unload_added_hook_indices": [
+    45,
+    46,
+    47,
+    48
+  ],
+  "same_template_unload_script_return": 9027757,
+  "same_template_unload_private_counter_offsets": [
+    16384,
+    16388,
+    16392,
+    16396
+  ],
+  "same_template_unload_native_data_writes": false,
+  "same_template_unload_requires_fresh_allocation": true,
+  "same_template_unload_gameplay_confirmation_pending": true,
+  "same_template_unload_child_safe_entry": true,
+  "same_template_unload_child_preserved_internal_entry": 9115768,
+  "latched_door_revision": 1,
+  "latched_door_changed_hook_indices": [
+    8,
+    9,
+    45
+  ],
+  "latched_door_object": {
+    "id": 15,
+    "kind": 2,
+    "instance": 1
+  },
+  "latched_door_dispatch": 16,
+  "latched_door_native_query": 115,
+  "latched_door_common_actions": [
+    170,
+    157
+  ],
+  "latched_door_main_motion_id": 223,
+  "latched_door_local_event_indices": [
+    0,
+    75
+  ],
+  "latched_door_required_motion_slots": [
+    2,
+    6
+  ],
+  "latched_door_helper_offsets": {
+    "generic": 66304,
+    "queued": 66320,
+    "body": 66336,
+    "resources": 67328
+  },
+  "latched_door_resource_failure_fallback": "previous_native_immediate_interaction",
+  "latched_door_native_state_and_other_features_preserved": true,
+  "latched_door_gameplay_confirmation_pending": true,
+  "talk_revision": 1,
+  "talk_changed_hook_indices": [
+    9,
+    46
+  ],
+  "talk_dispatch": 46,
+  "talk_native_queries": {
+    "start": 346,
+    "completion": 345
+  },
+  "talk_common_actions": [
+    170,
+    1155,
+    1156,
+    1157
+  ],
+  "talk_main_motion_ids": [
+    8,
+    0
+  ],
+  "talk_local_event_indices": [
+    0,
+    120
+  ],
+  "talk_required_motion_slots": [
+    2,
+    6
+  ],
+  "talk_helper_offsets": {
+    "queued": 68096,
+    "resources": 69376
+  },
+  "talk_resource_failure_fallback": "previous_accepted_native_queue",
+  "talk_direct_interaction_script_save_writes": false,
+  "talk_native_state_and_other_features_preserved": true,
+  "talk_gameplay_confirmation_pending": true,
+  "rescue_revision": 1,
+  "rescue_changed_hook_indices": [
+    9,
+    47
+  ],
+  "rescue_dispatch": 22,
+  "rescue_native_queries": {
+    "start": 181
+  },
+  "rescue_common_actions": [
+    170,
+    368
+  ],
+  "rescue_main_motion_ids": [
+    400
+  ],
+  "rescue_local_event_indices": [
+    0,
+    13
+  ],
+  "rescue_required_motion_slots": [
+    2,
+    6
+  ],
+  "rescue_helper_offsets": {
+    "queued": 70144,
+    "resources": 71424
+  },
+  "rescue_resource_failure_fallback": "previous_accepted_native_queue",
+  "rescue_direct_interaction_npc_hp_script_save_writes": false,
+  "rescue_native_state_and_other_features_preserved": true,
+  "rescue_gameplay_confirmation_pending": true
 }
