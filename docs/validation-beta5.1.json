@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "public_version": "1.0.0-beta.5.1",
+  "verification_date": "2026-10-09",
+  "upstream_local_version": "0.59",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08",
+    "other_builds_adapted": false
+  },
+  "native_hook_count": 55,
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.5.1",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 22,
+      "payload_comparisons": 660,
+      "layout_count": 12,
+      "hook_count": 55,
+      "pe_machine": "x64",
+      "executable_bytes": 213504,
+      "executable_sha256": "99818b8d9274278dd5c7eb830dbcc6def8a2b16aa100f8304c4ab417105eaac2"
+    },
+    "Release": {
+      "version": "1.0.0-beta.5.1",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 22,
+      "payload_comparisons": 660,
+      "layout_count": 12,
+      "hook_count": 55,
+      "pe_machine": "x64",
+      "executable_bytes": 210944,
+      "executable_sha256": "d7d6a6908c80b12951833d712c0c49f9ee81d63dc115f9a932def97218859271"
+    }
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "private_dependencies_imported": false,
+    "hook_count": 55,
+    "ct_unique_local_labels": 526,
+    "payload_comparisons": 660,
+    "layout_count": 12,
+    "negative_rejection_cases": 3,
+    "source_input_unchanged": true
+  },
+  "preserved_beta5_basis": {
+    "success": true,
+    "original_hook_count": 50,
+    "layouts": 12,
+    "byte_exact_payload_and_patch_comparisons": 600,
+    "data_offset_unchanged": true,
+    "game_access": false,
+    "prior_hook_signatures_slots_targets_and_source_bodies_unchanged": true
+  },
+  "public_cpu_regressions": {
+    "success": true,
+    "game_access": false,
+    "private_code_or_research_inputs": false,
+    "native_calls": "Explicit Win64 native-call stubs; synthetic actor/action/motion records; no native game engine or process access",
+    "retained_latched_door_instances": 8,
+    "retained_special_items": 5,
+    "retained_salt_recovery": 10,
+    "new_postdefeat_grab": 26,
+    "total": 49,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "postdefeat_scope": [
+      "Current native-referenced target binding and registration",
+      "Three address layouts and dynamic Win64 stack alignment",
+      "Volatile GP/SIMD/MXCSR and flags preservation",
+      "Bounded default-action precedence and selected-bank clip/hash lookup",
+      "Range, ownership, target state and source spawn guards",
+      "Repeated pairing and changed spawn without old target reads",
+      "Current native pair reference required before target dereference",
+      "Scoped zero-HP damage and both native-event/script healing suppression",
+      "Restoration after native source reference release",
+      "Foreign/live target rejection and unchanged native-call replay"
+    ]
+  },
+  "native_patch_boundary_audit": {
+    "success": true,
+    "new_hook_count": 5,
+    "instruction_spans_complete": true,
+    "direct_branches_into_patch_interiors_found": false,
+    "private_verified_native_inputs_used": true,
+    "private_native_inputs_distributed": false
+  },
+  "temporary_gameplay_evidence": {
+    "production_executable": false,
+    "user_confirmed": true,
+    "target": "Reported post-defeat Nouhime / Yuki-Onna in defeated pose with required resources loaded",
+    "consecutive_complete_grabs": 2,
+    "full_paired_animation": true,
+    "defeated_pose_restored": true,
+    "target_hp_remained_zero": true,
+    "defeated_state_preserved": true,
+    "player_hp_unchanged": true,
+    "movement_and_menu_normal": true,
+    "temporary_binding_kind": "Instance bound to the observed trial actors",
+    "temporary_hooks_removed_after_test": true
+  },
+  "production_runtime_validation": {
+    "read_only_refusal_checked": true,
+    "running_prior_beta5_profile_refused": true,
+    "mixed_version_reinjection_not_attempted": true,
+    "game_writes": false,
+    "cold_enable_and_positive_gameplay_checked": false,
+    "scope": "Final Beta 5.1 EXE read-only diagnostic refused the still-running prior Beta 5 process as expected. Final dynamic implementation is covered by public CPU tests; its clean-process enable and positive rendered gameplay have not yet been rerun."
+  },
+  "retained_gameplay_claims": {
+    "reference": "docs/validation-beta5.json",
+    "historical_evidence_rerun": false
+  },
+  "limitations": [
+    "Only the reported defeated target template, defeated action and loaded common victim reaction are covered; other defeated Bosses/corpses are unverified.",
+    "Native event engine, reference cleanup, damage and notification side effects are not executed by portable stubs.",
+    "Production clean-process enable, rendered dynamic pairing, every mission/reload/save transition and every interruption have not all been gameplay-tested.",
+    "Some non-critical item use remains unfixed; only first item shortcut bar digit 2 is supported.",
+    "Existing Beta 5 coverage and limitations retain their historical scope.",
+    "Unsigned Windows x64 Beta; direct CT enable in Cheat Engine remains untested."
+  ]
+}

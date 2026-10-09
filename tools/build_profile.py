@@ -56,6 +56,7 @@ from hinoenma_salt_event_catchup import apply_salt_event_catchup
 from hinoenma_salt_hurt_compatibility import apply_salt_hurt_compatibility
 from hinoenma_salt_damage96_draft import apply_salt_damage96_draft
 from hinoenma_salt_damage205_draft import apply_salt_damage205_draft, ROUTES_OFFSET, ROUTE_BYTES
+from hinoenma_postdefeat_grab import addon as apply_postdefeat_grab
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
@@ -134,7 +135,7 @@ def source_plan_v051(frozen: dict) -> dict:
     return plan
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_v058(frozen: dict) -> dict:
     """Rebuild Beta 5 from pure source and bounded public entry signatures.
 
     Native damage, input, item quantity and shared game resources stay native.
@@ -154,6 +155,15 @@ def source_plan(frozen: dict) -> dict:
     plan = apply_salt_damage205_draft(front)
     if plan['tool_version'] != '0.58-experimental' or len(plan['hooks']) != 50:
         raise ValueError('Expected the complete 50-hook local 0.58 source revision')
+    return plan
+
+
+def source_plan(frozen: dict) -> dict:
+    """Integrate the bounded post-defeat visual pair into the frozen Beta 5 base."""
+    plan = apply_postdefeat_grab(source_plan_v058(frozen))
+    plan['tool_version'] = '0.59'
+    if len(plan['hooks']) != 55:
+        raise ValueError('Expected the complete 55-hook local 0.59 source revision')
     return plan
 
 
@@ -192,7 +202,7 @@ def load_plan() -> dict:
     if (not code_ranges or code_ranges[0][0] < 0
             or any(left[1] > right[0] for left, right in zip(code_ranges, code_ranges[1:]))
             or code_ranges[-1][1] > plan['allocation_size']
-            or (plan['data_offset'], plan['allocation_size']) != (0xF000, 0x14000)
+            or (plan['data_offset'], plan['allocation_size']) != (0xF000, 0x19000)
             or any(max(start, protected_start) < min(end, protected_end)
                    for start,end in code_ranges
                    for protected_start,protected_end in ((0xF000,0x10000),(0x13000,0x14000)))):
@@ -494,7 +504,9 @@ def ct_source(plan: dict, display_version: str) -> str:
         '门闩门、NPC交谈与誾千代倒地救助已获实测；其他NPC/交互变体尚未全部验证。\n'
         '部分非关键道具使用仍未修复；第一栏数字 2 快捷位已确认可用，其余快捷位保留技能。\n'
         '角色选择在主菜单重新载入后生效，威廉为 00000000。道具可从背包或第一栏数字 2 使用。\n'
-        '本版新增八种道具兼容，盐的使用、妖怪精力命中与已测受击恢复获实测确认。\n'
+        '保留八种道具兼容，盐的使用、妖怪精力命中与已测受击恢复获实测确认。\n'
+        '本版新增已测战后浓姬倒地目标的完整吸血动画；不额外伤害、回血或复活，结束后恢复倒地姿态。\n'
+        '该兼容仅适用于核对过的目标与动画资源；未覆盖全部战后 Boss。\n'
         '盐的全部受击方向与连续受击分支未逐一实测；离线合成 CPU 检查不等同实机验证。\n'
         '武器切换只补教学操作。实际射击和 Boss 实际武器槽切换尚未实现。\n'
         '九十九保留飞缘魔招式；守护灵召唤未执行威廉挥刀的额外精力费用。\n'

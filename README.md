@@ -2,13 +2,13 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 5 / Pre-release.**
+**Current version: 1.0.0 Beta 5.1 / Pre-release.**
 
-A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 5 corresponds to local 0.58 and adds reported special-item compatibility and Salt recovery fixes. It retains the previous interaction and NPC fixes. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
+A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 5.1 adds a complete visual life-drain grab on the reported defeated Nouhime / Yuki-Onna while retaining Beta 5's special-item, Salt, interaction and NPC fixes. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
 
 ## Download and use
 
-Get the Windows x64 EXE or source archive from [Beta 5](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.5-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
+Get the Windows x64 EXE or source archive from [Beta 5.1](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.1). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.5.1-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.1-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
 
 1. Start the Steam game normally and stop at **NEW GAME / CONTINUE**.
 2. Run the tool. After it reports that the next character will be Hino-Enma, load a mission.
@@ -24,7 +24,14 @@ Repeated runs recognize the existing installation and retain the character choic
 - Epic and other executable builds have not been adapted. Matching a version label alone is insufficient.
 - The EXE changes the current process; game installation files do not need replacement. Game saves continue through the game's normal behavior; complete save/load and mission-transition coverage remains unverified.
 
-## New in Beta 5
+## New in Beta 5.1
+
+- Digit **1** can request the complete life-drain grab animation on a defeated Nouhime / Yuki-Onna who remains loaded with the required reaction resources. No new key is added.
+- The temporary revision was user-tested with two consecutive complete grabs. After each, she returned to her original defeated pose; movement and menus remained normal.
+- A defeated target receives no additional damage or healing from this visual pairing. The compatibility does not revive her or directly write mission/save state.
+- The production path binds the current player and target instances and checks ownership, distance, defeated state and loaded resources. It refreshes its bindings with the current character rather than using a saved process address. Other defeated Bosses or corpses are not claimed to be supported.
+
+## Retained Beta 5 fixes
 
 - Restore the reported Guardian Spirit Talisman, Hyottoko Mask, Conch, Yokai Water Pot, Kodama Bowl, Himorogi Branch and Summoner's Candle. Their reported summon, placement or mission-return effects are user-confirmed; the candle was tested after death while the guardian was lost, followed by normal guardian attack.
 - Restore Salt consumption, throwing effects and the reported Yokai ki hit. The latest reported Salt use and interruption test passed with normal movement and attacks. Other Salt interruption paths have offline checks and still require gameplay confirmation.
@@ -75,7 +82,7 @@ The following bindings use the tester’s current game keyboard settings; other 
 | Shift | Restore ki |
 | Q + Space | Take flight |
 | Alt | Flight charge / dive |
-| 1 | Life drain |
+| 1 | Life drain; also request the supported defeated Nouhime / Yuki-Onna visual grab |
 | 2 (first item shortcut bar) | Use shortcut items; currently the only supported item shortcut slot |
 | 5 | Ground / airborne roar |
 | F6 | Purify nearby Yokai Realm pools; holding triggers once, release and press again to repeat |
@@ -89,6 +96,7 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Known limitations
 
+- The new post-defeat visual grab covers the reported Nouhime / Yuki-Onna with loaded compatible resources. The two consecutive gameplay confirmations used a temporary revision; the final EXE's separate verification is recorded in the Beta 5.1 validation record. This does not establish support for every defeated Boss or corpse. No extra damage or healing is added to a zero-HP target.
 - Salt has user-confirmed effects and normal recovery in the reported test. The additional Common 205/85 interruption routes have CPU regression coverage only; they have not yet been observed in gameplay, and all Salt/enemy combinations are not confirmed.
 - Some non-critical item use remains unfixed. Recovery/buff and ninjutsu items have not all been individually verified; compatibility for specific reported items does not establish complete item support.
 - An additional element for the roar is excluded. Needle paralysis strength, exact elemental damage/healing and all airborne variants remain unmeasured/unverified.
@@ -100,14 +108,16 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 - Ladder and dojo results cover the reported locations. NPC dialogue and rescue cover the reported cases; other NPCs, repeated rescues, ladders, shrines, scripted events, all mission transitions and interactable variants have not all been verified. Gesture animations may remain laughter. Weapon-switch teaching support does not implement actual Boss weapon switching; native shooting is not implemented.
 - Living Weapon retains Hino-Enma's body and moves without William's full startup animation or weapon appearance. Guardian summoning does not reproduce William's additional ki cost. Other guardians, controllers and full combat/transition coverage remain unverified.
 - The [CT source](ct/) uses the same scoped hooks; enabling it directly inside Cheat Engine has not been tested. Use either the CT or EXE for a game session. Mixing different versions in one process is not supported.
-- The final public Beta 5 EXE recognized the already enabled local 0.58 game session in read-only diagnostics. Its first enable in a fresh game process remains pending; recognition and offline checks do not establish cold first-enable.
+- Final-public-EXE injection, reload and gameplay evidence are limited to the cases recorded for the release. Offline checks alone do not establish first enable in a fresh game process or complete mission/save coverage.
 - This Beta is unsigned with Authenticode. Build provenance and file checksums describe origin and integrity; they are separate from Windows code signing.
 
 ## Validation and development
 
-See [Beta 5 release record](docs/releases/1.0.0-beta.5.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 4.1's release record](docs/releases/1.0.0-beta.4.1.md) and earlier release records remain historical.
+See [Beta 5.1 release record](docs/releases/1.0.0-beta.5.1.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 4.1's release record](docs/releases/1.0.0-beta.4.1.md) and earlier release records remain historical.
 
-Local 0.58 passed **23 new native-CPU regression checks** using private verified native-code inputs. The separate public CPU suite passed **23 checks**: 8 retained door-instance checks, 5 new special-item checks and 10 new Salt checks, using synthetic records and explicit Win64 stubs. It does not run the native damage/event engine or inventory commit. These public checks, the 23 local native-code checks and user gameplay have distinct scope. The Beta 5 Debug and Release builds each passed **21 EXE self-checks and 600 EXE/source payload comparisons** (50 patches across 12 layouts), without game access; the completed results are recorded in [Beta 5 validation](docs/validation-beta5.json). Earlier evidence remains frozen; this is not a rerun of every historical check. Private game-code inputs/raw reports are excluded from public source and portable CI. Salt's sampled normal recovery paths and the user confirmation do not establish every interruption path, including the additional Common 205/85 routes. Final source commit, shipped hashes and actual publisher are recorded in provenance. Earlier public releases remain unchanged.
+The completed Beta 5.1 source/build checks and their actual counts are recorded in [Beta 5.1 validation](docs/validation-beta5.1.json). Public portable checks use synthetic records and explicit Win64 stubs; they do not execute the game's damage/event engine or inventory commit. Private native-code regression inputs and raw reports are excluded from public source and CI. The two consecutive post-defeat grab confirmations are recorded separately as gameplay evidence from the temporary revision; they do not prove every production reload, defeated target or mission transition.
+
+[Beta 5's validation](docs/validation-beta5.json) and earlier release evidence retain their historical scope; they are not represented as newly rerun checks. Salt's additional Common 205/85 paths remain CPU-only. Final source commit, shipped hashes and actual publisher are recorded in provenance. Earlier public releases remain unchanged.
 
 Character replacement is adapted from the user-supplied **Bryanyora CharacterChange CT**. This tool does not redistribute game assets; original author credits are retained in [NOTICE.md](NOTICE.md).
 

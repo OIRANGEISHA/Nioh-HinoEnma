@@ -98,6 +98,28 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(false).Read, Module, out a) == HookState.Original, "Original state"); });
                 test("current profile recognized without reinjection", delegate
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
+                test("post-defeat hooks reject altered payloads and mixed Beta 5 installations", delegate
+                {
+                    int count = 0;
+                    FakeMemory mixed = Memory(true);
+                    foreach(HookSpec hook in Profile.Hooks)
+                    {
+                        if(!hook.Name.StartsWith("HE_PostDefeat", StringComparison.Ordinal)) continue;
+                        count++;
+                        mixed.Write(Module+hook.Rva,hook.Original);
+                        FakeMemory altered = Memory(true);
+                        altered.Blocks[Allocation+hook.CodeOffset][0] ^= 1;
+                        long observed;
+                        Require(Checks.Inspect(altered.Read,Module,out observed)==HookState.Other,
+                            "Altered post-defeat payload refused: "+hook.Name);
+                    }
+                    Require(count==5,"Complete post-defeat hook inventory");
+                    long allocation;
+                    Require(Checks.Inspect(mixed.Read,Module,out allocation)==HookState.Other,
+                        "Prior 50-hook Beta 5 process requires a restart");
+                    Require(Checks.Inspect(Memory(true).Read,Module,out allocation)==HookState.Ours,
+                        "Complete 55-hook current profile recognized");
+                });
                 test("unrelated modification rejected", delegate
                 { FakeMemory m=Memory(false); m.Blocks[Module+Profile.Hooks[0].Rva][0]=0xCC; long a; Require(Checks.Inspect(m.Read,Module,out a)==HookState.Other,"Other modification"); });
                 test("modified private payload rejected", delegate

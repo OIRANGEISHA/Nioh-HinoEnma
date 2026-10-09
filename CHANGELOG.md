@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.5.1] - 2026-10-09
+
+### Added
+
+- Complete visual life-drain pairing for the reported defeated Nouhime / Yuki-Onna while she remains loaded with the required reaction resources. Use the existing digit 1 binding.
+- Bind the current source/target instances with ownership, distance, defeated-state and resource checks, refreshing bindings after character recreation.
+- Suppress additional damage and healing against the zero-HP target and restore the original defeated pose after pairing. No revival or direct mission/save-state write is added.
+
+### Validation and limits
+
+- The temporary revision was user-confirmed through two consecutive complete grabs, defeated-pose restoration and normal movement/menus. Production build, portable/offline checks and gameplay evidence are recorded separately in the Beta 5.1 validation record; earlier evidence remains historical.
+- This feature does not establish support for all defeated Bosses or corpses. Retain Beta 5's features, keyboard bindings and known limitations, including some non-critical item use remaining unfixed.
+- Release attachments remain exactly the Windows x64 EXE and complete source ZIP, with CT source inside the ZIP. Earlier tags/assets/records remain unchanged. Unsigned Pre-release.
+
 ## [1.0.0-beta.5] - 2026-10-09
 
 ### Added
@@ -120,7 +134,8 @@
 
 - Non-humanoid Boss life-drain grabs, shortcut conflicts, complete interaction coverage, individual item/affix effects and cold first-enable verification of the final public EXE remain open.
 
-[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.5...HEAD
+[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.5.1...HEAD
+[1.0.0-beta.5.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.1
 [1.0.0-beta.5]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5
 [1.0.0-beta.4.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4.1
 [1.0.0-beta.4]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4

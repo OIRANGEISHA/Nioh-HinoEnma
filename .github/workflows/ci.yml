@@ -1,0 +1,69 @@
+name: Portable source and builds
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portable-checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up verification Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install isolated verification dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --target artifacts/python-deps -r requirements-dev.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Verification dependency installation failed.' }
+          "PYTHONPATH=$((Resolve-Path artifacts/python-deps).Path)" >> $env:GITHUB_ENV
+          $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
+          "RELEASE_STEM=Nioh-HinoEnma-$($version.version)" >> $env:GITHUB_ENV
+
+      - name: Verify generated source, CT and public CPU regressions
+        run: |
+          python tools/build_profile.py --check
+          if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
+          python tools/check_source.py
+          if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
+          python tests/test_latched_door_instances.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Public latched-door CPU regressions failed.' }
+          python tests/test_special_items_portable.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Public special-item CPU regressions failed.' }
+          python tests/test_salt_recovery_portable.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Public Salt CPU regressions failed.' }
+          python -m unittest discover -s tests -p test_postdefeat_grab_portable.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Public post-defeat grab CPU regressions failed.' }
+
+      - name: Build Debug and optimized x64 Release
+        run: |
+          ./tools/build.ps1 -Configuration Debug
+          if ($LASTEXITCODE -ne 0) { throw 'Debug build failed.' }
+          ./tools/build.ps1 -Configuration Release
+          if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
+
+      - name: Verify both build profiles and self-checks
+        run: |
+          python tools/verify.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
+          python tools/verify.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }
