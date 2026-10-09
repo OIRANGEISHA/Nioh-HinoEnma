@@ -92,13 +92,13 @@ def verify_source_archive(archive: Path, commit: str, executable: Path) -> None:
         components = json.loads(zipped.read(prefix + "build-info/components.json"))
         if (verification["source_commit"] != commit or verification["game_access"]
                 or components["source_commit"] != commit or components["version"] != version["version"]
-                or components["runtime_embedded_components"][0]["native_hook_count"] != 59):
+                or components["runtime_embedded_components"][0]["native_hook_count"] != 60):
             raise ValueError("Embedded build evidence differs from release source")
         for config in ("Debug", "Release"):
             check = verification["checks"][config]
             if (not check["success"] or check["game_access"] or check["version"] != version["version"]
                     or (check["self_checks"], check["hook_count"], check["payload_comparisons"],
-                        check["layout_count"]) != (23, 59, 708, 12)):
+                        check["layout_count"]) != (26, 60, 720, 12)):
                 raise ValueError("Embedded portable validation differs: " + config)
         executable_hash = sha256(executable)
         if verification["checks"]["Release"]["executable_sha256"] != executable_hash:
@@ -140,8 +140,8 @@ def main() -> None:
             or version["repository"] != "OIRANGEISHA/Nioh-HinoEnma" or version["release_owner"] != "OIRANGEISHA"):
         raise ValueError("Expected consistent owner, repository and Semantic Versioning Beta metadata")
     plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
-    if plan["tool_version"] != version["version"] or len(plan["hooks"]) != 59:
-        raise ValueError("Release metadata differs from the reviewed 59-hook profile")
+    if plan["tool_version"] != version["version"] or len(plan["hooks"]) != 60:
+        raise ValueError("Release metadata differs from the reviewed 60-hook profile")
     ct_name = version["ct_file"]
     if Path(ct_name).name != ct_name or not ct_name.endswith(".CT"):
         raise ValueError("Expected a CT source filename within the public ct directory")
@@ -158,12 +158,12 @@ def main() -> None:
         report = json.loads((directory / "verification.json").read_text("utf-8"))
         build = json.loads((directory / "build.json").read_text("utf-8"))
         config_exe = directory / executable.name
-        if (not report["success"] or report["game_access"] or report["self_checks"] != 23
-                or report["payload_comparisons"] != 708 or report["hook_count"] != 59
+        if (not report["success"] or report["game_access"] or report["self_checks"] != 26
+                or report["payload_comparisons"] != 720 or report["hook_count"] != 60
                 or report["layout_count"] != 12 or not report["generated_source_matches"]
                 or report["version"] != version["version"] or report["executable_sha256"] != sha256(config_exe)
                 or build["product_version"] != version["version"] or build["file_version"] != version["file_version"]
-                or build["configuration"] != config or build["offline_self_checks"] != 23
+                or build["configuration"] != config or build["offline_self_checks"] != 26
                 or report["pe_machine"] != "x64" or build["pe_machine"] != "x64"):
             raise ValueError("Build or verification metadata does not match: " + config)
         reports[config], builds[config] = report, build
@@ -176,7 +176,7 @@ def main() -> None:
     published_exe = destination / executable.name
     shutil.copyfile(executable, published_exe)
     components = dict(schema=1, version=version["version"], source_commit=args.source_commit,
-        runtime_embedded_components=[dict(name="Nioh Hino-Enma launcher", origin="this repository", native_hook_count=59)],
+        runtime_embedded_components=[dict(name="Nioh Hino-Enma launcher", origin="this repository", native_hook_count=60)],
         platform_dependencies_not_embedded=["Windows x64", "Windows .NET Framework", "Win32 APIs"],
         development_dependencies_not_embedded=[
             dict(name="keystone-engine", version="0.9.2", purpose="independent x64 assembly verification", license="GPL-2.0 or commercial (development only)"),
@@ -193,7 +193,7 @@ def main() -> None:
         "- Prepared asset uploader: " + args.publisher, "- Workflow: " + args.workflow_url,
         "- Recorded UTC: " + datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "- Clean checkout checked before packaging: yes", "",
-        "Debug and Release each passed 23 offline C# checks and 708 payload comparisons across 12 layouts. No game access.",
+        "Debug and Release each passed 26 offline C# checks and 720 payload comparisons across 12 layouts. No game access.",
         "Local gameplay evidence and limitations are recorded in the reviewed release notes and sanitized validation record.",
         "Windows Authenticode: " + builds["Release"]["authenticode_status"] + ".",
         "CI attestation, when generated, covers the exact CI-built EXE and source ZIP; it does not certify gameplay or replace code signing.", "",

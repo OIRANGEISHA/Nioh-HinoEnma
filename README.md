@@ -2,13 +2,13 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 5.1 Hotfix 1 / Pre-release.**
+**Current version: 1.0.0 Beta 5.2 / Pre-release.**
 
-A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 5.1 Hotfix 1 fixes the reported Mount Hiei ladder fall, per-step teleporting and excessive exit height. Beta 5.1's defeated Nouhime / Yuki-Onna visual grab and earlier item/interaction fixes are retained. Player growth, armor and the selected melee weapon’s native bonuses remain additive.
+A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 5.2 passes the selected melee weapon's innate element to her supported attacks. Raikiri's “Imbue Lightning +8” is user-confirmed on kicks, umbrella attacks, body charge, needles and life drain. Earlier ladder, defeated Nouhime / Yuki-Onna grab, item and interaction fixes are retained. Player growth, armor and selected-weapon bonuses remain additive to the Boss baseline.
 
 ## Download and use
 
-Get the Windows x64 EXE or source archive from [Beta 5.1 Hotfix 1](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.1.hotfix.1). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.5.1.hotfix.1-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.1.hotfix.1-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
+Get the Windows x64 EXE or source archive from [Beta 5.2](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.2). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.5.2-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.2-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
 
 1. Start the Steam game normally and stop at **NEW GAME / CONTINUE**.
 2. Run the tool. After it reports that the next character will be Hino-Enma, load a mission.
@@ -24,12 +24,21 @@ Repeated runs recognize the existing installation and retain the character choic
 - Epic and other executable builds have not been adapted. Matching a version label alone is insufficient.
 - The EXE changes the current process; game installation files do not need replacement. Game saves continue through the game's normal behavior; complete save/load and mission-transition coverage remains unverified.
 
-## New in Beta 5.1 Hotfix 1
+## New in Beta 5.2
+
+- Pass the selected melee weapon's native innate fire, water, lightning, wind or earth element to supported kicks, umbrella attacks, body charge, needles and life-drain hits. Elemental talismans and Living Weapon retain priority over the permanent weapon element.
+- The second temporary revision was user-confirmed with Raikiri's “Imbue Lightning +8”: all five reported attacks showed lightning and movement, attacks and life drain remained normal. Other innate elements, exact per-hit damage and every attack variant have not been individually tested.
+- Needle paralysis and the roar's original effects are retained; the roar does not receive an added element. Ordinary body attacks use the game's native primary enchantment priority. This does not promise a second independent paralysis channel on those body attacks.
+- “Imbue [element] +N” supplies an element. A “[element] damage +N%” affix enhances matching damage already being dealt; that percentage alone does not add an element.
+- Preserve Boss base-plus-growth/equipment calculation and earlier functionality. Four existing hooks are updated and one is added, for 60 hooks. Re-equip the selected weapon and close the menu, or reload the character, to refresh its native element.
+- Exit and restart Nioh before upgrading from an earlier tool, then enable Beta 5.2 at the main menu.
+
+## Retained Beta 5.1 Hotfix 1 fixes
 
 - Fix falling before the exit on the reported underground-to-surface Mount Hiei ladder, per-step teleporting and excessive exit height. The pending climbing clip had still been sampled at Hino-Enma's 1.8 motion scale before becoming the current action.
 - Four scoped hooks normalize current and pending Common-ladder displacement samples and the matching rendered layer for the current player. Actor model scale and all 55 prior hooks are preserved; the complete profile has 59 hooks.
 - The second temporary revision was user-confirmed for up/down motion and normal exit height. Read-only observation recorded two ladder objects and their transitions. This does not establish coverage of every ladder or interruption.
-- Upgrade from an older version by exiting and restarting the game first. Do not mix an older tool with this Hotfix in one process.
+- Do not mix different tool versions in one game process.
 
 ## Retained Beta 5.1 additions
 
@@ -103,9 +112,10 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Known limitations
 
+- The innate-element gameplay result covers Raikiri's lightning on the five reported attacks in the second temporary revision. It does not establish every element, weapon affix, airborne variant or exact damage/status strength. Temporary enchantments keep native priority; ordinary body attacks do not gain a separately guaranteed paralysis channel.
 - The ladder fix is confirmed for the reported trial locations, with two ladder objects recorded. Enemy interruptions and every ladder variant remain untested. Final-public-EXE first enable in a fresh process has not yet been gameplay-tested; source/build checks are recorded separately.
 
-- The new post-defeat visual grab covers the reported Nouhime / Yuki-Onna with loaded compatible resources. The two consecutive gameplay confirmations used a temporary revision; the final EXE's separate verification is recorded in the Beta 5.1 validation record. This does not establish support for every defeated Boss or corpse. No extra damage or healing is added to a zero-HP target.
+- The retained post-defeat visual grab covers the reported Nouhime / Yuki-Onna with loaded compatible resources. The two consecutive gameplay confirmations used a temporary revision; its separate build verification is recorded in the historical Beta 5.1 validation record. This does not establish support for every defeated Boss or corpse. No extra damage or healing is added to a zero-HP target.
 - Salt has user-confirmed effects and normal recovery in the reported test. The additional Common 205/85 interruption routes have CPU regression coverage only; they have not yet been observed in gameplay, and all Salt/enemy combinations are not confirmed.
 - Some non-critical item use remains unfixed. Recovery/buff and ninjutsu items have not all been individually verified; compatibility for specific reported items does not establish complete item support.
 - An additional element for the roar is excluded. Needle paralysis strength, exact elemental damage/healing and all airborne variants remain unmeasured/unverified.
@@ -122,11 +132,13 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Validation and development
 
-See [Beta 5.1 Hotfix 1 release record](docs/releases/1.0.0-beta.5.1.hotfix.1.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 4.1's release record](docs/releases/1.0.0-beta.4.1.md) and earlier release records remain historical.
+See [Beta 5.2 release record](docs/releases/1.0.0-beta.5.2.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 5.1 Hotfix 1](docs/releases/1.0.0-beta.5.1.hotfix.1.md) and earlier release records remain historical.
 
-The completed Hotfix source/build checks and their actual counts are recorded in [Hotfix validation](docs/validation-beta5.1-hotfix1.json). Local private regression and temporary gameplay evidence are separate from the final public EXE checks. Public portable checks use synthetic records and explicit Win64 stubs; they do not execute the game's damage/event engine or inventory commit. Private native-code regression inputs and raw reports are excluded from public source and CI. The two consecutive post-defeat grab confirmations are recorded separately as gameplay evidence from the temporary revision; they do not prove every production reload, defeated target or mission transition.
+The actual Beta 5.2 source/build results are recorded in [Beta 5.2 validation](docs/validation-beta5.2.json). Public Debug and Release each passed 26 self-checks, 720 current-profile payload comparisons (60 hooks × 12 layouts) and 1,368 complete prior-profile comparisons (55 and 59 hooks × 12 layouts). Source/CT checks passed for 60 hooks, 555 unique local labels, 720 namespace comparisons and six negative guards. Prior-profile recognition verifies complete entry sites and payloads read-only; new installation checks cover executable code and three writable, non-executable data pages. This does not establish a VirtualQuery check of every old installation's live page protection.
 
-[Beta 5's validation](docs/validation-beta5.json) and earlier release evidence retain their historical scope; they are not represented as newly rerun checks. Salt's additional Common 205/85 paths remain CPU-only. Final source commit, shipped hashes and actual publisher are recorded in provenance. By the owner's explicit request, the existing Beta 5.1 release record is replaced by the Hotfix tag and two verified attachments; the old Beta 5.1 tag and historical source/validation records are retained. Other releases remain unchanged.
+The local second-revision EXE separately passed 23 self-checks and 720 payload comparisons, without game access. Its private native-code regression passed 20 tests and 959 CPU comparisons, including 165 comparisons of the 55 unchanged hooks across three layouts. Those local checks are distinct from the public build and from the five-hook temporary gameplay test. The final public EXE has not been gameplay-tested for first enable in a fresh process.
+
+Public portable checks use synthetic records and explicit Win64 stubs; they do not execute the complete game damage/event engine or inventory commit. Private native-code inputs and raw runtime reports are excluded from public source and CI. [Hotfix validation](docs/validation-beta5.1-hotfix1.json), [Beta 5 validation](docs/validation-beta5.json) and earlier evidence retain their historical scope; they are not represented as newly rerun checks. Salt's additional Common 205/85 paths remain CPU-only. Final source commit, shipped hashes and actual publisher are recorded in provenance. Beta 5.2 uses a new immutable tag and release; earlier tags, attachments and historical records remain unchanged.
 
 Character replacement is adapted from the user-supplied **Bryanyora CharacterChange CT**. This tool does not redistribute game assets; original author credits are retained in [NOTICE.md](NOTICE.md).
 

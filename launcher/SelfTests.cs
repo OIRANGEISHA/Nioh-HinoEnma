@@ -48,6 +48,23 @@ namespace HinoEnmaTool
             return memory;
         }
 
+        private static FakeMemory LegacyMemory(LegacyProfile previous)
+        {
+            FakeMemory memory = new FakeMemory();
+            foreach (HookSpec current in Profile.Hooks)
+                memory.Blocks[Module + current.Rva] = (byte[])current.Original.Clone();
+            foreach (HookSpec old in previous.Hooks)
+            {
+                memory.Blocks[Module + old.Rva] = old.Jump(Module, Allocation);
+                memory.Blocks[Allocation + old.CodeOffset] = old.Payload(Module, Allocation);
+            }
+            byte[] data = new byte[0x40];
+            Buffer.BlockCopy(BitConverter.GetBytes((uint)0x58E5E), 0, data, 0, 4);
+            data[0x2A] = 2;
+            memory.Blocks[Allocation + previous.DataOffset] = data;
+            return memory;
+        }
+
         private static void Require(bool value, string detail)
         { if (!value) throw new InvalidOperationException(detail); }
 
@@ -125,6 +142,70 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(false).Read, Module, out a) == HookState.Original, "Original state"); });
                 test("current profile recognized without reinjection", delegate
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
+                test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
+                {
+                    Require(Profile.Hooks.Length==60 && Profile.LegacyProfiles.Length==2,"Complete release identities");
+                    int index=0;
+                    foreach(LegacyProfile previous in Profile.LegacyProfiles)
+                    {
+                        Require(previous.Hooks.Length==(index++==0?55:59),"Complete prior hook list");
+                        Require(previous.DataOffset==0xF000 && previous.AllocationSize==(previous.Hooks.Length==55?0x19000:0x1B000),"Prior allocation preserved");
+                        FakeMemory memory=LegacyMemory(previous); long allocation;
+                        Require(Checks.Inspect(memory.Read,Module,out allocation)==HookState.Legacy && allocation==Allocation,"Exact prior identity");
+                        bool wrote=false,rejected=false;
+                        try { CharacterSelection.Apply(memory.Read,delegate(long at,byte[] bytes){wrote=true;},Module,Allocation,0); }
+                        catch(InvalidOperationException){rejected=true;}
+                        Require(rejected && !wrote,"Prior process never receives character writes");
+                    }
+                });
+                test("every historical payload and site is required and mixed new entries are refused", delegate
+                {
+                    foreach(LegacyProfile previous in Profile.LegacyProfiles)
+                    {
+                        foreach(HookSpec old in previous.Hooks)
+                        {
+                            FakeMemory changedPayload=LegacyMemory(previous),changedSite=LegacyMemory(previous); long allocation;
+                            changedPayload.Blocks[Allocation+old.CodeOffset][0]^=1;
+                            changedSite.Blocks[Module+old.Rva][old.Original.Length-1]^=1;
+                            Require(Checks.Inspect(changedPayload.Read,Module,out allocation)==HookState.Other,"Changed prior payload: "+old.Name);
+                            Require(Checks.Inspect(changedSite.Read,Module,out allocation)==HookState.Other,"Changed prior site: "+old.Name);
+                        }
+                        foreach(HookSpec current in Profile.Hooks)
+                        {
+                            bool existed=false;
+                            foreach(HookSpec old in previous.Hooks) existed|=old.Rva==current.Rva;
+                            if(existed) continue;
+                            FakeMemory mixed=LegacyMemory(previous); long allocation;
+                            mixed.Write(Module+current.Rva,current.Jump(Module,Allocation));
+                            Require(Checks.Inspect(mixed.Read,Module,out allocation)==HookState.Other,"Mixed native entry: "+current.Name);
+                        }
+                    }
+                });
+                test("code protection excludes all three writable data pages", delegate
+                {
+                    Require(Profile.AllocationSize==0x20000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==3,"Beta 5.2 protected layout");
+                    int[] starts={0xF000,0x13000,0x1F000};
+                    List<MemorySpan> spans=Checks.CodePages(Profile.Hooks,Profile.AllocationSize,Profile.ProtectedDataPages);
+                    foreach(HookSpec hook in Profile.Hooks)
+                    {
+                        bool covered=false;
+                        foreach(MemorySpan span in spans)
+                            covered|=span.Start<=hook.CodeOffset && span.End>=hook.CodeOffset+hook.CodeCapacity;
+                        Require(covered,"Every code capacity receives RX protection");
+                    }
+                    for(int index=0;index<starts.Length;index++)
+                    {
+                        MemorySpan data=Profile.ProtectedDataPages[index];
+                        Require(data.Start==starts[index] && data.End==starts[index]+0x1000,"Exact protected data page");
+                        foreach(MemorySpan span in spans)
+                            Require(Math.Max(span.Start,data.Start)>=Math.Min(span.End,data.End),"Data page never becomes RX");
+                        HookSpec invalid=new HookSpec("data-overlap",0,starts[index],0x400,"kA==","kA==",new Fixup[0]);
+                        bool rejected=false;
+                        try { Checks.CodePages(new HookSpec[]{invalid},Profile.AllocationSize,Profile.ProtectedDataPages); }
+                        catch(InvalidOperationException){rejected=true;}
+                        Require(rejected,"Code capacity in protected data rejected");
+                    }
+                });
                 test("post-defeat hooks reject altered payloads and mixed Beta 5 installations", delegate
                 {
                     int count = 0;
@@ -145,7 +226,7 @@ namespace HinoEnmaTool
                     Require(Checks.Inspect(mixed.Read,Module,out allocation)==HookState.Other,
                         "Prior 50-hook Beta 5 process requires a restart");
                     Require(Checks.Inspect(Memory(true).Read,Module,out allocation)==HookState.Ours,
-                        "Complete 59-hook current profile recognized");
+                        "Complete 60-hook current profile recognized");
                 });
                 test("unrelated modification rejected", delegate
                 { FakeMemory m=Memory(false); m.Blocks[Module+Profile.Hooks[0].Rva][0]=0xCC; long a; Require(Checks.Inspect(m.Read,Module,out a)==HookState.Other,"Other modification"); });
@@ -272,6 +353,24 @@ namespace HinoEnmaTool
                     foreach(HookSpec hook in Profile.Hooks)
                         result.Add(new {module=module,allocation=allocation,name=hook.Name,payload=Convert.ToBase64String(hook.Payload(module,allocation)),patch=Convert.ToBase64String(hook.Jump(module,allocation))});
                 }
+            File.WriteAllText(path,new JavaScriptSerializer().Serialize(result),new System.Text.UTF8Encoding(false));
+            return 0;
+        }
+
+        internal static int ExportLegacyPayloads(string path)
+        {
+            long[] modules={0x140000000,0x7FF83AA00000,0x7FFA01000000};
+            List<object> result=new List<object>();
+            foreach(LegacyProfile previous in Profile.LegacyProfiles)
+                foreach(long module in modules)
+                    foreach(int slot in new int[]{0,1,37,511})
+                    {
+                        long allocation=Checks.FirstAllocation(module)+slot*0x10000L;
+                        foreach(HookSpec hook in previous.Hooks)
+                            result.Add(new {version=previous.Version,module=module,allocation=allocation,
+                                name=hook.Name,payload=Convert.ToBase64String(hook.Payload(module,allocation)),
+                                patch=Convert.ToBase64String(hook.Jump(module,allocation))});
+                    }
             File.WriteAllText(path,new JavaScriptSerializer().Serialize(result),new System.Text.UTF8Encoding(false));
             return 0;
         }

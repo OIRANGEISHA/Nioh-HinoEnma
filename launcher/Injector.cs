@@ -18,11 +18,11 @@ namespace HinoEnmaTool
     {
         internal string Name;
         internal uint Rva;
-        internal int CodeOffset;
+        internal int CodeOffset, CodeCapacity;
         internal byte[] Original, Template;
         internal Fixup[] Fixups;
-        internal HookSpec(string name, uint rva, int offset, string original, string template, Fixup[] fixups)
-        { Name = name; Rva = rva; CodeOffset = offset; Original = Convert.FromBase64String(original); Template = Convert.FromBase64String(template); Fixups = fixups; }
+        internal HookSpec(string name, uint rva, int offset, int capacity, string original, string template, Fixup[] fixups)
+        { Name = name; Rva = rva; CodeOffset = offset; CodeCapacity = capacity; Original = Convert.FromBase64String(original); Template = Convert.FromBase64String(template); Fixups = fixups; }
 
         internal byte[] Payload(long moduleBase, long allocation)
         {
@@ -56,7 +56,22 @@ namespace HinoEnmaTool
         }
     }
 
-    internal enum HookState { Original, Ours, Other }
+    internal sealed class MemorySpan
+    {
+        internal readonly int Start, End;
+        internal MemorySpan(int start, int end) { Start = start; End = end; }
+    }
+
+    internal sealed class LegacyProfile
+    {
+        internal readonly string Version;
+        internal readonly int DataOffset, AllocationSize;
+        internal readonly HookSpec[] Hooks;
+        internal LegacyProfile(string version, int dataOffset, int allocationSize, HookSpec[] hooks)
+        { Version = version; DataOffset = dataOffset; AllocationSize = allocationSize; Hooks = hooks; }
+    }
+
+    internal enum HookState { Original, Ours, Legacy, Other }
 
     internal static class PatchTransaction
     {
@@ -95,6 +110,64 @@ namespace HinoEnmaTool
         internal static long FirstAllocation(long moduleBase)
         { return (moduleBase + Profile.ImageSize + 0xFFFFL) & ~0xFFFFL; }
 
+        internal static List<MemorySpan> CodePages(HookSpec[] hooks, int allocationSize, MemorySpan[] dataPages)
+        {
+            SortedSet<int> pages = new SortedSet<int>();
+            foreach (HookSpec hook in hooks)
+            {
+                int end = checked(hook.CodeOffset + hook.CodeCapacity);
+                if (hook.CodeOffset < 0 || hook.CodeCapacity <= 0 || hook.Template.Length == 0 ||
+                    hook.Template.Length > hook.CodeCapacity || end > allocationSize)
+                    throw new InvalidOperationException("工具代码范围无效。");
+                int first = hook.CodeOffset & ~0xFFF;
+                int last = checked((end + 0xFFF) & ~0xFFF);
+                foreach (MemorySpan data in dataPages)
+                    if (Math.Max(first, data.Start) < Math.Min(last, data.End))
+                        throw new InvalidOperationException("工具代码与数据页重叠。");
+                for (int at = first; at < last; at += 0x1000) pages.Add(at);
+            }
+            List<MemorySpan> result = new List<MemorySpan>();
+            int start = -1, finish = -1;
+            foreach (int page in pages)
+            {
+                if (page != finish)
+                {
+                    if (start >= 0) result.Add(new MemorySpan(start, finish));
+                    start = page;
+                }
+                finish = page + 0x1000;
+            }
+            if (start >= 0) result.Add(new MemorySpan(start, finish));
+            return result;
+        }
+
+        private static bool SettingsRecognized(Func<long, int, byte[]> read, long candidate, int dataOffset)
+        {
+            byte[] settings = read(candidate + dataOffset, 0x40);
+            uint selected = BitConverter.ToUInt32(settings, 0);
+            uint loaded = BitConverter.ToUInt32(settings, 4);
+            return CharacterSelection.Supported(selected) &&
+                (loaded == 0 || loaded == 0x58E5E || loaded == 0x51BE1) && settings[0x2A] <= 2;
+        }
+
+        private static bool Matches(Func<long, int, byte[]> read, long moduleBase, long candidate,
+                                    HookSpec[] hooks, int dataOffset)
+        {
+            try
+            {
+                foreach (HookSpec hook in hooks)
+                {
+                    if (!Equal(read(moduleBase + hook.Rva, hook.Original.Length), hook.Jump(moduleBase, candidate))) return false;
+                    byte[] wanted = hook.Payload(moduleBase, candidate);
+                    if (!Equal(read(candidate + hook.CodeOffset, wanted.Length), wanted)) return false;
+                }
+                return SettingsRecognized(read, candidate, dataOffset);
+            }
+            catch (System.ComponentModel.Win32Exception) { return false; }
+            catch (IOException) { return false; }
+            catch (InvalidOperationException) { return false; }
+        }
+
         internal static HookState Inspect(Func<long, int, byte[]> read, long moduleBase, out long allocation)
         {
             allocation = 0;
@@ -108,23 +181,29 @@ namespace HinoEnmaTool
             long candidate = moduleBase + first.Rva + 5 + BitConverter.ToInt32(jump, 1) - first.CodeOffset;
             long start = FirstAllocation(moduleBase);
             if ((candidate & 0xFFFFL) != 0 || candidate < start || candidate >= start + 512L * 0x10000) return HookState.Other;
-            try
+            if (Matches(read, moduleBase, candidate, Profile.Hooks, Profile.DataOffset))
             {
-                foreach (HookSpec hook in Profile.Hooks)
-                {
-                    if (!Equal(read(moduleBase + hook.Rva, hook.Original.Length), hook.Jump(moduleBase, candidate))) return HookState.Other;
-                    byte[] wanted = hook.Payload(moduleBase, candidate);
-                    if (!Equal(read(candidate + hook.CodeOffset, wanted.Length), wanted)) return HookState.Other;
-                }
-                byte[] settings = read(candidate + Profile.DataOffset, 0x40);
-                uint selected = BitConverter.ToUInt32(settings, 0);
-                uint loaded = BitConverter.ToUInt32(settings, 4);
-                if (!CharacterSelection.Supported(selected) ||
-                    (loaded != 0 && loaded != 0x58E5E && loaded != 0x51BE1) || settings[0x2A] > 2) return HookState.Other;
+                allocation = candidate;
+                return HookState.Ours;
             }
-            catch (System.ComponentModel.Win32Exception) { return HookState.Other; }
-            allocation = candidate;
-            return HookState.Ours;
+            // Old complete layouts are recognizable but never eligible for
+            // reinjection or character writes. Every extra current native
+            // site must remain pristine, so a mixed installation is refused.
+            foreach (LegacyProfile previous in Profile.LegacyProfiles)
+            {
+                if (previous.DataOffset != Profile.DataOffset ||
+                    !Matches(read, moduleBase, candidate, previous.Hooks, previous.DataOffset)) continue;
+                bool complete = true;
+                foreach (HookSpec current in Profile.Hooks)
+                {
+                    bool existed = false;
+                    foreach (HookSpec old in previous.Hooks) existed |= old.Rva == current.Rva;
+                    if (!existed && !Equal(read(moduleBase + current.Rva, current.Original.Length), current.Original))
+                    { complete = false; break; }
+                }
+                if (complete) { allocation = candidate; return HookState.Legacy; }
+            }
+            return HookState.Other;
         }
     }
 
@@ -327,6 +406,7 @@ namespace HinoEnmaTool
             Alive();
             long allocation;
             HookState state = Checks.Inspect(Read, Base, out allocation);
+            if (state == HookState.Legacy) return new Report("needs_restart", "已识别完整的旧 Beta 5.1 或 Hotfix 1 接入。请退出并重新启动游戏，停在主菜单后使用 Beta 5.2。", Pid, true);
             if (state == HookState.Other) return new Report("modified", "相关游戏代码已被其他工具修改。请关闭其他 CT 或工具，并重新启动游戏。", Pid, true);
             long actor = Player();
             if (state == HookState.Ours)
@@ -430,6 +510,7 @@ namespace HinoEnmaTool
             bool linked = false;
             try
             {
+                List<MemorySpan> codePages = Checks.CodePages(Profile.Hooks, Profile.AllocationSize, Profile.ProtectedDataPages);
                 long start = Checks.FirstAllocation(Base);
                 for (int index = 0; index < 512; index++)
                 {
@@ -444,22 +525,14 @@ namespace HinoEnmaTool
                 data[0x58] = Profile.AttributeOverlay ? (byte)1 : (byte)0;
                 Write(privateAllocation + Profile.DataOffset, data, false);
                 uint old;
-                if (!Native.VirtualProtectEx(handle, new IntPtr(privateAllocation), (UIntPtr)Profile.DataOffset, Native.ExecuteRead, out old)) throw Native.Error("无法准备工具代码。");
-                if (!Native.FlushInstructionCache(handle, new IntPtr(privateAllocation), (UIntPtr)Profile.DataOffset)) throw Native.Error("无法刷新工具代码。");
-                // New code may follow the original 4 KiB data page. Protect
-                // only its occupied pages; the data and trace pages stay RW.
-                foreach (HookSpec hook in Profile.Hooks)
+                // Core data, paired-grab scratch, and innate-cache pages stay
+                // RW. Validate complete capacities before protecting code.
+                foreach (MemorySpan span in codePages)
                 {
-                    if (hook.CodeOffset < Profile.DataOffset) continue;
-                    byte[] payload = hook.Payload(Base, privateAllocation);
-                    int firstPage = hook.CodeOffset & ~0xFFF;
-                    int lastPage = checked((hook.CodeOffset + payload.Length + 0xFFF) & ~0xFFF);
-                    if (firstPage < Profile.DataOffset + 0x1000 || lastPage > Profile.AllocationSize)
-                        throw new InvalidOperationException("扩展工具代码与数据区重叠。");
-                    UIntPtr length = (UIntPtr)(lastPage - firstPage);
-                    if (!Native.VirtualProtectEx(handle, new IntPtr(privateAllocation + firstPage), length, Native.ExecuteRead, out old))
+                    UIntPtr length = (UIntPtr)(span.End - span.Start);
+                    if (!Native.VirtualProtectEx(handle, new IntPtr(privateAllocation + span.Start), length, Native.ExecuteRead, out old))
                         throw Native.Error("无法准备扩展工具代码。");
-                    if (!Native.FlushInstructionCache(handle, new IntPtr(privateAllocation + firstPage), length))
+                    if (!Native.FlushInstructionCache(handle, new IntPtr(privateAllocation + span.Start), length))
                         throw Native.Error("无法刷新扩展工具代码。");
                 }
                 using (GameThreads threads = new GameThreads(Pid, Base, handle, Read))

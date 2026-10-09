@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.5.2] - 2026-10-10
+
+### Fixed
+
+- Pass the selected melee weapon's native innate fire, water, lightning, wind or earth element to supported Hino-Enma kicks, umbrella attacks, body charge, needles and life drain. Temporary elemental talismans and Living Weapon retain priority. Re-equip the selected weapon or reload the character for native refresh.
+- Preserve needle paralysis and the roar's original effects; exclude the roar from added elements. Ordinary body attacks follow the native primary enchantment priority, without claiming a second independent paralysis channel.
+- Update four existing hooks and add one, for 60 hooks. Preserve all 55 unrelated Hotfix 1 hooks, Boss base-plus-growth/equipment calculation and existing controls.
+- Extend launcher recognition to the complete supported older 55/59-hook installations. Verify full entry sites and payloads read-only and reject damaged or unknown configurations. New installation checks cover executable code and three writable, non-executable data pages; this does not claim a VirtualQuery check of old live page protection.
+
+### Validation and release scope
+
+- The second temporary revision was user-confirmed with Raikiri's “Imbue Lightning +8”: J, I, body charge, needles and life drain all showed lightning and gameplay remained normal. The five-hook live trial is separate from the final public EXE; fresh-process first enable, exact damage/status strength and every innate element remain unverified.
+- The local second-revision EXE passed 23 self-checks and 720 payload comparisons, and its private native-code regression passed 20 tests and 959 CPU comparisons. Those are local results. The public Beta 5.2 integration adds launcher checks; its actual Debug/Release and portable CPU results are recorded in the Beta 5.2 validation file.
+- Public Debug and Release each passed 26 self-checks, 720 current-profile comparisons and 1,368 complete prior-profile comparisons (55/59 hooks × 12 layouts). Source/CT checks passed for 60 hooks, 555 unique local labels, 720 namespace comparisons and six negative guards. These checks do not access the game or establish fresh-process first enable.
+- Retain the ladder and defeated Nouhime / Yuki-Onna compatibility, previous item/interaction fixes and additive stat calculation. Some non-critical item use remains unfixed; compatible shortcuts remain in slot 2 on the first bar, with other skill/move bindings unchanged.
+- Publish a new immutable `v1.0.0-beta.5.2` tag and Pre-release with exactly the Windows x64 EXE and complete source ZIP. Earlier tags, assets and historical records remain unchanged. Unsigned, latest=false.
+
 ## [1.0.0-beta.5.1.hotfix.1] - 2026-10-09
 
 ### Fixed
@@ -147,7 +164,9 @@
 
 - Non-humanoid Boss life-drain grabs, shortcut conflicts, complete interaction coverage, individual item/affix effects and cold first-enable verification of the final public EXE remain open.
 
-[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.5.1...HEAD
+[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.5.2...HEAD
+[1.0.0-beta.5.2]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.2
+[1.0.0-beta.5.1.hotfix.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.1.hotfix.1
 [1.0.0-beta.5.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.1
 [1.0.0-beta.5]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5
 [1.0.0-beta.4.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4.1

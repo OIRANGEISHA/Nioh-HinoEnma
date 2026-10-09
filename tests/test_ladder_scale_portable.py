@@ -24,9 +24,10 @@ from unicorn import Uc, UC_ARCH_X86, UC_MODE_64, UC_HOOK_CODE, UC_HOOK_MEM_WRITE
 import unicorn.x86_const as reg
 
 PLAN = load_plan()
-INTEGRATED = PLAN
 BASELINE = source_plan_v059(PLAN)
 BASELINE['allocation_size'] = 0x19000
+# Retain the complete historical 55 -> 59 proof independently of Beta 5.2.
+INTEGRATED = apply_ladder_scale(BASELINE)
 MODULE, CODE, PRODUCTION = 0x140000000, 0x144000000, 0x144000000
 DATA, PROD = CODE + DATA_OFFSET, PRODUCTION + 0xF000
 ACTOR, META, MOTION, PROXY = 0x30000000, 0x30004000, 0x30006000, 0x30008000
@@ -40,7 +41,7 @@ GPRS = tuple(getattr(reg, 'UC_X86_REG_' + name) for name in (
 XMMS = tuple(getattr(reg, 'UC_X86_REG_XMM' + str(index)) for index in range(16))
 REGISTERS = GPRS + XMMS + (reg.UC_X86_REG_EFLAGS, reg.UC_X86_REG_MXCSR)
 ORIGINAL_SCALE = struct.unpack('<I', struct.pack('<f', 0.733))[0]
-PAYLOADS = assemble(PLAN, MODULE, CODE)[55:]
+PAYLOADS = assemble(PLAN, MODULE, CODE)[55:59]
 PENDING, PENDING_PARAMS = ACTOR+0x22000, ACTOR+0x23000
 
 class BaseMachine:
@@ -553,6 +554,17 @@ class LadderScaleTests(unittest.TestCase):
                         self.assertEqual(left[field], right[field], (left['name'], field))
                     type(self).baseline_payload_comparisons += 1
                 type(self).baseline_layouts.append(dict(module_base=module, allocation=allocation))
+
+
+    def test_beta52_keeps_all_four_hotfix_ladder_payloads_exact(self):
+        self.assertEqual((len(PLAN['hooks']), PLAN['data_offset'], PLAN['allocation_size']),
+                         (60, 0xF000, 0x20000))
+        for module in (0x140000000, 0x150000000, 0x7FF600000000):
+            for displacement in (0x4000000, 0x200000, -0x4000000, -0x200000):
+                allocation = module + displacement
+                historical = assemble(INTEGRATED, module, allocation)[55:59]
+                current = assemble(PLAN, module, allocation)[55:59]
+                self.assertEqual(current, historical)
 
 
     def test_added_code_spans_native_sites_and_rw_pages_are_disjoint(self):

@@ -11,7 +11,7 @@ import sys
 
 from build_profile import (
     ROOT, assemble, aa_source, ct_render_plan, load_plan, source_plan,
-    validate_ct_labels,
+    legacy_plans, validate_ct_labels, validate_layout,
 )
 
 
@@ -27,7 +27,7 @@ def main() -> None:
     frozen = json.loads((ROOT / 'profiles/steam-1.24.8.json').read_text('utf-8'))
     original = deepcopy(frozen)
     plan = load_plan()
-    if len(plan['hooks']) != 59 or source_plan(frozen)['tool_version'] != '0.60':
+    if len(plan['hooks']) != 60 or source_plan(frozen)['tool_version'] != '1.0.0-beta.5.2':
         raise AssertionError('Expected the complete current source chain')
     if frozen != original:
         raise AssertionError('Source reconstruction changed its frozen input')
@@ -66,10 +66,22 @@ def main() -> None:
             'Duplicate CT definition was accepted')
     missing = text.replace('label(' + labels[0] + ')\n', '', 1)
     rejects(lambda: validate_ct_labels(missing, labels), 'Missing CT declaration was accepted')
+    for offset in (0xF000, 0x13000, 0x1F000):
+        invalid = deepcopy(plan)
+        invalid['hooks'][-1]['code_offset'] = offset
+        rejects(lambda: validate_layout(invalid), 'Code capacity in protected data was accepted')
+    previous = legacy_plans(frozen)
+    if [(len(item['hooks']), item['allocation_size']) for item in previous] != [
+            (55, 0x19000), (59, 0x1B000)]:
+        raise AssertionError('Historical complete allocation identities differ')
+    if frozen != original:
+        raise AssertionError('Legacy reconstruction changed its frozen input')
     print(json.dumps(dict(success=True, game_access=False,
-        private_dependencies_imported=False, hook_count=59, ct_local_labels=len(labels),
+        private_dependencies_imported=False, hook_count=len(plan['hooks']), ct_local_labels=len(labels),
         source_input_unchanged=True, layout_count=layouts,
-        ct_namespace_payload_comparisons=comparisons, negative_guards=3)))
+        ct_namespace_payload_comparisons=comparisons, negative_guards=6,
+        historical_hook_counts=[len(item['hooks']) for item in previous],
+        protected_data_pages=[0xF000, 0x13000, 0x1F000])))
 
 
 if __name__ == '__main__':

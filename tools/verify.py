@@ -9,18 +9,19 @@ from pathlib import Path
 import struct
 import subprocess
 
-from build_profile import ROOT, assemble, generate, load_plan
+from build_profile import ROOT, assemble, generate, legacy_plans, load_plan
 
 
 def verify(executable: Path, report: Path, preview: bool = False) -> dict:
     plan = load_plan()
-    if len(plan["hooks"]) != 59:
-        raise ValueError("Expected the reviewed 59-hook profile")
+    if len(plan["hooks"]) != 60:
+        raise ValueError("Expected the reviewed 60-hook Beta 5.2 profile")
     if (ROOT / "launcher/Profile.generated.cs").read_text("utf-8") != generate(plan):
         raise ValueError("Generated source differs")
     report.parent.mkdir(parents=True, exist_ok=True)
     targets = {"--self-test": report.with_name("self-tests.json"),
-               "--export-payloads": report.with_name("payloads.json")}
+               "--export-payloads": report.with_name("payloads.json"),
+               "--export-legacy-payloads": report.with_name("legacy-payloads.json")}
     if preview:
         targets["--preview"] = report.with_name("launcher-preview.png")
     for mode, target in targets.items():
@@ -33,8 +34,8 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
             raise ValueError("Offline executable check failed: " + mode + ": " + completed.stderr)
     self_test = json.loads(targets["--self-test"].read_text("utf-8"))
     if (not self_test["success"] or self_test.get("game_access") is not False
-            or self_test["count"] != 23 or len(self_test["checks"]) != 23
-            or len(set(self_test["checks"])) != 23):
+            or self_test["count"] != 26 or len(self_test["checks"]) != 26
+            or len(set(self_test["checks"])) != 26):
         raise ValueError("Offline refusal/transaction checks failed")
     exported = json.loads(targets["--export-payloads"].read_text("utf-8"))
     cache, names = {}, set()
@@ -58,6 +59,26 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
     }
     if set(cache) != expected_layouts:
         raise ValueError("Relocation layout set differs from the reviewed export")
+    previous = {item['tool_version']: item for item in legacy_plans(plan)}
+    legacy_exported = json.loads(targets['--export-legacy-payloads'].read_text('utf-8'))
+    legacy_cache, legacy_names = {}, set()
+    for item in legacy_exported:
+        key = (item['version'], item['module'], item['allocation'])
+        if key[0] not in previous or key[1:] not in expected_layouts:
+            raise ValueError('Unexpected legacy release or relocation layout')
+        if key not in legacy_cache:
+            legacy_cache[key] = {hook['name']: hook for hook in assemble(previous[key[0]], *key[1:])}
+        hook = legacy_cache[key][item['name']]
+        if (base64.b64decode(item['payload']) != hook['payload']
+                or base64.b64decode(item['patch']) != hook['patched']):
+            raise ValueError('Compiled historical relocation differs: ' + item['name'])
+        unique = (*key, item['name'])
+        if unique in legacy_names:
+            raise ValueError('Duplicate historical relocation comparison')
+        legacy_names.add(unique)
+    if (len(legacy_cache) != len(previous) * 12
+            or len(legacy_names) != sum(len(item['hooks']) for item in previous.values()) * 12):
+        raise ValueError('Incomplete historical relocation export')
     raw = executable.read_bytes()
     pe = struct.unpack_from("<I", raw, 0x3C)[0]
     if raw[:2] != b"MZ" or raw[pe:pe+4] != b"PE\0\0" or struct.unpack_from("<H", raw, pe+4)[0] != 0x8664:
@@ -66,6 +87,8 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
         "version": plan["tool_version"], "success": True, "game_access": False,
         "generated_source_matches": True, "self_checks": self_test["count"],
         "payload_comparisons": len(exported), "layout_count": len(cache), "hook_count": len(plan["hooks"]),
+        "legacy_hook_counts": [len(item['hooks']) for item in previous.values()],
+        "legacy_payload_comparisons": len(legacy_names), "legacy_layout_count": len(legacy_cache),
         "pe_machine": "x64", "executable_bytes": len(raw), "executable_sha256": hashlib.sha256(raw).hexdigest(),
     }
     report.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")

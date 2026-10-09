@@ -138,6 +138,7 @@ namespace HinoEnmaTool
             }
             if (args.Length == 2 && args[0] == "--self-test") return SelfTests.Run(args[1]);
             if (args.Length == 2 && args[0] == "--export-payloads") return SelfTests.ExportPayloads(args[1]);
+            if (args.Length == 2 && args[0] == "--export-legacy-payloads") return SelfTests.ExportLegacyPayloads(args[1]);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             if (args.Length == 2 && args[0] == "--preview")

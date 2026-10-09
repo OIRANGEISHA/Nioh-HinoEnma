@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "public_version": "1.0.0-beta.5.2",
+  "verification_date": "2026-10-10",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08",
+    "other_builds_adapted": false
+  },
+  "native_hook_count": 60,
+  "changed_inherent_hook_count": 4,
+  "added_inherent_hook_count": 1,
+  "public_verification_status": "completed_offline; final_public_exe_cold_first_enable_unverified",
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.5.2",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 26,
+      "payload_comparisons": 720,
+      "layout_count": 12,
+      "hook_count": 60,
+      "legacy_hook_counts": [
+        55,
+        59
+      ],
+      "legacy_payload_comparisons": 1368,
+      "legacy_layout_count": 24,
+      "pe_machine": "x64",
+      "executable_bytes": 268288,
+      "executable_sha256": "ae69b0213339b2c2c36d622ca322adae9a06dd42f2e5b656c629eafb4fc1ed3e"
+    },
+    "Release": {
+      "version": "1.0.0-beta.5.2",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 26,
+      "payload_comparisons": 720,
+      "layout_count": 12,
+      "hook_count": 60,
+      "legacy_hook_counts": [
+        55,
+        59
+      ],
+      "legacy_payload_comparisons": 1368,
+      "legacy_layout_count": 24,
+      "pe_machine": "x64",
+      "executable_bytes": 264704,
+      "executable_sha256": "d0034f5e3cd0d4da6487a7b925bfdf433dc244a9a8e204d333e678278c77bcbb"
+    }
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "private_dependencies_imported": false,
+    "hook_count": 60,
+    "ct_local_labels": 555,
+    "source_input_unchanged": true,
+    "layout_count": 12,
+    "ct_namespace_payload_comparisons": 720,
+    "negative_guards": 6,
+    "historical_hook_counts": [
+      55,
+      59
+    ],
+    "protected_data_pages": [
+      61440,
+      77824,
+      126976
+    ]
+  },
+  "public_cpu_regressions": {
+    "success": true,
+    "tests": 113,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "game_access": false,
+    "private_code_or_research_inputs": false,
+    "suites": {
+      "latched_door_instances": 8,
+      "special_items": 5,
+      "salt_recovery": 10,
+      "postdefeat_grab": 26,
+      "ladder_scale": 45,
+      "inherent_element": 19
+    },
+    "source_inputs_unchanged": true,
+    "native_calls": "Synthetic records and explicit RET/Win64 behavior; no complete native event or damage engine"
+  },
+  "private_native_regressions": {
+    "success": true,
+    "tests": 20,
+    "cpu_comparisons": 959,
+    "unchanged_baseline_payload_comparisons": 165,
+    "aslr_layouts": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "private_verified_native_inputs_used": true,
+    "private_inputs_distributed": false,
+    "source_module_sha256": "c2864fc3387e839fb490c06dbf2e7edc0b5fdff854d2cf746b5dfafc2c951d43"
+  },
+  "gameplay_confirmation": {
+    "method": "Second guarded five-hook temporary revision over recognized prior tool; not final-public-EXE cold enable",
+    "weapon": "Raikiri",
+    "affix": "Imbue Lightning +8",
+    "temporary_talisman": false,
+    "living_weapon": false,
+    "confirmed": [
+      "J kick lightning",
+      "I umbrella lightning",
+      "body charge lightning",
+      "needle lightning with original status intact",
+      "life-drain lightning",
+      "normal movement and attacks"
+    ],
+    "user_confirmation": "目前都有了，一切正常",
+    "boss_physical_attack_preserved": true,
+    "all_element_types_and_exact_damage_or_status_strength_tested": false
+  },
+  "inherent_element_rules": {
+    "selected_melee_weapon_only": true,
+    "valid_temporary_element_priority": true,
+    "stable_cache_bound_to_actor_component_epoch_slot_weapon_and_recalculation": true,
+    "boss_rows_and_growth_equipment_overlay_preserved": true,
+    "needle_intrinsic_status_preserved": true,
+    "roar_excluded": true,
+    "ordinary_body_uses_native_primary_element_priority": true,
+    "separate_body_paralysis_channel_claimed": false
+  },
+  "launcher_checks": {
+    "complete_prior_layouts_read_only": [
+      55,
+      59
+    ],
+    "legacy_payload_comparisons_per_build": 1368,
+    "malformed_or_mixed_layouts_rejected": true,
+    "old_layout_character_writes_rejected": true,
+    "code_pages_execute_read": true,
+    "three_data_pages_read_write_non_executable": true
+  },
+  "known_limits": [
+    "Final public EXE cold first-enable and direct CE/CT enable were not tested in a new game process.",
+    "Only reported Raikiri attacks were checked live; all weapons/elements/air variants and quantified damage/status strength remain unverified.",
+    "Some non-critical item use remains unfixed.",
+    "Item shortcuts use slot 2 on the first bar; other Boss skill/move bindings remain.",
+    "Retained Salt Common 205/85 interruption variants, all ladder/NPC/guardian/map/interaction variants and every mission/save transition remain outside full gameplay coverage.",
+    "Post-defeat grab remains scoped to loaded Nouhime/Yuki-onna resources; zero-HP actors receive no extra damage/healing/revival.",
+    "Windows Beta is unsigned."
+  ],
+  "release_assets": [
+    "Nioh-HinoEnma-1.0.0-beta.5.2-windows-x64.exe",
+    "Nioh-HinoEnma-1.0.0-beta.5.2-source.zip"
+  ]
+}

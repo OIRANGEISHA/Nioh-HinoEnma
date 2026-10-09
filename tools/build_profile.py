@@ -58,6 +58,7 @@ from hinoenma_salt_damage96_draft import apply_salt_damage96_draft
 from hinoenma_salt_damage205_draft import apply_salt_damage205_draft, ROUTES_OFFSET, ROUTE_BYTES
 from hinoenma_postdefeat_grab import addon as apply_postdefeat_grab
 from hinoenma_ladder_scale import apply_ladder_scale
+from hinoenma_inherent_element import apply_inherent_elements, BASE_VERSION, PROTECTED_DATA_PAGES
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
@@ -168,7 +169,7 @@ def source_plan_v059(frozen: dict) -> dict:
     return plan
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_hotfix(frozen: dict) -> dict:
     """Append the tested ladder sampler repair without changing Beta 5.1 hooks."""
     previous = source_plan_v059(frozen)
     # Rebuild the exact former allocation before appending the four new slots.
@@ -176,7 +177,40 @@ def source_plan(frozen: dict) -> dict:
     plan = apply_ladder_scale(previous)
     if len(plan['hooks']) != 59 or plan['hooks'][:55] != previous['hooks']:
         raise ValueError('Hotfix must preserve all 55 Beta 5.1 hooks')
+    plan['tool_version'] = BASE_VERSION
     return plan
+
+
+def source_plan(frozen: dict) -> dict:
+    """Rebuild Beta 5.2 from the exact public Hotfix and innate-element revision."""
+    plan = apply_inherent_elements(source_plan_hotfix(frozen))
+    if len(plan['hooks']) != 60 or plan.get('inherent_element_revision') != 2:
+        raise ValueError('Expected the complete reviewed 60-hook Beta 5.2 source')
+    plan['tool_version'] = '1.0.0-beta.5.2'
+    return plan
+
+
+def legacy_plans(frozen: dict) -> list[dict]:
+    """Exact older payloads are read-only identities, never migration inputs."""
+    beta51 = source_plan_v059(frozen)
+    beta51.update(tool_version='1.0.0-beta.5.1', allocation_size=0x19000)
+    return [beta51, source_plan_hotfix(frozen)]
+
+
+def validate_layout(plan: dict) -> None:
+    """Reject code capacity in core, paired-grab scratch, or innate-cache pages."""
+    code_ranges = sorted((hook['code_offset'], hook['code_offset']
+                          + hook.get('code_capacity', BLOCK_SIZE)) for hook in plan['hooks'])
+    if (not code_ranges or code_ranges[0][0] < 0
+            or any(left[1] > right[0] for left, right in zip(code_ranges, code_ranges[1:]))
+            or code_ranges[-1][1] > plan['allocation_size']
+            or (plan['data_offset'], plan['allocation_size']) != (0xF000, 0x20000)
+            or plan.get('inherent_element_cache_offset') != 0x1F000
+            or plan.get('inherent_element_cache_size') != 0x40
+            or any(max(start, protected_start) < min(end, protected_end)
+                   for start, end in code_ranges
+                   for protected_start, protected_end in PROTECTED_DATA_PAGES)):
+        raise ValueError('Code and protected data slots overlap')
 
 
 def source_specs() -> tuple[list[dict], dict]:
@@ -209,16 +243,7 @@ def load_plan() -> dict:
         if len(original) != frozen["length"] or sum(i.size for i in md.disasm(original, BASE + frozen["rva"])) != len(original):
             raise ValueError("Frozen signature truncates a native instruction")
         frozen["asm"] = source["asm"]
-    code_ranges = sorted((hook['code_offset'], hook['code_offset']
-                          + hook.get('code_capacity', BLOCK_SIZE)) for hook in plan['hooks'])
-    if (not code_ranges or code_ranges[0][0] < 0
-            or any(left[1] > right[0] for left, right in zip(code_ranges, code_ranges[1:]))
-            or code_ranges[-1][1] > plan['allocation_size']
-            or (plan['data_offset'], plan['allocation_size']) != (0xF000, 0x1B000)
-            or any(max(start, protected_start) < min(end, protected_end)
-                   for start,end in code_ranges
-                   for protected_start,protected_end in ((0xF000,0x10000),(0x13000,0x14000)))):
-        raise ValueError("Code and data slots overlap")
+    validate_layout(plan)
     native_ranges = sorted((hook["rva"], hook["rva"] + hook["length"]) for hook in plan["hooks"])
     if any(left[1] > right[0] for left, right in zip(native_ranges, native_ranges[1:])):
         raise ValueError("Native hook sites overlap")
@@ -301,6 +326,8 @@ def generate(plan: dict) -> str:
         f'internal const int DataOffset = {plan["data_offset"]};',
         f'internal const string Version = "{plan["tool_version"]}";',
         f'internal const string DisplayVersion = "{version["display_version"]}";',
+        'internal static readonly MemorySpan[] ProtectedDataPages = new MemorySpan[] {' +
+            ','.join(f'new MemorySpan({start},{end})' for start, end in PROTECTED_DATA_PAGES) + '};',
     ]
     for constant, key in (("ManualPurification", "manual_purification"),
                           ("LivingWeapon", "actual_living_weapon_activation_added"),
@@ -318,7 +345,19 @@ def generate(plan: dict) -> str:
     for item in relocation_specs(plan):
         original = base64.b64encode(bytes.fromhex(item["original"])).decode()
         fixups = ','.join(f'new Fixup({f["offset"]},{f["kind"]},{f["target"]}U,{f["next"]})' for f in item["fixups"])
-        lines.append(f'new HookSpec("{item["name"]}",{item["rva"]}U,{item["code_offset"]},"{original}","{item["template"]}",new Fixup[]{{{fixups}}}),')
+        capacity = next(hook.get('code_capacity', BLOCK_SIZE) for hook in plan['hooks']
+                        if hook['name'] == item['name'])
+        lines.append(f'new HookSpec("{item["name"]}",{item["rva"]}U,{item["code_offset"]},{capacity},"{original}","{item["template"]}",new Fixup[]{{{fixups}}}),')
+    lines += ['};', 'internal static readonly LegacyProfile[] LegacyProfiles = new LegacyProfile[] {']
+    for previous in legacy_plans(plan):
+        lines.append(f'new LegacyProfile("{previous["tool_version"]}",{previous["data_offset"]},{previous["allocation_size"]},new HookSpec[] {{')
+        for item in relocation_specs(previous):
+            original = base64.b64encode(bytes.fromhex(item['original'])).decode()
+            fixups = ','.join(f'new Fixup({f["offset"]},{f["kind"]},{f["target"]}U,{f["next"]})' for f in item['fixups'])
+            capacity = next(hook.get('code_capacity', BLOCK_SIZE) for hook in previous['hooks']
+                            if hook['name'] == item['name'])
+            lines.append(f'new HookSpec("{item["name"]}",{item["rva"]}U,{item["code_offset"]},{capacity},"{original}","{item["template"]}",new Fixup[]{{{fixups}}}),')
+        lines.append('}),')
     return '\n'.join(lines + ['};', '} }']) + '\n'
 
 
