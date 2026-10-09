@@ -1,0 +1,208 @@
+{
+  "schema": 3,
+  "public_version": "1.0.0-beta.5",
+  "verification_date": "2026-10-09",
+  "upstream_local_version": "0.58",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08",
+    "other_builds_adapted": false
+  },
+  "native_hook_count": 50,
+  "portable_public_validation_pending": false,
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.5",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 21,
+      "payload_comparisons": 600,
+      "layout_count": 12,
+      "hook_count": 50,
+      "pe_machine": "x64",
+      "executable_bytes": 198144,
+      "executable_sha256": "128c1705b1075731897b1c7a1d05b21598f3aa14f49b94e0dd2c1cba590922ab"
+    },
+    "Release": {
+      "version": "1.0.0-beta.5",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 21,
+      "payload_comparisons": 600,
+      "layout_count": 12,
+      "hook_count": 50,
+      "pe_machine": "x64",
+      "executable_bytes": 195584,
+      "executable_sha256": "e09c487527efd901bd16f6a1824bfe039d87cb2d13866c1f26e154c00f53a71f"
+    }
+  },
+  "portable_public_validation_required": {
+    "configurations": [
+      "Debug",
+      "Release"
+    ],
+    "self_checks_per_build": 21,
+    "payload_comparisons_per_build": 600,
+    "layout_count": 12,
+    "hook_count": 50,
+    "game_access": false
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "private_dependencies_imported": false,
+    "hook_count": 50,
+    "ct_unique_local_labels": 498,
+    "payload_comparisons": 600,
+    "layout_count": 12,
+    "negative_rejection_cases": 3,
+    "source_input_unchanged": true
+  },
+  "native_payload_equivalence_summary": {
+    "success": true,
+    "payload_comparisons": 600,
+    "layouts": 12,
+    "scope": "Public payloads and entry patches match the frozen local 0.58 adaptation in all 12 layouts; no private inputs distributed",
+    "game_access": false
+  },
+  "local_salt_damage205_regression_summary": {
+    "tests": 23,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "game_access": false,
+    "private_verified_native_code_inputs": true,
+    "prior_tests_rerun": false,
+    "private_inputs_distributed": false
+  },
+  "public_cpu_regression_summaries": {
+    "retained_latched_door_instances": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "success": true,
+      "game_access": false,
+      "private_code_or_research_inputs": false,
+      "tests": 8,
+      "command": "python tests/test_latched_door_instances.py -v",
+      "source_baseline_local_version": "0.51",
+      "native_calls": "Explicit Win64 stubs for common-action lookup, motion index and set-action",
+      "scope": "Retained public door-instance guard, dispatch, fallback and ABI checks; native queue, door scripts and rendered animation do not run"
+    },
+    "new_special_items": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "success": true,
+      "game_access": false,
+      "private_code_or_research_inputs": false,
+      "tests": 5,
+      "command": "python tests/test_special_items_portable.py -v",
+      "native_calls": "Explicit Win64 RET stubs with synthetic public ABI records",
+      "scope": "Owned item action dispatch, definition/owner guards, event schedule and exact clip guards, branch and lost-guardian candle eligibility; native event engine, item factory and inventory commit do not run"
+    },
+    "new_salt_recovery": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "success": true,
+      "game_access": false,
+      "private_code_or_research_inputs": false,
+      "tests": 10,
+      "command": "python tests/test_salt_recovery_portable.py -v",
+      "native_calls": "Explicit Win64 RET stubs for motion lookup and scheduling; synthetic descriptors and action records",
+      "scope": "Bounded owned Salt token arm/reuse/cleanup, 205/85/96/rear107 route and two-clip guards, actor epoch/HP/pending checks, read-only qualification, route table/CT roundtrip and event catch-up; native damage, predicates, resource hashing, inventory and animation do not run"
+    }
+  },
+  "gameplay_verification_scope": [
+    "Reported Guardian Spirit Talisman, Hyottoko Mask, Conch, Yokai Water Pot and Kodama Bowl effects",
+    "Himorogi Branch mission interruption and return to mission selection",
+    "Summoner Candle after death while guardian lost, followed by normal guardian attack",
+    "Salt consumption, throwing effect and reported Yokai ki hit",
+    "Latest reported Salt use/interruption recovery with normal movement and attacks",
+    "User-corrected shortcut location: first item shortcut bar, digit 2"
+  ],
+  "new_special_items": {
+    "reported_item_effects_user_confirmed": true,
+    "items": [
+      "Guardian Spirit Talisman",
+      "Hyottoko Mask",
+      "Conch",
+      "Yokai Water Pot",
+      "Kodama Bowl",
+      "Himorogi Branch",
+      "Summoner Candle"
+    ],
+    "all_item_effect_combinations_verified": false
+  },
+  "salt": {
+    "consumption_and_throwing_effect_user_confirmed": true,
+    "reported_yokai_ki_hit_user_confirmed": true,
+    "latest_reported_use_and_interruption_test_user_confirmed": true,
+    "sampled_recovery_actions": [
+      91,
+      92
+    ],
+    "common205_or85_observed_in_latest_recordings": false,
+    "common205_or85_gameplay_verified": false,
+    "all_interruption_routes_verified": false,
+    "all_enemy_combinations_verified": false,
+    "prior_failed_tests_superseded_only_within_current_test_scope": true
+  },
+  "item_shortcuts": {
+    "supported_bar": 1,
+    "supported_main_keyboard_digit": 2,
+    "other_slots_keep_boss_skill_bindings": true,
+    "compatible_items_from_bag_supported": true
+  },
+  "retained_gameplay_evidence": "Earlier public validation records remain historical and frozen; no blanket rerun claim.",
+  "known_limits": [
+    "Some non-critical item use remains unfixed; full item and affix coverage is incomplete",
+    "Salt Common 205/85 routes have local CPU regression coverage only, not gameplay confirmation",
+    "Only slot 2 on the first item shortcut bar is confirmed for shortcut items; other positions trigger Boss skills or moves",
+    "Gestures can still display a fixed laugh; extra roar element is excluded",
+    "Not all NPC, guardian, mission, save/load, transition or interaction variants tested",
+    "Actual Boss weapon switching and native shooting are not implemented",
+    "Final public EXE cold first-enable and direct CE/CT enable remain unverified",
+    "Unsigned with Windows Authenticode"
+  ],
+  "source_assets_include_game_resources": false,
+  "public_ct_direct_enable_gameplay_verified": false,
+  "final_public_exe_cold_first_enable_gameplay_verified": false,
+  "launcher_payload_readback_fix": {
+    "bounded_chunk_bytes": 4096,
+    "maximum_total_bytes": 8192,
+    "full_length_required": true,
+    "address_bounds_checked": true,
+    "self_checks_added": [
+      "long installed payload readback",
+      "partial read refusal"
+    ],
+    "direct_game_writes_for_diagnostic": false
+  },
+  "final_exe_read_only_enabled_session_recognition": {
+    "success": true,
+    "command": "--diagnose",
+    "read_only": true,
+    "already_enabled_local_version": "0.58",
+    "runtime_state": "enabled",
+    "process_identifiers_or_addresses_recorded": false,
+    "cold_first_enable_verified": false
+  },
+  "public_cpu_regression_total": {
+    "tests": 23,
+    "retained_door_checks": 8,
+    "new_special_item_checks": 5,
+    "new_salt_checks": 10,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "game_access": false,
+    "private_code_or_research_inputs": false,
+    "distinct_from_23_local_native_code_tests": true
+  }
+}

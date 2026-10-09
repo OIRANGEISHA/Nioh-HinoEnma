@@ -50,6 +50,12 @@ from hinoenma_latched_door import apply_latched_door
 from hinoenma_talk import apply_talk
 from hinoenma_rescue import apply_rescue
 from hinoenma_latched_door_instances import apply_latched_door_instances
+from hinoenma_special_items import apply_special_items
+from hinoenma_salt_isolation import apply_salt_isolation
+from hinoenma_salt_event_catchup import apply_salt_event_catchup
+from hinoenma_salt_hurt_compatibility import apply_salt_hurt_compatibility
+from hinoenma_salt_damage96_draft import apply_salt_damage96_draft
+from hinoenma_salt_damage205_draft import apply_salt_damage205_draft, ROUTES_OFFSET, ROUTE_BYTES
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
@@ -120,11 +126,34 @@ def source_plan_v050(frozen: dict) -> dict:
     return baseline
 
 
-def source_plan(frozen: dict) -> dict:
-    """Extend the complete 0.50 source with the same-length object-kind fix."""
+def source_plan_v051(frozen: dict) -> dict:
+    """Preserve the complete public Beta 4.1 source as a regression basis."""
     plan = apply_latched_door_instances(source_plan_v050(frozen))
     if plan['tool_version'] != '0.51' or len(plan['hooks']) != 49:
         raise ValueError('Expected the complete 49-hook local 0.51 source revision')
+    return plan
+
+
+def source_plan(frozen: dict) -> dict:
+    """Rebuild Beta 5 from pure source and bounded public entry signatures.
+
+    Native damage, input, item quantity and shared game resources stay native.
+    Saved research records and private verifier modules are never imported.
+    """
+    items = apply_special_items(source_plan_v051(frozen))
+    isolated = apply_salt_isolation(items)
+    signatures = [h for h in frozen['hooks'] if h['name'] == 'HE_SaltEventCatchup']
+    if len(signatures) != 1:
+        raise ValueError('Exactly one public Salt scheduler entry signature required')
+    hook = signatures[0]
+    if (hook['rva'], hook['length'], hook['code_offset'], hook['code_capacity']) != (0x718950, 5, 0x1040, 0x3C0):
+        raise ValueError('Public Salt scheduler entry shape differs')
+    event = apply_salt_event_catchup(isolated, items, bytes.fromhex(hook['original']))
+    rear = apply_salt_hurt_compatibility(event)
+    front = apply_salt_damage96_draft(rear)
+    plan = apply_salt_damage205_draft(front)
+    if plan['tool_version'] != '0.58-experimental' or len(plan['hooks']) != 50:
+        raise ValueError('Expected the complete 50-hook local 0.58 source revision')
     return plan
 
 
@@ -200,9 +229,21 @@ def relocation_specs(plan: dict) -> list[dict]:
     result = []
     for hook in assemble(plan, BASE, ALLOCATION):
         fixups = []
-        decoded = list(md.disasm(hook["payload"], hook["target"]))
-        if sum(i.size for i in decoded) != len(hook["payload"]):
-            raise ValueError("Incomplete payload disassembly")
+        # The Salt source declares one fixed, unreachable 14-row WORD table.
+        # Keep data out of instruction/relocation decoding; every byte still
+        # participates in all compiled-payload and CT namespace comparisons.
+        ranges = [(0, len(hook["payload"]))]
+        if hook["name"] == "HE_Preload" and plan.get("salt_damage205_draft"):
+            end = ROUTES_OFFSET + len(ROUTE_BYTES)
+            if hook["payload"][ROUTES_OFFSET:end] != ROUTE_BYTES or end != len(hook["payload"]):
+                raise ValueError("Salt route data interval differs from pure source")
+            ranges = [(0, ROUTES_OFFSET)]
+        decoded = []
+        for start, end in ranges:
+            instructions = list(md.disasm(hook["payload"][start:end], hook["target"] + start))
+            if sum(i.size for i in instructions) != end - start:
+                raise ValueError("Incomplete instruction payload disassembly: " + hook["name"])
+            decoded.extend(instructions)
         for ins in decoded:
             for operand in ins.operands:
                 if operand.type != CS_OP_IMM:
@@ -316,6 +357,8 @@ def aa_source(plan: dict) -> str:
         values = {key: f"nioh.exe+{rva:X}" for key, rva in plan["targets"].items()}
         values.update(data="HE_Prototype_Data", **{"return": f'nioh.exe+{hook["rva"]+hook["length"]:X}'})
         source = re.sub(r"0x([0-9A-Fa-f]+)", r"\1", hook["asm"].format(**values))
+        source = re.sub(r"(?m)^\.byte ([0-9,]+)$", lambda m: "db " +
+                        " ".join(f"{int(x):02X}" for x in m.group(1).split(",")), source)
         checks += [f'HE_Prototype_Code+{hook["code_offset"]:X}:', f'{hook["name"]}:', source]
     checks += ['HE_Prototype_Data:', 'dd 00058E5E', 'dd 00000000',
                'HE_Prototype_Data+28:', f'db 00 00 {plan.get("initial_interaction_mode", 1):02X}']
@@ -449,8 +492,10 @@ def ct_source(plan: dict, display_version: str) -> str:
         '未声称等待时长完全相同；所有温泉、交互、关卡、敌人、词条和伤害幅度尚未逐一验证。\n'
         '保留吼叫与俯冲物件的原有属性，未给这些受保护通道强行叠加第二元素；路标符投放与罗盘标记已获实测确认。\n'
         '门闩门、NPC交谈与誾千代倒地救助已获实测；其他NPC/交互变体尚未全部验证。\n'
-        '部分非关键道具使用仍未修复；快捷道具与技能存在冲突，请从背包使用。\n'
-        '角色选择在主菜单重新载入后生效，威廉为 00000000。数字 1—4 与快捷道具冲突。\n'
+        '部分非关键道具使用仍未修复；第一栏数字 2 快捷位已确认可用，其余快捷位保留技能。\n'
+        '角色选择在主菜单重新载入后生效，威廉为 00000000。道具可从背包或第一栏数字 2 使用。\n'
+        '本版新增八种道具兼容，盐的使用、妖怪精力命中与已测受击恢复获实测确认。\n'
+        '盐的全部受击方向与连续受击分支未逐一实测；离线合成 CPU 检查不等同实机验证。\n'
         '武器切换只补教学操作。实际射击和 Boss 实际武器槽切换尚未实现。\n'
         '九十九保留飞缘魔招式；守护灵召唤未执行威廉挥刀的额外精力费用。\n'
         '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'

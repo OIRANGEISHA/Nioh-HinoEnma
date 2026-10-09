@@ -57,6 +57,43 @@ namespace HinoEnmaTool
             Action<string, Action> test = delegate(string name, Action body) { body(); passed.Add(name); };
             try
             {
+                test("large payload recognition reads bounded complete chunks", delegate
+                {
+                    byte[] source = Profile.Hooks[38].Payload(Module, Allocation);
+                    foreach(HookSpec hook in Profile.Hooks)
+                        if(hook.Payload(Module, Allocation).Length > source.Length)
+                            source = hook.Payload(Module, Allocation);
+                    Require(source.Length > 0x1000 && source.Length <= 0x2000,"Large current payload");
+                    int calls = 0, total = 0;
+                    byte[] actual = MemoryReader.Read(Allocation, source.Length, delegate(long at, int size)
+                    {
+                        Require(at == Allocation + total && size > 0 && size <= 0x1000,"Sequential bounded read");
+                        byte[] chunk = new byte[size]; Buffer.BlockCopy(source,total,chunk,0,size);
+                        total += size; calls++; return chunk;
+                    });
+                    Require(calls == 2 && total == source.Length && Checks.Equal(actual,source),"Every payload byte preserved");
+                });
+                test("memory reader rejects invalid ranges and incomplete later chunks", delegate
+                {
+                    foreach(long at in new long[]{0xFFFF,0x0000800000000000L-3,long.MaxValue})
+                    {
+                        bool rejected=false;
+                        try { MemoryReader.Read(at,4,delegate(long a,int n){throw new Exception("Unvalidated native read");}); }
+                        catch(InvalidOperationException){rejected=true;}
+                        Require(rejected,"Address boundary guard");
+                    }
+                    foreach(int length in new int[]{0,-1,0x2001})
+                    {
+                        bool rejected=false;
+                        try { MemoryReader.Read(Allocation,length,delegate(long a,int n){throw new Exception("Unvalidated native read");}); }
+                        catch(InvalidOperationException){rejected=true;}
+                        Require(rejected,"Length guard");
+                    }
+                    int calls=0; bool partial=false;
+                    try { MemoryReader.Read(Allocation,0x16CD,delegate(long a,int n){calls++;return new byte[calls==2?n-1:n];}); }
+                    catch(IOException){partial=true;}
+                    Require(partial && calls==2,"Later partial chunk refused");
+                });
                 test("pristine instructions recognized", delegate
                 { long a; Require(Checks.Inspect(Memory(false).Read, Module, out a) == HookState.Original, "Original state"); });
                 test("current profile recognized without reinjection", delegate

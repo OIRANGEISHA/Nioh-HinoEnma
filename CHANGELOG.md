@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.5] - 2026-10-09
+
+### Added
+
+- Fifth public Beta based on local 0.58, retaining Beta 4.1 and earlier public behavior.
+- Reported Guardian Spirit Talisman, Hyottoko Mask, Conch, Yokai Water Pot, Kodama Bowl, Himorogi Branch and Summoner's Candle use; the seven reported item effects are user-confirmed.
+- Correct shortcut documentation to slot 2 on the **first** item shortcut bar. Other shortcut positions retain Hino-Enma skill/move bindings; compatible items can also be used from the bag.
+
+### Fixed
+
+- Read longer installed payloads in bounded chunks, preserving full-length/address checks and partial-read refusal.
+- Restore Salt consumption, throwing effects and the reported Yokai ki hit. Scope recovery to the current player's owned Salt action and supported interruption resources while preserving native effects and fallback behavior.
+- The latest reported Salt use/interruption test completed normally with movement and attacks restored. Additional Common 205/85 interruption routes have CPU-only coverage and are not gameplay-confirmed.
+
+### Validation and limits
+
+- Local 0.58 passed 23 new native-CPU regression checks using private verified native-code inputs. A separate 23 public CPU checks passed (8 retained door-instance, 5 new special-item and 10 new Salt checks), using synthetic records and explicit Win64 stubs. They do not run the native damage/event engine or inventory commit. Public checks, local native-code checks and user gameplay have distinct scope; historical proofs remain frozen.
+- Debug and Release each passed 21 EXE self-checks and 600 payload comparisons (50 hooks × 12 layouts), with final results recorded in the Beta 5 validation record. These checks do not access the game or establish final-EXE cold first-enable.
+- Some non-critical item use remains unfixed; all Salt interruptions, item effects, affixes, interactions and mission transitions are not verified.
+- Release attachments remain exactly the Windows x64 EXE and complete source ZIP. Earlier tags/assets/records remain unchanged. Unsigned Pre-release.
+
 ## [1.0.0-beta.4.1] - 2026-10-09
 
 ### Fixed
@@ -99,7 +120,8 @@
 
 - Non-humanoid Boss life-drain grabs, shortcut conflicts, complete interaction coverage, individual item/affix effects and cold first-enable verification of the final public EXE remain open.
 
-[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.4.1...HEAD
+[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.5...HEAD
+[1.0.0-beta.5]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5
 [1.0.0-beta.4.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4.1
 [1.0.0-beta.4]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.3

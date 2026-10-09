@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "profile_kind": "experimental_type2",
-  "tool_version": "1.0.0-beta.4.1",
+  "tool_version": "1.0.0-beta.5",
   "scoped_living_weapon_hint": true,
   "living_weapon_teaching_revision": 1,
   "living_weapon_teaching_key": "T",
@@ -96,169 +96,153 @@
       "name": "HE_Preload",
       "rva": 9024548,
       "length": 12,
-      "original": "45 33 C0 8B D0 8B C8 E8 B0 5F 01 00",
       "code_offset": 0,
-      "code_capacity": 1024
+      "original": "45 33 C0 8B D0 8B C8 E8 B0 5F 01 00"
     },
     {
       "name": "HE_Spawn",
       "rva": 9054459,
       "length": 11,
-      "original": "45 33 C0 8D 4A 63 E8 5A 28 EB FF",
       "code_offset": 1024,
+      "original": "45 33 C0 8D 4A 63 E8 5A 28 EB FF",
       "code_capacity": 256
     },
     {
       "name": "HE_PlayerInit",
       "rva": 7736115,
       "length": 5,
-      "original": "83 FB 64 75 76",
       "code_offset": 2048,
+      "original": "83 FB 64 75 76",
       "code_capacity": 256
     },
     {
       "name": "HE_Skin",
       "rva": 8111081,
       "length": 6,
-      "original": "8B 83 08 53 0B 00",
       "code_offset": 3072,
+      "original": "8B 83 08 53 0B 00",
       "code_capacity": 256
     },
     {
       "name": "HE_Equipment",
       "rva": 9054769,
       "length": 7,
-      "original": "80 BB 01 01 00 00 00",
       "code_offset": 4096,
-      "code_capacity": 1024
+      "original": "80 BB 01 01 00 00 00",
+      "code_capacity": 64
     },
     {
       "name": "HE_EquipmentPrepare",
       "rva": 8922681,
       "length": 7,
-      "original": "44 38 B6 CD 05 00 00",
       "code_offset": 5120,
-      "code_capacity": 1024
+      "original": "44 38 B6 CD 05 00 00"
     },
     {
       "name": "HE_InputA",
       "rva": 7475268,
       "length": 5,
-      "original": "44 0F BE 42 0C",
       "code_offset": 6144,
-      "code_capacity": 1024
+      "original": "44 0F BE 42 0C"
     },
     {
       "name": "HE_InputB",
       "rva": 7475353,
       "length": 5,
-      "original": "44 0F BE 47 0E",
       "code_offset": 7168,
-      "code_capacity": 1024
+      "original": "44 0F BE 47 0E"
     },
     {
       "name": "HE_Interaction",
       "rva": 7672150,
       "length": 10,
-      "original": "83 78 48 FF 0F 85 E2 00 00 00",
       "code_offset": 8192,
-      "code_capacity": 1024
+      "original": "83 78 48 FF 0F 85 E2 00 00 00"
     },
     {
       "name": "HE_QueuedDoor",
       "rva": 7672479,
       "length": 11,
-      "original": "48 C7 87 30 05 00 00 FF FF FF FF",
       "code_offset": 9216,
-      "code_capacity": 1024
+      "original": "48 C7 87 30 05 00 00 FF FF FF FF"
     },
     {
       "name": "HE_ActionCamera",
       "rva": 8740855,
       "length": 6,
-      "original": "8B 01 48 C1 E8 0A",
       "code_offset": 10240,
-      "code_capacity": 1024
+      "original": "8B 01 48 C1 E8 0A"
     },
     {
       "name": "HE_HimorogiFragment",
       "rva": 7673949,
       "length": 5,
-      "original": "45 84 F6 75 2D",
       "code_offset": 11264,
-      "code_capacity": 1024
+      "original": "45 84 F6 75 2D"
     },
     {
       "name": "HE_Kodama",
       "rva": 7672160,
       "length": 10,
-      "original": "49 8B C5 4D 85 C0 48 0F 45 C2",
       "code_offset": 12288,
-      "code_capacity": 1024
+      "original": "49 8B C5 4D 85 C0 48 0F 45 C2"
     },
     {
       "name": "HE_Consumables",
       "rva": 7673954,
       "length": 9,
-      "original": "83 BF 4C 05 00 00 00 74 24",
       "code_offset": 13312,
-      "code_capacity": 1024
+      "original": "83 BF 4C 05 00 00 00 74 24"
     },
     {
       "name": "HE_AttributeInit",
       "rva": 8159093,
       "length": 7,
-      "original": "48 8D BE D8 09 00 00",
       "code_offset": 14336,
-      "code_capacity": 1024
+      "original": "48 8D BE D8 09 00 00"
     },
     {
       "name": "HE_AttributeOverlay",
       "rva": 8159963,
       "length": 5,
       "code_capacity": 3072,
-      "original": "E8 A0 00 FF FF",
-      "code_offset": 15360
+      "code_offset": 15360,
+      "original": "E8 A0 00 FF FF"
     },
     {
       "name": "HE_WeaponHud",
       "rva": 13107671,
       "length": 8,
-      "original": "48 89 B4 24 88 00 00 00",
       "code_offset": 18432,
-      "code_capacity": 1024
+      "original": "48 89 B4 24 88 00 00 00"
     },
     {
       "name": "HE_WeaponHudRefresh",
       "rva": 13116013,
       "length": 7,
-      "original": "48 8D AE 28 01 00 00",
       "code_offset": 19456,
-      "code_capacity": 1024
+      "original": "48 8D AE 28 01 00 00"
     },
     {
       "name": "HE_WeaponHudMeleeSwitch",
       "rva": 13115339,
       "length": 9,
-      "original": "48 8B 4B 60 BA 18 00 00 00",
       "code_offset": 20480,
-      "code_capacity": 1024
+      "original": "48 8B 4B 60 BA 18 00 00 00"
     },
     {
       "name": "HE_WeaponHudRangedSwitch",
       "rva": 13114393,
       "length": 9,
-      "original": "48 8B 4B 60 BA 16 00 00 00",
       "code_offset": 21504,
-      "code_capacity": 1024
+      "original": "48 8B 4B 60 BA 16 00 00 00"
     },
     {
       "name": "HE_Revenant",
       "rva": 7672470,
       "length": 9,
-      "original": "48 8B 44 24 50 48 89 43 18",
       "code_offset": 22528,
-      "code_capacity": 1024
+      "original": "48 8B 44 24 50 48 89 43 18"
     },
     {
       "name": "HE_YokaiGrab",
@@ -272,81 +256,75 @@
       "name": "HE_ConsumableNotice",
       "rva": 7674182,
       "length": 11,
-      "original": "48 C7 87 48 05 00 00 FF FF FF FF",
       "code_offset": 26624,
-      "code_capacity": 1024
+      "original": "48 C7 87 48 05 00 00 FF FF FF FF"
     },
     {
       "name": "HE_TutorialReceipt",
       "rva": 9085714,
       "length": 6,
-      "original": "8B 88 7C 02 00 00",
       "code_offset": 27648,
-      "code_capacity": 1024
+      "original": "8B 88 7C 02 00 00"
     },
     {
       "name": "HE_TutorialClearReceipt",
       "rva": 9084735,
       "length": 7,
-      "original": "48 89 88 50 02 00 00",
       "code_offset": 28672,
-      "code_capacity": 1024
+      "original": "48 89 88 50 02 00 00"
     },
     {
       "name": "HE_DefenseHintRecovery",
       "rva": 13932585,
       "length": 5,
-      "original": "8B 49 60 85 C9",
       "code_offset": 29696,
-      "code_capacity": 1024
+      "original": "8B 49 60 85 C9"
     },
     {
       "name": "HE_KiPulseHintSpace",
       "rva": 13932576,
       "length": 6,
-      "original": "40 53 48 83 EC 30",
       "code_offset": 30720,
-      "code_capacity": 1024
+      "original": "40 53 48 83 EC 30"
     },
     {
       "name": "HE_PurificationHintSpace",
       "rva": 13932590,
       "length": 6,
       "code_capacity": 2048,
-      "original": "0F 84 17 01 00 00",
-      "code_offset": 31744
+      "code_offset": 31744,
+      "original": "0F 84 17 01 00 00"
     },
     {
       "name": "HE_PurificationPlayerTick",
       "rva": 7429435,
       "length": 8,
       "code_capacity": 2048,
-      "original": "4C 8D 9C 24 B0 00 00 00",
-      "code_offset": 33792
+      "code_offset": 33792,
+      "original": "4C 8D 9C 24 B0 00 00 00"
     },
     {
       "name": "HE_PurificationOrigin",
       "rva": 7618728,
       "length": 10,
-      "original": "66 0F 7F 45 D7 4C 89 6C 24 20",
       "code_offset": 35840,
-      "code_capacity": 1024
+      "original": "66 0F 7F 45 D7 4C 89 6C 24 20"
     },
     {
       "name": "HE_PurificationCollisionOrigin",
       "rva": 8248885,
       "length": 5,
       "code_capacity": 2048,
-      "original": "E8 B6 1B 00 00",
-      "code_offset": 36864
+      "code_offset": 36864,
+      "original": "E8 B6 1B 00 00"
     },
     {
       "name": "HE_ManualPurification",
       "rva": 7429443,
       "length": 8,
       "code_capacity": 2048,
-      "original": "49 8B 5B 28 49 8B 6B 30",
-      "code_offset": 38912
+      "code_offset": 38912,
+      "original": "49 8B 5B 28 49 8B 6B 30"
     },
     {
       "name": "HE_WeaponHintSwitch",
@@ -481,8 +459,16 @@
       "rva": 9116176,
       "length": 5,
       "code_offset": 71680,
-      "code_capacity": 2048,
+      "code_capacity": 6144,
       "original": "E8 0B FF 6D 00"
+    },
+    {
+      "name": "HE_SaltEventCatchup",
+      "rva": 7440720,
+      "length": 5,
+      "code_offset": 4160,
+      "code_capacity": 960,
+      "original": "E8 FB C4 FE FF"
     }
   ],
   "targets": {
@@ -555,7 +541,13 @@
     "same_template_world_next": 9116002,
     "same_template_resource_release": 16324896,
     "same_template_unload_epilogue": 9116702,
-    "same_template_object_next": 9115768
+    "same_template_object_next": 9115768,
+    "special_item_saved_manager": 25818120,
+    "special_item_guardian_pool_slot": 46506592,
+    "salt_catchup_native_schedule": 7360080,
+    "salt_hurt_first_return": 7412233,
+    "salt_hurt_next_return": 7412507,
+    "salt_hurt_qualification_return": 7476951
   },
   "guardian_combat_native_revision": 1,
   "guardian_combat_native_slot": 0,
@@ -805,5 +797,283 @@
   "rescue_direct_interaction_npc_hp_script_save_writes": false,
   "rescue_native_state_and_other_features_preserved": true,
   "rescue_gameplay_confirmation_pending": true,
-  "latched_door_instance_guard_matches_native_word_kind": true
+  "latched_door_observed_instances": [
+    1,
+    100
+  ],
+  "latched_door_instance_guard_matches_native_word_kind": true,
+  "special_item_actions_revision": 2,
+  "special_item_actions_changed_hook_indices": [
+    6,
+    7,
+    48
+  ],
+  "special_item_actions_item_ids": [
+    12084,
+    50129,
+    7696,
+    22295,
+    49379
+  ],
+  "special_item_actions_common_actions": [
+    172,
+    165,
+    601,
+    602,
+    610,
+    1185
+  ],
+  "special_item_actions_helper_offsets": {
+    "entry": 72192,
+    "effects": 76544,
+    "resources": 77312
+  },
+  "special_item_actions_required_motion_slots": [
+    2,
+    6
+  ],
+  "special_item_actions_new_rx_page": [
+    73728,
+    77824
+  ],
+  "special_item_actions_counter_page_preserved": [
+    77824,
+    81920
+  ],
+  "special_item_actions_direct_item_effect_quantity_npc_save_writes": false,
+  "special_item_actions_resource_failure_fallback": "previous_native_item_animation_gate",
+  "special_item_actions_gameplay_confirmation_pending": true,
+  "special_items_revision": 2,
+  "special_item_ids": [
+    12084,
+    50129,
+    7739,
+    7696,
+    22295,
+    49379,
+    46858,
+    33287
+  ],
+  "special_items_gameplay_confirmation_pending": true,
+  "special_items_salt_disabled_id": null,
+  "special_items_salt_disabled_native_action": 982,
+  "special_items_salt_gameplay_verified": false,
+  "special_items_salt_stuck_state_repair": false,
+  "special_items_other_seven_implementation_preserved": true,
+  "user_confirmed_prior_item_ids": [
+    12084,
+    50129,
+    7696,
+    22295,
+    49379,
+    46858,
+    33287
+  ],
+  "special_items_damage_compatibility_fully_verified": false,
+  "salt_isolation_changed_hook_indices": [
+    6,
+    7,
+    48
+  ],
+  "salt_isolation_all_payload_lengths_unchanged": true,
+  "salt_isolation_native_sites_and_other46_payloads_unchanged": true,
+  "salt_event_catchup": true,
+  "salt_event_catchup_state_offset": 81536,
+  "salt_event_catchup_state_size": 64,
+  "salt_event_catchup_observed_frames": [
+    0,
+    16
+  ],
+  "salt_event_catchup_exact_step": 1,
+  "salt_event_catchup_native_argument": "R9B once",
+  "salt_event_catchup_requires_motion_base": 2,
+  "salt_event_catchup_requires_motion_bank": 0,
+  "salt_event_catchup_gameplay_verified": false,
+  "salt_route_reenabled_for_event_test": true,
+  "distribution_ready": false,
+  "event_testing_requires_no_enemies": true,
+  "salt_hurt_compatibility": true,
+  "salt_hurt_changed_hook_indices": [
+    34,
+    39
+  ],
+  "salt_hurt_helper_offset": 48320,
+  "salt_hurt_helper_capacity": 1856,
+  "salt_hurt_aux_offset": 60624,
+  "salt_hurt_aux_capacity": 304,
+  "salt_hurt_token_offset": 81664,
+  "salt_hurt_token_size": 64,
+  "salt_hurt_arm_transition": 5170,
+  "salt_hurt_arm_target": 224,
+  "salt_hurt_motionless_targets": [
+    224,
+    151
+  ],
+  "salt_hurt_rear_targets": [
+    106,
+    107,
+    108,
+    109
+  ],
+  "salt_hurt_required_common_motions": [
+    30102,
+    30108
+  ],
+  "salt_hurt_required_motion_slots": [
+    2,
+    6
+  ],
+  "salt_hurt_front_native_preserved": true,
+  "salt_hurt_missing_common_motion_ids": [
+    30009
+  ],
+  "salt_hurt_gameplay_verified": false,
+  "salt_damage96_draft": true,
+  "salt_damage96_gameplay_verified": false,
+  "salt_damage96_changed_hook_indices": [
+    0,
+    34,
+    39
+  ],
+  "salt_damage96_selected_common224_entries": [
+    7921,
+    7932,
+    7933
+  ],
+  "salt_damage96_selected_common152_entry": 2634,
+  "salt_damage96_selected_common152_signature": "34003c00ffffffffffff00ffffffff000000000060000000ff806464400020000080ff7fffffffffffffffffffffffff",
+  "salt_damage96_common_motion_ids": [
+    30014
+  ],
+  "salt_damage205_draft": true,
+  "salt_damage205_gameplay_verified": false,
+  "salt_damage205_changed_hook_indices": [
+    0,
+    34,
+    39
+  ],
+  "salt_damage205_selected_routes": [
+    [
+      224,
+      982,
+      5170,
+      65535,
+      5166,
+      21
+    ],
+    [
+      224,
+      147,
+      2552,
+      65535,
+      2546,
+      9
+    ],
+    [
+      224,
+      205,
+      4540,
+      65535,
+      4530,
+      13
+    ],
+    [
+      224,
+      85,
+      1715,
+      65535,
+      1704,
+      14
+    ],
+    [
+      224,
+      96,
+      1869,
+      65535,
+      1858,
+      14
+    ],
+    [
+      147,
+      224,
+      7892,
+      43,
+      7870,
+      73
+    ],
+    [
+      205,
+      147,
+      2548,
+      65535,
+      2546,
+      9
+    ],
+    [
+      85,
+      151,
+      2599,
+      63,
+      2587,
+      28
+    ],
+    [
+      85,
+      151,
+      2600,
+      62,
+      2587,
+      28
+    ],
+    [
+      85,
+      151,
+      2601,
+      61,
+      2587,
+      28
+    ],
+    [
+      152,
+      224,
+      7921,
+      332,
+      7870,
+      73
+    ],
+    [
+      152,
+      224,
+      7932,
+      73,
+      7870,
+      73
+    ],
+    [
+      152,
+      224,
+      7933,
+      29,
+      7870,
+      73
+    ],
+    [
+      96,
+      152,
+      2634,
+      60,
+      2615,
+      32
+    ]
+  ],
+  "salt_damage205_common_motion_ids": [
+    30002,
+    30310
+  ],
+  "salt_damage205_active_repeat_sources": [
+    147,
+    205,
+    85,
+    96
+  ]
 }

@@ -21,7 +21,7 @@ $selfTest = Join-Path $destination 'self-tests.json'
 $process = Start-Process -FilePath $executable -ArgumentList '--self-test', ('"' + $selfTest + '"') -WindowStyle Hidden -Wait -PassThru
 if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $selfTest)) { throw 'Offline self-tests failed.' }
 $result = Get-Content -LiteralPath $selfTest -Raw | ConvertFrom-Json
-if (-not $result.success -or $result.game_access -or $result.count -ne 19 -or @($result.checks).Count -ne 19) { throw 'Unexpected self-test result.' }
+if (-not $result.success -or $result.game_access -or $result.count -ne 21 -or @($result.checks).Count -ne 21) { throw 'Unexpected self-test result.' }
 $details = @{
     configuration = $Configuration
     compiler = 'Windows .NET Framework C# compiler'

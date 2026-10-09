@@ -14,7 +14,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "tools"), str(ROOT / "src")]
-from build_profile import assemble, source_plan, source_plan_v050
+from build_profile import assemble, source_plan_v051 as source_plan, source_plan_v050
 from hinoenma_latched_door_instances import apply_latched_door_instances, OLD_BYTES, NEW_BYTES
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_64, UC_HOOK_CODE, UC_HOOK_MEM_WRITE
 from unicorn.x86_const import *

@@ -200,6 +200,28 @@ namespace HinoEnmaTool
         { State = state; Message = message; Pid = pid; ReadOnly = readOnly; }
     }
 
+    internal static class MemoryReader
+    {
+        // Payloads can exceed one page. Keep every native read bounded and
+        // reject incomplete chunks before recognition or write verification.
+        internal static byte[] Read(long address, int length, Func<long, int, byte[]> readChunk)
+        {
+            const long limit = 0x0000800000000000L;
+            if (length < 1 || length > 0x2000 || address < 0x10000 || address > limit - length)
+                throw new InvalidOperationException("读取超出工具允许范围。");
+            byte[] result = new byte[length];
+            for (int offset = 0; offset < length; offset += 0x1000)
+            {
+                int size = Math.Min(0x1000, length - offset);
+                byte[] chunk = readChunk(address + offset, size);
+                if (chunk == null || chunk.Length != size)
+                    throw new IOException("游戏数据未完整读取。");
+                Buffer.BlockCopy(chunk, 0, result, offset, size);
+            }
+            return result;
+        }
+    }
+
     internal sealed class Game : IDisposable
     {
         private readonly Process process;
@@ -241,13 +263,14 @@ namespace HinoEnmaTool
 
         internal byte[] Read(long address, int length)
         {
-            if (length < 1 || length > 0x1000 || address < 0x10000 || address >= 0x0000800000000000L)
-                throw new InvalidOperationException("读取超出工具允许范围。");
-            byte[] bytes = new byte[length];
-            UIntPtr count;
-            if (!Native.ReadProcessMemory(handle, new IntPtr(address), bytes, (UIntPtr)length, out count)) throw Native.Error("游戏内存读取失败。");
-            if (count.ToUInt64() != (ulong)length) throw new InvalidOperationException("游戏数据未完整读取。");
-            return bytes;
+            return MemoryReader.Read(address, length, delegate(long at, int size)
+            {
+                byte[] bytes = new byte[size];
+                UIntPtr count;
+                if (!Native.ReadProcessMemory(handle, new IntPtr(at), bytes, (UIntPtr)size, out count)) throw Native.Error("游戏内存读取失败。");
+                if (count.ToUInt64() != (ulong)size) throw new InvalidOperationException("游戏数据未完整读取。");
+                return bytes;
+            });
         }
 
         private void Alive()
