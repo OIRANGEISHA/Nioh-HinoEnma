@@ -57,6 +57,7 @@ from hinoenma_salt_hurt_compatibility import apply_salt_hurt_compatibility
 from hinoenma_salt_damage96_draft import apply_salt_damage96_draft
 from hinoenma_salt_damage205_draft import apply_salt_damage205_draft, ROUTES_OFFSET, ROUTE_BYTES
 from hinoenma_postdefeat_grab import addon as apply_postdefeat_grab
+from hinoenma_ladder_scale import apply_ladder_scale
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
@@ -158,12 +159,23 @@ def source_plan_v058(frozen: dict) -> dict:
     return plan
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_v059(frozen: dict) -> dict:
     """Integrate the bounded post-defeat visual pair into the frozen Beta 5 base."""
     plan = apply_postdefeat_grab(source_plan_v058(frozen))
     plan['tool_version'] = '0.59'
     if len(plan['hooks']) != 55:
         raise ValueError('Expected the complete 55-hook local 0.59 source revision')
+    return plan
+
+
+def source_plan(frozen: dict) -> dict:
+    """Append the tested ladder sampler repair without changing Beta 5.1 hooks."""
+    previous = source_plan_v059(frozen)
+    # Rebuild the exact former allocation before appending the four new slots.
+    previous['allocation_size'] = 0x19000
+    plan = apply_ladder_scale(previous)
+    if len(plan['hooks']) != 59 or plan['hooks'][:55] != previous['hooks']:
+        raise ValueError('Hotfix must preserve all 55 Beta 5.1 hooks')
     return plan
 
 
@@ -202,7 +214,7 @@ def load_plan() -> dict:
     if (not code_ranges or code_ranges[0][0] < 0
             or any(left[1] > right[0] for left, right in zip(code_ranges, code_ranges[1:]))
             or code_ranges[-1][1] > plan['allocation_size']
-            or (plan['data_offset'], plan['allocation_size']) != (0xF000, 0x19000)
+            or (plan['data_offset'], plan['allocation_size']) != (0xF000, 0x1B000)
             or any(max(start, protected_start) < min(end, protected_end)
                    for start,end in code_ranges
                    for protected_start,protected_end in ((0xF000,0x10000),(0x13000,0x14000)))):
@@ -511,6 +523,9 @@ def ct_source(plan: dict, display_version: str) -> str:
         '武器切换只补教学操作。实际射击和 Boss 实际武器槽切换尚未实现。\n'
         '九十九保留飞缘魔招式；守护灵召唤未执行威廉挥刀的额外精力费用。\n'
         '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'
+        'Hotfix1 修复梯子途中自动掉下、每步瞬移及离梯过高；当前与待切换公共攀爬动作均使用一致的位移缩放。\n'
+        '已测梯子上下攀爬和离梯正常，全部梯子、受击中断仍未逐一实测。\n'
+        '升级请先退出游戏；Hotfix 与旧 Beta5.1 不在同一进程叠加启用。\n'
         '本表不包含游戏程序、游戏资源、私有研究快照或旧 CT。')
     ET.indent(doc, space="  ")
     return ET.tostring(doc, encoding="unicode", xml_declaration=True) + "\n"

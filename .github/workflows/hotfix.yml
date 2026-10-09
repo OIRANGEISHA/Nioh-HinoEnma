@@ -1,0 +1,101 @@
+# Owner explicitly authorized this version-scoped replacement of Release 407938999.
+name: Replace Beta 5.1 with Hotfix 1
+on:
+  push:
+    branches: [main]
+    paths: [version.json]
+  workflow_dispatch:
+    inputs:
+      expected_commit:
+        description: Exact reviewed main commit SHA
+        required: true
+        type: string
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+concurrency:
+  group: prepare-beta-release
+  cancel-in-progress: false
+jobs:
+  hotfix:
+    if: github.repository == 'OIRANGEISHA/Nioh-HinoEnma' && github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    timeout-minutes: 25
+    env:
+      PYTHONUTF8: '1'
+      EXPECTED_COMMIT: ${{ github.event_name == 'workflow_dispatch' && inputs.expected_commit || github.sha }}
+      GH_TOKEN: ${{ github.token }}
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out exact reviewed source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Scope the owner-authorized replacement
+        id: scope
+        run: |
+          $ErrorActionPreference = 'Stop'
+          'run=false' >> $env:GITHUB_OUTPUT
+          $v = Get-Content version.json -Raw | ConvertFrom-Json
+          if ($v.version -cne '1.0.0-beta.5.1.hotfix.1') { exit 0 }
+          if ($env:EXPECTED_COMMIT -cnotmatch '^[0-9a-f]{40}$' -or (git rev-parse HEAD) -cne $env:EXPECTED_COMMIT -or $env:EXPECTED_COMMIT -cne $env:GITHUB_SHA) { throw 'Source lease mismatch.' }
+          if ((git rev-parse 'HEAD^') -cne '95aeae14ce4f0466b58bf085f5d2c72088100362' -or (git status --porcelain)) { throw 'Replacement must descend directly from reviewed Beta 5.1.' }
+          if ($v.tag -cne ('v' + $v.version) -or $v.release_owner -cne 'OIRANGEISHA' -or $v.repository -cne $env:GITHUB_REPOSITORY -or $v.channel -cne 'beta') { throw 'Version or owner mismatch.' }
+          "RELEASE_STEM=Nioh-HinoEnma-$($v.version)" >> $env:GITHUB_ENV
+          'run=true' >> $env:GITHUB_OUTPUT
+      - name: Set up Python
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install isolated verification dependencies
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          python -m pip install --disable-pip-version-check --target artifacts/python-deps -r requirements-dev.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
+          "PYTHONPATH=$((Resolve-Path artifacts/python-deps).Path)" >> $env:GITHUB_ENV
+      - name: Check source, regressions, Debug and Release
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          python tools/build_profile.py --check
+          if ($LASTEXITCODE -ne 0) { throw 'Generated source differs.' }
+          python tools/check_source.py
+          if ($LASTEXITCODE -ne 0) { throw 'Source checks failed.' }
+          python -m unittest discover -s tests -p 'test_*portable.py' -v
+          if ($LASTEXITCODE -ne 0) { throw 'Portable CPU regressions failed.' }
+          python tests/test_latched_door_instances.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Door regressions failed.' }
+          ./tools/build.ps1 -Configuration Debug
+          ./tools/build.ps1 -Configuration Release
+          python tools/verify.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
+          python tools/verify.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }
+      - name: Package exact source and EXE
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          python tools/package.py --source-commit "$env:GITHUB_SHA" --build-origin github-actions --publisher 'github-actions[bot]' --workflow-url "https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+          if ($LASTEXITCODE -ne 0) { throw 'Packaging failed.' }
+      - name: Attest exact CI assets
+        if: steps.scope.outputs.run == 'true'
+        id: attest
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            artifacts/dist/*.exe
+            artifacts/dist/*-source.zip
+      - name: Record attestation
+        if: steps.scope.outputs.run == 'true'
+        env:
+          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
+          ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
+        run: |
+          Copy-Item -LiteralPath $env:BUNDLE_PATH -Destination artifacts/hotfix-attestation.jsonl
+          Add-Content -LiteralPath artifacts/release-notes.md -Value "`nBuild attestation: $env:ATTESTATION_URL"
+      - name: Verify and replace the existing Release
+        if: steps.scope.outputs.run == 'true'
+        run: ./tools/replace_beta51_hotfix.ps1

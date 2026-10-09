@@ -57,6 +57,33 @@ namespace HinoEnmaTool
             Action<string, Action> test = delegate(string name, Action body) { body(); passed.Add(name); };
             try
             {
+                test("sampler installation checks full native frame and saved stack returns", delegate
+                {
+                    long begin = Module + ThreadInstallGuard.SamplerRva;
+                    long end = begin + ThreadInstallGuard.SamplerLength;
+                    Require(!ThreadInstallGuard.InNativeSpan(begin-1,Module) &&
+                        ThreadInstallGuard.InNativeSpan(begin,Module) &&
+                        ThreadInstallGuard.InNativeSpan(Module+0x9547A8,Module) &&
+                        !ThreadInstallGuard.InNativeSpan(end,Module),"Whole sampler frame boundaries");
+                    byte[] harmless = new byte[16];
+                    Buffer.BlockCopy(BitConverter.GetBytes(begin-1),0,harmless,0,8);
+                    Buffer.BlockCopy(BitConverter.GetBytes(end),0,harmless,8,8);
+                    ThreadInstallGuard.VerifySavedReturnBytes(harmless,Module);
+                    foreach(long address in new long[] {begin, Module+0x95470C, end-1, Module+Profile.Hooks[0].Rva})
+                    {
+                        bool rejected=false;
+                        try { ThreadInstallGuard.VerifySavedReturnBytes(BitConverter.GetBytes(address),Module); }
+                        catch(InvalidOperationException) { rejected=true; }
+                        Require(rejected,"Saved return into modified code rejected");
+                    }
+                    foreach(byte[] malformed in new byte[][] {null,new byte[0],new byte[7]})
+                    {
+                        bool rejected=false;
+                        try { ThreadInstallGuard.VerifySavedReturnBytes(malformed,Module); }
+                        catch(InvalidOperationException) { rejected=true; }
+                        Require(rejected,"Incomplete stack scan rejected");
+                    }
+                });
                 test("large payload recognition reads bounded complete chunks", delegate
                 {
                     byte[] source = Profile.Hooks[38].Payload(Module, Allocation);
@@ -118,7 +145,7 @@ namespace HinoEnmaTool
                     Require(Checks.Inspect(mixed.Read,Module,out allocation)==HookState.Other,
                         "Prior 50-hook Beta 5 process requires a restart");
                     Require(Checks.Inspect(Memory(true).Read,Module,out allocation)==HookState.Ours,
-                        "Complete 55-hook current profile recognized");
+                        "Complete 59-hook current profile recognized");
                 });
                 test("unrelated modification rejected", delegate
                 { FakeMemory m=Memory(false); m.Blocks[Module+Profile.Hooks[0].Rva][0]=0xCC; long a; Require(Checks.Inspect(m.Read,Module,out a)==HookState.Other,"Other modification"); });

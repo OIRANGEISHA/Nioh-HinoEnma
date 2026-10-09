@@ -462,7 +462,7 @@ namespace HinoEnmaTool
                     if (!Native.FlushInstructionCache(handle, new IntPtr(privateAllocation + firstPage), length))
                         throw Native.Error("无法刷新扩展工具代码。");
                 }
-                using (GameThreads threads = new GameThreads(Pid, Base))
+                using (GameThreads threads = new GameThreads(Pid, Base, handle, Read))
                 {
                     Alive();
                     VerifyHeader();

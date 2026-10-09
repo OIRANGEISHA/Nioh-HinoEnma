@@ -1,0 +1,178 @@
+{
+  "schema": 1,
+  "public_version": "1.0.0-beta.5.1.hotfix.1",
+  "verification_date": "2026-10-09",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08",
+    "other_builds_adapted": false
+  },
+  "native_hook_count": 59,
+  "added_ladder_hook_count": 4,
+  "public_verification_status": "completed_offline; final_public_exe_cold_first_enable_unverified",
+  "portable_public_validation_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.5.1.hotfix.1",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 23,
+      "payload_comparisons": 708,
+      "layout_count": 12,
+      "hook_count": 59,
+      "pe_machine": "x64",
+      "executable_bytes": 222208,
+      "executable_sha256": "bf5ed1073b0b53d194c3b7198cf82d1cfb4405e104e172992e9a3fa243e3c958"
+    },
+    "Release": {
+      "version": "1.0.0-beta.5.1.hotfix.1",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "self_checks": 23,
+      "payload_comparisons": 708,
+      "layout_count": 12,
+      "hook_count": 59,
+      "pe_machine": "x64",
+      "executable_bytes": 219648,
+      "executable_sha256": "b3d4a23ff1b5e4c43d2ccb98958d22f5224511e3daa72b8c988518f3f0078a33"
+    }
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "private_dependencies_imported": false,
+    "hook_count": 59,
+    "ct_unique_local_labels": 540,
+    "payload_comparisons": 708,
+    "layout_count": 12,
+    "negative_rejection_cases": 3,
+    "source_input_unchanged": true
+  },
+  "public_cpu_regressions": {
+    "new_ladder_suite": {
+      "success": true,
+      "tests": 44,
+      "cpu_comparisons": 693,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "game_access": false,
+      "private_code_or_research_inputs": false,
+      "source": "tests/test_ladder_scale_portable.py",
+      "scope": "Synthetic actor/action/motion/ladder records; explicit native call behavior; no complete game engine or rendered animation"
+    },
+    "success": true,
+    "game_access": false,
+    "private_code_or_research_inputs": false,
+    "retained_latched_door_instances": 8,
+    "retained_special_items": 5,
+    "retained_salt_recovery": 10,
+    "retained_postdefeat_grab": 26,
+    "new_ladder": 44,
+    "total": 93,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "native_calls": "Explicit native-call behavior/stubs and synthetic records; no game process or complete native event engine"
+  },
+  "local_private_integrated_validation": {
+    "success": true,
+    "tests": 50,
+    "cpu_comparisons": 693,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "game_access_during_cpu_checks": false,
+    "private_verified_native_inputs_used": true,
+    "private_inputs_distributed": false,
+    "prior_hook_count": 55,
+    "prior_payload_and_patch_comparisons": 660,
+    "prior_layout_count": 12,
+    "prior_hook_bodies_signatures_slots_targets_unchanged": true
+  },
+  "earlier_local_test_executable": {
+    "public_release_executable": false,
+    "version": "1.0.0-beta.5.1-ladder.1",
+    "success": true,
+    "game_access": false,
+    "self_checks": 22,
+    "hook_count": 59,
+    "payload_comparisons": 708,
+    "layout_count": 12,
+    "fresh_game_first_enable_tested": false
+  },
+  "temporary_gameplay_evidence": {
+    "production_executable": false,
+    "revision": 2,
+    "user_confirmed": true,
+    "user_reply": "正常了",
+    "reported_mission": "Mount Hiei mission (比睿山的魔物)",
+    "reported_ladder": "Underground to surface; other reported ladder height behavior also checked in the accepted trial",
+    "up_and_down_climbing_normal": true,
+    "step_teleporting_resolved": true,
+    "exit_height_normal": true,
+    "read_only_observation": true,
+    "distinct_ladder_objects_recorded": 2,
+    "up_down_exit_transitions_recorded": true,
+    "all_ladders_verified": false,
+    "enemy_interruptions_verified": false,
+    "scope": "User response and read-only trial observation; no claim that every map or ladder variant was tested"
+  },
+  "production_runtime_validation": {
+    "cold_enable_and_positive_gameplay_checked": false,
+    "scope": "Final public EXE first enable in a new game process has not been gameplay-tested"
+  },
+  "retained_beta51_basis": {
+    "reference": "docs/validation-beta5.1.json",
+    "historical_gameplay_evidence_rerun": false
+  },
+  "release_replacement": {
+    "explicit_owner_authorized": true,
+    "existing_release_id": 407938999,
+    "previous_tag": "v1.0.0-beta.5.1",
+    "previous_tag_moved": false,
+    "new_tag": "v1.0.0-beta.5.1.hotfix.1",
+    "final_custom_attachment_count": 2,
+    "verify_new_assets_before_removing_old_assets": true,
+    "other_historical_releases_unchanged": true,
+    "persistent_automatic_replacement_added": true,
+    "publication_status": "prepared; final_remote_replacement_not_yet_performed",
+    "automatic_replacement_scope": "Single owner-authorized version 1.0.0-beta.5.1.hotfix.1 and Release ID 407938999; no general replacement authorization",
+    "publication_workflow": ".github/workflows/hotfix.yml",
+    "publication_transport": "GitHub Actions; final remote readback pending",
+    "previous_annotated_tag_object": "4590de9c41d5954541b5f34e6a05476a9eb6a4d2",
+    "other_versions_and_general_release_workflow_draft_only": true
+  },
+  "limitations": [
+    "Temporary ladder gameplay is confirmed for the reported locations, with two distinct objects observed; all ladders and enemy interruptions are unverified.",
+    "Final public EXE clean-process first enable, all mission transitions and full save/load coverage have not been gameplay-tested.",
+    "Public portable CPU checks use synthetic records and explicit native-call stubs; they do not execute the rendered game or complete native event engine.",
+    "Some non-critical item use remains unfixed; compatible item shortcuts support only slot 2 on the first bar.",
+    "Retained Beta 5.1 features and limitations keep their historical gameplay scope.",
+    "Unsigned Windows x64 Beta; direct CT enable in Cheat Engine remains untested."
+  ],
+  "upstream_local_version": "0.60",
+  "upstream_baseline_local_version": "0.59",
+  "preserved_beta51_basis": {
+    "success": true,
+    "original_hook_count": 55,
+    "layouts": 12,
+    "byte_exact_payload_and_patch_comparisons": 660,
+    "prior_hook_signatures_slots_targets_and_source_bodies_unchanged": true,
+    "data_offset_unchanged": true,
+    "game_access": false
+  },
+  "public_to_tested_local_payload_equivalence": {
+    "success": true,
+    "game_access": false,
+    "public_hook_count": 59,
+    "old_hooks_preserved": 55,
+    "new_hook_count": 4,
+    "payload_and_patch_comparisons": 708,
+    "layout_count": 12,
+    "scope": "All 59 public hook payloads match the integrated local ladder revision across 12 address layouts; this does not certify final EXE cold first-enable or rendered gameplay"
+  }
+}

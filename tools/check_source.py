@@ -27,7 +27,7 @@ def main() -> None:
     frozen = json.loads((ROOT / 'profiles/steam-1.24.8.json').read_text('utf-8'))
     original = deepcopy(frozen)
     plan = load_plan()
-    if len(plan['hooks']) != 55 or source_plan(frozen)['tool_version'] != '0.59':
+    if len(plan['hooks']) != 59 or source_plan(frozen)['tool_version'] != '0.60':
         raise AssertionError('Expected the complete current source chain')
     if frozen != original:
         raise AssertionError('Source reconstruction changed its frozen input')
@@ -67,7 +67,7 @@ def main() -> None:
     missing = text.replace('label(' + labels[0] + ')\n', '', 1)
     rejects(lambda: validate_ct_labels(missing, labels), 'Missing CT declaration was accepted')
     print(json.dumps(dict(success=True, game_access=False,
-        private_dependencies_imported=False, hook_count=55, ct_local_labels=len(labels),
+        private_dependencies_imported=False, hook_count=59, ct_local_labels=len(labels),
         source_input_unchanged=True, layout_count=layouts,
         ct_namespace_payload_comparisons=comparisons, negative_guards=3)))
 

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "profile_kind": "experimental_type2",
-  "tool_version": "1.0.0-beta.5.1",
+  "tool_version": "1.0.0-beta.5.1.hotfix.1",
   "scoped_living_weapon_hint": true,
   "living_weapon_teaching_revision": 1,
   "living_weapon_teaching_key": "T",
@@ -89,7 +89,7 @@
   "pe_timestamp_hex": "0x6307A81B",
   "upstream": "Bryanyora's_nioh_2019_12_19_work.CT, Character Change entries 74 and 76",
   "upstream_sha256": "251c47b2b9ba5ce61d19cf0663fbd3661b8b20144c878926b7f0c1a205993c62",
-  "allocation_size": 102400,
+  "allocation_size": 110592,
   "data_offset": 61440,
   "hooks": [
     {
@@ -640,6 +640,46 @@
       "code_capacity": 4096,
       "asm": "pushfq\npush rax\npush rcx\npush rdx\npush r8\npush r9\npush r10\npush r11\nsub rsp, 0xB8\nmovdqu xmmword ptr [rsp], xmm0\nmovdqu xmmword ptr [rsp+0x10], xmm1\nmovdqu xmmword ptr [rsp+0x20], xmm2\nmovdqu xmmword ptr [rsp+0x30], xmm3\nmovdqu xmmword ptr [rsp+0x40], xmm4\nmovdqu xmmword ptr [rsp+0x50], xmm5\nstmxcsr dword ptr [rsp+0x60]\nmov r11, {data}\nadd r11, 0xC00\nmov rax, {data}\ncmp dword ptr [rax+4], 0\nje pd_heal_script_done\nmov r10, qword ptr [rax+0x10]\ntest r10, r10\nje pd_heal_script_done\nmov rdx, {postdefeat_player_slot}\ncmp r10, qword ptr [rdx]\njne pd_heal_script_done\ncmp r10, qword ptr [r11+0x10]\njne pd_heal_script_done\nmov edx, dword ptr [rax+0x1C]\ncmp edx, dword ptr [r11+8]\njne pd_heal_script_done\nmov rdx, qword ptr [r11+0x18]\ncmp rdx, qword ptr [r10]\njne pd_heal_script_done\nmov edx, dword ptr [r10]\ncmp edx, dword ptr [rax+4]\njne pd_heal_script_done\ncmp edx, 0x58E5E\nje pd_heal_script_hino\ncmp edx, 0x51BE1\njne pd_heal_script_done\npd_heal_script_hino:\ncmp dword ptr [r10+4], 0x10000\njne pd_heal_script_done\ncmp dword ptr [r10+0xEF0], 0\njne pd_heal_script_done\nmov rax, qword ptr [r10+0xE90]\ntest rax, rax\nje pd_heal_script_done\ncmp dword ptr [rax+0xC], 1\njne pd_heal_script_done\nmov rax, qword ptr [r10+0x240]\ntest rax, rax\nje pd_heal_script_done\ncmp r10, qword ptr [rax]\njne pd_heal_script_done\ncmp r10, qword ptr [rax+0x108]\njne pd_heal_script_done\ncmp rax, qword ptr [r11+0x28]\njne pd_heal_script_done\nmov rax, qword ptr [r10+0x230]\ntest rax, rax\nje pd_heal_script_done\ncmp r10, qword ptr [rax]\njne pd_heal_script_done\nmov r9, qword ptr [rax+8]\ntest r9, r9\nje pd_heal_script_done\ncmp r10, qword ptr [r9+0x50]\njne pd_heal_script_done\ncmp r9, qword ptr [r11+0x20]\njne pd_heal_script_done\ncmp dword ptr [r11+0x78], 1\nje pd_heal_script_token_valid\ncmp dword ptr [r11+0x78], 2\njne pd_heal_script_done\npd_heal_script_token_valid:\nmov rax, qword ptr [r9+0x58]\ntest rax, rax\nje pd_heal_script_done\ncmp dword ptr [rax], 857\njne pd_heal_script_done\ncmp byte ptr [rax+0x40], 1\njne pd_heal_script_done\nmov rax, qword ptr [rax+0x20]\ntest rax, rax\nje pd_heal_script_done\ncmp dword ptr [rax+0x20], 1101\njne pd_heal_script_done\nmov r8, qword ptr [r9+0x5B0]\ncmp r8, qword ptr [r11+0x30]\njne pd_heal_script_done\ntest r8, r8\nje pd_heal_script_done\ncmp r8, r10\nje pd_heal_script_done\ncmp dword ptr [r8], 0x28EEC\njne pd_heal_script_done\ncmp word ptr [r8+4], 0\njne pd_heal_script_done\ncmp word ptr [r8+6], 1\nje pd_heal_script_done\ncmp r8, qword ptr [r11+0x30]\njne pd_heal_script_done\nmov rax, qword ptr [r11+0x38]\ncmp rax, qword ptr [r8]\njne pd_heal_script_done\nmov rax, qword ptr [r8+0x240]\ntest rax, rax\nje pd_heal_script_done\ncmp r8, qword ptr [rax]\njne pd_heal_script_done\ncmp r8, qword ptr [rax+0x108]\njne pd_heal_script_done\ncmp qword ptr [rax+0x20], 0\njne pd_heal_script_done\ncmp dword ptr [rax+0x10], 1\njne pd_heal_script_done\ncmp rax, qword ptr [r11+0x48]\njne pd_heal_script_done\nmov rax, qword ptr [r8+0x230]\ntest rax, rax\nje pd_heal_script_done\ncmp r8, qword ptr [rax]\njne pd_heal_script_done\nmov rax, qword ptr [rax+8]\ntest rax, rax\nje pd_heal_script_done\ncmp r8, qword ptr [rax+0x50]\njne pd_heal_script_done\ncmp rax, qword ptr [r11+0x40]\njne pd_heal_script_done\n\nmov rax, qword ptr [r11+0x28]\nadd rax, 0x10\ncmp rax, qword ptr [rsp+0xE0]\njne pd_heal_script_done\nlock inc dword ptr [r11+0xB0]\nldmxcsr dword ptr [rsp+0x60]\nmovdqu xmm0, xmmword ptr [rsp]\nmovdqu xmm1, xmmword ptr [rsp+0x10]\nmovdqu xmm2, xmmword ptr [rsp+0x20]\nmovdqu xmm3, xmmword ptr [rsp+0x30]\nmovdqu xmm4, xmmword ptr [rsp+0x40]\nmovdqu xmm5, xmmword ptr [rsp+0x50]\nadd rsp, 0xB8\npop r11\npop r10\npop r9\npop r8\npop rdx\npop rcx\npop rax\npopfq\njmp {return}\npd_heal_script_done:\nldmxcsr dword ptr [rsp+0x60]\nmovdqu xmm0, xmmword ptr [rsp]\nmovdqu xmm1, xmmword ptr [rsp+0x10]\nmovdqu xmm2, xmmword ptr [rsp+0x20]\nmovdqu xmm3, xmmword ptr [rsp+0x30]\nmovdqu xmm4, xmmword ptr [rsp+0x40]\nmovdqu xmm5, xmmword ptr [rsp+0x50]\nadd rsp, 0xB8\npop r11\npop r10\npop r9\npop r8\npop rdx\npop rcx\npop rax\npopfq\ncall {postdefeat_script_recovery}\njmp {return}\n",
       "purpose": "Native-referenced defeated Yuki-Onna visual pairing, scoped damage/healing suppression and pose restoration"
+    },
+    {
+      "name": "HE_LadderScaleRdi",
+      "rva": 9783052,
+      "original": "F3 0F 10 97 20 03 00 00",
+      "length": 8,
+      "code_offset": 102400,
+      "code_capacity": 1536,
+      "asm": "movss xmm2, dword ptr [rdi+0x320]\npushfq\npush rax\npush rcx\npush rdx\npush r8\npush r9\npush r10\npush r11\nmov r8, rdi\nmov r11, {data}\ncmp dword ptr [r11+4], 0\nje ladder_scale_0_done\nmov r10, qword ptr [r11+0x10]\ncmp r10, 0x10000\njb ladder_scale_0_done\nmov rcx, r10\nshr rcx, 47\njne ladder_scale_0_done\nmov rax, {player_slot}\ncmp r10, qword ptr [rax]\njne ladder_scale_0_done\nmov eax, dword ptr [r10]\ncmp eax, dword ptr [r11+4]\njne ladder_scale_0_done\ncmp eax, 0x58E5E\nje ladder_scale_0_hino\ncmp eax, 0x51BE1\njne ladder_scale_0_done\nladder_scale_0_hino:\ncmp dword ptr [r10+4], 0x10000\njne ladder_scale_0_done\ncmp dword ptr [r10+0xEF0], 0\njne ladder_scale_0_done\nmov rax, qword ptr [r10+0xE90]\ncmp rax, 0x10000\njb ladder_scale_0_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_0_done\ncmp dword ptr [rax+0x0C], 1\njne ladder_scale_0_done\ncmp r8, qword ptr [r10+0x38]\njne ladder_scale_0_done\ncmp r10, qword ptr [r8]\njne ladder_scale_0_done\nmov rax, qword ptr [r10+0x230]\ncmp rax, 0x10000\njb ladder_scale_0_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_0_done\ncmp r10, qword ptr [rax]\njne ladder_scale_0_done\nmov r9, qword ptr [rax+8]\ncmp r9, 0x10000\njb ladder_scale_0_done\nmov rcx, r9\nshr rcx, 47\njne ladder_scale_0_done\ncmp r10, qword ptr [r9+0x50]\njne ladder_scale_0_done\ncmp dword ptr [r8+0x48], 2\njne ladder_scale_0_done\nmov ecx, dword ptr [rsp+0x60]\ncmp ecx, 250\njb ladder_scale_0_done\ncmp ecx, 267\nja ladder_scale_0_done\nxor r10d, r10d\nmov rax, qword ptr [r9+0x58]\ncmp rax, 0x10000\njb ladder_scale_0_pending\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_0_pending\ncmp byte ptr [rax+0x40], 0\nje ladder_scale_0_pending\ncmp dword ptr [rax], 56\njb ladder_scale_0_pending\ncmp dword ptr [rax], 70\nja ladder_scale_0_pending\nmov rdx, qword ptr [r9+0x80]\ntest rdx, rdx\nje ladder_scale_0_pending\ncmp rdx, qword ptr [rax+0x38]\njne ladder_scale_0_pending\nmov rdx, qword ptr [rax+0x20]\ncmp rdx, 0x10000\njb ladder_scale_0_pending\nmov rcx, rdx\nshr rcx, 47\njne ladder_scale_0_pending\ntest dword ptr [rdx], 0x800\nje ladder_scale_0_pending\nmov ecx, dword ptr [rdx+0x20]\ncmp ecx, dword ptr [rsp+0x60]\njne ladder_scale_0_pending\njmp ladder_scale_0_selected\nladder_scale_0_pending:\nmov r10d, 1\nmov rax, qword ptr [r9+0x60]\ncmp rax, 0x10000\njb ladder_scale_0_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_0_done\ncmp byte ptr [rax+0x40], 1\nja ladder_scale_0_done\ncmp dword ptr [rax], 56\njb ladder_scale_0_done\ncmp dword ptr [rax], 70\nja ladder_scale_0_done\nmov rdx, qword ptr [r9+0x80]\ntest rdx, rdx\nje ladder_scale_0_done\ncmp rdx, qword ptr [rax+0x38]\njne ladder_scale_0_done\nmov rdx, qword ptr [rax+0x20]\ncmp rdx, 0x10000\njb ladder_scale_0_done\nmov rcx, rdx\nshr rcx, 47\njne ladder_scale_0_done\ntest dword ptr [rdx], 0x800\nje ladder_scale_0_done\nmov ecx, dword ptr [rdx+0x20]\ncmp ecx, dword ptr [rsp+0x60]\njne ladder_scale_0_done\nladder_scale_0_selected:\nmov r11, rax\nmov rax, qword ptr [r9+0x510]\nmov rdx, qword ptr [r9+0x528]\ntest rax, rax\nje ladder_scale_0_exit\ntest rdx, rdx\nje ladder_scale_0_exit\ncmp rax, 0x10000\njb ladder_scale_0_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_0_done\ncmp rdx, 0x10000\njb ladder_scale_0_done\nmov rcx, rdx\nshr rcx, 47\njne ladder_scale_0_done\ncmp qword ptr [rdx], rax\njne ladder_scale_0_done\ncmp word ptr [rax+4], 2\njne ladder_scale_0_done\ncmp byte ptr [rdx+8], 1\njne ladder_scale_0_done\ncmp byte ptr [rdx+9], 1\nja ladder_scale_0_done\ncmp byte ptr [rdx+0xA], 1\nja ladder_scale_0_done\ncmp dword ptr [rdx+0x4C], 1\njb ladder_scale_0_done\ncmp dword ptr [rdx+0x4C], 0x1000\nja ladder_scale_0_done\ncmp dword ptr [rdx+0x50], 1\njb ladder_scale_0_done\ncmp dword ptr [rdx+0x50], 0x1000\nja ladder_scale_0_done\ncmp dword ptr [rdx+0x48], 8\nje ladder_scale_0_replace\ncmp dword ptr [rdx+0x48], 9\njne ladder_scale_0_done\njmp ladder_scale_0_replace\nladder_scale_0_exit:\ntest r10d, r10d\njne ladder_scale_0_done\ncmp dword ptr [r11], 61\nje ladder_scale_0_replace\ncmp dword ptr [r11], 62\nje ladder_scale_0_replace\ncmp dword ptr [r11], 66\njne ladder_scale_0_done\nladder_scale_0_replace:\nmov eax, 0x3F800000\nmovd xmm2, eax\nladder_scale_0_done:\npop r11\npop r10\npop r9\npop r8\npop rdx\npop rcx\npop rax\npopfq\njmp {return}\n",
+      "purpose": "Local Hino-Enma exact-sampled Common ladder unit-scale repair"
+    },
+    {
+      "name": "HE_LadderScaleRbx",
+      "rva": 9783369,
+      "original": "F3 0F 10 93 20 03 00 00",
+      "length": 8,
+      "code_offset": 103936,
+      "code_capacity": 1536,
+      "asm": "movss xmm2, dword ptr [rbx+0x320]\npushfq\npush rax\npush rcx\npush rdx\npush r8\npush r9\npush r10\npush r11\nmov r8, rbx\nmov r11, {data}\ncmp dword ptr [r11+4], 0\nje ladder_scale_1_done\nmov r10, qword ptr [r11+0x10]\ncmp r10, 0x10000\njb ladder_scale_1_done\nmov rcx, r10\nshr rcx, 47\njne ladder_scale_1_done\nmov rax, {player_slot}\ncmp r10, qword ptr [rax]\njne ladder_scale_1_done\nmov eax, dword ptr [r10]\ncmp eax, dword ptr [r11+4]\njne ladder_scale_1_done\ncmp eax, 0x58E5E\nje ladder_scale_1_hino\ncmp eax, 0x51BE1\njne ladder_scale_1_done\nladder_scale_1_hino:\ncmp dword ptr [r10+4], 0x10000\njne ladder_scale_1_done\ncmp dword ptr [r10+0xEF0], 0\njne ladder_scale_1_done\nmov rax, qword ptr [r10+0xE90]\ncmp rax, 0x10000\njb ladder_scale_1_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_1_done\ncmp dword ptr [rax+0x0C], 1\njne ladder_scale_1_done\ncmp r8, qword ptr [r10+0x38]\njne ladder_scale_1_done\ncmp r10, qword ptr [r8]\njne ladder_scale_1_done\nmov rax, qword ptr [r10+0x230]\ncmp rax, 0x10000\njb ladder_scale_1_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_1_done\ncmp r10, qword ptr [rax]\njne ladder_scale_1_done\nmov r9, qword ptr [rax+8]\ncmp r9, 0x10000\njb ladder_scale_1_done\nmov rcx, r9\nshr rcx, 47\njne ladder_scale_1_done\ncmp r10, qword ptr [r9+0x50]\njne ladder_scale_1_done\nmov rax, qword ptr [r9+0x58]\ncmp rax, 0x10000\njb ladder_scale_1_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_1_done\ncmp byte ptr [rax+0x40], 0\nje ladder_scale_1_done\ncmp dword ptr [rax], 56\njb ladder_scale_1_done\ncmp dword ptr [rax], 70\nja ladder_scale_1_done\nmov rdx, qword ptr [r9+0x80]\ntest rdx, rdx\nje ladder_scale_1_done\ncmp rdx, qword ptr [rax+0x38]\njne ladder_scale_1_done\nmov rdx, qword ptr [rax+0x20]\ncmp rdx, 0x10000\njb ladder_scale_1_done\nmov rcx, rdx\nshr rcx, 47\njne ladder_scale_1_done\ntest dword ptr [rdx], 0x800\nje ladder_scale_1_done\nmov ecx, dword ptr [rdx+0x20]\ncmp ecx, 250\njb ladder_scale_1_done\ncmp ecx, 267\nja ladder_scale_1_done\ncmp ecx, dword ptr [r8+0xEC]\njne ladder_scale_1_done\nmov rax, qword ptr [r9+0x510]\nmov rdx, qword ptr [r9+0x528]\ntest rax, rax\nje ladder_scale_1_exit\ntest rdx, rdx\nje ladder_scale_1_exit\ncmp rax, 0x10000\njb ladder_scale_1_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_1_done\ncmp rdx, 0x10000\njb ladder_scale_1_done\nmov rcx, rdx\nshr rcx, 47\njne ladder_scale_1_done\ncmp qword ptr [rdx], rax\njne ladder_scale_1_done\ncmp word ptr [rax+4], 2\njne ladder_scale_1_done\ncmp byte ptr [rdx+8], 1\njne ladder_scale_1_done\ncmp byte ptr [rdx+9], 1\nja ladder_scale_1_done\ncmp byte ptr [rdx+0xA], 1\nja ladder_scale_1_done\ncmp dword ptr [rdx+0x4C], 1\njb ladder_scale_1_done\ncmp dword ptr [rdx+0x4C], 0x1000\nja ladder_scale_1_done\ncmp dword ptr [rdx+0x50], 1\njb ladder_scale_1_done\ncmp dword ptr [rdx+0x50], 0x1000\nja ladder_scale_1_done\ncmp dword ptr [rdx+0x48], 8\nje ladder_scale_1_replace\ncmp dword ptr [rdx+0x48], 9\njne ladder_scale_1_done\njmp ladder_scale_1_replace\nladder_scale_1_exit:\nmov rax, qword ptr [r9+0x58]\ncmp dword ptr [rax], 61\nje ladder_scale_1_replace\ncmp dword ptr [rax], 62\nje ladder_scale_1_replace\ncmp dword ptr [rax], 66\njne ladder_scale_1_done\nladder_scale_1_replace:\nmov eax, 0x3F800000\nmovd xmm2, eax\nladder_scale_1_done:\npop r11\npop r10\npop r9\npop r8\npop rdx\npop rcx\npop rax\npopfq\njmp {return}\n",
+      "purpose": "Local Hino-Enma exact-sampled Common ladder unit-scale repair"
+    },
+    {
+      "name": "HE_LadderScaleRender",
+      "rva": 9781393,
+      "original": "F3 0F 10 80 20 03 00 00",
+      "length": 8,
+      "code_offset": 105472,
+      "code_capacity": 1536,
+      "asm": "movss xmm0, dword ptr [rax+0x320]\npushfq\npush rax\npush rcx\npush rdx\npush r8\npush r9\npush r10\npush r11\nmov r8, qword ptr [rsp+0x30]\nmov rax, qword ptr [rsp+0x10]\ncmp rax, 0x10000\njb ladder_scale_2_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_2_done\ncmp byte ptr [rax+0x28], 0\nje ladder_scale_2_done\nmov r11, {data}\ncmp dword ptr [r11+4], 0\nje ladder_scale_2_done\nmov r10, qword ptr [r11+0x10]\ncmp r10, 0x10000\njb ladder_scale_2_done\nmov rcx, r10\nshr rcx, 47\njne ladder_scale_2_done\nmov rax, {player_slot}\ncmp r10, qword ptr [rax]\njne ladder_scale_2_done\nmov eax, dword ptr [r10]\ncmp eax, dword ptr [r11+4]\njne ladder_scale_2_done\ncmp eax, 0x58E5E\nje ladder_scale_2_hino\ncmp eax, 0x51BE1\njne ladder_scale_2_done\nladder_scale_2_hino:\ncmp dword ptr [r10+4], 0x10000\njne ladder_scale_2_done\ncmp dword ptr [r10+0xEF0], 0\njne ladder_scale_2_done\nmov rax, qword ptr [r10+0xE90]\ncmp rax, 0x10000\njb ladder_scale_2_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_2_done\ncmp dword ptr [rax+0x0C], 1\njne ladder_scale_2_done\ncmp r8, qword ptr [r10+0x38]\njne ladder_scale_2_done\ncmp r10, qword ptr [r8]\njne ladder_scale_2_done\nmov rax, qword ptr [r10+0x230]\ncmp rax, 0x10000\njb ladder_scale_2_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_2_done\ncmp r10, qword ptr [rax]\njne ladder_scale_2_done\nmov r9, qword ptr [rax+8]\ncmp r9, 0x10000\njb ladder_scale_2_done\nmov rcx, r9\nshr rcx, 47\njne ladder_scale_2_done\ncmp r10, qword ptr [r9+0x50]\njne ladder_scale_2_done\nmov rax, qword ptr [r9+0x58]\ncmp rax, 0x10000\njb ladder_scale_2_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_2_done\ncmp byte ptr [rax+0x40], 0\nje ladder_scale_2_done\ncmp dword ptr [rax], 56\njb ladder_scale_2_done\ncmp dword ptr [rax], 70\nja ladder_scale_2_done\nmov rdx, qword ptr [r9+0x80]\ntest rdx, rdx\nje ladder_scale_2_done\ncmp rdx, qword ptr [rax+0x38]\njne ladder_scale_2_done\nmov rdx, qword ptr [rax+0x20]\ncmp rdx, 0x10000\njb ladder_scale_2_done\nmov rcx, rdx\nshr rcx, 47\njne ladder_scale_2_done\ntest dword ptr [rdx], 0x800\nje ladder_scale_2_done\nmov ecx, dword ptr [rdx+0x20]\ncmp ecx, 250\njb ladder_scale_2_done\ncmp ecx, 267\nja ladder_scale_2_done\ncmp ecx, dword ptr [r8+0xEC]\njne ladder_scale_2_done\nmov rax, qword ptr [r9+0x510]\nmov rdx, qword ptr [r9+0x528]\ntest rax, rax\nje ladder_scale_2_exit\ntest rdx, rdx\nje ladder_scale_2_exit\ncmp rax, 0x10000\njb ladder_scale_2_done\nmov rcx, rax\nshr rcx, 47\njne ladder_scale_2_done\ncmp rdx, 0x10000\njb ladder_scale_2_done\nmov rcx, rdx\nshr rcx, 47\njne ladder_scale_2_done\ncmp qword ptr [rdx], rax\njne ladder_scale_2_done\ncmp word ptr [rax+4], 2\njne ladder_scale_2_done\ncmp byte ptr [rdx+8], 1\njne ladder_scale_2_done\ncmp byte ptr [rdx+9], 1\nja ladder_scale_2_done\ncmp byte ptr [rdx+0xA], 1\nja ladder_scale_2_done\ncmp dword ptr [rdx+0x4C], 1\njb ladder_scale_2_done\ncmp dword ptr [rdx+0x4C], 0x1000\nja ladder_scale_2_done\ncmp dword ptr [rdx+0x50], 1\njb ladder_scale_2_done\ncmp dword ptr [rdx+0x50], 0x1000\nja ladder_scale_2_done\ncmp dword ptr [rdx+0x48], 8\nje ladder_scale_2_replace\ncmp dword ptr [rdx+0x48], 9\njne ladder_scale_2_done\njmp ladder_scale_2_replace\nladder_scale_2_exit:\nmov rax, qword ptr [r9+0x58]\ncmp dword ptr [rax], 61\nje ladder_scale_2_replace\ncmp dword ptr [rax], 62\nje ladder_scale_2_replace\ncmp dword ptr [rax], 66\njne ladder_scale_2_done\nladder_scale_2_replace:\nmov eax, 0x3F800000\nmovd xmm0, eax\nladder_scale_2_done:\npop r11\npop r10\npop r9\npop r8\npop rdx\npop rcx\npop rax\npopfq\njmp {return}\n",
+      "purpose": "Local Hino-Enma exact-sampled Common ladder unit-scale repair"
+    },
+    {
+      "name": "HE_LadderSampleClipCapture",
+      "rva": 9782916,
+      "original": "4C 63 51 50 49 8B E9",
+      "length": 7,
+      "code_offset": 107008,
+      "code_capacity": 1536,
+      "asm": "movsxd r10, dword ptr [rcx+0x50]\nmov rbp, r9\nmov dword ptr [rsp+0x20], r8d\njmp {return}\n",
+      "purpose": "Native sampler requested-clip local stack capture"
     }
   ],
   "targets": {
@@ -1252,11 +1292,49 @@
     85,
     96
   ],
-  "stage": "offline_salt_actual147_205_front85_draft",
+  "stage": "beta51_hotfix1_ladder_transition_gameplay_confirmed",
   "postdefeat_grab_revision": 1,
   "postdefeat_grab_state_offset": 3072,
   "postdefeat_grab_state_size": 512,
   "postdefeat_grab_target_template": 167660,
   "postdefeat_grab_original_action": 3158,
-  "postdefeat_grab_visual_only": true
+  "postdefeat_grab_visual_only": true,
+  "ladder_unit_scale_revision": 2,
+  "ladder_unit_scale_register_only": true,
+  "ladder_unit_scale_native_writes": false,
+  "ladder_unit_scale_counters": false,
+  "ladder_unit_scale_common_actions": [
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70
+  ],
+  "ladder_unit_scale_cleared_exit_actions": [
+    61,
+    62,
+    66
+  ],
+  "ladder_unit_scale_render_common_layer_only": true,
+  "ladder_unit_scale_sample_capture_local_offset": 32,
+  "ladder_unit_scale_sample_capture_saved_offset": 96,
+  "ladder_unit_scale_sampler_common_resource_bank": 2,
+  "ladder_unit_scale_sampler_current_or_pending": true,
+  "ladder_unit_scale_pending_inactive_allowed": true,
+  "ladder_unit_scale_gameplay_status": "Reported normal up/down, per-step movement and exit height on tested ladders",
+  "ladder_sampler_install_guard": {
+    "rva": 9782896,
+    "length": 313,
+    "live_stack_returns_checked": true
+  }
 }

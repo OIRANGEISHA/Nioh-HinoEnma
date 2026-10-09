@@ -106,7 +106,7 @@ jobs:
           if ($env:EXPECTED_COMMIT -cnotmatch '^[0-9a-f]{40}$' -or (git rev-parse HEAD) -cne $env:EXPECTED_COMMIT) { throw 'Reviewed source commit mismatch.' }
           if (git status --porcelain) { throw 'Checkout is not clean.' }
           $version = Get-Content version.json -Raw | ConvertFrom-Json
-          if ($version.version -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.[1-9][0-9]*(\.[1-9][0-9]*)?$' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta') { throw 'Unexpected release version.' }
+          if ($version.version -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.[1-9][0-9]*(\.[1-9][0-9]*)?(\.hotfix\.[1-9][0-9]*)?$' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta') { throw 'Unexpected release version.' }
           if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
           git show-ref --verify --quiet "refs/tags/$($version.tag)"
           if ($LASTEXITCODE -eq 0) { throw 'Tag already exists; public versions must never be overwritten.' }
@@ -145,6 +145,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Public Salt CPU regressions failed.' }
           python -m unittest discover -s tests -p test_postdefeat_grab_portable.py -v
           if ($LASTEXITCODE -ne 0) { throw 'Public post-defeat grab CPU regressions failed.' }
+          python -m unittest discover -s tests -p test_ladder_scale_portable.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Public ladder scale CPU regressions failed.' }
           ./tools/build.ps1 -Configuration Debug
           ./tools/build.ps1 -Configuration Release
 

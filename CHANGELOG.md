@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.5.1.hotfix.1] - 2026-10-09
+
+### Fixed
+
+- Fix the reported underground-to-surface ladder in the Mount Hiei mission: falling before the exit, per-step teleporting and excessive exit height came from Hino-Enma's 1.8-scale displacement being sampled for a pending ladder clip before the current action changed.
+- Normalize both current and pending owned Common-ladder clip samples, current-frame displacement and the matching rendered layer. Preserve the actor's normal model scale and all 55 Beta 5.1 hooks; add four scoped hooks for a total of 59.
+
+### Validation and release scope
+
+- The second temporary revision was user-confirmed for up/down climbing, per-step motion and exit height. Read-only observation recorded two ladder objects and their transitions. All ladders, enemy interruptions and final-public-EXE cold first-enable remain unverified; portable build and private local checks are recorded separately in the Hotfix validation.
+- Retain Beta 5.1's post-defeat grab, keyboard bindings and limitations. Compatible shortcut items remain in slot 2 on the first bar; some non-critical item use remains unfixed.
+- The owner explicitly requested replacing the Beta 5.1 release with this Hotfix. The publication plan reuses its release record with a new immutable Hotfix tag, verifies the new EXE/source ZIP before removing the superseded two attachments, and retains the old Beta 5.1 tag and historical records; the owner separately authorized the version/Release-ID-scoped `.github/workflows/hotfix.yml` Actions workflow, with identities and final readback recorded at publication. Other releases remain unchanged and other versions remain Draft-only without separate authorization. Unsigned Pre-release, latest=false.
+
 ## [1.0.0-beta.5.1] - 2026-10-09
 
 ### Added
