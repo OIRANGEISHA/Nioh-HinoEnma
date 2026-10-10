@@ -57,10 +57,23 @@ namespace HinoEnmaTool
         // A caller stopped before capture must never resume into the new reader.
         internal const uint SamplerRva = 0x954670U, SamplerLength = 0x139U;
 
+        // Exact unwind-function ranges for the ten added map-preview entries
+        // and their split failure epilogue. A nested native call can retain
+        // one of these returns even while its current instruction is elsewhere.
+        internal static readonly MemorySpan[] MenuNativeFrames = new MemorySpan[] {
+            new MemorySpan(0x8C5330,0x8C5563), new MemorySpan(0x8C61CA,0x8C61F3),
+            new MemorySpan(0x75FC80,0x761098), new MemorySpan(0x7C7EB0,0x7C9592),
+            new MemorySpan(0x952F20,0x9533AD), new MemorySpan(0x70ECE0,0x710A0C),
+            new MemorySpan(0x757206,0x757268), new MemorySpan(0x855250,0x8584A4),
+            new MemorySpan(0x850A20,0x850B04) };
+
         internal static bool InNativeSpan(long address, long moduleBase)
         {
             if (address >= moduleBase + SamplerRva && address < moduleBase + SamplerRva + SamplerLength)
                 return true;
+            foreach (MemorySpan span in MenuNativeFrames)
+                if (address >= moduleBase + span.Start && address < moduleBase + span.End)
+                    return true;
             foreach (HookSpec hook in Profile.Hooks)
                 if (address >= moduleBase + hook.Rva && address < moduleBase + hook.Rva + hook.Original.Length)
                     return true;

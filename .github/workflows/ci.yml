@@ -57,6 +57,14 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Public ladder scale CPU regressions failed.' }
           python -m unittest discover -s tests -p test_inherent_element_portable.py -v
           if ($LASTEXITCODE -ne 0) { throw 'Public inherent element CPU regressions failed.' }
+          python -m unittest discover -s tests -p test_beta52_baseline.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation regressions failed.' }
+          python -m unittest discover -s tests -p test_release_evidence.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Exact release evidence rejection checks failed.' }
+          python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation proof failed.' }
+          python tools/verify_menu_preview.py --report artifacts/menu-preview-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Portable menu source and CPU proof failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |

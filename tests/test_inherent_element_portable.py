@@ -15,13 +15,13 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / 'src'), str(ROOT / 'tools')]
-from build_profile import assemble, load_plan, source_plan_v059
+from build_profile import assemble, load_plan, source_plan_v059, source_plan_beta52
 from hinoenma_ladder_scale import apply_ladder_scale
 from keystone import Ks, KS_ARCH_X86, KS_MODE_64
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_64, UC_HOOK_CODE, UC_HOOK_MEM_WRITE
 import unicorn.x86_const as reg
 
-PLAN = load_plan()
+PLAN = source_plan_beta52(load_plan())
 BASELINE = source_plan_v059(PLAN)
 BASELINE['allocation_size'] = 0x19000
 BASELINE = apply_ladder_scale(BASELINE)

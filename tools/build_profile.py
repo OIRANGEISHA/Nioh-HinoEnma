@@ -181,7 +181,7 @@ def source_plan_hotfix(frozen: dict) -> dict:
     return plan
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_beta52(frozen: dict) -> dict:
     """Rebuild Beta 5.2 from the exact public Hotfix and innate-element revision."""
     plan = apply_inherent_elements(source_plan_hotfix(frozen))
     if len(plan['hooks']) != 60 or plan.get('inherent_element_revision') != 2:
@@ -190,14 +190,24 @@ def source_plan(frozen: dict) -> dict:
     return plan
 
 
+def source_plan(frozen: dict) -> dict:
+    """Rebuild the local70-hook snapshot from unchanged public Beta5.2 source."""
+    from menu_preview_portable_integration import apply_menu_preview
+    return apply_menu_preview(source_plan_beta52(frozen))
+
+
 def legacy_plans(frozen: dict) -> list[dict]:
     """Exact older payloads are read-only identities, never migration inputs."""
     beta51 = source_plan_v059(frozen)
     beta51.update(tool_version='1.0.0-beta.5.1', allocation_size=0x19000)
-    return [beta51, source_plan_hotfix(frozen)]
+    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen)]
 
 
 def validate_layout(plan: dict) -> None:
+    if len(plan.get('hooks', ())) == 70:
+        from menu_preview_portable_integration import validate_layout as validate_menu_layout
+        validate_menu_layout(plan)
+        return
     """Reject code capacity in core, paired-grab scratch, or innate-cache pages."""
     code_ranges = sorted((hook['code_offset'], hook['code_offset']
                           + hook.get('code_capacity', BLOCK_SIZE)) for hook in plan['hooks'])
@@ -327,7 +337,7 @@ def generate(plan: dict) -> str:
         f'internal const string Version = "{plan["tool_version"]}";',
         f'internal const string DisplayVersion = "{version["display_version"]}";',
         'internal static readonly MemorySpan[] ProtectedDataPages = new MemorySpan[] {' +
-            ','.join(f'new MemorySpan({start},{end})' for start, end in PROTECTED_DATA_PAGES) + '};',
+            ','.join(f'new MemorySpan({start},{end})' for start, end in plan.get('protected_data_pages', PROTECTED_DATA_PAGES)) + '};',
     ]
     for constant, key in (("ManualPurification", "manual_purification"),
                           ("LivingWeapon", "actual_living_weapon_activation_added"),
@@ -392,7 +402,18 @@ def validate_ct_labels(source: str, local_labels: list[str]) -> None:
 
 
 def aa_source(plan: dict) -> str:
-    plan, local_labels = ct_render_plan(plan)
+    from menu_preview_portable_integration import ct_compatible_plan
+    # The standalone source tests also exercise an explicitly converted plan.
+    # Accept only the exact conversion of the reconstructed source profile;
+    # never infer numeric semantics from arbitrary modified assembly text.
+    try:
+        validate_layout(plan)
+    except ValueError:
+        canonical = source_plan(plan)
+        if plan != ct_compatible_plan(canonical):
+            raise ValueError('Expected raw source or exact CT numeric conversion')
+        plan = canonical
+    plan, local_labels = ct_render_plan(ct_compatible_plan(plan))
     checks = [
         "[ENABLE]", "{$lua}", "if syntaxcheck then return end",
         'if getAddressSafe("HE_Prototype_Code") then error("飞缘魔测试版已启用。") end',

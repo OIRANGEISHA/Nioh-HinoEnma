@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "public_version": "1.0.0-beta.5.3",
+  "file_version": "1.0.0.64",
+  "verification_date": "2026-10-10",
+  "compatibility": {
+    "platform": "Windows x64",
+    "game": "Steam Nioh Complete Edition",
+    "game_version": "1.24.8",
+    "window_version": "1.24.08",
+    "other_builds_adapted": false
+  },
+  "native_hook_count": 70,
+  "retained_beta52_hook_count": 60,
+  "added_menu_preview_hook_count": 10,
+  "public_verification_status": "completed_offline_public_source; final_public_exe_fresh_process_enable_reload_unverified",
+  "portable_public_source_builds_completed": {
+    "Debug": {
+      "version": "1.0.0-beta.5.3",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "generated_source_sha256": "261ef5b56a5b07f24877376e7c1e40300bc6a602478fcdd75a4e6c820907d3bf",
+      "profile_sha256": "986ca0029ef383649f76d69a2aa7a391f18f392186b18bc750e3e4f9b9dcb3dc",
+      "self_checks": 28,
+      "payload_comparisons": 840,
+      "layout_count": 12,
+      "hook_count": 70,
+      "legacy_hook_counts": [
+        55,
+        59,
+        60
+      ],
+      "legacy_payload_comparisons": 2088,
+      "legacy_layout_count": 36,
+      "pe_machine": "x64",
+      "executable_bytes": 324096,
+      "executable_sha256": "2044af98b714389c064cce06d7d5ed16c48d5c813659fc61617317e315430fcd"
+    },
+    "Release": {
+      "version": "1.0.0-beta.5.3",
+      "success": true,
+      "game_access": false,
+      "generated_source_matches": true,
+      "generated_source_sha256": "261ef5b56a5b07f24877376e7c1e40300bc6a602478fcdd75a4e6c820907d3bf",
+      "profile_sha256": "986ca0029ef383649f76d69a2aa7a391f18f392186b18bc750e3e4f9b9dcb3dc",
+      "self_checks": 28,
+      "payload_comparisons": 840,
+      "layout_count": 12,
+      "hook_count": 70,
+      "legacy_hook_counts": [
+        55,
+        59,
+        60
+      ],
+      "legacy_payload_comparisons": 2088,
+      "legacy_layout_count": 36,
+      "pe_machine": "x64",
+      "executable_bytes": 320512,
+      "executable_sha256": "d173c180a24f431020d01c35797b0ac2f5a806987c6c92160cc65471ef873c3d"
+    }
+  },
+  "source_only_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "private_dependencies_imported": false,
+    "hook_count": 70,
+    "ct_local_labels": 636,
+    "layout_count": 12,
+    "ct_namespace_payload_comparisons": 840,
+    "historical_hook_counts": [
+      55,
+      59,
+      60
+    ],
+    "generated_source_matches": true
+  },
+  "public_regressions_completed": {
+    "success": true,
+    "tests": 133,
+    "retained_regression_and_baseline_tests": 121,
+    "added_release_evidence_refusal_tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "game_access": false,
+    "private_code_or_research_inputs": false
+  },
+  "portable_menu_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "tests_run": 25,
+    "byte_comparisons": 2490,
+    "cpu_comparisons": 10005,
+    "aslr_layouts": 12,
+    "source_sha256": "44012d3a4bb44f578bb1eae128afaaa8eee8a11b0c595a9289501744d9b66e85",
+    "test_sha256": "40b416b758749de4e03d07a3a696e4fb4691f2c33653255244231601c537fa00",
+    "profile_sha256": "986ca0029ef383649f76d69a2aa7a391f18f392186b18bc750e3e4f9b9dcb3dc",
+    "generated_source_sha256": "261ef5b56a5b07f24877376e7c1e40300bc6a602478fcdd75a4e6c820907d3bf",
+    "verifier_sha256": "19dc84aa3be2251fdc87bc2f12af2f63b0b249fadeb874f89ffdc69351a28153"
+  },
+  "immutable_beta52_baseline_validation_completed": {
+    "success": true,
+    "game_access": false,
+    "hook_count": 60,
+    "template_comparisons": 60,
+    "fixup_comparisons": 60,
+    "layout_count": 12,
+    "payload_comparisons": 720,
+    "patch_comparisons": 720,
+    "baseline_commit": "b5a4d9811efa64042587a9b01c71712cc9283a8c",
+    "baseline_git_blob": "4d3efc5d57146fc323ec8e7fbbfbd049eaa1033e",
+    "baseline_profile_sha256": "41f543e4a7b032000baa21eadc94d3b14f7f181d84a298b858986a1199aafbf3",
+    "profile_sha256": "986ca0029ef383649f76d69a2aa7a391f18f392186b18bc750e3e4f9b9dcb3dc",
+    "generated_source_sha256": "261ef5b56a5b07f24877376e7c1e40300bc6a602478fcdd75a4e6c820907d3bf",
+    "verifier_sha256": "430858fc2b7a417d2333a8485317312870a841aa96e24baacb9ef16305822b91"
+  },
+  "menu_preview_rules": {
+    "scope": "Equipment/status preview opened from the mission-selection map or base",
+    "hino_model_and_skeleton": true,
+    "native_hino_idle": true,
+    "william_body_and_armor_overlays_suppressed": true,
+    "native_stats_and_equipment_bonuses_preserved": true,
+    "camera_distance": 740.0,
+    "camera_height": -45.0,
+    "native_menu_distance": 580.0,
+    "native_menu_height": -55.0,
+    "binding": "Exact verified constructor captures a fresh owner/actor/body/selection generation; completion and ownership are rechecked before camera overrides. Reload invalidates the prior stamp.",
+    "recorded_live_heap_addresses_used": false,
+    "william_gameplay_or_foreign_instance_native_fallback": true,
+    "new_key_required": false
+  },
+  "gameplay_confirmation": {
+    "method": "User-confirmed temporary scoped in-game preview revisions; not first enable/reload of the final public EXE",
+    "scope": "Reported mission-selection map/base equipment and status preview",
+    "confirmed": [
+      "Hino-Enma model and skeleton",
+      "native idle",
+      "no William body or armor overlays",
+      "accepted full-body framing at distance 740 and height -45"
+    ],
+    "final_public_exe_fresh_process_enable_tested": false,
+    "final_public_exe_fresh_process_reload_tested": false,
+    "every_in_mission_menu_aspect_ratio_and_transition_tested": false
+  },
+  "launcher_checks": {
+    "complete_prior_layouts_read_only": [
+      55,
+      59,
+      60
+    ],
+    "restart_required_for_prior_installations": true,
+    "legacy_payload_comparisons_per_build": 2088,
+    "legacy_layout_count_per_build": 36,
+    "malformed_or_mixed_layouts_rejected": true,
+    "old_layout_character_writes_rejected": true,
+    "allocation_bytes": 184320,
+    "code_pages_execute_read": true,
+    "writable_non_executable_data_page_count": 6,
+    "complete_menu_native_function_spans": 9,
+    "native_frame_instruction_pointer_and_saved_return_exclusions_checked": true
+  },
+  "evidence_boundaries": {
+    "game_access": false,
+    "native_calls": "Synthetic records and explicit Win64 stubs; no complete native event, resource, damage or inventory engine",
+    "real_game_object_lifetimes_proven": false,
+    "private_native_inputs_distributed": false,
+    "public_source_local_build_hashes_are_final_ci_asset_hashes": false,
+    "published_source_commit_tree_and_asset_hashes": "Recorded after packaging/publication in source ZIP build-info and Release body; the reports above identify local builds of the reviewed public source."
+  },
+  "controls": {
+    "item_shortcut": "slot 2 on the first item shortcut bar",
+    "digit_5": "ground/air roar",
+    "F6": "nearby Yokai Realm purification",
+    "digit_9": "native Living Weapon and guardian attack at full charge while idle on the ground",
+    "other_shortcut_slots": "Retain Hino-Enma skills and moves"
+  },
+  "known_limits": [
+    "Final public EXE first enable/reload in a fresh game process and direct CE/CT enable remain untested.",
+    "Menu confirmation covers the reported map/base preview; every in-mission menu, aspect ratio, guardian appearance and transition remains unverified.",
+    "Some non-critical item use remains unfixed; compatible shortcuts use slot 2 on the first bar.",
+    "The roar is excluded from added elements; gesture animations may remain laughter.",
+    "All elements, weapon affixes, attacks, quantified damage/status strength, enemies, NPCs, guardians and save/mission transitions are not fully tested.",
+    "Retained Salt Common 205/85 interruption routes have CPU-only coverage.",
+    "Post-defeat grabs remain scoped to loaded compatible Nouhime/Yuki-Onna resources; zero-HP targets receive no extra damage, healing or revival.",
+    "This Windows Beta is unsigned with Authenticode."
+  ],
+  "release_assets": [
+    "Nioh-HinoEnma-1.0.0-beta.5.3-windows-x64.exe",
+    "Nioh-HinoEnma-1.0.0-beta.5.3-source.zip"
+  ],
+  "release_policy": {
+    "tag": "v1.0.0-beta.5.3",
+    "pre_release": true,
+    "latest": false,
+    "new_immutable_tag": true,
+    "historical_tags_and_assets_preserved": true,
+    "exact_asset_count": 2
+  }
+}

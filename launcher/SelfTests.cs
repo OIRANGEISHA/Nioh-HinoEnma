@@ -74,7 +74,7 @@ namespace HinoEnmaTool
             Action<string, Action> test = delegate(string name, Action body) { body(); passed.Add(name); };
             try
             {
-                test("sampler installation checks full native frame and saved stack returns", delegate
+                test("installation checks complete sampler and menu native frames and saved returns", delegate
                 {
                     long begin = Module + ThreadInstallGuard.SamplerRva;
                     long end = begin + ThreadInstallGuard.SamplerLength;
@@ -86,6 +86,22 @@ namespace HinoEnmaTool
                     Buffer.BlockCopy(BitConverter.GetBytes(begin-1),0,harmless,0,8);
                     Buffer.BlockCopy(BitConverter.GetBytes(end),0,harmless,8,8);
                     ThreadInstallGuard.VerifySavedReturnBytes(harmless,Module);
+                    Require(ThreadInstallGuard.MenuNativeFrames.Length==9,"Exact menu frame inventory");
+                    foreach(MemorySpan span in ThreadInstallGuard.MenuNativeFrames)
+                    {
+                        long first=Module+span.Start,last=Module+span.End;
+                        Require(first<last && ThreadInstallGuard.InNativeSpan(first,Module) &&
+                            ThreadInstallGuard.InNativeSpan(last-1,Module),"Complete menu native frame");
+                        Require(!ThreadInstallGuard.InNativeSpan(first-1,Module) &&
+                            !ThreadInstallGuard.InNativeSpan(last,Module),"Exact menu frame boundaries");
+                        foreach(long address in new long[] {first,first+(last-first)/2,last-1})
+                        {
+                            bool rejected=false;
+                            try { ThreadInstallGuard.VerifySavedReturnBytes(BitConverter.GetBytes(address),Module); }
+                            catch(InvalidOperationException) { rejected=true; }
+                            Require(rejected,"Nested menu return into changed native function rejected");
+                        }
+                    }
                     foreach(long address in new long[] {begin, Module+0x95470C, end-1, Module+Profile.Hooks[0].Rva})
                     {
                         bool rejected=false;
@@ -144,12 +160,12 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==60 && Profile.LegacyProfiles.Length==2,"Complete release identities");
-                    int index=0;
+                    Require(Profile.Hooks.Length==70 && Profile.LegacyProfiles.Length==3,"Complete local and prior release identities");
+                    int index=0; int[] counts={55,59,60}; int[] allocations={0x19000,0x1B000,0x20000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
-                        Require(previous.Hooks.Length==(index++==0?55:59),"Complete prior hook list");
-                        Require(previous.DataOffset==0xF000 && previous.AllocationSize==(previous.Hooks.Length==55?0x19000:0x1B000),"Prior allocation preserved");
+                        Require(previous.Hooks.Length==counts[index],"Complete prior hook list");
+                        Require(previous.DataOffset==0xF000 && previous.AllocationSize==allocations[index++],"Prior allocation preserved");
                         FakeMemory memory=LegacyMemory(previous); long allocation;
                         Require(Checks.Inspect(memory.Read,Module,out allocation)==HookState.Legacy && allocation==Allocation,"Exact prior identity");
                         bool wrote=false,rejected=false;
@@ -181,10 +197,10 @@ namespace HinoEnmaTool
                         }
                     }
                 });
-                test("code protection excludes all three writable data pages", delegate
+                test("code protection excludes every gameplay and menu writable page", delegate
                 {
-                    Require(Profile.AllocationSize==0x20000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==3,"Beta 5.2 protected layout");
-                    int[] starts={0xF000,0x13000,0x1F000};
+                    Require(Profile.AllocationSize==0x2D000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==6,"Local menu70 protected layout");
+                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000};
                     List<MemorySpan> spans=Checks.CodePages(Profile.Hooks,Profile.AllocationSize,Profile.ProtectedDataPages);
                     foreach(HookSpec hook in Profile.Hooks)
                     {
@@ -226,7 +242,43 @@ namespace HinoEnmaTool
                     Require(Checks.Inspect(mixed.Read,Module,out allocation)==HookState.Other,
                         "Prior 50-hook Beta 5 process requires a restart");
                     Require(Checks.Inspect(Memory(true).Read,Module,out allocation)==HookState.Ours,
-                        "Complete 60-hook current profile recognized");
+                        "Complete70-hook local profile recognized");
+                });
+                test("all ten menu entries require complete payloads and native sites", delegate
+                {
+                    string[] names={"HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapAppearancePrivate","HE_MapNativeIdlePrivate","HE_MapIdleSelectionPrivate","HE_MapLoadoutAppearancePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate"};
+                    Require(Profile.Hooks.Length==70,"Exact total menu build inventory");
+                    for(int i=60;i<70;i++)
+                    {
+                        HookSpec hook=Profile.Hooks[i];
+                        Require(hook.Name==names[i-60],"Exact scoped menu entry name");
+                        foreach(bool payload in new bool[]{true,false})
+                        {
+                            FakeMemory memory=Memory(true); long observed;
+                            byte[] bytes=memory.Blocks[(payload?Allocation+hook.CodeOffset:Module+hook.Rva)];
+                            bytes[bytes.Length-1]^=1;
+                            Require(Checks.Inspect(memory.Read,Module,out observed)==HookState.Other,"Changed menu code refused");
+                        }
+                    }
+                });
+                test("all original sixty templates fixups and relocated payloads remain identical", delegate
+                {
+                    LegacyProfile beta52=Profile.LegacyProfiles[2];
+                    Require(beta52.Version=="1.0.0-beta.5.2" && beta52.Hooks.Length==60,"Exact published baseline");
+                    for(int i=0;i<60;i++)
+                    {
+                        HookSpec current=Profile.Hooks[i],old=beta52.Hooks[i];
+                        Require(current.Name==old.Name && current.Rva==old.Rva && current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity,"Original slot identity");
+                        Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Original encoded template");
+                        for(int f=0;f<current.Fixups.Length;f++)
+                            Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Original relocation encoding");
+                        foreach(long module in new long[]{0x140000000,0x7FF83AA00000,0x7FFA01000000})
+                            foreach(int slot in new int[]{0,1,37,511})
+                            {
+                                long at=Checks.FirstAllocation(module)+slot*0x10000L;
+                                Require(Checks.Equal(current.Payload(module,at),old.Payload(module,at)) && Checks.Equal(current.Jump(module,at),old.Jump(module,at)),"Original relocated bytes");
+                            }
+                    }
                 });
                 test("unrelated modification rejected", delegate
                 { FakeMemory m=Memory(false); m.Blocks[Module+Profile.Hooks[0].Rva][0]=0xCC; long a; Require(Checks.Inspect(m.Read,Module,out a)==HookState.Other,"Other modification"); });
@@ -353,7 +405,7 @@ namespace HinoEnmaTool
                     foreach(HookSpec hook in Profile.Hooks)
                         result.Add(new {module=module,allocation=allocation,name=hook.Name,payload=Convert.ToBase64String(hook.Payload(module,allocation)),patch=Convert.ToBase64String(hook.Jump(module,allocation))});
                 }
-            File.WriteAllText(path,new JavaScriptSerializer().Serialize(result),new System.Text.UTF8Encoding(false));
+            File.WriteAllText(path,new JavaScriptSerializer { MaxJsonLength = 16 * 1024 * 1024 }.Serialize(result),new System.Text.UTF8Encoding(false));
             return 0;
         }
 
@@ -371,7 +423,7 @@ namespace HinoEnmaTool
                                 name=hook.Name,payload=Convert.ToBase64String(hook.Payload(module,allocation)),
                                 patch=Convert.ToBase64String(hook.Jump(module,allocation))});
                     }
-            File.WriteAllText(path,new JavaScriptSerializer().Serialize(result),new System.Text.UTF8Encoding(false));
+            File.WriteAllText(path,new JavaScriptSerializer { MaxJsonLength = 16 * 1024 * 1024 }.Serialize(result),new System.Text.UTF8Encoding(false));
             return 0;
         }
     }

@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.5.3] - 2026-10-10
+
+### Added
+
+- Show Hino-Enma's model, skeleton and native idle in the equipment/status preview opened from the mission-selection map or base. Suppress William's body and armor overlays for the owned map display actor while retaining native stats and equipment bonuses.
+- Adjust the owned preview's computed camera distance to 740 and target height to −45 for full-body framing. Bind this to the newly constructed instance and invalidate it on map reload; William, gameplay and foreign instances keep native fallback.
+- Add ten scoped preview hooks to the unchanged 60-hook Beta 5.2 basis, for 70 hooks. Keep the existing controls, innate weapon elements and Boss base-plus-growth/equipment calculation.
+
+### Validation and release scope
+
+- The temporary in-game revisions were user-confirmed for the model, native idle, removal of William overlays and accepted framing. The final public EXE's first enable/reload in a fresh game process remains untested. Coverage is the reported map/base preview, not every in-mission menu or screen ratio.
+- The final public source passed 133 regression tests (121 retained plus 12 release-evidence refusal checks) and 25 portable menu tests: 2,490 byte comparisons, 10,005 synthetic CPU comparisons and 12 ASLR layouts. Public-source Debug and Release each passed 28 C# self-checks, 840 current-profile comparisons and 2,088 complete prior-profile comparisons. Source/CT checks passed for 70 hooks, 636 unique labels and 840 namespace comparisons; the unchanged 60-hook basis passed 720 payload and 720 patch comparisons. Actual results are recorded in docs/validation-beta5.3.json; exact Git-source provenance and final CI asset hashes are recorded when packaged/published.
+- Preserve historical release records and the immutable Beta 5.2 baseline. Some non-critical item use remains unfixed. Compatible shortcut items stay in slot 2 on the first bar; digit 5 is roar, F6 purification and digit 9 native Living Weapon/guardian attack.
+- Publish a new immutable `v1.0.0-beta.5.3` Pre-release with exactly the Windows x64 EXE and complete Git-source ZIP. Earlier tags/assets remain unchanged. Unsigned, latest=false.
+
 ## [1.0.0-beta.5.2] - 2026-10-10
 
 ### Fixed

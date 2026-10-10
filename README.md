@@ -2,18 +2,18 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 5.2 / Pre-release.**
+**Current version: 1.0.0 Beta 5.3 / Pre-release.**
 
-A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 5.2 passes the selected melee weapon's innate element to her supported attacks. Raikiri's “Imbue Lightning +8” is user-confirmed on kicks, umbrella attacks, body charge, needles and life drain. Earlier ladder, defeated Nouhime / Yuki-Onna grab, item and interaction fixes are retained. Player growth, armor and selected-weapon bonuses remain additive to the Boss baseline.
+A standalone Windows tool that replaces the playable character in **Nioh: Complete Edition** with Hino-Enma while preserving her model and moveset. Beta 5.3 adds her model, skeleton and native idle to the equipment/status preview opened from the mission-selection map or base, removes William's body and armor overlays, and adjusts framing to fit her full body. Beta 5.2's innate weapon elements and earlier item, interaction and ladder fixes are retained. Player growth, armor and selected-weapon bonuses remain additive to the Boss baseline.
 
 ## Download and use
 
-Get the Windows x64 EXE or source archive from [Beta 5.2](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.2). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.5.2-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.2-source.zip`; the source archive includes instructions and keyboard documentation. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
+Get the Windows x64 EXE or source archive from [Beta 5.3](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.3). The release attachments are only `Nioh-HinoEnma-1.0.0-beta.5.3-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.3-source.zip`; the source archive includes instructions, [keyboard documentation](docs/键位说明.md) and build provenance. GitHub also provides its automatic source ZIP/tar downloads. You do not need Cheat Engine, Python or the source archive to use the EXE.
 
 1. Start the Steam game normally and stop at **NEW GAME / CONTINUE**.
-2. Run the tool. After it reports that the next character will be Hino-Enma, load a mission.
+2. Run the tool. After it reports that the next character will be Hino-Enma, continue to the mission-selection map or load a mission.
 3. The newly created player becomes Hino-Enma. You can close the tool.
-4. To switch to William or Hino-Enma, select that character in the tool, return to the main menu and load the mission again. Run the tool again after restarting the game.
+4. To switch to William or Hino-Enma, select that character in the tool, return to the main menu and continue again. This recreates the mission player or map preview. Run the tool again after restarting the game.
 
 Repeated runs recognize the existing installation and retain the character choice for that game process. A new game process defaults to Hino-Enma after enabling. The tool checks the exact executable and instruction signatures; an unsupported build is refused. If access fails, try running the tool as administrator. To return to an older public version, exit Nioh first and use the unchanged [Beta 1 release](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.1).
 
@@ -24,14 +24,23 @@ Repeated runs recognize the existing installation and retain the character choic
 - Epic and other executable builds have not been adapted. Matching a version label alone is insufficient.
 - The EXE changes the current process; game installation files do not need replacement. Game saves continue through the game's normal behavior; complete save/load and mission-transition coverage remains unverified.
 
-## New in Beta 5.2
+## New in Beta 5.3
+
+- Replace the equipment/status preview opened from the mission-selection map or base with Hino-Enma's coherent model and skeleton resources and her native idle. Suppress William's body and armor overlays for this display actor; gameplay stats and equipment bonuses keep their native calculation.
+- Pull the preview camera back slightly and raise its target for more space around her head. The accepted framing uses distance 740 and height −45, replacing the native menu values 580 and −55 only for the owned Hino-Enma map display.
+- Bind the camera to the newly constructed display instance, invalidate that binding during map reload and retain native fallback when the selection, owner or actor changes. Selecting William retains the native William preview. No new key is added.
+- Add ten scoped menu hooks to the unchanged 60-hook Beta 5.2 profile, for 70 hooks. These changes cover the map/base preview; every in-mission menu is not claimed to be covered.
+- The temporary in-game revisions were user-confirmed for native idle, removal of William overlays and the accepted framing. The final distributed EXE has not yet been gameplay-tested for first enable and reload in a fresh game process.
+
+Exit and restart Nioh before upgrading from an earlier tool, then enable Beta 5.3 at the main menu. Older supported installations are recognized read-only and require a restart; their live allocations are not migrated.
+
+## Retained Beta 5.2 innate-element fixes
 
 - Pass the selected melee weapon's native innate fire, water, lightning, wind or earth element to supported kicks, umbrella attacks, body charge, needles and life-drain hits. Elemental talismans and Living Weapon retain priority over the permanent weapon element.
 - The second temporary revision was user-confirmed with Raikiri's “Imbue Lightning +8”: all five reported attacks showed lightning and movement, attacks and life drain remained normal. Other innate elements, exact per-hit damage and every attack variant have not been individually tested.
 - Needle paralysis and the roar's original effects are retained; the roar does not receive an added element. Ordinary body attacks use the game's native primary enchantment priority. This does not promise a second independent paralysis channel on those body attacks.
 - “Imbue [element] +N” supplies an element. A “[element] damage +N%” affix enhances matching damage already being dealt; that percentage alone does not add an element.
-- Preserve Boss base-plus-growth/equipment calculation and earlier functionality. Four existing hooks are updated and one is added, for 60 hooks. Re-equip the selected weapon and close the menu, or reload the character, to refresh its native element.
-- Exit and restart Nioh before upgrading from an earlier tool, then enable Beta 5.2 at the main menu.
+- Preserve Boss base-plus-growth/equipment calculation and earlier functionality. Beta 5.2 updated four hooks and added one, producing the 60-hook basis retained by Beta 5.3. Re-equip the selected weapon and close the menu, or reload the character, to refresh its native element.
 
 ## Retained Beta 5.1 Hotfix 1 fixes
 
@@ -112,6 +121,7 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Known limitations
 
+- Menu-preview gameplay confirmation covers the reported map/base screen and temporary revisions. Every in-mission menu, aspect ratio, guardian appearance and transition remains unverified. The final public EXE's fresh-process enable/reload is still untested.
 - The innate-element gameplay result covers Raikiri's lightning on the five reported attacks in the second temporary revision. It does not establish every element, weapon affix, airborne variant or exact damage/status strength. Temporary enchantments keep native priority; ordinary body attacks do not gain a separately guaranteed paralysis channel.
 - The ladder fix is confirmed for the reported trial locations, with two ladder objects recorded. Enemy interruptions and every ladder variant remain untested. Final-public-EXE first enable in a fresh process has not yet been gameplay-tested; source/build checks are recorded separately.
 
@@ -132,13 +142,15 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Validation and development
 
-See [Beta 5.2 release record](docs/releases/1.0.0-beta.5.2.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 5.1 Hotfix 1](docs/releases/1.0.0-beta.5.1.hotfix.1.md) and earlier release records remain historical.
+See [Beta 5.3 release record](docs/releases/1.0.0-beta.5.3.md), [build instructions](docs/BUILD.md), [development/release standard](DEVELOPMENT_RELEASE_STANDARD.md) and [credits/components](NOTICE.md). [Beta 5.2](docs/releases/1.0.0-beta.5.2.md), [Beta 5.1 Hotfix 1](docs/releases/1.0.0-beta.5.1.hotfix.1.md) and earlier release records remain historical.
+
+The final public source passed [Beta 5.3 offline validation](docs/validation-beta5.3.json): 133 regression tests (121 retained tests plus 12 release-evidence refusal checks) and 25 portable menu tests, including 2,490 byte comparisons, 10,005 synthetic CPU comparisons and 12 ASLR layouts. Public-source Debug and Release each passed 28 C# self-checks, 840 current-profile comparisons and 2,088 complete prior-profile comparisons. Source/CT checks passed for 70 hooks, 636 unique local labels and 840 namespace comparisons. The original 60 templates/fixups, 720 payloads and 720 patches match the immutable Beta 5.2 baseline. The source ZIP's `build-info/` records the exact reviewed commit and build reports; final CI/downloaded asset hashes are recorded separately.
 
 The actual Beta 5.2 source/build results are recorded in [Beta 5.2 validation](docs/validation-beta5.2.json). Public Debug and Release each passed 26 self-checks, 720 current-profile payload comparisons (60 hooks × 12 layouts) and 1,368 complete prior-profile comparisons (55 and 59 hooks × 12 layouts). Source/CT checks passed for 60 hooks, 555 unique local labels, 720 namespace comparisons and six negative guards. Prior-profile recognition verifies complete entry sites and payloads read-only; new installation checks cover executable code and three writable, non-executable data pages. This does not establish a VirtualQuery check of every old installation's live page protection.
 
 The local second-revision EXE separately passed 23 self-checks and 720 payload comparisons, without game access. Its private native-code regression passed 20 tests and 959 CPU comparisons, including 165 comparisons of the 55 unchanged hooks across three layouts. Those local checks are distinct from the public build and from the five-hook temporary gameplay test. The final public EXE has not been gameplay-tested for first enable in a fresh process.
 
-Public portable checks use synthetic records and explicit Win64 stubs; they do not execute the complete game damage/event engine or inventory commit. Private native-code inputs and raw runtime reports are excluded from public source and CI. [Hotfix validation](docs/validation-beta5.1-hotfix1.json), [Beta 5 validation](docs/validation-beta5.json) and earlier evidence retain their historical scope; they are not represented as newly rerun checks. Salt's additional Common 205/85 paths remain CPU-only. Final source commit, shipped hashes and actual publisher are recorded in provenance. Beta 5.2 uses a new immutable tag and release; earlier tags, attachments and historical records remain unchanged.
+Public portable checks use synthetic records and explicit Win64 stubs; they do not execute the complete game engine or establish real object lifetimes. Private native-code inputs and raw runtime reports are excluded from public source and CI. Historical validation files retain their original scope. Salt's additional Common 205/85 paths remain CPU-only. Beta 5.3 uses a new immutable tag and release; earlier tags, attachments and historical records remain unchanged. The distributed source ZIP is exported from the exact reviewed Git commit; its source inventory, asset hashes and actual publisher are recorded in `build-info/` and the Release body. Build provenance does not replace Windows Authenticode signing.
 
 Character replacement is adapted from the user-supplied **Bryanyora CharacterChange CT**. This tool does not redistribute game assets; original author credits are retained in [NOTICE.md](NOTICE.md).
 

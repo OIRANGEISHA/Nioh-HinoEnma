@@ -1,7 +1,7 @@
 name: Prepare Beta release
 
 on:
-  # One-time path for the authorized Beta 5.2 uploads; other versions never publish on push.
+  # One-time path for the authorized Beta 5.3 uploads; other versions never publish on push.
   push:
     branches: [main]
     paths: [version.json]
@@ -38,7 +38,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-      - name: Limit push publication to the first authorized Beta 5.2 only
+      - name: Limit push publication to the first authorized Beta 5.3 only
         id: scope
         shell: pwsh
         env:
@@ -55,8 +55,8 @@ jobs:
           $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
           if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
           if ($env:EVENT_NAME -ceq 'push') {
-            if ($version.version -cne '1.0.0-beta.5.2' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $version.upstream_private_profile_version -cne '0.60' -or $version.upstream_private_inherent_element_revision -ne 2) {
-              'Push publication skipped: this one-time path is only for the authorized Beta 5.2 / Hotfix 1 plus inherent element revision 2.' >> $env:GITHUB_STEP_SUMMARY
+            if ($version.version -cne '1.0.0-beta.5.3' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $version.upstream_private_profile_version -cne '0.60' -or $version.upstream_private_inherent_element_revision -ne 2 -or $version.menu_preview_revision -ne 1 -or $version.menu_preview_hook_count -ne 10 -or $version.menu_camera_distance -ne 740.0 -or $version.menu_camera_height -ne -45.0) {
+              'Push publication skipped: this one-time path is only for the authorized Beta 5.3 / accepted menu preview revision 1.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
             git show-ref --verify --quiet "refs/tags/$($version.tag)"
@@ -149,8 +149,18 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Public ladder scale CPU regressions failed.' }
           python -m unittest discover -s tests -p test_inherent_element_portable.py -v
           if ($LASTEXITCODE -ne 0) { throw 'Public inherent element CPU regressions failed.' }
+          python -m unittest discover -s tests -p test_beta52_baseline.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation regressions failed.' }
+          python -m unittest discover -s tests -p test_release_evidence.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Exact release evidence rejection checks failed.' }
+          python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation proof failed.' }
+          python tools/verify_menu_preview.py --report artifacts/menu-preview-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Portable menu source and CPU proof failed.' }
           ./tools/build.ps1 -Configuration Debug
+          if ($LASTEXITCODE -ne 0) { throw 'Debug build failed.' }
           ./tools/build.ps1 -Configuration Release
+          if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
 
       - name: Run portable checks on both builds
         run: |
@@ -216,7 +226,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Draft preparation failed; inspect the existing tag before any retry.' }
           'Draft prepared for exact source and asset readback inspection.' >> $env:GITHUB_STEP_SUMMARY
 
-      - name: Verify Draft readback and publish only the one-time authorized Beta 5.2 upload
+      - name: Verify Draft readback and publish only the one-time authorized Beta 5.3 upload
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -329,11 +339,11 @@ jobs:
             'Verified Draft retained. Manual dispatch does not publish automatically.' >> $env:GITHUB_STEP_SUMMARY
             exit 0
           }
-          # This mutation is authorized only for the first exact Beta 5.2 push above.
-          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cne '1.0.0-beta.5.2' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
+          # This mutation is authorized only for the first exact Beta 5.3 push above.
+          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cne '1.0.0-beta.5.3' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
           if (git status --porcelain) { throw 'Source changed after Draft inspection.' }
           if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed after Draft inspection.' }
-          if ($version.upstream_private_profile_version -cne '0.60' -or $version.upstream_private_inherent_element_revision -ne 2) { throw 'Authorized Beta 5.2 must identify Hotfix 1 plus inherent element revision 2.' }
+          if ($version.upstream_private_profile_version -cne '0.60' -or $version.upstream_private_inherent_element_revision -ne 2 -or $version.menu_preview_revision -ne 1 -or $version.menu_preview_hook_count -ne 10 -or $version.menu_camera_distance -ne 740.0 -or $version.menu_camera_height -ne -45.0) { throw 'Authorized Beta 5.3 must identify the reviewed inherited profile and accepted menu preview revision 1.' }
           $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
           if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed after Draft inspection.' }
           gh release edit "$env:RELEASE_TAG" --repo "$env:GITHUB_REPOSITORY" --draft=false --prerelease --latest=false

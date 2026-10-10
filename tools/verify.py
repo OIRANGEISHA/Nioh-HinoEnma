@@ -14,8 +14,8 @@ from build_profile import ROOT, assemble, generate, legacy_plans, load_plan
 
 def verify(executable: Path, report: Path, preview: bool = False) -> dict:
     plan = load_plan()
-    if len(plan["hooks"]) != 60:
-        raise ValueError("Expected the reviewed 60-hook Beta 5.2 profile")
+    if len(plan["hooks"]) != 70:
+        raise ValueError("Expected the local70-hook menu preview profile")
     if (ROOT / "launcher/Profile.generated.cs").read_text("utf-8") != generate(plan):
         raise ValueError("Generated source differs")
     report.parent.mkdir(parents=True, exist_ok=True)
@@ -34,8 +34,8 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
             raise ValueError("Offline executable check failed: " + mode + ": " + completed.stderr)
     self_test = json.loads(targets["--self-test"].read_text("utf-8"))
     if (not self_test["success"] or self_test.get("game_access") is not False
-            or self_test["count"] != 26 or len(self_test["checks"]) != 26
-            or len(set(self_test["checks"])) != 26):
+            or self_test["count"] != 28 or len(self_test["checks"]) != 28
+            or len(set(self_test["checks"])) != 28):
         raise ValueError("Offline refusal/transaction checks failed")
     exported = json.loads(targets["--export-payloads"].read_text("utf-8"))
     cache, names = {}, set()
@@ -85,7 +85,10 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
         raise ValueError("Expected Windows x64 PE")
     result = {
         "version": plan["tool_version"], "success": True, "game_access": False,
-        "generated_source_matches": True, "self_checks": self_test["count"],
+        "generated_source_matches": True,
+        "generated_source_sha256": hashlib.sha256((ROOT/"launcher/Profile.generated.cs").read_bytes()).hexdigest(),
+        "profile_sha256": hashlib.sha256((ROOT/"profiles/steam-1.24.8.json").read_bytes()).hexdigest(),
+        "self_checks": self_test["count"],
         "payload_comparisons": len(exported), "layout_count": len(cache), "hook_count": len(plan["hooks"]),
         "legacy_hook_counts": [len(item['hooks']) for item in previous.values()],
         "legacy_payload_comparisons": len(legacy_names), "legacy_layout_count": len(legacy_cache),
