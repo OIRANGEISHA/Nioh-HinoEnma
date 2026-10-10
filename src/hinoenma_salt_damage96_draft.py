@@ -99,7 +99,7 @@ def _without_islands(source):
 
 
 def _assemble(source, plan, base, allocation, offset):
-    from keystone import Ks, KS_ARCH_X86, KS_MODE_64
+    from source_assembler import Ks, KS_ARCH_X86, KS_MODE_64
     values = {k: base+v for k,v in plan['targets'].items()}
     values['data'] = allocation+plan['data_offset']
     carrier = next((h for h in plan['hooks'] if h['code_offset']==offset), None)

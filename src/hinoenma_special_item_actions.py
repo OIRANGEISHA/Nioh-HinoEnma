@@ -411,7 +411,7 @@ def apply_special_item_actions(previous_profile, *, effect_helper='xor eax, eax\
         h['asm']=h['asm'][:start]+_input_scope(suffix)+h['asm'][stop:]
     # Assemble only owned code to derive fixed-entry padding; never read a
     # process or write a profile. The frozen unload prefix must remain exact.
-    from keystone import Ks,KS_ARCH_X86,KS_MODE_64
+    from source_assembler import Ks,KS_ARCH_X86,KS_MODE_64
     ks=Ks(KS_ARCH_X86,KS_MODE_64)
     values={k:0x140000000+v for k,v in plan['targets'].items()}
     values.update(data=0x144000000+plan['data_offset'])

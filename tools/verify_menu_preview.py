@@ -9,6 +9,8 @@ import unittest
 from test_menu_preview_portable_integration import PortableTests,LAYOUTS,ROOT
 from test_menu_preview_reload_portable import ReloadTests
 import test_menu_preview_coldstart_portable as cold
+import test_menu_preview_portable_integration as frozen_tests
+from source_assembler import Ks as NumericKs
 
 SOURCE_SHA='44012d3a4bb44f578bb1eae128afaaa8eee8a11b0c595a9289501744d9b66e85'
 TEST_SHA='40b416b758749de4e03d07a3a696e4fb4691f2c33653255244231601c537fa00'
@@ -23,6 +25,17 @@ def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def verify(report=None):
+    # Keep every frozen source/assertion byte intact; select the corrected
+    # numeric dependency only while running its unchanged ASM/CPU checks.
+    original=frozen_tests.Ks
+    frozen_tests.Ks=NumericKs
+    try:
+        return _verify(report)
+    finally:
+        frozen_tests.Ks=original
+
+
+def _verify(report=None):
     source=ROOT/'tools/menu_preview_portable_integration.py'
     test=ROOT/'tools/test_menu_preview_portable_integration.py'
     if digest(source)!=SOURCE_SHA or digest(test)!=TEST_SHA:

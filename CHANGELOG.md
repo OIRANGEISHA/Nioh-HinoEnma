@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Stabilize source-only Windows verification by expressing the project's decimal Intel literals with an explicit radix before invoking Keystone 0.9.2. Keep the Beta 5.3.2 hook source, generated C#, CT, runtime payloads, release tag and published assets unchanged. Add seven numeric parsing regressions and preserve the frozen 41-test menu suites byte-for-byte.
+- 修正 Windows 源码验证中 Keystone 0.9.2 默认数字进制不稳定的问题；汇编前显式标注数字进制，游戏补丁、已发布标签和附件不变。新增七项数字解析回归，原有 41 项菜单测试文件保持原样。
+
 ## [1.0.0-beta.5.3.2] - 2026-10-11
 
 ### Fixed

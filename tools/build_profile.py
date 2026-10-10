@@ -59,7 +59,7 @@ from hinoenma_salt_damage205_draft import apply_salt_damage205_draft, ROUTES_OFF
 from hinoenma_postdefeat_grab import addon as apply_postdefeat_grab
 from hinoenma_ladder_scale import apply_ladder_scale
 from hinoenma_inherent_element import apply_inherent_elements, BASE_VERSION, PROTECTED_DATA_PAGES
-from keystone import Ks, KS_ARCH_X86, KS_MODE_64
+from source_assembler import Ks, KS_ARCH_X86, KS_MODE_64
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_IMM
 
 BASE = 0x140000000

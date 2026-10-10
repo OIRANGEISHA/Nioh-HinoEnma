@@ -137,6 +137,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
           python tools/check_source.py
           if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
+          python tests/test_source_assembler.py -v
+          if ($LASTEXITCODE -ne 0) { throw 'Explicit assembly numeric parsing regressions failed.' }
           python tests/test_latched_door_instances.py -v
           if ($LASTEXITCODE -ne 0) { throw 'Public latched-door CPU regressions failed.' }
           python tests/test_special_items_portable.py -v

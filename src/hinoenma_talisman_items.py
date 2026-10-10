@@ -197,7 +197,7 @@ ja consumable_original
     consumables['purpose'] += '; ordinary single-effect elemental talismans and verified shrine-return item retain native commit'
     # Encoded guard length is independent of runtime ASLR. The helper entry is
     # fixed, and all its data/native addresses use normal profile relocation.
-    from keystone import Ks, KS_ARCH_X86, KS_MODE_64
+    from source_assembler import Ks, KS_ARCH_X86, KS_MODE_64
     values = {key: 0x140000000+rva for key, rva in plan['targets'].items()}
     values.update(data=0x144000000+plan['data_offset'], **{'return': 0x140000000+ELEMENT_HOOK_RVA+5})
     encoded, _ = Ks(KS_ARCH_X86, KS_MODE_64).asm(VISUAL_GUARD.format(**values), addr=0x144000000+CARRIER_OFFSET)
