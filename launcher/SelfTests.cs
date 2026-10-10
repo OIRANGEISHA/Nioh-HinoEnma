@@ -86,7 +86,8 @@ namespace HinoEnmaTool
                     Buffer.BlockCopy(BitConverter.GetBytes(begin-1),0,harmless,0,8);
                     Buffer.BlockCopy(BitConverter.GetBytes(end),0,harmless,8,8);
                     ThreadInstallGuard.VerifySavedReturnBytes(harmless,Module);
-                    Require(ThreadInstallGuard.MenuNativeFrames.Length==9,"Exact menu frame inventory");
+                    Require(ThreadInstallGuard.MenuNativeFrames.Length==8,"Exact menu frame inventory including complete BaseMode aura frame");
+                    Require(ThreadInstallGuard.InNativeSpan(Module+0x8C59B4,Module),"Saved return after the displaced aura update must reject installation");
                     foreach(MemorySpan span in ThreadInstallGuard.MenuNativeFrames)
                     {
                         long first=Module+span.Start,last=Module+span.End;
@@ -160,8 +161,8 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==70 && Profile.LegacyProfiles.Length==3,"Complete local and prior release identities");
-                    int index=0; int[] counts={55,59,60}; int[] allocations={0x19000,0x1B000,0x20000};
+                    Require(Profile.Hooks.Length==71 && Profile.LegacyProfiles.Length==4,"Complete local and prior release identities");
+                    int index=0; int[] counts={55,59,60,70}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
                         Require(previous.Hooks.Length==counts[index],"Complete prior hook list");
@@ -199,8 +200,8 @@ namespace HinoEnmaTool
                 });
                 test("code protection excludes every gameplay and menu writable page", delegate
                 {
-                    Require(Profile.AllocationSize==0x2D000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==6,"Local menu70 protected layout");
-                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000};
+                    Require(Profile.AllocationSize==0x36000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==7,"Local menu70 protected layout");
+                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000};
                     List<MemorySpan> spans=Checks.CodePages(Profile.Hooks,Profile.AllocationSize,Profile.ProtectedDataPages);
                     foreach(HookSpec hook in Profile.Hooks)
                     {
@@ -244,11 +245,11 @@ namespace HinoEnmaTool
                     Require(Checks.Inspect(Memory(true).Read,Module,out allocation)==HookState.Ours,
                         "Complete70-hook local profile recognized");
                 });
-                test("all ten menu entries require complete payloads and native sites", delegate
+                test("all eleven menu entries require complete payloads and native sites", delegate
                 {
-                    string[] names={"HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapAppearancePrivate","HE_MapNativeIdlePrivate","HE_MapIdleSelectionPrivate","HE_MapLoadoutAppearancePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate"};
-                    Require(Profile.Hooks.Length==70,"Exact total menu build inventory");
-                    for(int i=60;i<70;i++)
+                    string[] names={"HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapAppearancePrivate","HE_MapNativeIdlePrivate","HE_MapIdleSelectionPrivate","HE_MapLoadoutAppearancePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate","HE_MapPreviewAuraCopiedHash"};
+                    Require(Profile.Hooks.Length==71,"Exact total menu build inventory");
+                    for(int i=60;i<71;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
                         Require(hook.Name==names[i-60],"Exact scoped menu entry name");

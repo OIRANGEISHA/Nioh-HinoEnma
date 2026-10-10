@@ -1,0 +1,249 @@
+{
+  "version": "1.0.0-beta.5.3.1",
+  "build_origin": "local-source-snapshot",
+  "baseline": {
+    "baseline_commit": "af39e666f54c39993760462f68362063574e1ed3",
+    "baseline_version": "1.0.0-beta.5.3",
+    "local_snapshot": true,
+    "new_git_commit": null
+  },
+  "local_only": true,
+  "source_commit": null,
+  "gameplay": {
+    "scope": "private live menu-preview reload revision",
+    "user_confirmed": "正常了",
+    "status_page_reopen_passed": true,
+    "title_reload_passed": true,
+    "distance": 740.0,
+    "height": -45.0,
+    "native_aura_effect_id": 8040,
+    "native_aura_effects": 2,
+    "idle_normal": true,
+    "no_william_overlay": true,
+    "source_evidence_sha256": "78c2719281391d5e3eccca29db7ba554130823f8910dd018dabace062050679c",
+    "packaged_exe_fresh_process_tested": false
+  },
+  "offline": {
+    "regressions": {
+      "success": true,
+      "game_access": false,
+      "tests_run": 134,
+      "failures": 0,
+      "errors": 0
+    },
+    "menu": {
+      "success": true,
+      "game_access": false,
+      "tests_run": 41,
+      "byte_comparisons": 4280,
+      "cpu_comparisons": 15880,
+      "legacy_tests": 25,
+      "reload_tests": 16,
+      "reload_source_files": {
+        "tools/menu_preview_reload_portable.py": "fb133e8a9503a3b1ba22d21188864e7272ee636aa1d4485c2ac25cc810f2c3c8",
+        "tools/menu_preview_reload_sources.py": "57762edc987334b52cc6533888e61a6ed99ec77e52154b38cf0665528958c275",
+        "tools/menu_preview_aura_source.py": "9e7d75241be7a1cb3631adec46f98c352360f081573cde6787df6696629c46c3",
+        "tools/test_menu_preview_reload_portable.py": "db86a147c4a0647a1a1ecdd0ba7d32df977a23e52dbf3d8bf84026389de1be71"
+      },
+      "aslr_layouts": 12,
+      "source_sha256": "44012d3a4bb44f578bb1eae128afaaa8eee8a11b0c595a9289501744d9b66e85",
+      "test_sha256": "40b416b758749de4e03d07a3a696e4fb4691f2c33653255244231601c537fa00",
+      "profile_sha256": "ce2c80a26171371099ee57ba4407335e69dbc63238dcfd293951e856ec6a8e86",
+      "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+      "verifier_sha256": "2df5650736ececad29f65b9df423d859d370dfafce1c403865510069774e1f65"
+    },
+    "baseline": {
+      "success": true,
+      "game_access": false,
+      "hook_count": 60,
+      "template_comparisons": 60,
+      "fixup_comparisons": 60,
+      "layout_count": 12,
+      "payload_comparisons": 720,
+      "patch_comparisons": 720,
+      "baseline_commit": "b5a4d9811efa64042587a9b01c71712cc9283a8c",
+      "baseline_git_blob": "4d3efc5d57146fc323ec8e7fbbfbd049eaa1033e",
+      "baseline_profile_sha256": "41f543e4a7b032000baa21eadc94d3b14f7f181d84a298b858986a1199aafbf3",
+      "profile_sha256": "ce2c80a26171371099ee57ba4407335e69dbc63238dcfd293951e856ec6a8e86",
+      "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+      "verifier_sha256": "9605bb4225e9170f1c70ec8e67ad8558fb4dfc14ec1808d2027baa6e1e8b6e54"
+    },
+    "builds": {
+      "Debug": {
+        "version": "1.0.0-beta.5.3.1",
+        "success": true,
+        "game_access": false,
+        "generated_source_matches": true,
+        "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+        "profile_sha256": "ce2c80a26171371099ee57ba4407335e69dbc63238dcfd293951e856ec6a8e86",
+        "self_checks": 28,
+        "payload_comparisons": 852,
+        "layout_count": 12,
+        "hook_count": 71,
+        "legacy_hook_counts": [
+          55,
+          59,
+          60,
+          70
+        ],
+        "legacy_payload_comparisons": 2928,
+        "legacy_layout_count": 48,
+        "pe_machine": "x64",
+        "executable_bytes": 361984,
+        "executable_sha256": "706ee479d0cc7295fea5ac0b6d8a32b287c4572607e547ec905fa21a229abfb0"
+      },
+      "Release": {
+        "version": "1.0.0-beta.5.3.1",
+        "success": true,
+        "game_access": false,
+        "generated_source_matches": true,
+        "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+        "profile_sha256": "ce2c80a26171371099ee57ba4407335e69dbc63238dcfd293951e856ec6a8e86",
+        "self_checks": 28,
+        "payload_comparisons": 852,
+        "layout_count": 12,
+        "hook_count": 71,
+        "legacy_hook_counts": [
+          55,
+          59,
+          60,
+          70
+        ],
+        "legacy_payload_comparisons": 2928,
+        "legacy_layout_count": 48,
+        "pe_machine": "x64",
+        "executable_bytes": 358400,
+        "executable_sha256": "5e5620a96faadc8b09aedb2172621925ca5f52ead1c06d487e2f16517bb30fe1"
+      }
+    }
+  },
+  "limitations": [
+    "Some non-critical item use remains unfixed",
+    "Reported map/base preview only; not all in-mission menus/aspect ratios",
+    "CT activation inside Cheat Engine has not been tested",
+    "No Authenticode signature"
+  ],
+  "record_scope": "Retained historical local-source-snapshot evidence plus local reviewed public-source preparation; not CI or publication completion evidence",
+  "publication": {
+    "authorized": true,
+    "authorization_request": "推送到github吧",
+    "status": "authorized_preparation",
+    "tag": "v1.0.0-beta.5.3.1",
+    "pre_release": true,
+    "latest": false,
+    "new_release": true,
+    "repository": "OIRANGEISHA/Nioh-HinoEnma",
+    "release_owner": "OIRANGEISHA",
+    "release_url": "https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.3.1",
+    "assets": [
+      "Nioh-HinoEnma-1.0.0-beta.5.3.1-windows-x64.exe",
+      "Nioh-HinoEnma-1.0.0-beta.5.3.1-source.zip"
+    ],
+    "source_export": "tools/package.py from exact reviewed clean Git commit/tree",
+    "earlier_tags_and_assets_unchanged": true,
+    "final_ci_provenance": "Recorded separately in release source ZIP build-info/ and release body; generated CI attestations linked from release body",
+    "completion_requirement": "Exact source/tag/publisher and downloaded two-asset inventory, size, SHA-256 and Git-source ZIP verification",
+    "does_not_claim_publication_complete": true
+  },
+  "public_source_preparation_offline": {
+    "build_origin": "local-reviewed-public-source-checkout",
+    "game_access": false,
+    "ci_results": false,
+    "source_commit": null,
+    "source_commit_location": "Final reviewed commit/tree recorded by tools/package.py in the release source ZIP build-info/; not inferred from these pre-commit local checks",
+    "regressions": {
+      "success": true,
+      "game_access": false,
+      "tests_run": 134,
+      "failures": 0,
+      "errors": 0
+    },
+    "builds": {
+      "Debug": {
+        "version": "1.0.0-beta.5.3.1",
+        "success": true,
+        "game_access": false,
+        "generated_source_matches": true,
+        "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+        "profile_sha256": "bb48aa1960dee8951d475a35439e5d56649bc4b8d6717c8c5b6f086d1b1a5cba",
+        "self_checks": 28,
+        "payload_comparisons": 852,
+        "layout_count": 12,
+        "hook_count": 71,
+        "legacy_hook_counts": [
+          55,
+          59,
+          60,
+          70
+        ],
+        "legacy_payload_comparisons": 2928,
+        "legacy_layout_count": 48,
+        "pe_machine": "x64",
+        "executable_bytes": 361984,
+        "executable_sha256": "e310ca3bf77b354b0820bfda3c0cbdec54aa3510c136a61856d1bdcaf8a9c36b"
+      },
+      "Release": {
+        "version": "1.0.0-beta.5.3.1",
+        "success": true,
+        "game_access": false,
+        "generated_source_matches": true,
+        "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+        "profile_sha256": "bb48aa1960dee8951d475a35439e5d56649bc4b8d6717c8c5b6f086d1b1a5cba",
+        "self_checks": 28,
+        "payload_comparisons": 852,
+        "layout_count": 12,
+        "hook_count": 71,
+        "legacy_hook_counts": [
+          55,
+          59,
+          60,
+          70
+        ],
+        "legacy_payload_comparisons": 2928,
+        "legacy_layout_count": 48,
+        "pe_machine": "x64",
+        "executable_bytes": 358400,
+        "executable_sha256": "5b5468a60c343bdb88b3217a74fae4e9c186311996f8ea8fdfdb3e9d5db94da2"
+      }
+    },
+    "menu": {
+      "success": true,
+      "game_access": false,
+      "tests_run": 41,
+      "byte_comparisons": 4280,
+      "cpu_comparisons": 15880,
+      "legacy_tests": 25,
+      "reload_tests": 16,
+      "reload_source_files": {
+        "tools/menu_preview_reload_portable.py": "fb133e8a9503a3b1ba22d21188864e7272ee636aa1d4485c2ac25cc810f2c3c8",
+        "tools/menu_preview_reload_sources.py": "57762edc987334b52cc6533888e61a6ed99ec77e52154b38cf0665528958c275",
+        "tools/menu_preview_aura_source.py": "9e7d75241be7a1cb3631adec46f98c352360f081573cde6787df6696629c46c3",
+        "tools/test_menu_preview_reload_portable.py": "db86a147c4a0647a1a1ecdd0ba7d32df977a23e52dbf3d8bf84026389de1be71"
+      },
+      "aslr_layouts": 12,
+      "source_sha256": "44012d3a4bb44f578bb1eae128afaaa8eee8a11b0c595a9289501744d9b66e85",
+      "test_sha256": "40b416b758749de4e03d07a3a696e4fb4691f2c33653255244231601c537fa00",
+      "profile_sha256": "bb48aa1960dee8951d475a35439e5d56649bc4b8d6717c8c5b6f086d1b1a5cba",
+      "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+      "verifier_sha256": "2df5650736ececad29f65b9df423d859d370dfafce1c403865510069774e1f65"
+    },
+    "baseline": {
+      "success": true,
+      "game_access": false,
+      "hook_count": 60,
+      "template_comparisons": 60,
+      "fixup_comparisons": 60,
+      "layout_count": 12,
+      "payload_comparisons": 720,
+      "patch_comparisons": 720,
+      "baseline_commit": "b5a4d9811efa64042587a9b01c71712cc9283a8c",
+      "baseline_git_blob": "4d3efc5d57146fc323ec8e7fbbfbd049eaa1033e",
+      "baseline_profile_sha256": "41f543e4a7b032000baa21eadc94d3b14f7f181d84a298b858986a1199aafbf3",
+      "profile_sha256": "bb48aa1960dee8951d475a35439e5d56649bc4b8d6717c8c5b6f086d1b1a5cba",
+      "generated_source_sha256": "005722b0e36591b15faaa3080cad9bb2f1b7f807b91983c5f6231c16d620cf86",
+      "verifier_sha256": "9605bb4225e9170f1c70ec8e67ad8558fb4dfc14ec1808d2027baa6e1e8b6e54"
+    },
+    "scope": "Rebuilt reviewed public source locally; distinct from retained historical local snapshot and final GitHub Actions build/download evidence",
+    "profile_text_encoding": "UTF-8 with LF line endings; verified source bytes match the Git-tracked blob"
+  }
+}

@@ -1,10 +1,10 @@
-# Build and verification
+# Beta 5.3.1 build and verification
 
-Beta 5.3 contains 70 hooks: the unchanged 60-hook Beta 5.2 basis plus ten scoped map-preview hooks. Public version `1.0.0-beta.5.3`, file version `1.0.0.64` and tag `v1.0.0-beta.5.3` are separate from the retained private profile version. The distributed source ZIP is exported from the exact reviewed Git commit, rather than copied from a local research folder.
+The Beta 5.3.1 profile contains 71 hooks, file version 1.0.0.65. It preserves the original 60-hook basis and all eight prior display/appearance entries, replaces two camera entries, and adds one native preview-aura entry. The code allocation is 0x36000; seven private data pages are writable and non-executable. No recorded live heap address is embedded.
 
 ## Rebuild on Windows x64
 
-The standalone EXE requires Windows x64 and .NET Framework; users do not need Python or Cheat Engine. Python 3.10+ and pinned development dependencies are used only to regenerate or verify source. Offline rebuilding needs no Nioh executable, game assets or private research inputs.
+Windows .NET Framework includes the x64 C# compiler used by `tools/build.ps1`. Python and pinned development packages are needed only for regenerating and independently verifying source. No game files or private research inputs are needed.
 
 ```powershell
 python -m pip install --target artifacts/python-deps -r requirements-dev.txt
@@ -16,47 +16,39 @@ python tools/verify_menu_preview.py --report artifacts/menu-preview-verification
 python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
 ./tools/build.ps1 -Configuration Debug
 ./tools/build.ps1 -Configuration Release
-python tools/verify.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.5.3-windows-x64.exe --report artifacts/Debug/verification.json
-python tools/verify.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.3-windows-x64.exe --report artifacts/Release/verification.json
+python tools/verify.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.5.3.1-windows-x64.exe --report artifacts/Debug/verification.json
+python tools/verify.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.3.1-windows-x64.exe --report artifacts/Release/verification.json
 ```
 
-Edit pure assembly in `src/` or the menu builders in `tools/`, regenerate the embedded C# profile and matching CT with `python tools/build_profile.py`, then repeat the checks. The menu verifier binds the reviewed source/test hashes; a deliberate source change requires renewed review and proof. Do not substitute arbitrary game hashes or native signatures.
-
-The profile allocates `0x2D000` bytes. Six data pages remain writable and non-executable; code capacities receive executable, read-only protection. The camera values 740 and −45 are computed loads, with private zero-initialized instance stamps. No recorded live heap address is used. The CT emitter preserves the source's decimal operand meaning when rendering AutoAssembler hexadecimal values; compare actual relocated CT and EXE bytes.
-
-Supported older 55/59/60-hook installations are read-only restart identities. The tool refuses damaged or unknown configurations and does not migrate older allocations. Current installation dependencies include complete menu native-function instruction-pointer and saved-return exclusions.
-
-## Evidence boundaries
-
-The final public source passed 133 regression tests (121 retained plus 12 release-evidence refusal checks) and 25 portable menu tests, including 2,490 byte comparisons and 10,005 synthetic CPU comparisons across 12 ASLR layouts. Public-source Debug and Release each passed 28 C# self-checks, 840 current-profile comparisons and 2,088 complete prior-profile comparisons. Source/CT verification passed for 70 hooks, 636 unique labels and 840 namespace comparisons. The immutable Beta 5.2 baseline verifier passed all 60 original template/fixup sets, 720 payload comparisons and 720 patch comparisons. Actual reports and local public-source EXE hashes are recorded in [Beta 5.3 validation](validation-beta5.3.json); record final CI-built and downloaded asset hashes separately.
-
-Public CPU fixtures use synthetic records and explicit Win64 native-call stubs. They test source, ownership, ABI, scope lifetime, fallback and relocation; they do not prove real game object lifetime, resource execution, native damage or inventory commits. Private game-code inputs, raw memory reports and game resources are excluded from source and CI. Earlier validation files retain their historical scope.
-
-Temporary in-game revisions were user-confirmed for the Hino-Enma map/base preview, native idle, removal of William overlays and accepted camera framing. A fresh-process first enable/reload of the final public EXE has not been gameplay-tested. Every in-mission menu, display ratio, mission transition and save/load flow is not claimed to be covered. See [Beta 5.3 notes](releases/1.0.0-beta.5.3.md) and [keyboard documentation](键位说明.md).
-
-## Packaging and publication
-
-From the exact clean, reviewed Git checkout:
+The full regressions currently contain 134 tests. The owner-authorized GitHub publication uses `tools/package.py` from an exact clean reviewed Git checkout, after the checks above:
 
 ```powershell
-python tools/package.py --source-commit <full-reviewed-commit-sha>
+$taskSourceCommit = (git rev-parse HEAD).Trim()
+python tools/package.py --source-commit $taskSourceCommit --build-origin local --publisher OIRANGEISHA
+python tools/package.py --source-commit $taskSourceCommit --verify-source-zip artifacts/dist/Nioh-HinoEnma-1.0.0-beta.5.3.1-source.zip --exe artifacts/dist/Nioh-HinoEnma-1.0.0-beta.5.3.1-windows-x64.exe
 ```
 
-The public package has exactly two Release attachments:
+The release packager refuses a dirty/mismatched checkout, stale source/build proofs and a nonempty output directory. It exports exact tracked Git blobs and embeds the reviewed commit/tree, per-file manifest, component inventory, build reports and EXE checksum in `build-info/`. Release attachments are only the Windows x64 EXE and complete Git-source ZIP. GitHub Actions uses `--build-origin github-actions`, its actual bot uploader identity and workflow URL; do not use those values for a local build. The authorized flow verifies the exact annotated tag and downloads before publishing Pre-release with `latest=false`. Final attachment hashes and CI provenance are recorded in the release body/ZIP; generated attestations remain with GitHub and do not add attachments.
 
-- `Nioh-HinoEnma-1.0.0-beta.5.3-windows-x64.exe`
-- `Nioh-HinoEnma-1.0.0-beta.5.3-source.zip`
+## Optional local snapshot package
 
-The source ZIP exports committed Git blobs and records every selected path, blob ID, size and SHA-256. It includes the complete launcher, pure source, generated profile, matching CT, pinned development requirements, bilingual instructions and verification tools. Packaging refuses private directories, game assets, dependency binaries, build artifacts and symlinks.
-
-The ZIP's `build-info/` records the exact source commit/tree, source inventory, portable verification reports, EXE checksum, component inventory and build provenance. The Release body records both attachment hashes, sizes and actual publisher/uploader identities. Keep CI attestations with GitHub and link them in the body; do not add checksum, CT, runtime ZIP or attestation files as separate Release attachments.
-
-The owner authorized publishing this Beta 5.3 through the existing version-scoped Actions flow. Verify the same clean source and unchanged remote main before tag creation and immediately before publication. Inspect the annotated tag and Draft assets, publish as Pre-release with `latest=false`, then download both attachments and verify their bytes, complete source inventory and final IDs. Never move earlier tags or replace earlier attachments. The historical Beta 5.1 Hotfix replacement remains a separate, narrowly authorized exception.
-
-To verify downloaded files against the exact public Git checkout:
+`tools/package_local.py` remains available for rebuilding an uncommitted local snapshot, distinct from a Git-source publication. Prepare its required regression receipt:
 
 ```powershell
-python tools/package.py --source-commit <full-reviewed-commit-sha> --verify-source-zip <source.zip> --exe <release.exe>
+python -c "import json,unittest; from pathlib import Path; r=unittest.TextTestRunner().run(unittest.defaultTestLoader.discover('tests')); p=Path('artifacts/regression-tests.json'); p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(dict(success=r.wasSuccessful(),game_access=False,tests_run=r.testsRun)),encoding='utf-8'); raise SystemExit(not r.wasSuccessful())"
+python tools/package_local.py
 ```
 
-An API transport fallback must record its use and compare local/remote Git trees. Attestation source/subject checks are separate from independent cryptographic verification. A CI attestation covers only the CI-built bytes and does not attest a separate local EXE, certify gameplay or replace Windows Authenticode signing. This Beta remains unsigned.
+The local packager refuses stale build/source proofs and nonempty output directories. It records a complete UTF-8 snapshot with per-file hashes, exact EXE hash, build reports and component inventory. Its default output is `artifacts/dist-local`; `--destination <empty-directory>` can select another directory. Local outputs are the standalone EXE, source ZIP, and usage text. Verify downloaded/copied local artifacts with:
+
+```powershell
+python tools/package_local.py --verify-source-zip <source.zip> --exe <exe>
+```
+
+## Validation boundaries
+
+The 41 portable menu tests use synthetic records and explicit native-call stubs: 4280 byte comparisons, 15880 CPU comparisons, and 12 ASLR layouts. They verify copied timing hashes, current-generation camera checks, once-only aura queueing, owned resources, native fallback and machine restoration. Debug and Release each passed 28 self-checks, 852 current-profile and 2928 old-profile comparisons. Old 55/59/60/70-hook installations are restart-only identities. BaseMode installation checks include the complete aura native frame and saved returns.
+
+The private live revision was user-confirmed for menu mist, framing, idle, no William overlays, page reopen and title reload. The packaged EXE's fresh-process enable/reload has not yet been gameplay-tested. CT execution inside CE remains untested. Full scene, mission and save coverage is not implied.
+
+The earlier local snapshot was based on published Beta 5.3 commit `af39e666f54c39993760462f68362063574e1ed3` and had no new Git commit/tag or CI attestation. Its results and hashes remain local evidence in docs/validation-beta5.3.1.json. The owner has now authorized a new `v1.0.0-beta.5.3.1` Pre-release with the two Git-source attachments. Publication is complete only after the reviewed source, tag and downloaded artifacts are verified; final CI results belong in that release's build-info/ and body, separately from prior local results. Earlier releases remain unchanged. Authenticode signing is absent.

@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.5.3.1] - 2026-10-10
+
+### Fixed
+
+- Restore Hino-Enma's surrounding native Yokai Realm mist in the mission-map/base equipment and status preview. Verify the independently allocated timing hash array's complete contents and queue the owned aura once per completed display generation.
+- Keep the accepted camera distance 740 and height −45 after reopening the status page or continuing from the main menu. Preserve the eight display/appearance hooks and 60-hook gameplay basis, replace two camera hooks and add one aura hook, for 71 hooks.
+
+### Validation and release scope
+
+- The private live revision was user-confirmed for mist, framing, idle and no William overlays after page reopen and title reload. The packaged EXE's first enable/reload in a fresh game process remains untested.
+- The local source passed 134 regressions and 41 portable menu tests: 4,280 byte comparisons, 15,880 synthetic CPU comparisons and 12 ASLR layouts. Debug and Release each passed 28 C# self-checks, 852 current-profile and 2,928 prior-profile comparisons; the original 60-hook basis passed 720 payload and patch comparisons. Keep these local results distinct from final CI build and download verification.
+- Prepare the owner-authorized new immutable `v1.0.0-beta.5.3.1` Pre-release with exactly the Windows x64 EXE and complete Git-source ZIP. Publish only after source, tag and downloaded-asset verification; earlier releases remain unchanged. Unsigned, latest=false.
+- Some non-critical item use remains unfixed. Compatible shortcut items stay in slot 2 on the first bar; existing gameplay controls and limitations remain.
+
 ## [1.0.0-beta.5.3] - 2026-10-10
 
 ### Added
@@ -179,7 +193,9 @@
 
 - Non-humanoid Boss life-drain grabs, shortcut conflicts, complete interaction coverage, individual item/affix effects and cold first-enable verification of the final public EXE remain open.
 
-[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.5.2...HEAD
+[Unreleased]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/compare/v1.0.0-beta.5.3.1...HEAD
+[1.0.0-beta.5.3.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.3.1
+[1.0.0-beta.5.3]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.3
 [1.0.0-beta.5.2]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.2
 [1.0.0-beta.5.1.hotfix.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.1.hotfix.1
 [1.0.0-beta.5.1]: https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.1

@@ -23,12 +23,12 @@ def digest(path: Path) -> str:
 
 
 def verify_plans(original: dict, current: dict) -> dict:
-    if len(original['hooks']) != 60 or len(current['hooks']) != 70:
+    if len(original['hooks']) != 60 or len(current['hooks']) != 71:
         raise ValueError('Exactly published60 and current70 hooks required')
     for key in ('disk_sha256', 'image_size', 'pe_timestamp_hex', 'data_offset'):
         if original[key] != current[key]:
             raise ValueError('Original executable/core identity changed: '+key)
-    if original['allocation_size'] != 0x20000 or current['allocation_size'] != 0x2D000:
+    if original['allocation_size'] != 0x20000 or current['allocation_size'] != 0x36000:
         raise ValueError('Exact baseline/current allocation layout required')
     if current['hooks'][:60] != original['hooks']:
         raise ValueError('A published hook source/signature/slot changed')

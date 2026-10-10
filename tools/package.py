@@ -13,10 +13,10 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_INFO_NAMES = ("source-manifest.json", "components.json", "verification.json",
                     "build-provenance.md", "SHA256SUMS.txt")
-EXPECTED_CHECKS = (28, 70, 840, 12)
-EXPECTED_LEGACY = ([55, 59, 60], 2088, 36)
+EXPECTED_CHECKS = (28, 71, 852, 12)
+EXPECTED_LEGACY = ([55, 59, 60, 70], 2928, 48)
 PROTECTED_PAGES = [[0xF000, 0x10000], [0x13000, 0x14000], [0x1F000, 0x20000],
-                   [0x24000, 0x25000], [0x29000, 0x2A000], [0x2C000, 0x2D000]]
+                   [0x24000, 0x25000], [0x29000, 0x2A000], [0x2C000, 0x2D000], [0x35000, 0x36000]]
 
 
 def sha256(path: Path) -> str:
@@ -90,14 +90,15 @@ def validate_source_proofs(proofs: dict, file_hashes: dict[str, str]) -> None:
             or baseline.get("baseline_profile_sha256") != file_hashes["baseline_profile_sha256"]
             or baseline.get("verifier_sha256") != file_hashes["baseline_verifier_sha256"]):
         raise ValueError("Immutable original 60-hook proof is incomplete or stale")
-    if (tuple(menu.get(key) for key in ("tests_run", "byte_comparisons", "cpu_comparisons", "aslr_layouts")) != (25, 2490, 10005, 12)
+    if (tuple(menu.get(key) for key in ("tests_run", "byte_comparisons", "cpu_comparisons", "aslr_layouts")) != (41, 4280, 15880, 12)
+            or menu.get("reload_source_files") != file_hashes["reload_source_files"]
             or any(menu.get(key) != file_hashes[key] for key in ("source_sha256", "test_sha256"))
             or menu.get("verifier_sha256") != file_hashes["menu_verifier_sha256"]):
         raise ValueError("Complete portable menu proof is incomplete or stale")
 
 
 def source_hashes() -> dict[str, str]:
-    return {name: sha256(ROOT / path) for name, path in {
+    result = {name: sha256(ROOT / path) for name, path in {
         "profile_sha256": "profiles/steam-1.24.8.json",
         "generated_source_sha256": "launcher/Profile.generated.cs",
         "baseline_profile_sha256": "profiles/baseline-beta5.2.json",
@@ -105,6 +106,9 @@ def source_hashes() -> dict[str, str]:
         "source_sha256": "tools/menu_preview_portable_integration.py",
         "test_sha256": "tools/test_menu_preview_portable_integration.py",
         "menu_verifier_sha256": "tools/verify_menu_preview.py"}.items()}
+    from verify_menu_preview import RELOAD_FILES
+    result["reload_source_files"] = {name: sha256(ROOT / name) for name in RELOAD_FILES}
+    return result
 
 
 def verify_source_archive(archive: Path, commit: str, executable: Path) -> None:
@@ -135,7 +139,7 @@ def verify_source_archive(archive: Path, commit: str, executable: Path) -> None:
         components = json.loads(zipped.read(prefix + "build-info/components.json"))
         if (verification["source_commit"] != commit or verification["game_access"]
                 or components["source_commit"] != commit or components["version"] != version["version"]
-                or components["runtime_embedded_components"][0]["native_hook_count"] != 70):
+                or components["runtime_embedded_components"][0]["native_hook_count"] != 71):
             raise ValueError("Embedded build evidence differs from release source")
         for config in ("Debug", "Release"):
             check = verification["checks"][config]
@@ -177,17 +181,17 @@ def main() -> None:
     if args.exe is not None:
         raise ValueError("--exe is only used with --verify-source-zip")
     version = json.loads((ROOT / "version.json").read_text("utf-8"))
-    match = re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.([1-9][0-9]*(?:\.[1-9][0-9]*)?)(?:\.hotfix\.([1-9][0-9]*))?", version["version"])
+    match = re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.([1-9][0-9]*(?:\.[1-9][0-9]*)*)(?:\.hotfix\.([1-9][0-9]*))?", version["version"])
     if (not match or version["tag"] != "v" + version["version"] or version["channel"] != "beta"
             or version["repository"] != "OIRANGEISHA/Nioh-HinoEnma" or version["release_owner"] != "OIRANGEISHA"):
         raise ValueError("Expected consistent owner, repository and Semantic Versioning Beta metadata")
     plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
-    if (plan["tool_version"] != version["version"] or len(plan["hooks"]) != 70
-            or plan["allocation_size"] != 0x2D000 or plan["data_offset"] != 0xF000
+    if (plan["tool_version"] != version["version"] or len(plan["hooks"]) != 71
+            or plan["allocation_size"] != 0x36000 or plan["data_offset"] != 0xF000
             or plan["protected_data_pages"] != PROTECTED_PAGES
-            or version.get("menu_preview_revision") != 1 or version.get("menu_preview_hook_count") != 10
+            or version.get("menu_preview_revision") != 2 or version.get("menu_preview_hook_count") != 11
             or version.get("menu_camera_distance") != 740.0 or version.get("menu_camera_height") != -45.0):
-        raise ValueError("Release metadata differs from the reviewed 70-hook menu profile")
+        raise ValueError("Release metadata differs from the reviewed 71-hook menu profile")
     ct_name = version["ct_file"]
     if Path(ct_name).name != ct_name or not ct_name.endswith(".CT"):
         raise ValueError("Expected a CT source filename within the public ct directory")
@@ -224,7 +228,7 @@ def main() -> None:
     published_exe = destination / executable.name
     shutil.copyfile(executable, published_exe)
     components = dict(schema=1, version=version["version"], source_commit=args.source_commit,
-        runtime_embedded_components=[dict(name="Nioh Hino-Enma launcher", origin="this repository", native_hook_count=70)],
+        runtime_embedded_components=[dict(name="Nioh Hino-Enma launcher", origin="this repository", native_hook_count=71)],
         platform_dependencies_not_embedded=["Windows x64", "Windows .NET Framework", "Win32 APIs"],
         development_dependencies_not_embedded=[
             dict(name="keystone-engine", version="0.9.2", purpose="independent x64 assembly verification", license="GPL-2.0 or commercial (development only)"),
@@ -241,8 +245,8 @@ def main() -> None:
         "- Prepared asset uploader: " + args.publisher, "- Workflow: " + args.workflow_url,
         "- Recorded UTC: " + datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "- Clean checkout checked before packaging: yes", "",
-        "Debug and Release each passed 28 offline C# checks, 840 current payload comparisons across 12 layouts and 2088 legacy payload comparisons across 36 layouts. No game access.",
-        "Independent included-source checks preserved all 60 Beta 5.2 payloads across 12 layouts (720 comparisons); the portable menu suite passed 25 tests, 2490 byte comparisons and 10005 synthetic CPU comparisons across 12 ASLR layouts.",
+        "Debug and Release each passed 28 offline C# checks, 852 current payload comparisons across 12 layouts and 2928 legacy payload comparisons across 48 layouts. No game access.",
+        "Independent included-source checks preserved all 60 Beta 5.2 payloads across 12 layouts (720 comparisons); the portable menu suite passed 41 tests, 4280 byte comparisons and 15880 synthetic CPU comparisons across 12 ASLR layouts.",
         "Local gameplay evidence and limitations are recorded in the reviewed release notes and sanitized validation record.",
         "Windows Authenticode: " + builds["Release"]["authenticode_status"] + ".",
         "CI attestation, when generated, covers the exact CI-built EXE and source ZIP; it does not certify gameplay or replace code signing.", "",

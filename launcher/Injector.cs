@@ -406,7 +406,7 @@ namespace HinoEnmaTool
             Alive();
             long allocation;
             HookState state = Checks.Inspect(Read, Base, out allocation);
-            if (state == HookState.Legacy) return new Report("needs_restart", "已识别完整的旧 Beta 5.1、Hotfix 1 或 Beta 5.2 接入。请退出并重新启动游戏，停在主菜单后使用 Beta5.3。", Pid, true);
+            if (state == HookState.Legacy) return new Report("needs_restart", "已识别完整的旧版接入（包括 Beta 5.3）。请退出并重新启动游戏，停在主菜单后使用 Beta 5.3.1。", Pid, true);
             if (state == HookState.Other) return new Report("modified", "相关游戏代码已被其他工具修改。请关闭其他 CT 或工具，并重新启动游戏。", Pid, true);
             long actor = Player();
             if (state == HookState.Ours)
