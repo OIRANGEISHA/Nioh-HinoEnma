@@ -27,7 +27,7 @@ def main() -> None:
     frozen = json.loads((ROOT / 'profiles/steam-1.24.8.json').read_text('utf-8'))
     original = deepcopy(frozen)
     plan = load_plan()
-    if len(plan['hooks']) != 71 or source_plan(frozen)['tool_version'] != '1.0.0-beta.5.3.1':
+    if len(plan['hooks']) != 71 or source_plan(frozen)['tool_version'] != '1.0.0-beta.5.3.2':
         raise AssertionError('Expected the complete current source chain')
     if frozen != original:
         raise AssertionError('Source reconstruction changed its frozen input')
@@ -72,7 +72,7 @@ def main() -> None:
         rejects(lambda: validate_layout(invalid), 'Code capacity in protected data was accepted')
     previous = legacy_plans(frozen)
     if [(len(item['hooks']), item['allocation_size']) for item in previous] != [
-            (55, 0x19000), (59, 0x1B000), (60, 0x20000), (70, 0x2D000)]:
+            (55, 0x19000), (59, 0x1B000), (60, 0x20000), (70, 0x2D000), (71, 0x36000)]:
         raise AssertionError('Historical complete allocation identities differ')
     if frozen != original:
         raise AssertionError('Legacy reconstruction changed its frozen input')

@@ -8,6 +8,7 @@ import unittest
 
 from test_menu_preview_portable_integration import PortableTests,LAYOUTS,ROOT
 from test_menu_preview_reload_portable import ReloadTests
+import test_menu_preview_coldstart_portable as cold
 
 SOURCE_SHA='44012d3a4bb44f578bb1eae128afaaa8eee8a11b0c595a9289501744d9b66e85'
 TEST_SHA='40b416b758749de4e03d07a3a696e4fb4691f2c33653255244231601c537fa00'
@@ -39,7 +40,17 @@ def verify(report=None):
     if (not current.wasSuccessful() or current.testsRun!=16 or ReloadTests.byte_comparisons!=1790
             or ReloadTests.cpu_comparisons!=5875):
         raise ValueError('Complete portable71 reload proof required: '+stream.getvalue())
-    receipt=dict(success=True,game_access=False,tests_run=result.testsRun+current.testsRun,
+    cold.ColdMachine.executed_frames=0
+    cold_result=unittest.TextTestRunner(stream=stream).run(unittest.defaultTestLoader.loadTestsFromModule(cold))
+    if (not cold_result.wasSuccessful() or cold_result.testsRun!=18
+            or cold.ColdMachine.executed_frames!=19892):
+        raise ValueError('Complete cold-start readiness CPU proof required: '+stream.getvalue())
+    cold_paths=('tools/menu_preview_coldstart_portable.py','tools/test_menu_preview_coldstart_portable.py')
+    receipt=dict(success=True,game_access=False,tests_run=result.testsRun+current.testsRun+cold_result.testsRun,
+        coldstart_tests=cold_result.testsRun,coldstart_cpu_frames=cold.ColdMachine.executed_frames,
+        coldstart_payload_comparisons=852,coldstart_other70_payload_comparisons=840,
+        coldstart_asset_wait_frames=1800,coldstart_total_wait_frames=7200,
+        coldstart_source_files={name:digest(ROOT/name) for name in cold_paths},
         byte_comparisons=PortableTests.comparisons+ReloadTests.byte_comparisons,
         cpu_comparisons=PortableTests.cpu_comparisons+ReloadTests.cpu_comparisons,
         legacy_tests=25,reload_tests=16,reload_source_files=RELOAD_FILES,

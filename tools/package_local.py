@@ -73,7 +73,7 @@ def main():
     if args.exe:raise ValueError('--exe is only for ZIP verification')
     version=json.loads((ROOT/'version.json').read_text('utf-8'));plan=load_plan()
     if plan['tool_version']!=version['version'] or len(plan['hooks'])!=71:
-        raise ValueError('Exact Beta5.3.1 source profile required')
+        raise ValueError('Exact Beta5.3.2 source profile required')
     if (ROOT/'launcher/Profile.generated.cs').read_text('utf-8')!=generate(plan):
         raise ValueError('Stale generated launcher')
     hashes=source_hashes();reports={};builds={}
@@ -120,10 +120,10 @@ def main():
             'Baseline Git commit: '+manifest['baseline']['baseline_commit'],
             'Prepared UTC: '+datetime.now(timezone.utc).isoformat(timespec='seconds'),'',
             'No new Git commit, tag, GitHub Release, or CI attestation is claimed.',
-            'Debug and Release: 28 self-checks, 852 current and 2928 legacy payload comparisons each.',
-            '41 portable menu tests; 134 source regressions; no game access during these checks.',
+            'Debug and Release: 28 self-checks, 852 current and 3780 legacy payload comparisons each.',
+            '59 portable menu tests; 134 source regressions; no game access during these checks.',
             'The private menu trial passed visible mist, framing, idle, status reopen and title reload.',
-            'The packaged EXE has not yet been enabled in a fresh game process.',
+            'The same cold-start hook payload was user-tested after a complete restart; this packaged binary has offline checks.',
             'Rebuild and verify using docs/BUILD.md.'])+'\n').encode('utf-8')}
     archive=destination/(stem+'-source.zip');prefix=stem+'-source/'
     with zipfile.ZipFile(archive,'x',zipfile.ZIP_DEFLATED,compresslevel=9) as z:

@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD_INFO_NAMES = ("source-manifest.json", "components.json", "verification.json",
                     "build-provenance.md", "SHA256SUMS.txt")
 EXPECTED_CHECKS = (28, 71, 852, 12)
-EXPECTED_LEGACY = ([55, 59, 60, 70], 2928, 48)
+EXPECTED_LEGACY = ([55, 59, 60, 70, 71], 3780, 60)
 PROTECTED_PAGES = [[0xF000, 0x10000], [0x13000, 0x14000], [0x1F000, 0x20000],
                    [0x24000, 0x25000], [0x29000, 0x2A000], [0x2C000, 0x2D000], [0x35000, 0x36000]]
 
@@ -90,7 +90,9 @@ def validate_source_proofs(proofs: dict, file_hashes: dict[str, str]) -> None:
             or baseline.get("baseline_profile_sha256") != file_hashes["baseline_profile_sha256"]
             or baseline.get("verifier_sha256") != file_hashes["baseline_verifier_sha256"]):
         raise ValueError("Immutable original 60-hook proof is incomplete or stale")
-    if (tuple(menu.get(key) for key in ("tests_run", "byte_comparisons", "cpu_comparisons", "aslr_layouts")) != (41, 4280, 15880, 12)
+    if (tuple(menu.get(key) for key in ("tests_run", "byte_comparisons", "cpu_comparisons", "aslr_layouts")) != (59, 4280, 15880, 12)
+            or tuple(menu.get(key) for key in ('coldstart_tests','coldstart_cpu_frames','coldstart_payload_comparisons','coldstart_other70_payload_comparisons','coldstart_asset_wait_frames','coldstart_total_wait_frames')) != (18,19892,852,840,1800,7200)
+            or menu.get('coldstart_source_files') != file_hashes['coldstart_source_files']
             or menu.get("reload_source_files") != file_hashes["reload_source_files"]
             or any(menu.get(key) != file_hashes[key] for key in ("source_sha256", "test_sha256"))
             or menu.get("verifier_sha256") != file_hashes["menu_verifier_sha256"]):
@@ -108,6 +110,7 @@ def source_hashes() -> dict[str, str]:
         "menu_verifier_sha256": "tools/verify_menu_preview.py"}.items()}
     from verify_menu_preview import RELOAD_FILES
     result["reload_source_files"] = {name: sha256(ROOT / name) for name in RELOAD_FILES}
+    result['coldstart_source_files'] = {name: sha256(ROOT/name) for name in ('tools/menu_preview_coldstart_portable.py','tools/test_menu_preview_coldstart_portable.py')}
     return result
 
 
@@ -190,7 +193,9 @@ def main() -> None:
             or plan["allocation_size"] != 0x36000 or plan["data_offset"] != 0xF000
             or plan["protected_data_pages"] != PROTECTED_PAGES
             or version.get("menu_preview_revision") != 2 or version.get("menu_preview_hook_count") != 11
-            or version.get("menu_camera_distance") != 740.0 or version.get("menu_camera_height") != -45.0):
+            or version.get("menu_camera_distance") != 740.0 or version.get("menu_camera_height") != -45.0
+            or version.get("menu_coldstart_revision") != 1 or version.get("menu_asset_wait_frames") != 1800
+            or version.get("menu_total_wait_frames") != 7200):
         raise ValueError("Release metadata differs from the reviewed 71-hook menu profile")
     ct_name = version["ct_file"]
     if Path(ct_name).name != ct_name or not ct_name.endswith(".CT"):
@@ -245,8 +250,8 @@ def main() -> None:
         "- Prepared asset uploader: " + args.publisher, "- Workflow: " + args.workflow_url,
         "- Recorded UTC: " + datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "- Clean checkout checked before packaging: yes", "",
-        "Debug and Release each passed 28 offline C# checks, 852 current payload comparisons across 12 layouts and 2928 legacy payload comparisons across 48 layouts. No game access.",
-        "Independent included-source checks preserved all 60 Beta 5.2 payloads across 12 layouts (720 comparisons); the portable menu suite passed 41 tests, 4280 byte comparisons and 15880 synthetic CPU comparisons across 12 ASLR layouts.",
+        "Debug and Release each passed 28 offline C# checks, 852 current payload comparisons across 12 layouts and 3780 legacy payload comparisons across 60 layouts. No game access.",
+        "Independent included-source checks preserved all 60 Beta 5.2 payloads across 12 layouts (720 comparisons); the frozen menu suites passed 41 tests, 4280 byte comparisons and 15880 synthetic CPU comparisons across 12 ASLR layouts. Another 18 cold-start tests passed 19892 synthetic CPU frames, 852 relocation comparisons and 840 unchanged other-hook comparisons.",
         "Local gameplay evidence and limitations are recorded in the reviewed release notes and sanitized validation record.",
         "Windows Authenticode: " + builds["Release"]["authenticode_status"] + ".",
         "CI attestation, when generated, covers the exact CI-built EXE and source ZIP; it does not certify gameplay or replace code signing.", "",

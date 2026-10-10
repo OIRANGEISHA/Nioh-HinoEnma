@@ -2,28 +2,27 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 5.3.1 / Pre-release build.**
+**Current version: 1.0.0 Beta 5.3.2 / Pre-release build.**
 
-A standalone Windows tool for playing Hino-Enma in Steam Nioh: Complete Edition 1.24.08. This version restores her surrounding Yokai Realm mist in the mission-map/base equipment and status preview and keeps the accepted camera framing after reopening the page or reloading from the main menu. Her native idle and the removal of William body/armor overlays are retained.
+A standalone Windows tool for playing Hino-Enma in Steam Nioh: Complete Edition 1.24.08. This version fixes the equipment/status preview reverting to William after a complete game restart. It waits for the native map-loading gates before counting the Hino-Enma resource timeout and retries temporarily absent managers. Her native idle, surrounding Yokai Realm mist and accepted camera framing are retained.
 
 ## Download and use
 
-The owner has authorized a new [Beta 5.3.1 Pre-release](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.3.1). Its attachment inventory is exactly `Nioh-HinoEnma-1.0.0-beta.5.3.1-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.3.1-source.zip`. Publication completes only after the reviewed source, tag and downloaded attachments pass verification. The standalone EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python, or the source ZIP.
+The owner has authorized a new [Beta 5.3.2 Pre-release](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.3.2). Its attachment inventory is exactly `Nioh-HinoEnma-1.0.0-beta.5.3.2-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.3.2-source.zip`. Publication completes only after the reviewed source, tag and downloaded attachments pass verification. The standalone EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python, or the source ZIP.
 
 1. After upgrading, exit and restart Nioh, then stop at **NEW GAME / CONTINUE**.
 2. Run the EXE and enable Hino-Enma, then continue to the mission map or a mission.
 3. The tool can be closed after enabling. Run it again after restarting Nioh.
 4. To select William or Hino-Enma, use the tool's character button and return to the main menu before continuing. Do not mix EXE/CT versions in one process.
 
-Supported old Beta 5.1, Hotfix 1, Beta 5.2 and Beta 5.3 installations are recognized read-only and require a restart. Unsupported executable builds are refused. The supported executable SHA-256 is `0c3508c6b4d0696d84423949df9faccb3f9c6d93833854e1e17a78d66defc389`.
+Supported old Beta 5.1, Hotfix 1, Beta 5.2, Beta 5.3 and Beta 5.3.1 installations are recognized read-only and require a restart. Unsupported executable builds are refused. The supported executable SHA-256 is `0c3508c6b4d0696d84423949df9faccb3f9c6d93833854e1e17a78d66defc389`.
 
-## New in Beta 5.3.1
+## New in Beta 5.3.2
 
-- Restore the native ambient mist in the owned Hino-Enma map/base preview without another key.
-- Verify the native timing bank's separately allocated hash array by its complete contents, then recheck its identity before queuing the original aura action once per completed preview generation.
-- Bind camera checks to the current completed actor/model generation so main-menu reloads keep the accepted distance 740 and height −45.
-- Retain the existing 68 entries; replace the two camera entries and add one scoped aura entry, for 71 hooks. Gameplay controls and the original 60-hook basis remain unchanged.
-- The private live revision passed the user's status-page reopen and main-menu reload checks for mist, framing, native idle and no William overlays. Fresh-process enable of the packaged EXE still needs a gameplay check.
+- Fix the menu preview reverting to William on the first visit to the mission map/base after restarting the game and enabling the tool at the title menu.
+- Native map-loading gates no longer consume the asset-wait budget. Temporary resource-manager absence retries within the same bounded generation, without duplicate preload requests or forced global readiness flags.
+- Keep all 71 entry sites and the existing allocation. Only the readiness hook changes; the other 70 hooks, native idle, mist, camera distance 740/height −45 and gameplay controls remain the same.
+- The test EXE passed a complete game-process restart and direct status-page visit before entering a mission. The user confirmed the model, idle, framing and mist; the record shows one preload, 498 native-gate wait frames, 34 asset-wait frames and no fallback. The final release is built separately and verified against the same tested hook payloads.
 
 ## Retained Beta 5.2 innate-element fixes
 
@@ -133,10 +132,10 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Validation and development
 
-See [Beta 5.3.1 notes](docs/releases/1.0.0-beta.5.3.1.md), [build instructions](docs/BUILD.md), [keyboard documentation](docs/键位说明.md), and [validation](docs/validation-beta5.3.1.json). Historical records retain their original scope.
+See [Beta 5.3.2 notes](docs/releases/1.0.0-beta.5.3.2.md), [build instructions](docs/BUILD.md), [keyboard documentation](docs/键位说明.md), and [validation](docs/validation-beta5.3.2.json). Historical records retain their original scope.
 
-The local source passed 134 regressions and 41 menu tests (4,280 byte comparisons, 15,880 synthetic CPU comparisons, 12 ASLR layouts). Debug and Release each passed 28 C# self-checks, 852 current-profile and 2,928 legacy-profile comparisons. The unchanged 60-hook Beta 5.2 basis passed 720 payload/patch comparisons. These checks use synthetic records and native-call stubs, with no game access.
+The local source passed 134 regressions, the frozen 41 menu tests (4,280 byte comparisons, 15,880 synthetic CPU comparisons, 12 ASLR layouts), and 18 cold-start tests (19,892 synthetic CPU frames, 852 relocation comparisons and 840 unchanged other-hook comparisons). Debug and Release each passed 28 C# self-checks, 852 current-profile and 3,780 legacy-profile comparisons. The unchanged 60-hook Beta 5.2 basis passed 720 payload/patch comparisons. These checks use synthetic records and native-call stubs, with no game access.
 
-The release source ZIP is exported from the exact reviewed Git commit by `tools/package.py`. Its `build-info/` identifies the source commit/tree, every tracked source file, build reports and the distributed EXE hash. The earlier local snapshot was based on Beta 5.3 commit `af39e666f54c39993760462f68362063574e1ed3`; its recorded local checks and EXE hashes remain local evidence. Final CI-build provenance and downloaded attachment hashes are recorded separately in the release body and ZIP, with CI attestations linked when generated. The new tag is `v1.0.0-beta.5.3.1`; earlier tags and assets remain unchanged. This Windows Beta is unsigned with Authenticode.
+The release source ZIP is exported from the exact reviewed Git commit by `tools/package.py`. Its `build-info/` identifies the source commit/tree, every tracked source file, build reports and the distributed EXE hash. The local Beta 5.3.2 build records are based on published Beta 5.3.1 commit `0ad57b8b5d16912a06018b34d85f8a3b6b866ead`; their EXE hashes remain local evidence. Final CI-build provenance and downloaded attachment hashes are recorded separately in the release body and ZIP, with CI attestations linked when generated. The new tag is `v1.0.0-beta.5.3.2`; earlier tags and assets remain unchanged. This Windows Beta is unsigned with Authenticode.
 
 Character replacement is adapted from the user-supplied Bryanyora CharacterChange CT. Credits remain in [NOTICE.md](NOTICE.md); game assets and private memory dumps are excluded.

@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [1.0.0-beta.5.3.2] - 2026-10-11
+
+### Fixed
+
+- Fix the first mission-map/base equipment/status preview reverting to William after a complete game restart. Wait for both native map-loading gates before consuming the asset timeout and retry temporarily absent resource managers within the same bounded generation, without duplicate preload requests.
+- Change only the readiness payload among the existing 71 hooks. Keep the other 70 payloads, native idle, preview mist and accepted camera distance 740/height −45. Recognize complete Beta 5.3.1 installations read-only and require restart.
+
+### Validation and release scope
+
+- The cold-start test EXE passed a full game-process restart and direct status-page visit before entering a mission; the user confirmed model, idle, framing and mist. Observed one preload, 498 gate-wait frames, 34 asset-wait frames and no fallback. The final public EXE is a separate build verified against the same hook payloads.
+- Pass 134 source regressions, the frozen 41-test menu suites, and 18 cold-start tests with 19,892 synthetic CPU frames. Both builds pass 28 C# checks, 852 current-profile and 3,780 previous-profile comparisons; preserve the immutable 60-hook Beta 5.2 basis. Local and CI results remain distinct.
+- Owner-authorized new immutable Pre-release, exactly the EXE and Git-source ZIP; preserve historical releases. Compatible items use slot 2 on the first shortcut bar. Some non-critical item use remains unfixed.
+
 ## [1.0.0-beta.5.3.1] - 2026-10-10
 
 ### Fixed

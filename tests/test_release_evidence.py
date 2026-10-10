@@ -12,10 +12,10 @@ from package import source_hashes, validate_build_check, validate_source_proofs
 class ReleaseEvidenceTests(unittest.TestCase):
     def setUp(self):
         self.hashes = source_hashes()
-        self.build = dict(success=True, game_access=False, version='1.0.0-beta.5.3.1',
+        self.build = dict(success=True, game_access=False, version='1.0.0-beta.5.3.2',
             generated_source_matches=True, self_checks=28, hook_count=71,
-            payload_comparisons=852, layout_count=12, legacy_hook_counts=[55,59,60,70],
-            legacy_payload_comparisons=2928, legacy_layout_count=48, pe_machine='x64',
+            payload_comparisons=852, layout_count=12, legacy_hook_counts=[55,59,60,70,71],
+            legacy_payload_comparisons=3780, legacy_layout_count=60, pe_machine='x64',
             profile_sha256=self.hashes['profile_sha256'],
             generated_source_sha256=self.hashes['generated_source_sha256'])
         baseline = dict(success=True, game_access=False, hook_count=60,
@@ -25,8 +25,11 @@ class ReleaseEvidenceTests(unittest.TestCase):
             baseline_git_blob='4d3efc5d57146fc323ec8e7fbbfbd049eaa1033e',
             baseline_profile_sha256=self.hashes['baseline_profile_sha256'],
             verifier_sha256=self.hashes['baseline_verifier_sha256'])
-        menu = dict(success=True, game_access=False, tests_run=41,
+        menu = dict(success=True, game_access=False, tests_run=59,
             byte_comparisons=4280, cpu_comparisons=15880, aslr_layouts=12,
+            coldstart_tests=18,coldstart_cpu_frames=19892,coldstart_payload_comparisons=852,
+            coldstart_other70_payload_comparisons=840,coldstart_asset_wait_frames=1800,
+            coldstart_total_wait_frames=7200,coldstart_source_files=self.hashes['coldstart_source_files'],
             reload_source_files=self.hashes['reload_source_files'],
             source_sha256=self.hashes['source_sha256'], test_sha256=self.hashes['test_sha256'],
             verifier_sha256=self.hashes['menu_verifier_sha256'])
@@ -35,7 +38,7 @@ class ReleaseEvidenceTests(unittest.TestCase):
         self.proofs = dict(beta52_baseline=baseline, menu_preview=menu)
 
     def check_build(self, report):
-        validate_build_check(report, '1.0.0-beta.5.3.1',
+        validate_build_check(report, '1.0.0-beta.5.3.2',
             {key:self.hashes[key] for key in ('profile_sha256','generated_source_sha256')})
 
     def test_complete_exact_source_evidence(self):
@@ -76,7 +79,9 @@ class ReleaseEvidenceTests(unittest.TestCase):
         with self.assertRaises(ValueError): validate_source_proofs(self.proofs,self.hashes)
 
     def test_menu_count_or_cpu_proof_rejected(self):
-        for key in ('tests_run','byte_comparisons','cpu_comparisons','aslr_layouts'):
+        for key in ('tests_run','byte_comparisons','cpu_comparisons','aslr_layouts',
+                    'coldstart_tests','coldstart_cpu_frames','coldstart_payload_comparisons',
+                    'coldstart_other70_payload_comparisons','coldstart_asset_wait_frames','coldstart_total_wait_frames'):
             proofs=deepcopy(self.proofs);proofs['menu_preview'][key]-=1
             with self.assertRaises(ValueError): validate_source_proofs(proofs,self.hashes)
 
@@ -92,10 +97,11 @@ class ReleaseEvidenceTests(unittest.TestCase):
                 with self.assertRaises(ValueError): validate_source_proofs(proofs,self.hashes)
 
     def test_changed_reload_source_hash_rejected(self):
-        proofs=deepcopy(self.proofs)
-        key=next(iter(proofs['menu_preview']['reload_source_files']))
-        proofs['menu_preview']['reload_source_files'][key]='0'*64
-        with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+        for field in ('reload_source_files', 'coldstart_source_files'):
+            proofs=deepcopy(self.proofs)
+            key=next(iter(proofs['menu_preview'][field]))
+            proofs['menu_preview'][field][key]='0'*64
+            with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
 
 
 if __name__ == '__main__':

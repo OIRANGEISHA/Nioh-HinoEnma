@@ -191,8 +191,8 @@ def source_plan_beta52(frozen: dict) -> dict:
 
 
 def source_plan(frozen: dict) -> dict:
-    """Rebuild the local70-hook snapshot from unchanged public Beta5.2 source."""
-    from menu_preview_reload_portable import apply_menu_preview
+    """Rebuild Beta 5.3.2 from the unchanged 60-hook gameplay basis."""
+    from menu_preview_coldstart_portable import apply_menu_preview
     return apply_menu_preview(source_plan_beta52(frozen))
 
 
@@ -201,12 +201,16 @@ def legacy_plans(frozen: dict) -> list[dict]:
     beta51 = source_plan_v059(frozen)
     beta51.update(tool_version='1.0.0-beta.5.1', allocation_size=0x19000)
     from menu_preview_portable_integration import apply_menu_preview as beta53
-    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen))]
+    from menu_preview_reload_portable import apply_menu_preview as beta531
+    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen)), beta531(source_plan_beta52(frozen))]
 
 
 def validate_layout(plan: dict) -> None:
     if len(plan.get('hooks', ())) == 71:
-        from menu_preview_reload_portable import validate_layout as validate_reload_layout
+        if plan.get('tool_version') == '1.0.0-beta.5.3.2':
+            from menu_preview_coldstart_portable import validate_layout as validate_reload_layout
+        else:
+            from menu_preview_reload_portable import validate_layout as validate_reload_layout
         validate_reload_layout(plan)
         return
     if len(plan.get('hooks', ())) == 70:
@@ -407,14 +411,18 @@ def validate_ct_labels(source: str, local_labels: list[str]) -> None:
 
 
 def aa_source(plan: dict) -> str:
-    from menu_preview_reload_portable import ct_compatible_plan
+    from menu_preview_coldstart_portable import ct_compatible_plan
     # The standalone source tests also exercise an explicitly converted plan.
     # Accept only the exact conversion of the reconstructed source profile;
     # never infer numeric semantics from arbitrary modified assembly text.
     try:
         validate_layout(plan)
     except ValueError:
-        canonical = source_plan(plan) if len(plan['hooks'])==71 else __import__('menu_preview_portable_integration').apply_menu_preview(source_plan_beta52(plan))
+        if len(plan['hooks']) == 71 and plan.get('tool_version') == '1.0.0-beta.5.3.1':
+            from menu_preview_reload_portable import apply_menu_preview as beta531
+            canonical = beta531(source_plan_beta52(plan))
+        else:
+            canonical = source_plan(plan) if len(plan['hooks'])==71 else __import__('menu_preview_portable_integration').apply_menu_preview(source_plan_beta52(plan))
         if plan != ct_compatible_plan(canonical):
             raise ValueError('Expected raw source or exact CT numeric conversion')
         plan = canonical

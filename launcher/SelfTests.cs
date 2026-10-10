@@ -86,7 +86,7 @@ namespace HinoEnmaTool
                     Buffer.BlockCopy(BitConverter.GetBytes(begin-1),0,harmless,0,8);
                     Buffer.BlockCopy(BitConverter.GetBytes(end),0,harmless,8,8);
                     ThreadInstallGuard.VerifySavedReturnBytes(harmless,Module);
-                    Require(ThreadInstallGuard.MenuNativeFrames.Length==8,"Exact menu frame inventory including complete BaseMode aura frame");
+                    Require(ThreadInstallGuard.MenuNativeFrames.Length==11,"Exact menu frame inventory including aura and cold-start loading dependencies");
                     Require(ThreadInstallGuard.InNativeSpan(Module+0x8C59B4,Module),"Saved return after the displaced aura update must reject installation");
                     foreach(MemorySpan span in ThreadInstallGuard.MenuNativeFrames)
                     {
@@ -161,8 +161,8 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==71 && Profile.LegacyProfiles.Length==4,"Complete local and prior release identities");
-                    int index=0; int[] counts={55,59,60,70}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000};
+                    Require(Profile.Hooks.Length==71 && Profile.LegacyProfiles.Length==5,"Complete local and prior release identities");
+                    int index=0; int[] counts={55,59,60,70,71}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
                         Require(previous.Hooks.Length==counts[index],"Complete prior hook list");

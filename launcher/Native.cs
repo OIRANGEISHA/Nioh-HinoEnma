@@ -66,7 +66,9 @@ namespace HinoEnmaTool
             new MemorySpan(0x75FC80,0x761098), new MemorySpan(0x7C7EB0,0x7C9592),
             new MemorySpan(0x952F20,0x9533AD), new MemorySpan(0x70ECE0,0x710A0C),
             new MemorySpan(0x757206,0x757268), new MemorySpan(0x855250,0x8584A4),
-            new MemorySpan(0x850A20,0x850B04) };
+            new MemorySpan(0x850A20,0x850B04),
+            new MemorySpan(0xC448E0,0xC44907), new MemorySpan(0xC449A0,0xC453BA),
+            new MemorySpan(0xC002C0,0xC002C3) };
 
         internal static bool InNativeSpan(long address, long moduleBase)
         {
