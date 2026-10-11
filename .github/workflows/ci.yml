@@ -53,6 +53,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Portable menu source and CPU proof failed.' }
           python tools/verify_orochi_execution.py --report artifacts/orochi-execution-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Portable execution source and CPU proof failed.' }
+          python tools/verify_ninetails_execution.py --report artifacts/ninetails-execution-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Portable Nine Tails source and CPU proof failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |

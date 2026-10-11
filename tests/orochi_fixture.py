@@ -1,17 +1,18 @@
 """Synthetic loaded owners for portable execution tests; no game assets."""
 import struct
+import json
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT/'tools'), str(ROOT/'src')]
-from build_profile import load_plan, assemble
+from build_profile import source_plan_beta541, assemble
 from hinoenma_manual_purification import MENU_FIELDS, SUBMENU_FIELDS
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_64, UC_HOOK_CODE
 from unicorn.x86_const import *
 
 MODULE, ALLOCATION, HEAP, STACK, STOP = 0x140000000, 0x144000000, 0x150000000, 0x160000000, 0x170000000
-PLAN = load_plan()
+PLAN = source_plan_beta541(json.loads((ROOT/'profiles/steam-1.24.8.json').read_text('utf-8')))
 HOOKS = assemble(PLAN, MODULE, ALLOCATION)[71:]
 GPRS = (UC_X86_REG_RAX, UC_X86_REG_RBX, UC_X86_REG_RCX, UC_X86_REG_RDX,
         UC_X86_REG_RSI, UC_X86_REG_RDI, UC_X86_REG_R8, UC_X86_REG_R9,

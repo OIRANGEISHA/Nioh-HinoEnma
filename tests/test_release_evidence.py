@@ -12,10 +12,10 @@ from package import source_hashes, validate_build_check, validate_source_proofs
 class ReleaseEvidenceTests(unittest.TestCase):
     def setUp(self):
         self.hashes = source_hashes()
-        self.build = dict(success=True, game_access=False, version='1.0.0-beta.5.4.1',
+        self.build = dict(success=True, game_access=False, version='1.0.0-beta.5.4.2',
             generated_source_matches=True, self_checks=29, hook_count=81,
-            payload_comparisons=972, layout_count=12, legacy_hook_counts=[55,59,60,70,71,71,80],
-            legacy_payload_comparisons=5592, legacy_layout_count=84, pe_machine='x64',
+            payload_comparisons=972, layout_count=12, legacy_hook_counts=[55,59,60,70,71,71,80,81],
+            legacy_payload_comparisons=6564, legacy_layout_count=96, pe_machine='x64',
             profile_sha256=self.hashes['profile_sha256'],
             generated_source_sha256=self.hashes['generated_source_sha256'])
         baseline = dict(success=True, game_access=False, hook_count=60,
@@ -39,12 +39,18 @@ class ReleaseEvidenceTests(unittest.TestCase):
             source_files=self.hashes['orochi_source_files'], verifier_sha256=self.hashes['orochi_verifier_sha256'],
             bootstrap_instance_addresses=False, final_exe_gameplay_validated=False,
             ninetails_execution_validated=False)
-        for report in (baseline, menu, orochi):
+        from verify_ninetails_execution import EXPECTED_TESTS as nine_tests
+        nine = dict(success=True,game_access=False,tests_run=nine_tests,hook_count=81,
+            unchanged_hooks=73,unchanged_payload_comparisons=876,unchanged_patch_comparisons=876,
+            aslr_layouts=12,orochi_original_bodies_preserved=8,ninetails_binding_bytes=512,
+            source_files=self.hashes['ninetails_source_files'],verifier_sha256=self.hashes['ninetails_verifier_sha256'],
+            bootstrap_instance_addresses=False,final_exe_gameplay_validated=False)
+        for report in (baseline, menu, orochi, nine):
             report.update({key:self.hashes[key] for key in ('profile_sha256','generated_source_sha256')})
-        self.proofs = dict(beta52_baseline=baseline, menu_preview=menu, orochi_execution=orochi)
+        self.proofs = dict(beta52_baseline=baseline, menu_preview=menu, orochi_execution=orochi,ninetails_execution=nine)
 
     def check_build(self, report):
-        validate_build_check(report, '1.0.0-beta.5.4.1',
+        validate_build_check(report, '1.0.0-beta.5.4.2',
             {key:self.hashes[key] for key in ('profile_sha256','generated_source_sha256')})
 
     def test_complete_exact_source_evidence(self):
@@ -99,7 +105,7 @@ class ReleaseEvidenceTests(unittest.TestCase):
             with self.assertRaises(ValueError): validate_source_proofs(proofs,self.hashes)
 
     def test_source_proof_profile_or_game_access_rejected(self):
-        for proof in ('beta52_baseline','menu_preview','orochi_execution'):
+        for proof in ('beta52_baseline','menu_preview','orochi_execution','ninetails_execution'):
             for key,value in (('profile_sha256','0'*64),('game_access',True)):
                 proofs=deepcopy(self.proofs);proofs[proof][key]=value
                 with self.assertRaises(ValueError): validate_source_proofs(proofs,self.hashes)
@@ -127,6 +133,22 @@ class ReleaseEvidenceTests(unittest.TestCase):
             proofs=deepcopy(self.proofs);proofs['orochi_execution']['source_files'][name]='0'*64
             with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
         proofs=deepcopy(self.proofs);proofs['orochi_execution']['verifier_sha256']='0'*64
+        with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+
+    def test_missing_partial_or_overstated_ninetails_proof_rejected(self):
+        proofs=deepcopy(self.proofs);del proofs['ninetails_execution']
+        with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+        for field,value in (('unchanged_hooks',72),('unchanged_payload_comparisons',875),
+                ('orochi_original_bodies_preserved',7),('ninetails_binding_bytes',256),
+                ('bootstrap_instance_addresses',True),('final_exe_gameplay_validated',True)):
+            proofs=deepcopy(self.proofs);proofs['ninetails_execution'][field]=value
+            with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+
+    def test_changed_ninetails_source_or_verifier_rejected(self):
+        for name in self.hashes['ninetails_source_files']:
+            proofs=deepcopy(self.proofs);proofs['ninetails_execution']['source_files'][name]='0'*64
+            with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+        proofs=deepcopy(self.proofs);proofs['ninetails_execution']['verifier_sha256']='0'*64
         with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
 
 

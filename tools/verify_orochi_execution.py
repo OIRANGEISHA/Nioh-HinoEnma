@@ -37,7 +37,8 @@ def digest(path):
 
 def verify(report=None):
     from build_profile import generate, load_plan
-    from hinoenma_orochi_runtime import NATIVE_SPANS, validate_layout
+    from hinoenma_orochi_runtime import NATIVE_SPANS
+    from build_profile import validate_layout
     from test_orochi_execution import Tests
 
     source_files = {name: digest(ROOT / name) for name in SOURCE_FILES}

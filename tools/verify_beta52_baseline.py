@@ -28,7 +28,8 @@ def verify_plans(original: dict, current: dict) -> dict:
     for key in ('disk_sha256', 'image_size', 'pe_timestamp_hex', 'data_offset'):
         if original[key] != current[key]:
             raise ValueError('Original executable/core identity changed: '+key)
-    if original['allocation_size'] != 0x20000 or current['allocation_size'] != 0x43000:
+    expected_allocation = {'1.0.0-beta.5.4.1':0x43000, '1.0.0-beta.5.4.2':0x51000}.get(current['tool_version'])
+    if original['allocation_size'] != 0x20000 or current['allocation_size'] != expected_allocation:
         raise ValueError('Exact baseline/current allocation layout required')
     if current['hooks'][:60] != original['hooks']:
         raise ValueError('A published hook source/signature/slot changed')

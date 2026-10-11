@@ -2,29 +2,44 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 5.4.1.**
+**Current version: 1.0.0 Beta 5.4.2.**
 
-A standalone Windows tool for playing Hino-Enma in Steam Nioh: Complete Edition 1.24.08. Beta 5.4.1 adapts the reported Yamata-no-Orochi execution resource chain and protects its zero-length and non-finite geometry queries. Beta 5.4 failed after restart because discovery incorrectly required Hino idle and native common idle to be the same record. This revision keeps their owners separate and reads heavy transitions from common idle. The exact Release EXE now passed a complete game-process restart, main-menu enable and final Orochi execution; the user confirmed the kill, continued story and restored control. Existing menu, element, item, ladder and interaction fixes are retained.
+A standalone Windows tool for playing Hino-Enma in Steam Nioh: Complete Edition 1.24.08. Beta 5.4.2 adds the independent Nine Tails execution chain. It discovers the current loaded native action, primary/auxiliary motion and event resources, then lets the game perform pairing, damage, death and story handling. The exact new Release EXE passed a complete game-process restart and main-menu enable; the user confirmed the kill, continued story and restored movement/menu control. Read-only post-execution verification confirmed native death and cleanup. Existing Orochi, menu, element, item, ladder and interaction fixes are retained.
 
 ## Download and use
 
-Download the Windows x64 EXE and complete source ZIP from [Beta 5.4.1 Releases](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.4.1). Usage instructions are included in the Release body and source ZIP. See [build and package verification](docs/BUILD.md) for exact source and EXE checks. The EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python, or the source ZIP. The Release assets are built and verified by GitHub Actions. Local gameplay verification identifies the exact local EXE below; the CI-built EXE has separate hashes and offline evidence in the Release body and source ZIP.
+Download the Windows x64 EXE and complete source ZIP from [Beta 5.4.2 Releases](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.4.2). See [release notes](docs/releases/1.0.0-beta.5.4.2.md) and [build and package verification](docs/BUILD.md). GitHub Actions builds and verifies separate release assets; their hashes and provenance are recorded in the Release body and source ZIP. The exact locally gameplay-tested EXE retains its own hash below. The EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python or the source ZIP.
 
 1. After upgrading, exit and restart Nioh, then stop at **NEW GAME / CONTINUE**.
 2. Run the EXE and enable Hino-Enma, then continue to the mission map or a mission.
 3. The tool can be closed after enabling. Run it again after restarting Nioh.
 4. To select William or Hino-Enma, use the tool's character button and return to the main menu before continuing. Do not mix EXE/CT versions in one process.
 
-Supported old Beta 5.1, Hotfix 1, Beta 5.2, Beta 5.3, Beta 5.3.1 , Beta 5.3.2 and Beta 5.4 installations are recognized read-only and require a restart. Unsupported executable builds are refused. The supported executable SHA-256 is `0c3508c6b4d0696d84423949df9faccb3f9c6d93833854e1e17a78d66defc389`.
+Supported old Beta 5.1, Hotfix 1, Beta 5.2, Beta 5.3, Beta 5.3.1, Beta 5.3.2, Beta 5.4 and Beta 5.4.1 installations are recognized read-only and require a restart. Unsupported executable builds are refused. The supported executable SHA-256 is `0c3508c6b4d0696d84423949df9faccb3f9c6d93833854e1e17a78d66defc389`.
 
-## New in Beta 5.4.1
+## New in Beta 5.4.2
+
+- Route a locked, native-ready Nine Tails to its own `4026/1210 → 1273/1211` player chain and native `1274/31010` target chain. Preserve the first native query474/query381 branch and three-frame transition.
+- Bind both motion and event layers independently. Retain all native schedules, including legal late markers in 1210 and the target's death event at frame 510.
+- Protect the verified pre-pairing query86 interval from an early Living Weapon branch. Pairing, target HP and mission handling remain native.
+- Keep 81 entry sites. Eight shared payloads add scoped dual-boss routing; their original Orochi bodies are retained in full, and the other 73 payloads stay identical. A separate 512-byte Nine Tails binding refreshes from current owners without saved scene addresses.
+- Both the scene trial and exact Release EXE completed death, story continuation and restored control. The EXE's full-restart test used the standalone launcher with all 81 hooks verified and no temporary patch. The user pressed T before the final sampler began, so the final read-only evidence records the native end state; the earlier frame-by-frame clock belongs to the scene trial. Release EXE SHA-256: `dc771492d5e4a6521b3d36ac287c4a644c7de39a926a7b5e39c1ff983d984e20`. See [the exact validation record](docs/validation-beta5.4.2.json).
+
+At downed Nine Tails or the final Orochi head, lock on and approach the execution position, then press the game's original heavy key once (T in this layout) and wait for the full sequence. See [the Nine Tails investigation](docs/ninetails-execution-investigation.md). Other situations retain the spin attack. Beta 5.4.2 has not yet repeated the full Orochi fight; retained code and CPU evidence are distinct from the historical Beta 5.4.1 gameplay result.
+
+## Known issue
+
+- The user reports that taking the boat in the Abyss crashes the game. This is **unfixed** in Beta 5.4.2 and deferred for a later repair. No cause or fix is claimed in this release.
+- The user also reports that advancing to the next Abyss floor does nothing after the interaction progress completes. This is **unfixed** and deferred for a later repair.
+
+## Retained Beta 5.4.1 Orochi fix
 
 - Add ten scoped execution hooks while preserving all 71 Beta 5.3.2 hook payloads. Discover the current owned action, motion and auxiliary event resources at runtime. Recorded scene addresses are excluded from the package.
 - Supply matching native resource views for the reported Orochi execution and retain native input, damage, kill events and terminal recovery. The scene-bound trials were user-confirmed for the post-kill sequence and restored control.
 - Guard zero-length and non-finite ray queries through the native no-hit return, including the post-kill interval after pairing references are cleared. Direct HP, mission and save writes are excluded.
 - Fix distinct idle owners, pre-pairing Living Weapon readiness, missing ready3204 and valid four-byte metadata alignment. Match all eight exact head identities. The revised trial completed native death, mission progression and restored control.
 - The exact Release EXE passed a fresh-process test on final target `1DC1C / 19569 / 3203`, with all 81 hooks verified and no diagnostic hook or temporary patch. Read-only sampling confirmed native HP 0 and eight head deaths at target frame 251, then player idle and execution phase 0 at frame 411.
-- All eight full battles have not been tested individually. The earlier `8F795` animation-only failure remains recorded without a proven cause. Nine Tails execution remains unverified.
+- All eight full battles have not been tested individually. The earlier `8F795` animation-only failure remains recorded without a proven cause. Nine Tails was unverified in Beta 5.4.1; its separate fix and evidence are recorded for Beta 5.4.2 above.
 
 At the final downed head, lock on and approach the execution position, then press the game's original heavy-attack key once (T in this test layout) and wait for the complete sequence. Other situations retain the spin attack. See the [debugging record and Nine Tails follow-up](docs/debugging/orochi-execution-2026-10-11.md) and [exact local validation](docs/validation-beta5.4.1.json).
 
@@ -145,9 +160,9 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Validation and development
 
-See [Beta 5.4.1 notes](docs/releases/1.0.0-beta.5.4.1.md), [build instructions](docs/BUILD.md), [keyboard documentation](docs/键位说明.md), [validation](docs/validation-beta5.4.1.json) and the [Orochi fault analysis](docs/debugging/orochi-execution-2026-10-11.md). Historical records retain their original scope.
+See [Beta 5.4.2 notes](docs/releases/1.0.0-beta.5.4.2.md), [build instructions](docs/BUILD.md), [keyboard documentation](docs/键位说明.md), [validation](docs/validation-beta5.4.2.json), [Nine Tails analysis](docs/ninetails-execution-investigation.md) and the [historical Orochi analysis](docs/debugging/orochi-execution-2026-10-11.md). Historical records retain their original scope.
 
-The new local build requires exact source regeneration, source/CT agreement, retained menu and original gameplay proofs, dynamic-binding regressions, and Debug/Release checks for 81 hooks. Each build must compare 972 current payloads across 12 layouts and 5,592 prior payloads across 84 layouts. Completed results and exact EXE hashes belong in the validation record and source ZIP `build-info/`; expected counts alone are not completed evidence.
+The local build passed 203 source regressions, exact source regeneration, source/CT agreement, four source proofs and Debug/Release checks for 81 hooks. Each build compared 972 current payloads across 12 layouts and 6,564 prior payloads across 96 layouts. Exact hashes and evidence belong in the validation record and source ZIP `build-info/`. Offline checks do not certify gameplay.
 
 The local source ZIP is a complete UTF-8 snapshot with per-file hashes and the exact distributed EXE hash. It records no new source commit, public tag, GitHub release or CI attestation. The historical Beta 5.3.2 evidence remains unchanged. This Windows Beta is unsigned with Authenticode.
 

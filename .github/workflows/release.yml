@@ -1,7 +1,7 @@
 name: Prepare Beta release
 
 on:
-  # One-time paths for the authorized Beta 5.3.2 and Beta 5.4.1 uploads only.
+  # One-time paths for the explicitly authorized Beta 5.3.2, 5.4.1 and 5.4.2 uploads.
   push:
     branches: [main]
     paths: [version.json]
@@ -38,7 +38,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-      - name: Limit push publication to the first authorized Beta 5.3.2 or Beta 5.4.1 only
+      - name: Limit push publication to an exact authorized Beta revision
         id: scope
         shell: pwsh
         env:
@@ -58,12 +58,17 @@ jobs:
             $inheritedScope = $version.tag -ceq "v$($version.version)" -and $version.channel -ceq 'beta' -and $version.upstream_private_profile_version -ceq '0.60' -and $version.upstream_private_inherent_element_revision -eq 2 -and $version.menu_preview_revision -eq 2 -and $version.menu_preview_hook_count -eq 11 -and $version.menu_aura_revision -eq 1 -and $version.menu_camera_reload_revision -eq 1 -and $version.menu_camera_distance -eq 740.0 -and $version.menu_camera_height -eq -45.0 -and $version.menu_coldstart_revision -eq 1 -and $version.menu_asset_wait_frames -eq 1800 -and $version.menu_total_wait_frames -eq 7200
             $authorizedBeta532 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.3.2'
             $authorizedBeta541 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.4.1' -and $version.file_version -ceq '1.0.0.68' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_4_1.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2
+            $authorizedBeta542 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.4.2' -and $version.file_version -ceq '1.0.0.69' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_4_2.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2 -and $version.ninetails_execution_revision -eq 1 -and $version.ninetails_resource_revision -eq 1 -and $version.ninetails_wait_guard_revision -eq 1
             if ($authorizedBeta541) {
               $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
               if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.orochi_execution_revision -ne 3 -or $profile.orochi_hook_count -ne 10 -or $profile.orochi_resource_revision -ne 5 -or $profile.orochi_ray_guard_revision -ne 2 -or $profile.orochi_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.1 must identify the reviewed dynamic-resource 81-hook execution profile.' }
             }
-            if (-not ($authorizedBeta532 -or $authorizedBeta541)) {
-              'Push publication skipped: only the first authorized Beta 5.3.2 or Beta 5.4.1 with exact reviewed revision metadata may publish.' >> $env:GITHUB_STEP_SUMMARY
+            if ($authorizedBeta542) {
+              $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
+              if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.allocation_size -ne 331776 -or $profile.ninetails_execution_revision -ne 1 -or $profile.ninetails_binding_data_offset -ne 278528 -or $profile.ninetails_binding_data_size -ne 512 -or $profile.ninetails_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.2 must identify the reviewed dual-boss 81-hook profile.' }
+            }
+            if (-not ($authorizedBeta532 -or $authorizedBeta541 -or $authorizedBeta542)) {
+              'Push publication skipped: only an exact explicitly authorized Beta revision may publish.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
             git show-ref --verify --quiet "refs/tags/$($version.tag)"
@@ -138,7 +143,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Verification dependency installation failed.' }
           "PYTHONPATH=$((Resolve-Path artifacts/python-deps).Path)" >> $env:GITHUB_ENV
 
-      - name: Verify generated profile, complete regressions and three portable proofs
+      - name: Verify generated profile, complete regressions and four portable proofs
         run: |
           python tools/build_profile.py --check
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
@@ -152,6 +157,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Portable menu source and CPU proof failed.' }
           python tools/verify_orochi_execution.py --report artifacts/orochi-execution-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Portable execution source and CPU proof failed.' }
+          python tools/verify_ninetails_execution.py --report artifacts/ninetails-execution-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Portable Nine Tails source and CPU proof failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |
@@ -337,8 +344,8 @@ jobs:
             'Verified Draft retained. Manual dispatch does not publish automatically.' >> $env:GITHUB_STEP_SUMMARY
             exit 0
           }
-          # This mutation is authorized only for the first exact Beta 5.3.2 or Beta 5.4.1 push above.
-          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cnotin @('1.0.0-beta.5.3.2', '1.0.0-beta.5.4.1') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
+          # This mutation is authorized only for an exact version accepted by the push gate above.
+          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cnotin @('1.0.0-beta.5.3.2', '1.0.0-beta.5.4.1', '1.0.0-beta.5.4.2') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
           if (git status --porcelain) { throw 'Source changed after Draft inspection.' }
           if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed after Draft inspection.' }
           if ($version.upstream_private_profile_version -cne '0.60' -or $version.upstream_private_inherent_element_revision -ne 2 -or $version.menu_preview_revision -ne 2 -or $version.menu_preview_hook_count -ne 11 -or $version.menu_aura_revision -ne 1 -or $version.menu_camera_reload_revision -ne 1 -or $version.menu_camera_distance -ne 740.0 -or $version.menu_camera_height -ne -45.0 -or $version.menu_coldstart_revision -ne 1 -or $version.menu_asset_wait_frames -ne 1800 -or $version.menu_total_wait_frames -ne 7200) { throw 'Authorized Beta must identify the reviewed inherited profile and accepted menu preview reload/aura revision 2 and cold-start revision 1.' }
@@ -346,6 +353,11 @@ jobs:
             if ($version.file_version -cne '1.0.0.68' -or $version.ct_file -cne 'Nioh_HinoEnma_1.24.8_Beta5_4_1.CT' -or $version.local_package_only -ne $false -or $version.orochi_execution_revision -ne 3 -or $version.orochi_hook_count -ne 10 -or $version.orochi_resource_revision -ne 5 -or $version.orochi_ray_guard_revision -ne 2) { throw 'Authorized Beta 5.4.1 execution revision metadata differs.' }
             $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
             if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.orochi_execution_revision -ne 3 -or $profile.orochi_hook_count -ne 10 -or $profile.orochi_resource_revision -ne 5 -or $profile.orochi_ray_guard_revision -ne 2 -or $profile.orochi_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.1 execution profile differs.' }
+          }
+          if ($version.version -ceq '1.0.0-beta.5.4.2') {
+            if ($version.file_version -cne '1.0.0.69' -or $version.ct_file -cne 'Nioh_HinoEnma_1.24.8_Beta5_4_2.CT' -or $version.local_package_only -ne $false -or $version.orochi_execution_revision -ne 3 -or $version.orochi_hook_count -ne 10 -or $version.orochi_resource_revision -ne 5 -or $version.orochi_ray_guard_revision -ne 2 -or $version.ninetails_execution_revision -ne 1 -or $version.ninetails_resource_revision -ne 1 -or $version.ninetails_wait_guard_revision -ne 1) { throw 'Authorized Beta 5.4.2 execution revision metadata differs.' }
+            $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
+            if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.allocation_size -ne 331776 -or $profile.ninetails_execution_revision -ne 1 -or $profile.ninetails_binding_data_offset -ne 278528 -or $profile.ninetails_binding_data_size -ne 512 -or $profile.ninetails_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.2 dual-boss profile differs.' }
           }
           $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
           if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed after Draft inspection.' }

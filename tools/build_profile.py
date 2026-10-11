@@ -197,10 +197,17 @@ def source_plan_beta532(frozen: dict) -> dict:
     return apply_menu_preview(source_plan_beta52(frozen))
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_beta541(frozen: dict) -> dict:
     from hinoenma_orochi_runtime import apply_orochi_execution
     from hinoenma_manual_purification import menu_guard
-    return apply_orochi_execution(source_plan_beta532(frozen), menu_guard())
+    plan = apply_orochi_execution(source_plan_beta532(frozen), menu_guard())
+    return {key:value for key,value in plan.items() if not key.startswith('ninetails_') or key=='ninetails_execution_validated'}
+
+
+def source_plan(frozen: dict) -> dict:
+    from hinoenma_ninetails_runtime import apply_ninetails_execution
+    from hinoenma_manual_purification import menu_guard
+    return apply_ninetails_execution(source_plan_beta541(frozen), menu_guard())
 
 
 def legacy_plans(frozen: dict) -> list[dict]:
@@ -216,13 +223,16 @@ def legacy_plans(frozen: dict) -> list[dict]:
     if (beta54['tool_version'] != '1.0.0-beta.5.4' or len(beta54['hooks']) != 80
             or beta54['allocation_size'] != 0x43000 or beta54['data_offset'] != 0xF000):
         raise ValueError('Complete delivered Beta5.4 identity required')
-    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen)), beta531(source_plan_beta52(frozen)), source_plan_beta532(frozen), beta54]
+    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen)), beta531(source_plan_beta52(frozen)), source_plan_beta532(frozen), beta54, source_plan_beta541(frozen)]
 
 
 def validate_layout(plan: dict) -> None:
     if len(plan.get('hooks', ())) == 81:
-        from hinoenma_orochi_runtime import validate_layout as validate_orochi_layout
-        validate_orochi_layout(plan)
+        if plan.get('tool_version') == '1.0.0-beta.5.4.2':
+            from hinoenma_ninetails_runtime import validate_layout as validate_execution_layout
+        else:
+            from hinoenma_orochi_runtime import validate_layout as validate_execution_layout
+        validate_execution_layout(plan)
         return
     if len(plan.get('hooks', ())) == 71:
         if plan.get('tool_version') == '1.0.0-beta.5.3.2':
@@ -430,7 +440,10 @@ def validate_ct_labels(source: str, local_labels: list[str]) -> None:
 
 def aa_source(plan: dict) -> str:
     if len(plan.get('hooks', ())) == 81:
-        from hinoenma_orochi_runtime import ct_compatible_plan
+        if plan.get('tool_version') == '1.0.0-beta.5.4.2':
+            from hinoenma_ninetails_runtime import ct_compatible_plan
+        else:
+            from hinoenma_orochi_runtime import ct_compatible_plan
     else:
         from menu_preview_coldstart_portable import ct_compatible_plan
     # The standalone source tests also exercise an explicitly converted plan.

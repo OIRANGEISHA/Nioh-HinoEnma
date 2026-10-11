@@ -15,9 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD_INFO_NAMES = ("source-manifest.json", "components.json", "verification.json",
                     "build-provenance.md", "SHA256SUMS.txt")
 EXPECTED_CHECKS = (29, 81, 972, 12)
-EXPECTED_LEGACY = ([55, 59, 60, 70, 71, 71, 80], 5592, 84)
+EXPECTED_LEGACY = ([55, 59, 60, 70, 71, 71, 80, 81], 6564, 96)
 PROTECTED_PAGES = [[0xF000, 0x10000], [0x13000, 0x14000], [0x1F000, 0x20000],
-                   [0x24000, 0x25000], [0x29000, 0x2A000], [0x2C000, 0x2D000], [0x35000, 0x36000], [0x42000, 0x43000]]
+                   [0x24000, 0x25000], [0x29000, 0x2A000], [0x2C000, 0x2D000], [0x35000, 0x36000], [0x42000, 0x43000], [0x44000, 0x45000]]
 
 
 def sha256(path: Path) -> str:
@@ -90,10 +90,10 @@ def validate_regression_check(check: dict) -> None:
 
 
 def validate_source_proofs(proofs: dict, file_hashes: dict[str, str]) -> None:
-    if set(proofs) != {"beta52_baseline", "menu_preview", "orochi_execution"}:
-        raise ValueError("All three exact-source portable proofs required")
-    baseline, menu, orochi = (proofs[name] for name in ("beta52_baseline", "menu_preview", "orochi_execution"))
-    for check in (baseline, menu, orochi):
+    if set(proofs) != {"beta52_baseline", "menu_preview", "orochi_execution", "ninetails_execution"}:
+        raise ValueError("All four exact-source portable proofs required")
+    baseline, menu, orochi, nine = (proofs[name] for name in ("beta52_baseline", "menu_preview", "orochi_execution", "ninetails_execution"))
+    for check in (baseline, menu, orochi, nine):
         if (not check.get("success") or check.get("game_access") is not False
                 or any(check.get(key) != file_hashes[key] for key in ("profile_sha256", "generated_source_sha256"))):
             raise ValueError("Offline source evidence does not identify the exact generated profile")
@@ -118,6 +118,14 @@ def validate_source_proofs(proofs: dict, file_hashes: dict[str, str]) -> None:
             or any(orochi.get(key) is not False for key in ("bootstrap_instance_addresses",
                 "final_exe_gameplay_validated", "ninetails_execution_validated"))):
         raise ValueError("Complete portable execution proof is incomplete, stale or overstates gameplay")
+    from verify_ninetails_execution import EXPECTED_TESTS as expected_nine_tests
+    if (tuple(nine.get(key) for key in ('tests_run','hook_count','unchanged_hooks',
+            'unchanged_payload_comparisons','unchanged_patch_comparisons','aslr_layouts',
+            'orochi_original_bodies_preserved','ninetails_binding_bytes')) != (expected_nine_tests,81,73,876,876,12,8,512)
+            or nine.get('source_files') != file_hashes['ninetails_source_files']
+            or nine.get('verifier_sha256') != file_hashes['ninetails_verifier_sha256']
+            or any(nine.get(key) is not False for key in ('bootstrap_instance_addresses','final_exe_gameplay_validated'))):
+        raise ValueError('Complete Nine Tails source proof is incomplete, stale or overstates gameplay')
 
 
 def source_hashes() -> dict[str, str]:
@@ -135,6 +143,9 @@ def source_hashes() -> dict[str, str]:
     from verify_orochi_execution import SOURCE_FILES
     result['orochi_source_files'] = {name: sha256(ROOT/name) for name in SOURCE_FILES}
     result['orochi_verifier_sha256'] = sha256(ROOT/'tools/verify_orochi_execution.py')
+    from verify_ninetails_execution import SOURCE_FILES as NINE_FILES
+    result['ninetails_source_files'] = {name:sha256(ROOT/name) for name in NINE_FILES}
+    result['ninetails_verifier_sha256'] = sha256(ROOT/'tools/verify_ninetails_execution.py')
     return result
 
 
@@ -215,15 +226,18 @@ def main() -> None:
         raise ValueError("Expected consistent owner, repository and Semantic Versioning Beta metadata")
     plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
     if (plan["tool_version"] != version["version"] or len(plan["hooks"]) != 81
-            or plan["allocation_size"] != 0x43000 or plan["data_offset"] != 0xF000
+            or plan["allocation_size"] != 0x51000 or plan["data_offset"] != 0xF000
             or plan["protected_data_pages"] != PROTECTED_PAGES
             or version.get("menu_preview_revision") != 2 or version.get("menu_preview_hook_count") != 11
             or version.get("menu_camera_distance") != 740.0 or version.get("menu_camera_height") != -45.0
             or version.get("menu_coldstart_revision") != 1 or version.get("menu_asset_wait_frames") != 1800
             or version.get("menu_total_wait_frames") != 7200
             or version.get("orochi_execution_revision") != 3 or version.get("orochi_hook_count") != 10
-            or version.get("orochi_resource_revision") != 5 or version.get("orochi_ray_guard_revision") != 2):
-        raise ValueError("Release metadata differs from the reviewed 81-hook Orochi profile")
+            or version.get("orochi_resource_revision") != 5 or version.get("orochi_ray_guard_revision") != 2
+            or version.get("ninetails_execution_revision") != 1
+            or version.get("ninetails_resource_revision") != 1
+            or version.get("ninetails_wait_guard_revision") != 1):
+        raise ValueError("Release metadata differs from the reviewed dual execution profile")
     ct_name = version["ct_file"]
     if Path(ct_name).name != ct_name or not ct_name.endswith(".CT"):
         raise ValueError("Expected a CT source filename within the public ct directory")
@@ -250,11 +264,18 @@ def main() -> None:
         reports[config], builds[config] = report, build
     source_proofs = {"beta52_baseline": json.loads((ROOT / "artifacts/baseline-verification.json").read_text("utf-8")),
                      "menu_preview": json.loads((ROOT / "artifacts/menu-preview-verification.json").read_text("utf-8")),
-                     "orochi_execution": json.loads((ROOT / "artifacts/orochi-execution-verification.json").read_text("utf-8"))}
+                     "orochi_execution": json.loads((ROOT / "artifacts/orochi-execution-verification.json").read_text("utf-8")),
+                     "ninetails_execution": json.loads((ROOT / "artifacts/ninetails-execution-verification.json").read_text("utf-8"))}
     validate_source_proofs(source_proofs, source_hashes())
     regressions = json.loads((ROOT / "artifacts/regression-tests.json").read_text("utf-8"))
     validate_regression_check(regressions)
-    local_gameplay_hash = json.loads(validation.read_text("utf-8"))["gameplay"]["executable_sha256"]
+    local_gameplay = json.loads(validation.read_text("utf-8"))["fresh_exe_gameplay"]
+    if (local_gameplay.get("passed") is not True or local_gameplay.get("pending") is not False
+            or local_gameplay.get("user_confirmed_control_restored") is not True):
+        raise ValueError("Recorded full-restart Nine Tails gameplay and control confirmation required")
+    local_gameplay_hash = local_gameplay["executable_sha256"]
+    if not re.fullmatch(r"[0-9a-f]{64}", local_gameplay_hash):
+        raise ValueError("Exact local gameplay-tested EXE checksum required")
     entries = source_entries(args.source_commit)
     source_tree = git("rev-parse", "HEAD^{tree}")
     destination = ROOT / "artifacts/dist"
@@ -282,11 +303,11 @@ def main() -> None:
         "- Recorded UTC: " + datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "- Clean checkout checked before packaging: yes", "",
         str(regressions["tests_run"]) + " exact-source public regressions passed with zero failures and errors; the complete tested-source hash receipt is embedded in verification.json. No game access.",
-        "Debug and Release each passed 29 offline C# checks, 972 current payload comparisons across 12 layouts and 5592 legacy payload comparisons across 84 layouts. No game access.",
+        "Debug and Release each passed 29 offline C# checks, 972 current payload comparisons across 12 layouts and 6564 legacy payload comparisons across 96 layouts. No game access.",
         "Independent included-source checks preserved all 60 Beta 5.2 payloads across 12 layouts (720 comparisons); the frozen menu suites passed 41 tests, 4280 byte comparisons and 15880 synthetic CPU comparisons across 12 ASLR layouts. Another 18 cold-start tests passed 19892 synthetic CPU frames, 852 relocation comparisons and 840 unchanged other-hook comparisons.",
         "Local gameplay evidence and limitations are recorded in the reviewed release notes and sanitized validation record.",
         "The gameplay-tested local Release EXE SHA-256 is " + local_gameplay_hash + "; CI-built asset hashes are recorded separately below and do not claim a new gameplay test.",
-        "34 synthetic Orochi execution tests preserved all previous71 hooks across 12 layouts (852 payloads and patches); the exact EXE gameplay scope is recorded separately, and Nine Tails remains unverified.",
+        "34 synthetic Orochi tests preserved all previous71 hooks across 12 layouts (852 payloads and patches). The 24 Nine Tails tests preserved 73 payloads and patches across 12 layouts (876 comparisons each) and eight complete original Orochi bodies. Exact local Nine Tails gameplay and native post-execution state are recorded separately.",
         "Windows Authenticode: " + builds["Release"]["authenticode_status"] + ".",
         "CI attestation, when generated, covers the exact CI-built EXE and source ZIP; it does not certify gameplay or replace code signing.", "",
         "| Asset | Bytes | SHA-256 |", "| --- | ---: | --- |",

@@ -5,6 +5,17 @@
 - Stabilize source-only Windows verification by expressing the project's decimal Intel literals with an explicit radix before invoking Keystone 0.9.2. Keep the Beta 5.3.2 hook source, generated C#, CT, runtime payloads, release tag and published assets unchanged. Add seven numeric parsing regressions and preserve the frozen 41-test menu suites byte-for-byte.
 - 修正 Windows 源码验证中 Keystone 0.9.2 默认数字进制不稳定的问题；汇编前显式标注数字进制，游戏补丁、已发布标签和附件不变。新增七项数字解析回归，原有 41 项菜单测试文件保持原样。
 
+## [1.0.0-beta.5.4.2] - 2026-10-11
+
+- 修复九尾妖狐倒地后重攻击仍为旋转的问题，按当前所属资源绑定原生 `4026/1210 → 1273/1211` 玩家链与 `1274/31010` 目标链。
+- 补齐主辅动画与主辅事件，保留合法晚期调度及目标第 510 帧 local77 原生死亡事件；在已验证的起手、待配对区间保护 query86，生命及任务状态由游戏处理。
+- 保持 81 处入口，八处共享载荷增加双 Boss 路由且完整保留原有大蛇处理体，其余 73 处逐字节一致。九尾使用独立 512 字节动态绑定，分配扩大到 0x51000；旧 Beta 5.4.1 增加为完整只读重启身份。
+- 启动工具支持分块核对较大的正式重攻击载荷。事件表 DWORD 边界溢出和遗留九尾阶段遮蔽大蛇路由均补齐拒绝／回退检查。
+- 203 项源码回归、四项来源证明及 Debug/Release 核对全部通过；每个 EXE 有 29 项自检、972 次当前和 6564 次历史载荷比较。场景候选与精确新 EXE 的完整重启复测均完成击杀、剧情继续和控制恢复；正式版只读核对限于原生结束状态，其范围和哈希单独记录在 docs/validation-beta5.4.2.json。
+- 用户反馈的无间狱坐船闪退尚未修复，按要求列入已知问题，后续单独处理。
+- 用户反馈的无间狱无法前往下一层、交互进度满后没有反应尚未修复，按要求列入已知问题，后续单独处理。
+- 用户于 2026-10-11 授权源码及记录推送到 GitHub，并发布本版独立 Pre-release；发布前核对完整源码、四项来源证明和下载附件。历史发布与原本地交付保留原始身份；Beta 5.4.2 未重打大蛇整场。
+
 ## [1.0.0-beta.5.4.1] - 2026-10-11
 
 - 修正 Beta 5.4 完整重启后八岐大蛇最后处决仍触发旋转攻击的资源绑定错误：分别保存飞缘魔当前待机与原生 common 待机，重攻击过渡从后者查找，入口和结束恢复继续使用飞缘魔待机。

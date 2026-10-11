@@ -146,7 +146,7 @@ namespace HinoEnmaTool
                     foreach(HookSpec hook in Profile.Hooks)
                         if(hook.Payload(Module, Allocation).Length > source.Length)
                             source = hook.Payload(Module, Allocation);
-                    Require(source.Length > 0x1000 && source.Length <= 0x2000,"Large current payload");
+                    Require(source.Length > 0x2000 && source.Length <= 0x4000,"Complete dual execution payload");
                     int calls = 0, total = 0;
                     byte[] actual = MemoryReader.Read(Allocation, source.Length, delegate(long at, int size)
                     {
@@ -154,7 +154,7 @@ namespace HinoEnmaTool
                         byte[] chunk = new byte[size]; Buffer.BlockCopy(source,total,chunk,0,size);
                         total += size; calls++; return chunk;
                     });
-                    Require(calls == 2 && total == source.Length && Checks.Equal(actual,source),"Every payload byte preserved");
+                    Require(calls == (source.Length+0xFFF)/0x1000 && total == source.Length && Checks.Equal(actual,source),"Every payload byte preserved");
                 });
                 test("memory reader rejects invalid ranges and incomplete later chunks", delegate
                 {
@@ -165,7 +165,7 @@ namespace HinoEnmaTool
                         catch(InvalidOperationException){rejected=true;}
                         Require(rejected,"Address boundary guard");
                     }
-                    foreach(int length in new int[]{0,-1,0x2001})
+                    foreach(int length in new int[]{0,-1,0x4001})
                     {
                         bool rejected=false;
                         try { MemoryReader.Read(Allocation,length,delegate(long a,int n){throw new Exception("Unvalidated native read");}); }
@@ -183,8 +183,8 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==81 && Profile.LegacyProfiles.Length==7,"Complete local and prior release identities");
-                    int index=0; int[] counts={55,59,60,70,71,71,80}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000,0x36000,0x43000};
+                    Require(Profile.Hooks.Length==81 && Profile.LegacyProfiles.Length==8,"Complete local and prior release identities");
+                    int index=0; int[] counts={55,59,60,70,71,71,80,81}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000,0x36000,0x43000,0x43000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
                         Require(previous.Hooks.Length==counts[index],"Complete prior hook list");
@@ -222,8 +222,8 @@ namespace HinoEnmaTool
                 });
                 test("code protection excludes every gameplay and menu writable page", delegate
                 {
-                    Require(Profile.AllocationSize==0x43000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==8,"Complete execution protected layout");
-                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000,0x42000};
+                    Require(Profile.AllocationSize==0x51000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==9,"Complete execution protected layout");
+                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000,0x42000,0x44000};
                     List<MemorySpan> spans=Checks.CodePages(Profile.Hooks,Profile.AllocationSize,Profile.ProtectedDataPages);
                     foreach(HookSpec hook in Profile.Hooks)
                     {
@@ -300,20 +300,25 @@ namespace HinoEnmaTool
                             Require(Checks.Inspect(memory.Read,Module,out observed)==HookState.Other,"Changed execution code refused");
                         }
                     }
-                    Require(Profile.Hooks[71].CodeOffset==0x36000 && Profile.Hooks[71].CodeCapacity==0x2000,
-                        "Heavy binding payload has its exact reduced code capacity");
+                    Require(Profile.Hooks[71].CodeOffset==0x46000 && Profile.Hooks[71].CodeCapacity==0x4000,
+                        "Dual heavy binding payload has its exact bounded code capacity");
                     HookSpec weaponGuard=Profile.Hooks[80];
-                    Require(weaponGuard.CodeOffset==0x38000 && weaponGuard.CodeCapacity==0x1000 &&
+                    Require(weaponGuard.CodeOffset==0x50000 && weaponGuard.CodeCapacity==0x1000 &&
                         weaponGuard.Rva==0x737769U &&
                         Checks.Equal(weaponGuard.Original,new byte[]{0x48,0x8B,0x41,0x58,0x48,0x8B,0x48,0x20}),
-                        "Pending Living Weapon guard has exact native entry and formerly unused code slot");
+                        "Dual pending Living Weapon guard has exact native entry and bounded code slot");
                     LegacyProfile beta532=Profile.LegacyProfiles[5];
                     Require(beta532.Version=="1.0.0-beta.5.3.2" && beta532.Hooks.Length==71,"Exact previous71 identity");
                     LegacyProfile beta54=Profile.LegacyProfiles[6];
                     Require(beta54.Version=="1.0.0-beta.5.4" && beta54.Hooks.Length==80,"Exact delivered80 identity");
                     Require(!Checks.Equal(Profile.Hooks[71].Template,beta54.Hooks[71].Template),"Restart binding repair differs from delivered Beta5.4");
-                    for(int i=0;i<80;i++)
-                        if(i!=71) Require(Checks.Equal(Profile.Hooks[i].Template,beta54.Hooks[i].Template),"Other79 templates preserved from Beta5.4");
+                    LegacyProfile beta541=Profile.LegacyProfiles[7];
+                    Require(beta541.Version=="1.0.0-beta.5.4.1" && beta541.Hooks.Length==81,"Exact published Beta5.4.1 identity");
+                    for(int i=0;i<81;i++)
+                    {
+                        if((i>=71 && i<=77) || i==80) continue;
+                        Require(Checks.Equal(Profile.Hooks[i].Template,beta541.Hooks[i].Template),"Other73 templates preserved from Beta5.4.1");
+                    }
                     for(int i=0;i<71;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];

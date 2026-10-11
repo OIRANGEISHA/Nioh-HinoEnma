@@ -89,7 +89,7 @@ def main():
     if args.exe:raise ValueError('--exe is only for ZIP verification')
     version=json.loads((ROOT/'version.json').read_text('utf-8'));plan=load_plan()
     if plan['tool_version']!=version['version'] or len(plan['hooks'])!=81:
-        raise ValueError('Exact Beta5.4.1 source profile required')
+        raise ValueError('Exact current dual-boss source profile required')
     if (ROOT/'launcher/Profile.generated.cs').read_text('utf-8')!=generate(plan):
         raise ValueError('Stale generated launcher')
     hashes=source_hashes();reports={};builds={}
@@ -106,7 +106,8 @@ def main():
         reports[config]=check;builds[config]=build
     proofs={name:json.loads((ROOT/'artifacts'/file).read_text('utf-8')) for name,file in
         (('beta52_baseline','baseline-verification.json'),('menu_preview','menu-preview-verification.json'),
-         ('orochi_execution','orochi-execution-verification.json'))}
+         ('orochi_execution','orochi-execution-verification.json'),
+         ('ninetails_execution','ninetails-execution-verification.json'))}
     validate_source_proofs(proofs,hashes)
     regression=json.loads((ROOT/'artifacts/regression-tests.json').read_text('utf-8'))
     if (not regression.get('success') or regression.get('game_access') is not False
@@ -143,8 +144,9 @@ def main():
             str(proofs['menu_preview']['tests_run'])+' portable menu tests; '+str(regression['tests_run'])+' source regressions; no game access during these checks.',
             str(proofs['orochi_execution']['tests_run'])+' synthetic execution tests; all previous71 payloads and patches preserved across 12 layouts.',
             'The scene-bound Orochi resource and numerical trials were user-confirmed to complete the scene and recover control.',
-            'The exact EXE gameplay scope and fresh-process result are recorded separately in docs/validation-beta5.4.1.json; offline checks do not certify gameplay.',
-            'Nine Tails execution remains a separate unverified follow-up.',
+            'The exact EXE gameplay scope and fresh-process result are recorded separately in docs/validation-beta5.4.2.json; offline checks do not certify gameplay.',
+            str(proofs['ninetails_execution']['tests_run'])+' synthetic dual-boss tests; 73 unchanged payloads and patches preserved across 12 layouts, original eight Orochi bodies retained.',
+            'The Nine Tails scene candidate completed the native kill and story and restored control; final EXE scope is stated in the gameplay record.',
             'Rebuild and verify using docs/BUILD.md.'])+'\n').encode('utf-8')}
     archive=destination/(stem+'-source.zip');prefix=stem+'-source/'
     with zipfile.ZipFile(archive,'x',zipfile.ZIP_DEFLATED,compresslevel=9) as z:

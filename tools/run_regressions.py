@@ -7,7 +7,7 @@ import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_TESTS = 177
+EXPECTED_TESTS = 203
 
 
 def source_files():

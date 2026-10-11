@@ -362,7 +362,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(PLAN['orochi_hook_count'],10)
         self.assertEqual(PLAN['orochi_binding_data_size'],0x200)
         self.assertFalse(PLAN['orochi_fresh_exe_gameplay_validated'])
-        old=assemble(legacy_plans(PLAN)[-1],MODULE,ALLOCATION)
+        old=assemble(next(p for p in legacy_plans(PLAN) if p['tool_version']=='1.0.0-beta.5.4'),MODULE,ALLOCATION)
         current=assemble(PLAN,MODULE,ALLOCATION)
         for left,right in zip(current[72:80],old[72:80]):
             self.assertEqual(left['payload'],right['payload'])
