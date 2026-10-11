@@ -2,13 +2,13 @@
 
 [English](README.md)
 
-**当前版本：1.0.0 Beta 5.4.1，本地测试包。**
+**当前版本：1.0.0 Beta 5.4.1。**
 
 适配 Steam《仁王 完全版》1.24.08。Beta 5.4.1 接入已反馈的八岐大蛇处决资源链，并保护零长度与非有限数值的几何查询。Beta 5.4 重启后的绑定失败已定位：错误要求飞缘魔与原生 common 待机共用动作记录。本版分别保存两者，重攻击过渡来自原生 common，结束恢复仍使用飞缘魔待机。精确 Release EXE 已通过完整退出并重启游戏、主菜单启用和八岐大蛇最后处决复测，用户确认完成击杀、剧情继续并恢复控制。保留菜单、属性、道具、梯子与交互兼容。
 
 ## 下载与使用
 
-已验证的本地交付目录包含 `飞缘魔启动工具.exe`、`Nioh-HinoEnma-1.0.0-beta.5.4.1-source.zip` 和 `使用说明.txt`。本仓库保存 Beta 5.4.1 源码及技术记录，源码推送触发完整离线 CI；精确源码与 EXE 校验方法见[构建说明](docs/BUILD.md)。EXE 只需要 Windows 64 位和 .NET Framework 4.x，不需要 CE、Python 或源码包。实机验证对应下文的精确本地 EXE，另行构建的 CI 文件须单独记录。
+在 [Beta 5.4.1 Releases](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.4.1) 下载 Windows x64 EXE 与完整源码 ZIP。使用方法保存在发布正文及源码包中；精确源码与 EXE 校验方法见[构建说明](docs/BUILD.md)。EXE 只需要 Windows 64 位和 .NET Framework 4.x，不需要 CE、Python 或源码包。Release 附件由 GitHub Actions 构建并验证；下文的实机记录对应精确本地 EXE，CI 构建的独立哈希和离线证据保存在发布正文及源码包中。
 
 1. 升级后先退出并重启游戏，停在 **NEW GAME／CONTINUE 主菜单**。
 2. 运行本版 EXE，启用飞缘魔后继续到地图或关卡。
@@ -149,6 +149,6 @@
 
 本次本地构建须通过精确源码再生成、源码／CT 一致性、保留的菜单与原有游玩证明、动态绑定回归，以及 81 处配置的 Debug／Release 校验。每个构建须比较 12 组布局的 972 个当前载荷和 84 组布局的 5592 个旧版载荷。实际完成结果及 EXE 哈希记录在验证文件和源码包 `build-info/`；要求的计数不等于已完成结果。
 
-本地源码 ZIP 保存完整 UTF-8 快照、逐文件哈希与交付 EXE 的精确哈希，不宣称新源码提交、公开标签、GitHub 发布或 CI 证明。Beta 5.3.2 历史证据保持原样。本版未作 Windows Authenticode 签名。
+原本地源码 ZIP 保存其完整 UTF-8 快照、逐文件哈希与交付 EXE 的精确哈希。GitHub Release 的源码 ZIP 另行导出对应提交的完整 Git 文件，记录提交、树、177 项源码回归、三项来源证明和 CI EXE 哈希。Beta 5.3.2 历史证据保持原样。本版未作 Windows Authenticode 签名。
 
 角色替换基于用户提供的 Bryanyora CharacterChange CT，来源说明见 [NOTICE.md](NOTICE.md)。源码不附带游戏资源或私人内存记录。

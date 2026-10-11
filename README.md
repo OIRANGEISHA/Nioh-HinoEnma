@@ -2,13 +2,13 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 5.4.1 / local Beta package.**
+**Current version: 1.0.0 Beta 5.4.1.**
 
 A standalone Windows tool for playing Hino-Enma in Steam Nioh: Complete Edition 1.24.08. Beta 5.4.1 adapts the reported Yamata-no-Orochi execution resource chain and protects its zero-length and non-finite geometry queries. Beta 5.4 failed after restart because discovery incorrectly required Hino idle and native common idle to be the same record. This revision keeps their owners separate and reads heavy transitions from common idle. The exact Release EXE now passed a complete game-process restart, main-menu enable and final Orochi execution; the user confirmed the kill, continued story and restored control. Existing menu, element, item, ladder and interaction fixes are retained.
 
 ## Download and use
 
-The verified local package contains `飞缘魔启动工具.exe`, `Nioh-HinoEnma-1.0.0-beta.5.4.1-source.zip` and `使用说明.txt`. This repository contains the Beta 5.4.1 source and technical records; source pushes run complete offline CI. See [build and package verification](docs/BUILD.md) for exact source and EXE checks. The EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python, or the source ZIP. Local gameplay verification identifies the exact EXE below; a separate CI build requires its own build record.
+Download the Windows x64 EXE and complete source ZIP from [Beta 5.4.1 Releases](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.4.1). Usage instructions are included in the Release body and source ZIP. See [build and package verification](docs/BUILD.md) for exact source and EXE checks. The EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python, or the source ZIP. The Release assets are built and verified by GitHub Actions. Local gameplay verification identifies the exact local EXE below; the CI-built EXE has separate hashes and offline evidence in the Release body and source ZIP.
 
 1. After upgrading, exit and restart Nioh, then stop at **NEW GAME / CONTINUE**.
 2. Run the EXE and enable Hino-Enma, then continue to the mission map or a mission.

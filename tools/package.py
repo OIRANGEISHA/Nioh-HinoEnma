@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import zipfile
+from run_regressions import EXPECTED_TESTS, source_files as regression_source_files
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_INFO_NAMES = ("source-manifest.json", "components.json", "verification.json",
@@ -76,6 +77,16 @@ def validate_build_check(check: dict, version: str, file_hashes: dict[str, str])
             or check.get("pe_machine") != "x64"
             or any(check.get(key) != value for key, value in file_hashes.items())):
         raise ValueError("Complete current and legacy build verification for exact source required")
+
+
+def validate_regression_check(check: dict) -> None:
+    if (not isinstance(check, dict) or check.get("success") is not True
+            or check.get("game_access") is not False
+            or type(check.get("tests_run")) is not int or check["tests_run"] != EXPECTED_TESTS
+            or type(check.get("failures")) is not int or check["failures"] != 0
+            or type(check.get("errors")) is not int or check["errors"] != 0
+            or check.get("source_files") != regression_source_files()):
+        raise ValueError("Complete unchanged-source regression evidence required")
 
 
 def validate_source_proofs(proofs: dict, file_hashes: dict[str, str]) -> None:
@@ -162,6 +173,7 @@ def verify_source_archive(archive: Path, commit: str, executable: Path) -> None:
             validate_build_check(check, version["version"],
                                  {key: source_hashes()[key] for key in ("profile_sha256", "generated_source_sha256")})
         validate_source_proofs(verification["source_proofs"], source_hashes())
+        validate_regression_check(verification.get("regressions"))
         executable_hash = sha256(executable)
         if verification["checks"]["Release"]["executable_sha256"] != executable_hash:
             raise ValueError("Source archive evidence does not identify the distributed EXE")
@@ -240,6 +252,9 @@ def main() -> None:
                      "menu_preview": json.loads((ROOT / "artifacts/menu-preview-verification.json").read_text("utf-8")),
                      "orochi_execution": json.loads((ROOT / "artifacts/orochi-execution-verification.json").read_text("utf-8"))}
     validate_source_proofs(source_proofs, source_hashes())
+    regressions = json.loads((ROOT / "artifacts/regression-tests.json").read_text("utf-8"))
+    validate_regression_check(regressions)
+    local_gameplay_hash = json.loads(validation.read_text("utf-8"))["gameplay"]["executable_sha256"]
     entries = source_entries(args.source_commit)
     source_tree = git("rev-parse", "HEAD^{tree}")
     destination = ROOT / "artifacts/dist"
@@ -266,9 +281,11 @@ def main() -> None:
         "- Prepared asset uploader: " + args.publisher, "- Workflow: " + args.workflow_url,
         "- Recorded UTC: " + datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "- Clean checkout checked before packaging: yes", "",
+        str(regressions["tests_run"]) + " exact-source public regressions passed with zero failures and errors; the complete tested-source hash receipt is embedded in verification.json. No game access.",
         "Debug and Release each passed 29 offline C# checks, 972 current payload comparisons across 12 layouts and 5592 legacy payload comparisons across 84 layouts. No game access.",
         "Independent included-source checks preserved all 60 Beta 5.2 payloads across 12 layouts (720 comparisons); the frozen menu suites passed 41 tests, 4280 byte comparisons and 15880 synthetic CPU comparisons across 12 ASLR layouts. Another 18 cold-start tests passed 19892 synthetic CPU frames, 852 relocation comparisons and 840 unchanged other-hook comparisons.",
         "Local gameplay evidence and limitations are recorded in the reviewed release notes and sanitized validation record.",
+        "The gameplay-tested local Release EXE SHA-256 is " + local_gameplay_hash + "; CI-built asset hashes are recorded separately below and do not claim a new gameplay test.",
         "34 synthetic Orochi execution tests preserved all previous71 hooks across 12 layouts (852 payloads and patches); the exact EXE gameplay scope is recorded separately, and Nine Tails remains unverified.",
         "Windows Authenticode: " + builds["Release"]["authenticode_status"] + ".",
         "CI attestation, when generated, covers the exact CI-built EXE and source ZIP; it does not certify gameplay or replace code signing.", "",
@@ -278,7 +295,8 @@ def main() -> None:
         "source-manifest.json": json_bytes(dict(schema=1, version=version["version"], source_commit=args.source_commit,
                                                 source_tree=source_tree, files=inventory(entries))),
         "components.json": json_bytes(components),
-        "verification.json": json_bytes(dict(source_commit=args.source_commit, game_access=False, checks=reports, source_proofs=source_proofs)),
+        "verification.json": json_bytes(dict(source_commit=args.source_commit, game_access=False,
+            checks=reports, source_proofs=source_proofs, regressions=regressions)),
         "build-provenance.md": "\n".join(provenance).encode("utf-8"),
         "SHA256SUMS.txt": (sha256(executable) + "  " + executable.name + "\n").encode("utf-8"),
     }
@@ -300,6 +318,8 @@ def main() -> None:
     (ROOT / "artifacts/release-manifest.json").write_bytes(json_bytes(manifest))
     release_notes = notes.read_text("utf-8") + "\n\n## Exact release assets\n\n"
     release_notes += "Source commit: " + args.source_commit + "; source tree: " + source_tree + ".\n\n"
+    release_notes += str(regressions["tests_run"]) + " exact-source public regressions passed with zero failures and errors. Their complete source-hash receipt is embedded in the source ZIP's build-info/verification.json.\n\n"
+    release_notes += "Build origin: " + args.build_origin + ". The gameplay-tested local Release EXE SHA-256 is `" + local_gameplay_hash + "`; CI-built asset hashes are recorded below, separately from that local gameplay result.\n\n"
     release_notes += "| Asset | Bytes | SHA-256 |\n| --- | ---: | --- |\n"
     for asset in assets:
         release_notes += "| " + asset["name"] + " | " + str(asset["bytes"]) + " | " + asset["sha256"] + " |\n"

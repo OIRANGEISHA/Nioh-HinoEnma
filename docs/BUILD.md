@@ -38,7 +38,9 @@ Outputs are `飞缘魔启动工具.exe`, `Nioh-HinoEnma-1.0.0-beta.5.4.1-source.
 
 ## Publication scope
 
-`tools/package.py` retains the Git-source publication path for a separately authorized release. It requires an exact clean reviewed commit/tree and verifies exact Git blobs. The historical Beta 5.3.2 publication authorization and version-scoped workflow do not authorize publishing Beta 5.4.1. Existing public tags, assets and historical evidence remain unchanged.
+The user requested the Beta 5.4.1 GitHub Release on 2026-10-11 (Asia/Shanghai), after the source push and its complete CI passed. The version-scoped Actions publisher now permits this reviewed Beta 5.4.1 release. It runs all 177 regressions, all three source proofs, Debug/Release builds and verification, then calls `tools/package.py` from the exact clean reviewed commit. The source ZIP exports exact Git blobs and includes the complete regression receipt. The workflow prepares an immutable annotated tag and Draft, verifies both downloaded assets and source contents, and publishes a Pre-release with latest=false. Historical tags, assets and evidence remain unchanged.
+
+The Release has exactly two attachments: `Nioh-HinoEnma-1.0.0-beta.5.4.1-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.4.1-source.zip`. Usage, checksums, CI provenance and the attestation link are in the Release body and source ZIP. GitHub Actions builds a separate EXE; its exact hash is recorded there. The local gameplay-tested EXE and original local ZIP retain their original identities and are not overwritten or relabeled as CI builds.
 
 ## Validation boundaries
 

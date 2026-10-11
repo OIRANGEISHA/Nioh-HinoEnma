@@ -30,5 +30,5 @@
   "orochi_hook_count": 10,
   "orochi_resource_revision": 5,
   "orochi_ray_guard_revision": 2,
-  "local_package_only": true
+  "local_package_only": false
 }
