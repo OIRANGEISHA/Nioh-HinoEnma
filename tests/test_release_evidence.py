@@ -12,10 +12,10 @@ from package import source_hashes, validate_build_check, validate_source_proofs
 class ReleaseEvidenceTests(unittest.TestCase):
     def setUp(self):
         self.hashes = source_hashes()
-        self.build = dict(success=True, game_access=False, version='1.0.0-beta.5.3.2',
-            generated_source_matches=True, self_checks=28, hook_count=71,
-            payload_comparisons=852, layout_count=12, legacy_hook_counts=[55,59,60,70,71],
-            legacy_payload_comparisons=3780, legacy_layout_count=60, pe_machine='x64',
+        self.build = dict(success=True, game_access=False, version='1.0.0-beta.5.4.1',
+            generated_source_matches=True, self_checks=29, hook_count=81,
+            payload_comparisons=972, layout_count=12, legacy_hook_counts=[55,59,60,70,71,71,80],
+            legacy_payload_comparisons=5592, legacy_layout_count=84, pe_machine='x64',
             profile_sha256=self.hashes['profile_sha256'],
             generated_source_sha256=self.hashes['generated_source_sha256'])
         baseline = dict(success=True, game_access=False, hook_count=60,
@@ -33,21 +33,29 @@ class ReleaseEvidenceTests(unittest.TestCase):
             reload_source_files=self.hashes['reload_source_files'],
             source_sha256=self.hashes['source_sha256'], test_sha256=self.hashes['test_sha256'],
             verifier_sha256=self.hashes['menu_verifier_sha256'])
-        for report in (baseline, menu):
+        orochi = dict(success=True, game_access=False, tests_run=34, hook_count=81,
+            execution_hook_count=10, previous_hooks_preserved=71, previous_payload_comparisons=852,
+            previous_patch_comparisons=852, aslr_layouts=12, native_frame_guards=10,
+            source_files=self.hashes['orochi_source_files'], verifier_sha256=self.hashes['orochi_verifier_sha256'],
+            bootstrap_instance_addresses=False, final_exe_gameplay_validated=False,
+            ninetails_execution_validated=False)
+        for report in (baseline, menu, orochi):
             report.update({key:self.hashes[key] for key in ('profile_sha256','generated_source_sha256')})
-        self.proofs = dict(beta52_baseline=baseline, menu_preview=menu)
+        self.proofs = dict(beta52_baseline=baseline, menu_preview=menu, orochi_execution=orochi)
 
     def check_build(self, report):
-        validate_build_check(report, '1.0.0-beta.5.3.2',
+        validate_build_check(report, '1.0.0-beta.5.4.1',
             {key:self.hashes[key] for key in ('profile_sha256','generated_source_sha256')})
 
     def test_complete_exact_source_evidence(self):
         self.check_build(self.build)
         validate_source_proofs(self.proofs, self.hashes)
 
-    def test_old_60_hook_release_counts_rejected(self):
-        self.build.update(self_checks=26, hook_count=60, payload_comparisons=720)
-        with self.assertRaises(ValueError): self.check_build(self.build)
+    def test_old_hook_release_counts_rejected(self):
+        for checks,hooks,payloads in ((26,60,720),(29,80,960)):
+            report=deepcopy(self.build)
+            report.update(self_checks=checks,hook_count=hooks,payload_comparisons=payloads)
+            with self.assertRaises(ValueError): self.check_build(report)
 
     def test_missing_beta52_legacy_rejected(self):
         self.build.update(legacy_hook_counts=[55,59], legacy_payload_comparisons=1368, legacy_layout_count=24)
@@ -91,7 +99,7 @@ class ReleaseEvidenceTests(unittest.TestCase):
             with self.assertRaises(ValueError): validate_source_proofs(proofs,self.hashes)
 
     def test_source_proof_profile_or_game_access_rejected(self):
-        for proof in ('beta52_baseline','menu_preview'):
+        for proof in ('beta52_baseline','menu_preview','orochi_execution'):
             for key,value in (('profile_sha256','0'*64),('game_access',True)):
                 proofs=deepcopy(self.proofs);proofs[proof][key]=value
                 with self.assertRaises(ValueError): validate_source_proofs(proofs,self.hashes)
@@ -102,6 +110,24 @@ class ReleaseEvidenceTests(unittest.TestCase):
             key=next(iter(proofs['menu_preview'][field]))
             proofs['menu_preview'][field][key]='0'*64
             with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+
+    def test_missing_partial_or_overstated_execution_proof_rejected(self):
+        proofs=deepcopy(self.proofs);del proofs['orochi_execution']
+        with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+        for field,value in (('tests_run',22),('tests_run',25),('tests_run',32),
+                ('hook_count',80),('execution_hook_count',9),
+                ('previous_payload_comparisons',851),('native_frame_guards',9),
+                ('bootstrap_instance_addresses',True),
+                ('final_exe_gameplay_validated',True),('ninetails_execution_validated',True)):
+            proofs=deepcopy(self.proofs);proofs['orochi_execution'][field]=value
+            with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+
+    def test_changed_execution_source_or_verifier_rejected(self):
+        for name in self.hashes['orochi_source_files']:
+            proofs=deepcopy(self.proofs);proofs['orochi_execution']['source_files'][name]='0'*64
+            with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
+        proofs=deepcopy(self.proofs);proofs['orochi_execution']['verifier_sha256']='0'*64
+        with self.assertRaises(ValueError):validate_source_proofs(proofs,self.hashes)
 
 
 if __name__ == '__main__':

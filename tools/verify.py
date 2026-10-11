@@ -14,8 +14,8 @@ from build_profile import ROOT, assemble, generate, legacy_plans, load_plan
 
 def verify(executable: Path, report: Path, preview: bool = False) -> dict:
     plan = load_plan()
-    if len(plan["hooks"]) != 71:
-        raise ValueError("Expected the local71-hook menu preview profile")
+    if len(plan["hooks"]) != 81:
+        raise ValueError("Expected the complete81-hook native execution profile")
     if (ROOT / "launcher/Profile.generated.cs").read_text("utf-8") != generate(plan):
         raise ValueError("Generated source differs")
     report.parent.mkdir(parents=True, exist_ok=True)
@@ -34,8 +34,8 @@ def verify(executable: Path, report: Path, preview: bool = False) -> dict:
             raise ValueError("Offline executable check failed: " + mode + ": " + completed.stderr)
     self_test = json.loads(targets["--self-test"].read_text("utf-8"))
     if (not self_test["success"] or self_test.get("game_access") is not False
-            or self_test["count"] != 28 or len(self_test["checks"]) != 28
-            or len(set(self_test["checks"])) != 28):
+            or self_test["count"] != 29 or len(self_test["checks"]) != 29
+            or len(set(self_test["checks"])) != 29):
         raise ValueError("Offline refusal/transaction checks failed")
     exported = json.loads(targets["--export-payloads"].read_text("utf-8"))
     cache, names = {}, set()

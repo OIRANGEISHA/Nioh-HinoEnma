@@ -13,6 +13,7 @@ import shutil
 import zipfile
 from package import ROOT,sha256,json_bytes,source_hashes,validate_build_check,validate_source_proofs
 from build_profile import load_plan,generate
+from run_regressions import source_files as regression_source_files, EXPECTED_TESTS
 
 EXCLUDED={'.git','.devdeps','.venv','artifacts','research','release','references','__pycache__','build-info'}
 INFO_NAMES={'source-manifest.json','verification.json','build-provenance.md','SHA256SUMS.txt','components.json'}
@@ -48,11 +49,26 @@ def verify_archive(archive,executable):
             if len(raw)!=row['bytes'] or hashlib.sha256(raw).hexdigest()!=row['sha256']:
                 raise ValueError('Source manifest mismatch: '+row['path'])
         files=manifest['files']
+        current=[{key:value for key,value in row.items() if key!='raw'} for row in source_files()]
+        if files!=current:raise ValueError('Source ZIP differs from the exact local snapshot')
         identity=hashlib.sha256(json_bytes(dict(files=files))).hexdigest()
         if identity!=manifest['source_snapshot_sha256'] or manifest['source_commit'] is not None:
             raise ValueError('Local snapshot identity mismatch')
         v=json.loads(z.read(prefix+'version.json'))
         proof=json.loads(z.read(prefix+'build-info/verification.json'))
+        hashes=source_hashes()
+        if proof.get('game_access') is not False:raise ValueError('Offline archive proof required')
+        for config in ('Debug','Release'):
+            validate_build_check(proof['checks'][config],v['version'],
+                {key:hashes[key] for key in ('profile_sha256','generated_source_sha256')})
+        validate_source_proofs(proof['source_proofs'],hashes)
+        regressions=proof['regressions']
+        if (not regressions.get('success') or regressions.get('game_access') is not False
+                or regressions.get('tests_run')!=EXPECTED_TESTS
+                or regressions.get('source_files')!=regression_source_files()):raise ValueError('Complete exact-source archive regressions required')
+        components=json.loads(z.read(prefix+'build-info/components.json'))
+        if (components['version']!=v['version'] or components['native_hook_count']!=81
+                or components.get('standalone_exe') is not True):raise ValueError('Invalid archive components')
         release=proof['checks']['Release']
         if v['version']!=manifest['version'] or release['executable_sha256']!=sha256(executable):
             raise ValueError('Distributed EXE/source identity mismatch')
@@ -72,8 +88,8 @@ def main():
         print(json.dumps(verify_archive(args.verify_source_zip,args.exe)));return
     if args.exe:raise ValueError('--exe is only for ZIP verification')
     version=json.loads((ROOT/'version.json').read_text('utf-8'));plan=load_plan()
-    if plan['tool_version']!=version['version'] or len(plan['hooks'])!=71:
-        raise ValueError('Exact Beta5.3.2 source profile required')
+    if plan['tool_version']!=version['version'] or len(plan['hooks'])!=81:
+        raise ValueError('Exact Beta5.4.1 source profile required')
     if (ROOT/'launcher/Profile.generated.cs').read_text('utf-8')!=generate(plan):
         raise ValueError('Stale generated launcher')
     hashes=source_hashes();reports={};builds={}
@@ -85,14 +101,17 @@ def main():
         executable=directory/(stem+'-windows-x64.exe')
         validate_build_check(check,version['version'],{k:hashes[k] for k in ('profile_sha256','generated_source_sha256')})
         if (check['executable_sha256']!=sha256(executable) or build['product_version']!=version['version']
-                or build['file_version']!=version['file_version'] or build['offline_self_checks']!=28
+                or build['file_version']!=version['file_version'] or build['offline_self_checks']!=29
                 or build['configuration']!=config):raise ValueError('Stale build: '+config)
         reports[config]=check;builds[config]=build
     proofs={name:json.loads((ROOT/'artifacts'/file).read_text('utf-8')) for name,file in
-        (('beta52_baseline','baseline-verification.json'),('menu_preview','menu-preview-verification.json'))}
+        (('beta52_baseline','baseline-verification.json'),('menu_preview','menu-preview-verification.json'),
+         ('orochi_execution','orochi-execution-verification.json'))}
     validate_source_proofs(proofs,hashes)
     regression=json.loads((ROOT/'artifacts/regression-tests.json').read_text('utf-8'))
-    if not regression.get('success') or regression.get('game_access') is not False or regression['tests_run']!=134:
+    if (not regression.get('success') or regression.get('game_access') is not False
+            or regression['tests_run']!=EXPECTED_TESTS
+            or regression.get('source_files')!=regression_source_files()):
         raise ValueError('Complete source regressions required')
     rows=source_files();inventory=[{k:v for k,v in x.items() if k!='raw'} for x in rows]
     identity=hashlib.sha256(json_bytes(dict(files=inventory))).hexdigest()
@@ -107,7 +126,7 @@ def main():
     info={
         'source-manifest.json':json_bytes(manifest),
         'verification.json':json_bytes(dict(game_access=False,checks=reports,source_proofs=proofs,regressions=regression)),
-        'components.json':json_bytes(dict(version=version['version'],native_hook_count=71,
+        'components.json':json_bytes(dict(version=version['version'],native_hook_count=81,
             runtime=['Windows x64','.NET Framework 4.x'],standalone_exe=True,
             excluded=['Nioh executable/assets','game dumps','Python runtime','development dependencies'],
             development_dependencies_file='requirements-dev.txt',credits='NOTICE.md',
@@ -120,10 +139,12 @@ def main():
             'Baseline Git commit: '+manifest['baseline']['baseline_commit'],
             'Prepared UTC: '+datetime.now(timezone.utc).isoformat(timespec='seconds'),'',
             'No new Git commit, tag, GitHub Release, or CI attestation is claimed.',
-            'Debug and Release: 28 self-checks, 852 current and 3780 legacy payload comparisons each.',
-            '59 portable menu tests; 134 source regressions; no game access during these checks.',
-            'The private menu trial passed visible mist, framing, idle, status reopen and title reload.',
-            'The same cold-start hook payload was user-tested after a complete restart; this packaged binary has offline checks.',
+            'Debug and Release: '+str(reports['Release']['self_checks'])+' self-checks, '+str(reports['Release']['payload_comparisons'])+' current and '+str(reports['Release']['legacy_payload_comparisons'])+' legacy payload comparisons each.',
+            str(proofs['menu_preview']['tests_run'])+' portable menu tests; '+str(regression['tests_run'])+' source regressions; no game access during these checks.',
+            str(proofs['orochi_execution']['tests_run'])+' synthetic execution tests; all previous71 payloads and patches preserved across 12 layouts.',
+            'The scene-bound Orochi resource and numerical trials were user-confirmed to complete the scene and recover control.',
+            'The exact EXE gameplay scope and fresh-process result are recorded separately in docs/validation-beta5.4.1.json; offline checks do not certify gameplay.',
+            'Nine Tails execution remains a separate unverified follow-up.',
             'Rebuild and verify using docs/BUILD.md.'])+'\n').encode('utf-8')}
     archive=destination/(stem+'-source.zip');prefix=stem+'-source/'
     with zipfile.ZipFile(archive,'x',zipfile.ZIP_DEFLATED,compresslevel=9) as z:

@@ -5,6 +5,30 @@
 - Stabilize source-only Windows verification by expressing the project's decimal Intel literals with an explicit radix before invoking Keystone 0.9.2. Keep the Beta 5.3.2 hook source, generated C#, CT, runtime payloads, release tag and published assets unchanged. Add seven numeric parsing regressions and preserve the frozen 41-test menu suites byte-for-byte.
 - 修正 Windows 源码验证中 Keystone 0.9.2 默认数字进制不稳定的问题；汇编前显式标注数字进制，游戏补丁、已发布标签和附件不变。新增七项数字解析回归，原有 41 项菜单测试文件保持原样。
 
+## [1.0.0-beta.5.4.1] - 2026-10-11
+
+- 修正 Beta 5.4 完整重启后八岐大蛇最后处决仍触发旋转攻击的资源绑定错误：分别保存飞缘魔当前待机与原生 common 待机，重攻击过渡从后者查找，入口和结束恢复继续使用飞缘魔待机。
+- 在处决3491起手尚未完成配对的区间，防止满槽九十九query86提前分派169打断；保留原生false尾声和ABI，其余状态沿原路径。
+- 核定并精确匹配八只蛇头的template/placement身份，补齐原生就绪3204；元数据按真实DWORD结构允许4字节对齐，并验证模板一致。
+- 默认CPU模型分离两种待机所有者，并覆盖八头身份、元数据、待配对间隙、资源所有权与异常回退。完整布局81处，保留Beta5.3.2的71处载荷；旧Beta5.4作为精确只读重启身份。
+- 本次修订实机结果、构建哈希与本地源码包另行记录；九尾妖狐仍需独立取证。
+
+## [1.0.0-beta.5.4] - 2026-10-11
+
+### Fixed
+
+- Add nine scoped Yamata-no-Orochi execution hooks and dynamic resource discovery while preserving all 71 Beta 5.3.2 payloads. Supply matching native action, motion and auxiliary event resource views without direct HP, mission or save writes.
+- Guard zero-length and non-finite ray queries through the native no-hit epilogue, including the post-kill interval after both pairing references are cleared.
+- 修复八岐大蛇处决的辅助事件资源缺失与几何查询卡住；保留原生伤害、击杀事件、结束动作及控制恢复。
+
+### Validation and package scope
+
+- Scene-bound candidate v5 passed 35 offline tests; numerical guard v2 passed 13 offline tests. The user confirmed the post-kill sequence and restored control, with phase 0, recovered idle 1, head HP 0 and native head-death count 8. These trials have a separate identity from the new dynamic-binding EXE.
+- Prepare a local package only. New integration proofs and exact Debug/Release EXE checks must pass before packaging; the final EXE has not been gameplay-tested. Preserve historical tags, published assets and validation records.
+- Local checks passed 166 complete source regressions, 23 execution tests (included in that total), and the frozen 59 menu/cold-start tests. Debug and Release each passed 29 self-checks, 960 current payload comparisons across 12 layouts and 4632 prior payload comparisons across 72 layouts. Preserve all previous71 payloads and patches (852 comparisons each) and the immutable Beta 5.2 basis.
+- Nine Tails execution remains an independent investigation. Its native chain, resources, kill events, terminal recovery and exit geometry require separate evidence; Orochi IDs and counters do not establish compatibility.
+- Record the failed auxiliary-event lookup, native paired execution chain, zero-vector/NaN freezes before and after kill, correct late query epilogue and Nine Tails investigation path in `docs/debugging/orochi-execution-2026-10-11.md`.
+
 ## [1.0.0-beta.5.3.2] - 2026-10-11
 
 ### Fixed

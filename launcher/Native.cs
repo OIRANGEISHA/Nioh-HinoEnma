@@ -70,11 +70,23 @@ namespace HinoEnmaTool
             new MemorySpan(0xC448E0,0xC44907), new MemorySpan(0xC449A0,0xC453BA),
             new MemorySpan(0xC002C0,0xC002C3) };
 
+        // Complete original frames, including chained unwind fragments and
+        // the late no-hit epilogue. New views must not enter a pending frame.
+        internal static readonly MemorySpan[] ExecutionNativeFrames = new MemorySpan[] {
+            new MemorySpan(0x73F860,0x73FA00), new MemorySpan(0x73FA40,0x73FB11),
+            new MemorySpan(0x954E73,0x954FD0), new MemorySpan(0x954FD0,0x9552D6),
+            new MemorySpan(0x968A10,0x968D5B), new MemorySpan(0x7DCF10,0x7DD02D),
+            new MemorySpan(0x2165F0,0x216B82), new MemorySpan(0x6E84EA,0x6E8754),
+            new MemorySpan(0x7DEB70,0x7DEE1D), new MemorySpan(0x736CB0,0x73AB00) };
+
         internal static bool InNativeSpan(long address, long moduleBase)
         {
             if (address >= moduleBase + SamplerRva && address < moduleBase + SamplerRva + SamplerLength)
                 return true;
             foreach (MemorySpan span in MenuNativeFrames)
+                if (address >= moduleBase + span.Start && address < moduleBase + span.End)
+                    return true;
+            foreach (MemorySpan span in ExecutionNativeFrames)
                 if (address >= moduleBase + span.Start && address < moduleBase + span.End)
                     return true;
             foreach (HookSpec hook in Profile.Hooks)

@@ -13,10 +13,10 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 BUILD_INFO_NAMES = ("source-manifest.json", "components.json", "verification.json",
                     "build-provenance.md", "SHA256SUMS.txt")
-EXPECTED_CHECKS = (28, 71, 852, 12)
-EXPECTED_LEGACY = ([55, 59, 60, 70, 71], 3780, 60)
+EXPECTED_CHECKS = (29, 81, 972, 12)
+EXPECTED_LEGACY = ([55, 59, 60, 70, 71, 71, 80], 5592, 84)
 PROTECTED_PAGES = [[0xF000, 0x10000], [0x13000, 0x14000], [0x1F000, 0x20000],
-                   [0x24000, 0x25000], [0x29000, 0x2A000], [0x2C000, 0x2D000], [0x35000, 0x36000]]
+                   [0x24000, 0x25000], [0x29000, 0x2A000], [0x2C000, 0x2D000], [0x35000, 0x36000], [0x42000, 0x43000]]
 
 
 def sha256(path: Path) -> str:
@@ -79,8 +79,10 @@ def validate_build_check(check: dict, version: str, file_hashes: dict[str, str])
 
 
 def validate_source_proofs(proofs: dict, file_hashes: dict[str, str]) -> None:
-    baseline, menu = proofs["beta52_baseline"], proofs["menu_preview"]
-    for check in (baseline, menu):
+    if set(proofs) != {"beta52_baseline", "menu_preview", "orochi_execution"}:
+        raise ValueError("All three exact-source portable proofs required")
+    baseline, menu, orochi = (proofs[name] for name in ("beta52_baseline", "menu_preview", "orochi_execution"))
+    for check in (baseline, menu, orochi):
         if (not check.get("success") or check.get("game_access") is not False
                 or any(check.get(key) != file_hashes[key] for key in ("profile_sha256", "generated_source_sha256"))):
             raise ValueError("Offline source evidence does not identify the exact generated profile")
@@ -97,6 +99,14 @@ def validate_source_proofs(proofs: dict, file_hashes: dict[str, str]) -> None:
             or any(menu.get(key) != file_hashes[key] for key in ("source_sha256", "test_sha256"))
             or menu.get("verifier_sha256") != file_hashes["menu_verifier_sha256"]):
         raise ValueError("Complete portable menu proof is incomplete or stale")
+    if (tuple(orochi.get(key) for key in ("tests_run", "hook_count", "execution_hook_count",
+            "previous_hooks_preserved", "previous_payload_comparisons", "previous_patch_comparisons",
+            "aslr_layouts", "native_frame_guards")) != (34, 81, 10, 71, 852, 852, 12, 10)
+            or orochi.get("source_files") != file_hashes["orochi_source_files"]
+            or orochi.get("verifier_sha256") != file_hashes["orochi_verifier_sha256"]
+            or any(orochi.get(key) is not False for key in ("bootstrap_instance_addresses",
+                "final_exe_gameplay_validated", "ninetails_execution_validated"))):
+        raise ValueError("Complete portable execution proof is incomplete, stale or overstates gameplay")
 
 
 def source_hashes() -> dict[str, str]:
@@ -111,6 +121,9 @@ def source_hashes() -> dict[str, str]:
     from verify_menu_preview import RELOAD_FILES
     result["reload_source_files"] = {name: sha256(ROOT / name) for name in RELOAD_FILES}
     result['coldstart_source_files'] = {name: sha256(ROOT/name) for name in ('tools/menu_preview_coldstart_portable.py','tools/test_menu_preview_coldstart_portable.py')}
+    from verify_orochi_execution import SOURCE_FILES
+    result['orochi_source_files'] = {name: sha256(ROOT/name) for name in SOURCE_FILES}
+    result['orochi_verifier_sha256'] = sha256(ROOT/'tools/verify_orochi_execution.py')
     return result
 
 
@@ -142,7 +155,7 @@ def verify_source_archive(archive: Path, commit: str, executable: Path) -> None:
         components = json.loads(zipped.read(prefix + "build-info/components.json"))
         if (verification["source_commit"] != commit or verification["game_access"]
                 or components["source_commit"] != commit or components["version"] != version["version"]
-                or components["runtime_embedded_components"][0]["native_hook_count"] != 71):
+                or components["runtime_embedded_components"][0]["native_hook_count"] != 81):
             raise ValueError("Embedded build evidence differs from release source")
         for config in ("Debug", "Release"):
             check = verification["checks"][config]
@@ -189,14 +202,16 @@ def main() -> None:
             or version["repository"] != "OIRANGEISHA/Nioh-HinoEnma" or version["release_owner"] != "OIRANGEISHA"):
         raise ValueError("Expected consistent owner, repository and Semantic Versioning Beta metadata")
     plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
-    if (plan["tool_version"] != version["version"] or len(plan["hooks"]) != 71
-            or plan["allocation_size"] != 0x36000 or plan["data_offset"] != 0xF000
+    if (plan["tool_version"] != version["version"] or len(plan["hooks"]) != 81
+            or plan["allocation_size"] != 0x43000 or plan["data_offset"] != 0xF000
             or plan["protected_data_pages"] != PROTECTED_PAGES
             or version.get("menu_preview_revision") != 2 or version.get("menu_preview_hook_count") != 11
             or version.get("menu_camera_distance") != 740.0 or version.get("menu_camera_height") != -45.0
             or version.get("menu_coldstart_revision") != 1 or version.get("menu_asset_wait_frames") != 1800
-            or version.get("menu_total_wait_frames") != 7200):
-        raise ValueError("Release metadata differs from the reviewed 71-hook menu profile")
+            or version.get("menu_total_wait_frames") != 7200
+            or version.get("orochi_execution_revision") != 3 or version.get("orochi_hook_count") != 10
+            or version.get("orochi_resource_revision") != 5 or version.get("orochi_ray_guard_revision") != 2):
+        raise ValueError("Release metadata differs from the reviewed 81-hook Orochi profile")
     ct_name = version["ct_file"]
     if Path(ct_name).name != ct_name or not ct_name.endswith(".CT"):
         raise ValueError("Expected a CT source filename within the public ct directory")
@@ -217,12 +232,13 @@ def main() -> None:
                              {key: source_hashes()[key] for key in ("profile_sha256", "generated_source_sha256")})
         if (report["executable_sha256"] != sha256(config_exe)
                 or build["product_version"] != version["version"] or build["file_version"] != version["file_version"]
-                or build["configuration"] != config or build["offline_self_checks"] != 28
+                or build["configuration"] != config or build["offline_self_checks"] != 29
                 or report["pe_machine"] != "x64" or build["pe_machine"] != "x64"):
             raise ValueError("Build or verification metadata does not match: " + config)
         reports[config], builds[config] = report, build
     source_proofs = {"beta52_baseline": json.loads((ROOT / "artifacts/baseline-verification.json").read_text("utf-8")),
-                     "menu_preview": json.loads((ROOT / "artifacts/menu-preview-verification.json").read_text("utf-8"))}
+                     "menu_preview": json.loads((ROOT / "artifacts/menu-preview-verification.json").read_text("utf-8")),
+                     "orochi_execution": json.loads((ROOT / "artifacts/orochi-execution-verification.json").read_text("utf-8"))}
     validate_source_proofs(source_proofs, source_hashes())
     entries = source_entries(args.source_commit)
     source_tree = git("rev-parse", "HEAD^{tree}")
@@ -233,7 +249,7 @@ def main() -> None:
     published_exe = destination / executable.name
     shutil.copyfile(executable, published_exe)
     components = dict(schema=1, version=version["version"], source_commit=args.source_commit,
-        runtime_embedded_components=[dict(name="Nioh Hino-Enma launcher", origin="this repository", native_hook_count=71)],
+        runtime_embedded_components=[dict(name="Nioh Hino-Enma launcher", origin="this repository", native_hook_count=81)],
         platform_dependencies_not_embedded=["Windows x64", "Windows .NET Framework", "Win32 APIs"],
         development_dependencies_not_embedded=[
             dict(name="keystone-engine", version="0.9.2", purpose="independent x64 assembly verification", license="GPL-2.0 or commercial (development only)"),
@@ -250,9 +266,10 @@ def main() -> None:
         "- Prepared asset uploader: " + args.publisher, "- Workflow: " + args.workflow_url,
         "- Recorded UTC: " + datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "- Clean checkout checked before packaging: yes", "",
-        "Debug and Release each passed 28 offline C# checks, 852 current payload comparisons across 12 layouts and 3780 legacy payload comparisons across 60 layouts. No game access.",
+        "Debug and Release each passed 29 offline C# checks, 972 current payload comparisons across 12 layouts and 5592 legacy payload comparisons across 84 layouts. No game access.",
         "Independent included-source checks preserved all 60 Beta 5.2 payloads across 12 layouts (720 comparisons); the frozen menu suites passed 41 tests, 4280 byte comparisons and 15880 synthetic CPU comparisons across 12 ASLR layouts. Another 18 cold-start tests passed 19892 synthetic CPU frames, 852 relocation comparisons and 840 unchanged other-hook comparisons.",
         "Local gameplay evidence and limitations are recorded in the reviewed release notes and sanitized validation record.",
+        "34 synthetic Orochi execution tests preserved all previous71 hooks across 12 layouts (852 payloads and patches); the exact EXE gameplay scope is recorded separately, and Nine Tails remains unverified.",
         "Windows Authenticode: " + builds["Release"]["authenticode_status"] + ".",
         "CI attestation, when generated, covers the exact CI-built EXE and source ZIP; it does not certify gameplay or replace code signing.", "",
         "| Asset | Bytes | SHA-256 |", "| --- | ---: | --- |",

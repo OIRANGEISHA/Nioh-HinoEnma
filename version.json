@@ -1,15 +1,15 @@
 {
-  "version": "1.0.0-beta.5.3.2",
-  "display_version": "1.0.0 Beta 5.3.2",
-  "tag": "v1.0.0-beta.5.3.2",
-  "file_version": "1.0.0.66",
+  "version": "1.0.0-beta.5.4.1",
+  "display_version": "1.0.0 Beta 5.4.1",
+  "tag": "v1.0.0-beta.5.4.1",
+  "file_version": "1.0.0.68",
   "release_date": "2026-10-11",
   "repository": "OIRANGEISHA/Nioh-HinoEnma",
   "release_owner": "OIRANGEISHA",
   "upstream_private_profile_version": "0.60",
   "upstream_baseline_private_profile_version": "0.60",
   "upstream_private_profile_revision": 1,
-  "ct_file": "Nioh_HinoEnma_1.24.8_Beta5_3_2.CT",
+  "ct_file": "Nioh_HinoEnma_1.24.8_Beta5_4_1.CT",
   "channel": "beta",
   "upstream_private_ladder_revision": 2,
   "upstream_private_ladder_scale_revision": 2,
@@ -25,5 +25,10 @@
   "menu_camera_reload_revision": 1,
   "menu_coldstart_revision": 1,
   "menu_asset_wait_frames": 1800,
-  "menu_total_wait_frames": 7200
+  "menu_total_wait_frames": 7200,
+  "orochi_execution_revision": 3,
+  "orochi_hook_count": 10,
+  "orochi_resource_revision": 5,
+  "orochi_ray_guard_revision": 2,
+  "local_package_only": true
 }

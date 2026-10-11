@@ -1,14 +1,15 @@
 """Run the frozen portable70 and Beta5.3.1 proofs without game inputs."""
 import argparse
 import hashlib
+import importlib.util
 import io
 import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 from test_menu_preview_portable_integration import PortableTests,LAYOUTS,ROOT
 from test_menu_preview_reload_portable import ReloadTests
-import test_menu_preview_coldstart_portable as cold
 import test_menu_preview_portable_integration as frozen_tests
 from source_assembler import Ks as NumericKs
 
@@ -19,6 +20,28 @@ RELOAD_FILES={
     'tools/menu_preview_reload_sources.py':'57762edc987334b52cc6533888e61a6ed99ec77e52154b38cf0665528958c275',
     'tools/menu_preview_aura_source.py':'9e7d75241be7a1cb3631adec46f98c352360f081573cde6787df6696629c46c3',
     'tools/test_menu_preview_reload_portable.py':'db86a147c4a0647a1a1ecdd0ba7d32df977a23e52dbf3d8bf84026389de1be71'}
+
+
+def load_frozen_coldstart():
+    # This frozen test intentionally reads the then-current71 profile and
+    # asserts its complete identity. Supply that exact predecessor as its
+    # input without editing any historical source/assertion or disk file.
+    from build_profile import load_plan, source_plan_beta532
+    predecessor = source_plan_beta532(load_plan())
+    source = ROOT/'profiles/steam-1.24.8.json'
+    raw = json.dumps(predecessor)
+    original_read = Path.read_text
+
+    def read_input(path, *args, **kwargs):
+        if path.resolve() == source.resolve():
+            return raw
+        return original_read(path, *args, **kwargs)
+
+    spec = importlib.util.spec_from_file_location('_frozen71_coldstart', ROOT/'tools/test_menu_preview_coldstart_portable.py')
+    module = importlib.util.module_from_spec(spec)
+    with patch.object(Path, 'read_text', read_input):
+        spec.loader.exec_module(module)
+    return module
 
 
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -42,6 +65,7 @@ def _verify(report=None):
         raise ValueError('Frozen portable source/test hashes changed')
     if any(digest(ROOT/name)!=value for name,value in RELOAD_FILES.items()):
         raise ValueError('Reviewed portable reload source/test hashes changed')
+    cold = load_frozen_coldstart()
     PortableTests.comparisons=PortableTests.cpu_comparisons=0
     stream=io.StringIO()
     result=unittest.TextTestRunner(stream=stream).run(unittest.defaultTestLoader.loadTestsFromTestCase(PortableTests))
@@ -64,6 +88,8 @@ def _verify(report=None):
         coldstart_payload_comparisons=852,coldstart_other70_payload_comparisons=840,
         coldstart_asset_wait_frames=1800,coldstart_total_wait_frames=7200,
         coldstart_source_files={name:digest(ROOT/name) for name in cold_paths},
+        coldstart_input_hook_count=71,
+        coldstart_input='exact Beta5.3.2 predecessor; frozen assertions unchanged',
         byte_comparisons=PortableTests.comparisons+ReloadTests.byte_comparisons,
         cpu_comparisons=PortableTests.cpu_comparisons+ReloadTests.cpu_comparisons,
         legacy_tests=25,reload_tests=16,reload_source_files=RELOAD_FILES,

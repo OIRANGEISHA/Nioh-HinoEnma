@@ -103,6 +103,28 @@ namespace HinoEnmaTool
                             Require(rejected,"Nested menu return into changed native function rejected");
                         }
                     }
+                    Require(ThreadInstallGuard.ExecutionNativeFrames.Length==10,"Exact execution native frame inventory");
+                    foreach(MemorySpan span in ThreadInstallGuard.ExecutionNativeFrames)
+                    {
+                        long first=Module+span.Start,last=Module+span.End;
+                        Require(first<last && ThreadInstallGuard.InNativeSpan(first,Module) &&
+                            ThreadInstallGuard.InNativeSpan(last-1,Module),"Complete execution native frame");
+                        foreach(long address in new long[] {first,first+(last-first)/2,last-1})
+                        {
+                            bool rejected=false;
+                            try { ThreadInstallGuard.VerifySavedReturnBytes(BitConverter.GetBytes(address),Module); }
+                            catch(InvalidOperationException) { rejected=true; }
+                            Require(rejected,"Nested execution return into changed native function rejected");
+                        }
+                    }
+                    Require(ThreadInstallGuard.InNativeSpan(Module+0x216ADD,Module) &&
+                        ThreadInstallGuard.InNativeSpan(Module+0x7DED33,Module),"Late geometry exit and original nested return guarded");
+                    MemorySpan queryFrame=ThreadInstallGuard.ExecutionNativeFrames[9];
+                    Require(queryFrame.Start==0x736CB0 && queryFrame.End==0x73AB00,
+                        "Complete query dispatch frame including chained unwind fragments");
+                    Require(!ThreadInstallGuard.InNativeSpan(Module+queryFrame.Start-1,Module) &&
+                        !ThreadInstallGuard.InNativeSpan(Module+queryFrame.End,Module),
+                        "Exact query dispatch frame boundaries");
                     foreach(long address in new long[] {begin, Module+0x95470C, end-1, Module+Profile.Hooks[0].Rva})
                     {
                         bool rejected=false;
@@ -161,8 +183,8 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==71 && Profile.LegacyProfiles.Length==5,"Complete local and prior release identities");
-                    int index=0; int[] counts={55,59,60,70,71}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000};
+                    Require(Profile.Hooks.Length==81 && Profile.LegacyProfiles.Length==7,"Complete local and prior release identities");
+                    int index=0; int[] counts={55,59,60,70,71,71,80}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000,0x36000,0x43000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
                         Require(previous.Hooks.Length==counts[index],"Complete prior hook list");
@@ -200,8 +222,8 @@ namespace HinoEnmaTool
                 });
                 test("code protection excludes every gameplay and menu writable page", delegate
                 {
-                    Require(Profile.AllocationSize==0x36000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==7,"Local menu70 protected layout");
-                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000};
+                    Require(Profile.AllocationSize==0x43000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==8,"Complete execution protected layout");
+                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000,0x42000};
                     List<MemorySpan> spans=Checks.CodePages(Profile.Hooks,Profile.AllocationSize,Profile.ProtectedDataPages);
                     foreach(HookSpec hook in Profile.Hooks)
                     {
@@ -248,7 +270,7 @@ namespace HinoEnmaTool
                 test("all eleven menu entries require complete payloads and native sites", delegate
                 {
                     string[] names={"HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapAppearancePrivate","HE_MapNativeIdlePrivate","HE_MapIdleSelectionPrivate","HE_MapLoadoutAppearancePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate","HE_MapPreviewAuraCopiedHash"};
-                    Require(Profile.Hooks.Length==71,"Exact total menu build inventory");
+                    Require(Profile.Hooks.Length==81,"Exact total execution build inventory");
                     for(int i=60;i<71;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
@@ -260,6 +282,51 @@ namespace HinoEnmaTool
                             bytes[bytes.Length-1]^=1;
                             Require(Checks.Inspect(memory.Read,Module,out observed)==HookState.Other,"Changed menu code refused");
                         }
+                    }
+                });
+                test("all ten execution entries are required and preserve the previous71 profile", delegate
+                {
+                    string[] names={"HE_OrochiHeavyTransition","HE_OrochiWeaponBankRead","HE_OrochiWeaponMotionRead","HE_OrochiWeaponMotionPresence","HE_OrochiWeaponEventRead","HE_OrochiWeaponBlendPresence","HE_OrochiWeaponBlendRead","HE_OrochiZeroLengthRay","HE_OrochiStalledInvalidRayExit","HE_OrochiPendingLivingWeaponGuard"};
+                    Require(Profile.Hooks.Length==81,"Exact complete execution inventory");
+                    for(int i=71;i<81;i++)
+                    {
+                        HookSpec hook=Profile.Hooks[i];
+                        Require(hook.Name==names[i-71],"Exact execution entry identity");
+                        foreach(bool payload in new bool[]{true,false})
+                        {
+                            FakeMemory memory=Memory(true); long observed;
+                            byte[] bytes=memory.Blocks[(payload?Allocation+hook.CodeOffset:Module+hook.Rva)];
+                            bytes[bytes.Length-1]^=1;
+                            Require(Checks.Inspect(memory.Read,Module,out observed)==HookState.Other,"Changed execution code refused");
+                        }
+                    }
+                    Require(Profile.Hooks[71].CodeOffset==0x36000 && Profile.Hooks[71].CodeCapacity==0x2000,
+                        "Heavy binding payload has its exact reduced code capacity");
+                    HookSpec weaponGuard=Profile.Hooks[80];
+                    Require(weaponGuard.CodeOffset==0x38000 && weaponGuard.CodeCapacity==0x1000 &&
+                        weaponGuard.Rva==0x737769U &&
+                        Checks.Equal(weaponGuard.Original,new byte[]{0x48,0x8B,0x41,0x58,0x48,0x8B,0x48,0x20}),
+                        "Pending Living Weapon guard has exact native entry and formerly unused code slot");
+                    LegacyProfile beta532=Profile.LegacyProfiles[5];
+                    Require(beta532.Version=="1.0.0-beta.5.3.2" && beta532.Hooks.Length==71,"Exact previous71 identity");
+                    LegacyProfile beta54=Profile.LegacyProfiles[6];
+                    Require(beta54.Version=="1.0.0-beta.5.4" && beta54.Hooks.Length==80,"Exact delivered80 identity");
+                    Require(!Checks.Equal(Profile.Hooks[71].Template,beta54.Hooks[71].Template),"Restart binding repair differs from delivered Beta5.4");
+                    for(int i=0;i<80;i++)
+                        if(i!=71) Require(Checks.Equal(Profile.Hooks[i].Template,beta54.Hooks[i].Template),"Other79 templates preserved from Beta5.4");
+                    for(int i=0;i<71;i++)
+                    {
+                        HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];
+                        Require(current.Name==old.Name && current.Rva==old.Rva && current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity,"Previous hook slot identity");
+                        Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Previous encoded template");
+                        for(int f=0;f<current.Fixups.Length;f++)
+                            Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Previous relocation encoding");
+                        foreach(long module in new long[]{0x140000000,0x7FF83AA00000,0x7FFA01000000})
+                            foreach(int slot in new int[]{0,1,37,511})
+                            {
+                                long at=Checks.FirstAllocation(module)+slot*0x10000L;
+                                Require(Checks.Equal(current.Payload(module,at),old.Payload(module,at)) && Checks.Equal(current.Jump(module,at),old.Jump(module,at)),"Previous relocated payload and site bytes");
+                            }
                     }
                 });
                 test("all original sixty templates fixups and relocated payloads remain identical", delegate

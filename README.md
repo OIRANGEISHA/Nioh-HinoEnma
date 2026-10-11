@@ -2,22 +2,35 @@
 
 [简体中文](README.zh-CN.md)
 
-**Current version: 1.0.0 Beta 5.3.2 / Pre-release build.**
+**Current version: 1.0.0 Beta 5.4.1 / local Beta package.**
 
-A standalone Windows tool for playing Hino-Enma in Steam Nioh: Complete Edition 1.24.08. This version fixes the equipment/status preview reverting to William after a complete game restart. It waits for the native map-loading gates before counting the Hino-Enma resource timeout and retries temporarily absent managers. Her native idle, surrounding Yokai Realm mist and accepted camera framing are retained.
+A standalone Windows tool for playing Hino-Enma in Steam Nioh: Complete Edition 1.24.08. Beta 5.4.1 adapts the reported Yamata-no-Orochi execution resource chain and protects its zero-length and non-finite geometry queries. Beta 5.4 failed after restart because discovery incorrectly required Hino idle and native common idle to be the same record. This revision keeps their owners separate and reads heavy transitions from common idle. The exact Release EXE now passed a complete game-process restart, main-menu enable and final Orochi execution; the user confirmed the kill, continued story and restored control. Existing menu, element, item, ladder and interaction fixes are retained.
 
 ## Download and use
 
-The owner has authorized a new [Beta 5.3.2 Pre-release](https://github.com/OIRANGEISHA/Nioh-HinoEnma/releases/tag/v1.0.0-beta.5.3.2). Its attachment inventory is exactly `Nioh-HinoEnma-1.0.0-beta.5.3.2-windows-x64.exe` and `Nioh-HinoEnma-1.0.0-beta.5.3.2-source.zip`. Publication completes only after the reviewed source, tag and downloaded attachments pass verification. The standalone EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python, or the source ZIP.
+The verified local package contains `飞缘魔启动工具.exe`, `Nioh-HinoEnma-1.0.0-beta.5.4.1-source.zip` and `使用说明.txt`. This repository contains the Beta 5.4.1 source and technical records; source pushes run complete offline CI. See [build and package verification](docs/BUILD.md) for exact source and EXE checks. The EXE needs Windows x64 and .NET Framework 4.x; it does not need CE, Python, or the source ZIP. Local gameplay verification identifies the exact EXE below; a separate CI build requires its own build record.
 
 1. After upgrading, exit and restart Nioh, then stop at **NEW GAME / CONTINUE**.
 2. Run the EXE and enable Hino-Enma, then continue to the mission map or a mission.
 3. The tool can be closed after enabling. Run it again after restarting Nioh.
 4. To select William or Hino-Enma, use the tool's character button and return to the main menu before continuing. Do not mix EXE/CT versions in one process.
 
-Supported old Beta 5.1, Hotfix 1, Beta 5.2, Beta 5.3 and Beta 5.3.1 installations are recognized read-only and require a restart. Unsupported executable builds are refused. The supported executable SHA-256 is `0c3508c6b4d0696d84423949df9faccb3f9c6d93833854e1e17a78d66defc389`.
+Supported old Beta 5.1, Hotfix 1, Beta 5.2, Beta 5.3, Beta 5.3.1 , Beta 5.3.2 and Beta 5.4 installations are recognized read-only and require a restart. Unsupported executable builds are refused. The supported executable SHA-256 is `0c3508c6b4d0696d84423949df9faccb3f9c6d93833854e1e17a78d66defc389`.
 
-## New in Beta 5.3.2
+## New in Beta 5.4.1
+
+- Add ten scoped execution hooks while preserving all 71 Beta 5.3.2 hook payloads. Discover the current owned action, motion and auxiliary event resources at runtime. Recorded scene addresses are excluded from the package.
+- Supply matching native resource views for the reported Orochi execution and retain native input, damage, kill events and terminal recovery. The scene-bound trials were user-confirmed for the post-kill sequence and restored control.
+- Guard zero-length and non-finite ray queries through the native no-hit return, including the post-kill interval after pairing references are cleared. Direct HP, mission and save writes are excluded.
+- Fix distinct idle owners, pre-pairing Living Weapon readiness, missing ready3204 and valid four-byte metadata alignment. Match all eight exact head identities. The revised trial completed native death, mission progression and restored control.
+- The exact Release EXE passed a fresh-process test on final target `1DC1C / 19569 / 3203`, with all 81 hooks verified and no diagnostic hook or temporary patch. Read-only sampling confirmed native HP 0 and eight head deaths at target frame 251, then player idle and execution phase 0 at frame 411.
+- All eight full battles have not been tested individually. The earlier `8F795` animation-only failure remains recorded without a proven cause. Nine Tails execution remains unverified.
+
+At the final downed head, lock on and approach the execution position, then press the game's original heavy-attack key once (T in this test layout) and wait for the complete sequence. Other situations retain the spin attack. See the [debugging record and Nine Tails follow-up](docs/debugging/orochi-execution-2026-10-11.md) and [exact local validation](docs/validation-beta5.4.1.json).
+
+The tested Release EXE's SHA-256 is `dff85284c3e2ade94d6c8d50255734e48544391546e92eae41489864b6f7c2be`. The earlier scene-bound success and this final EXE test retain separate records.
+
+## Retained Beta 5.3.2 restart fix
 
 - Fix the menu preview reverting to William on the first visit to the mission map/base after restarting the game and enabling the tool at the title menu.
 - Native map-loading gates no longer consume the asset-wait budget. Temporary resource-manager absence retries within the same bounded generation, without duplicate preload requests or forced global readiness flags.
@@ -111,9 +124,9 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Known limitations
 
-- Menu-preview gameplay confirmation covers the reported map/base screen and temporary revisions. Every in-mission menu, aspect ratio, guardian appearance and transition remains unverified. The final public EXE's fresh-process enable/reload is still untested.
+- Menu-preview gameplay confirmation covers the reported map/base screen and temporary revisions. Every in-mission menu, aspect ratio, guardian appearance and transition remains unverified; the current local EXE's fresh-process Orochi test does not extend that menu coverage.
 - The innate-element gameplay result covers Raikiri's lightning on the five reported attacks in the second temporary revision. It does not establish every element, weapon affix, airborne variant or exact damage/status strength. Temporary enchantments keep native priority; ordinary body attacks do not gain a separately guaranteed paralysis channel.
-- The ladder fix is confirmed for the reported trial locations, with two ladder objects recorded. Enemy interruptions and every ladder variant remain untested. Final-public-EXE first enable in a fresh process has not yet been gameplay-tested; source/build checks are recorded separately.
+- The ladder fix is confirmed for the reported trial locations, with two ladder objects recorded. Enemy interruptions and every ladder variant remain untested; the current local EXE's fresh-process Orochi test does not extend that ladder coverage.
 
 - The retained post-defeat visual grab covers the reported Nouhime / Yuki-Onna with loaded compatible resources. The two consecutive gameplay confirmations used a temporary revision; its separate build verification is recorded in the historical Beta 5.1 validation record. This does not establish support for every defeated Boss or corpse. No extra damage or healing is added to a zero-HP target.
 - Salt has user-confirmed effects and normal recovery in the reported test. The additional Common 205/85 interruption routes have CPU regression coverage only; they have not yet been observed in gameplay, and all Salt/enemy combinations are not confirmed.
@@ -132,10 +145,10 @@ Space handles the compatible dojo ki-pulse/purification steps. Dojo weapon-switc
 
 ## Validation and development
 
-See [Beta 5.3.2 notes](docs/releases/1.0.0-beta.5.3.2.md), [build instructions](docs/BUILD.md), [keyboard documentation](docs/键位说明.md), and [validation](docs/validation-beta5.3.2.json). Historical records retain their original scope.
+See [Beta 5.4.1 notes](docs/releases/1.0.0-beta.5.4.1.md), [build instructions](docs/BUILD.md), [keyboard documentation](docs/键位说明.md), [validation](docs/validation-beta5.4.1.json) and the [Orochi fault analysis](docs/debugging/orochi-execution-2026-10-11.md). Historical records retain their original scope.
 
-The local source passed 134 regressions, the frozen 41 menu tests (4,280 byte comparisons, 15,880 synthetic CPU comparisons, 12 ASLR layouts), and 18 cold-start tests (19,892 synthetic CPU frames, 852 relocation comparisons and 840 unchanged other-hook comparisons). Debug and Release each passed 28 C# self-checks, 852 current-profile and 3,780 legacy-profile comparisons. The unchanged 60-hook Beta 5.2 basis passed 720 payload/patch comparisons. These checks use synthetic records and native-call stubs, with no game access.
+The new local build requires exact source regeneration, source/CT agreement, retained menu and original gameplay proofs, dynamic-binding regressions, and Debug/Release checks for 81 hooks. Each build must compare 972 current payloads across 12 layouts and 5,592 prior payloads across 84 layouts. Completed results and exact EXE hashes belong in the validation record and source ZIP `build-info/`; expected counts alone are not completed evidence.
 
-The release source ZIP is exported from the exact reviewed Git commit by `tools/package.py`. Its `build-info/` identifies the source commit/tree, every tracked source file, build reports and the distributed EXE hash. The local Beta 5.3.2 build records are based on published Beta 5.3.1 commit `0ad57b8b5d16912a06018b34d85f8a3b6b866ead`; their EXE hashes remain local evidence. Final CI-build provenance and downloaded attachment hashes are recorded separately in the release body and ZIP, with CI attestations linked when generated. The new tag is `v1.0.0-beta.5.3.2`; earlier tags and assets remain unchanged. This Windows Beta is unsigned with Authenticode.
+The local source ZIP is a complete UTF-8 snapshot with per-file hashes and the exact distributed EXE hash. It records no new source commit, public tag, GitHub release or CI attestation. The historical Beta 5.3.2 evidence remains unchanged. This Windows Beta is unsigned with Authenticode.
 
 Character replacement is adapted from the user-supplied Bryanyora CharacterChange CT. Credits remain in [NOTICE.md](NOTICE.md); game assets and private memory dumps are excluded.

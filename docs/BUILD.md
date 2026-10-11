@@ -1,54 +1,53 @@
-# Beta 5.3.2 build and verification
+# Beta 5.4.1 build and verification
 
-The Beta 5.3.2 profile contains 71 hooks, file version 1.0.0.66. It preserves the original 60-hook basis and all ten other menu entries. Only the existing resource-readiness payload changes, with native loading-gate waits and transient-manager retries. The code allocation is 0x36000; seven private data pages are writable and non-executable. No recorded live heap address is embedded.
+The local Beta 5.4.1 profile contains 81 hooks, file version 1.0.0.68. All 71 Beta 5.3.2 hook payloads remain identical. Ten new hooks supply native Orochi execution resource views and scoped numerical/Living Weapon query guards. Current actors and loaded resources are discovered at runtime. Hino idle and common idle are distinct records; private58 retains Hino idle, private1F0 retains owned common idle for native heavy-transition discovery. The allocation is 0x43000; eight private data pages are writable and non-executable. No recorded live heap address is embedded.
 
 ## Rebuild on Windows x64
 
-Windows .NET Framework includes the x64 C# compiler used by `tools/build.ps1`. Python and pinned development packages are needed only for regenerating and independently verifying source. No game files or private research inputs are needed.
+Windows .NET Framework includes the x64 C# compiler used by `tools/build.ps1`. Use Python 3.12 and the pinned development requirements for source regeneration and independent verification. No game files or private research inputs are needed. The EXE itself does not require Python or those packages.
 
 ```powershell
 python -m pip install --target artifacts/python-deps -r requirements-dev.txt
 $env:PYTHONPATH = (Resolve-Path artifacts/python-deps).Path
 python tools/build_profile.py --check
 python tools/check_source.py
-python -m unittest discover -s tests -p "test_*.py"
+python tools/run_regressions.py
 python tools/verify_menu_preview.py --report artifacts/menu-preview-verification.json
 python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
+python tools/verify_orochi_execution.py --report artifacts/orochi-execution-verification.json
 ./tools/build.ps1 -Configuration Debug
 ./tools/build.ps1 -Configuration Release
-python tools/verify.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.5.3.2-windows-x64.exe --report artifacts/Debug/verification.json
-python tools/verify.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.3.2-windows-x64.exe --report artifacts/Release/verification.json
+python tools/verify.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.5.4.1-windows-x64.exe --report artifacts/Debug/verification.json
+python tools/verify.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.4.1-windows-x64.exe --report artifacts/Release/verification.json
 ```
 
-The full regressions currently contain 134 tests. The owner-authorized GitHub publication uses `tools/package.py` from an exact clean reviewed Git checkout, after the checks above:
+The complete source suite contains 177 tests. The runner records the exact tested source hashes and refuses a changed source set during the run. The 34 execution tests are part of that total; their independent verifier additionally records frozen trial-source identities and previous71 payload preservation.
+
+## Local snapshot package
+
+The verified Beta 5.4.1 package was prepared locally; the subsequent user request authorizes committing and pushing its reviewed source and records to GitHub `main`. To create a local package after completing all checks above:
 
 ```powershell
-$taskSourceCommit = (git rev-parse HEAD).Trim()
-python tools/package.py --source-commit $taskSourceCommit --build-origin local --publisher OIRANGEISHA
-python tools/package.py --source-commit $taskSourceCommit --verify-source-zip artifacts/dist/Nioh-HinoEnma-1.0.0-beta.5.3.2-source.zip --exe artifacts/dist/Nioh-HinoEnma-1.0.0-beta.5.3.2-windows-x64.exe
-```
-
-The release packager refuses a dirty/mismatched checkout, stale source/build proofs and a nonempty output directory. It exports exact tracked Git blobs and embeds the reviewed commit/tree, per-file manifest, component inventory, build reports and EXE checksum in `build-info/`. Release attachments are only the Windows x64 EXE and complete Git-source ZIP. GitHub Actions uses `--build-origin github-actions`, its actual bot uploader identity and workflow URL; do not use those values for a local build. The authorized flow verifies the exact annotated tag and downloads before publishing Pre-release with `latest=false`. Final attachment hashes and CI provenance are recorded in the release body/ZIP; generated attestations remain with GitHub and do not add attachments.
-
-## Optional local snapshot package
-
-`tools/package_local.py` remains available for rebuilding an uncommitted local snapshot, distinct from a Git-source publication. Prepare its required regression receipt:
-
-```powershell
-python -c "import json,unittest; from pathlib import Path; r=unittest.TextTestRunner().run(unittest.defaultTestLoader.discover('tests')); p=Path('artifacts/regression-tests.json'); p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(dict(success=r.wasSuccessful(),game_access=False,tests_run=r.testsRun)),encoding='utf-8'); raise SystemExit(not r.wasSuccessful())"
-python tools/package_local.py
-```
-
-The local packager refuses stale build/source proofs and nonempty output directories. It records a complete UTF-8 snapshot with per-file hashes, exact EXE hash, build reports and component inventory. Its default output is `artifacts/dist-local`; `--destination <empty-directory>` can select another directory. Local outputs are the standalone EXE, source ZIP, and usage text. Verify downloaded/copied local artifacts with:
-
-```powershell
+python tools/package_local.py --destination <empty-directory>
 python tools/package_local.py --verify-source-zip <source.zip> --exe <exe>
 ```
 
+The packager refuses stale source/build/proof hashes and nonempty output directories. It exports a complete selected UTF-8 source snapshot and verifies every archived file against its current source and manifest, all three portable proofs, both EXE verification reports and the distributed EXE checksum. The source ZIP includes technical records, release notes and `build-info/` with source inventory, snapshot identity, component inventory, build evidence and checksums. It excludes game resources, private dumps and development binaries.
+
+Outputs are `飞缘魔启动工具.exe`, `Nioh-HinoEnma-1.0.0-beta.5.4.1-source.zip` and `使用说明.txt`. The default destination is `artifacts/dist-local`. This local packager records a source snapshot and does not create a Git commit, tag, remote Release or CI attestation. The original verified local ZIP retains its original snapshot; subsequent documentation updates in Git are recorded by their commits.
+
+## Publication scope
+
+`tools/package.py` retains the Git-source publication path for a separately authorized release. It requires an exact clean reviewed commit/tree and verifies exact Git blobs. The historical Beta 5.3.2 publication authorization and version-scoped workflow do not authorize publishing Beta 5.4.1. Existing public tags, assets and historical evidence remain unchanged.
+
 ## Validation boundaries
 
-The 41 frozen portable menu tests use synthetic records and explicit native-call stubs: 4280 byte comparisons, 15880 CPU comparisons, and 12 ASLR layouts. They verify copied timing hashes, current-generation camera checks, once-only aura queueing, owned resources, native fallback and machine restoration. Debug and Release each passed 28 self-checks, 852 current-profile and 3780 old-profile comparisons. Another 18 cold-start tests execute 19892 synthetic CPU frames, comparing 852 relocated payloads and 840 unchanged other-hook payloads. Old 55/59/60/70/71-hook installations are restart-only identities. Installation checks include the complete BaseMode aura frame, both native loading-gate dependencies, their readiness leaf and saved returns.
+The frozen 41 menu tests retain 4280 byte comparisons, 15880 synthetic CPU comparisons and 12 ASLR layouts. The 18 frozen cold-start tests retain 19892 CPU frames, 852 relocated payloads and 840 unchanged other-hook comparisons. The verifier supplies their exact Beta 5.3.2 predecessor input without changing frozen files or assertions. These counts describe those historical suites, not the new81 profile.
 
-The cold-start test EXE was user-confirmed after a complete game-process restart: enable at NEW GAME/CONTINUE, continue directly to the mission map/base and open the status page before visiting a mission. Model, idle, camera and mist were normal, with one preload and no fallback. The final public EXE is a separate build; its 71 hook payloads and native targets are checked against that tested revision. These tests do not imply every scene, aspect ratio or resource-failure condition. CT execution inside CE remains untested.
+The 34 execution tests use synthetic owners, resources and explicit Win64 call stubs. They check dynamic discovery, native fallback, both motion/event layers, descriptor bounds, the paired chain, post-kill scope, numerical query exits and ABI preservation. All previous71 payloads and patches remain identical across 12 layouts (852 comparisons of each). The immutable Beta 5.2 basis retains 720 payload and 720 patch comparisons.
 
-The owner has authorized a new `v1.0.0-beta.5.3.2` Pre-release with only the EXE and Git-source ZIP. Local offline results remain local evidence in docs/validation-beta5.3.2.json; final CI-built and downloaded asset hashes belong in the source ZIP's build-info/ and release body. Publication completes after exact source, tag and downloaded-artifact verification. Earlier releases and evidence remain unchanged. Authenticode signing is absent.
+Debug and Release each passed 29 self-checks, 972 current-profile comparisons across 12 layouts and 5592 old-profile comparisons across 84 layouts. The prior 55/59/60/70/71/71/80 installations remain read-only restart identities. Installation excludes complete menu frames and ten execution/geometry/query frames, including the full query86 frame, saved returns and the late no-hit epilogue.
+
+The scene-bound trials and final EXE gameplay retain separate evidence. The exact optimized Release EXE, SHA-256 `dff85284c3e2ade94d6c8d50255734e48544391546e92eae41489864b6f7c2be`, passed a complete game-process restart and main-menu enable, followed by final Orochi execution on `1DC1C / 19569 / 3203`. All 81 installed hooks matched the release payloads; no diagnostic hook or temporary patch was present. The user confirmed the kill, continued story and restored control. The 1412 read-only clock samples recorded native HP 0 and eight head deaths at target frame 251, then player idle and execution phase 0 at frame 411.
+
+The eight exact head identities have native-table and regression evidence, but all eight full battles have not been tested individually. The earlier `8F795` animation-only failure lacks target-clock evidence establishing its cause. Nine Tails remains unverified. See [the debugging record](debugging/orochi-execution-2026-10-11.md), [local validation](validation-beta5.4.1.json) and [package notes](releases/1.0.0-beta.5.4.1.md). CT execution in CE remains untested; Authenticode signing is absent.

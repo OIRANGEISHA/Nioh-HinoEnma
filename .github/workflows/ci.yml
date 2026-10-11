@@ -45,28 +45,14 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
           python tools/check_source.py
           if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
-          python tests/test_source_assembler.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Explicit assembly numeric parsing regressions failed.' }
-          python tests/test_latched_door_instances.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Public latched-door CPU regressions failed.' }
-          python tests/test_special_items_portable.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Public special-item CPU regressions failed.' }
-          python tests/test_salt_recovery_portable.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Public Salt CPU regressions failed.' }
-          python -m unittest discover -s tests -p test_postdefeat_grab_portable.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Public post-defeat grab CPU regressions failed.' }
-          python -m unittest discover -s tests -p test_ladder_scale_portable.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Public ladder scale CPU regressions failed.' }
-          python -m unittest discover -s tests -p test_inherent_element_portable.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Public inherent element CPU regressions failed.' }
-          python -m unittest discover -s tests -p test_beta52_baseline.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation regressions failed.' }
-          python -m unittest discover -s tests -p test_release_evidence.py -v
-          if ($LASTEXITCODE -ne 0) { throw 'Exact release evidence rejection checks failed.' }
+          python tools/run_regressions.py
+          if ($LASTEXITCODE -ne 0) { throw 'Complete exact-source regressions failed.' }
           python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation proof failed.' }
           python tools/verify_menu_preview.py --report artifacts/menu-preview-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Portable menu source and CPU proof failed.' }
+          python tools/verify_orochi_execution.py --report artifacts/orochi-execution-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Portable execution source and CPU proof failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |

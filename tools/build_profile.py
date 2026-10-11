@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import base64
 from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -190,10 +191,16 @@ def source_plan_beta52(frozen: dict) -> dict:
     return plan
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_beta532(frozen: dict) -> dict:
     """Rebuild Beta 5.3.2 from the unchanged 60-hook gameplay basis."""
     from menu_preview_coldstart_portable import apply_menu_preview
     return apply_menu_preview(source_plan_beta52(frozen))
+
+
+def source_plan(frozen: dict) -> dict:
+    from hinoenma_orochi_runtime import apply_orochi_execution
+    from hinoenma_manual_purification import menu_guard
+    return apply_orochi_execution(source_plan_beta532(frozen), menu_guard())
 
 
 def legacy_plans(frozen: dict) -> list[dict]:
@@ -202,10 +209,21 @@ def legacy_plans(frozen: dict) -> list[dict]:
     beta51.update(tool_version='1.0.0-beta.5.1', allocation_size=0x19000)
     from menu_preview_portable_integration import apply_menu_preview as beta53
     from menu_preview_reload_portable import apply_menu_preview as beta531
-    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen)), beta531(source_plan_beta52(frozen))]
+    old_bytes = (ROOT / 'profiles/legacy-beta5.4.json').read_bytes()
+    if hashlib.sha256(old_bytes).hexdigest() != '3e864d373a4175bad8b5748c20579bdadde4dd1bacb28a8792980a2a32985da9':
+        raise ValueError('Exact delivered Beta5.4 identity changed')
+    beta54 = json.loads(old_bytes.decode('utf-8'))
+    if (beta54['tool_version'] != '1.0.0-beta.5.4' or len(beta54['hooks']) != 80
+            or beta54['allocation_size'] != 0x43000 or beta54['data_offset'] != 0xF000):
+        raise ValueError('Complete delivered Beta5.4 identity required')
+    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen)), beta531(source_plan_beta52(frozen)), source_plan_beta532(frozen), beta54]
 
 
 def validate_layout(plan: dict) -> None:
+    if len(plan.get('hooks', ())) == 81:
+        from hinoenma_orochi_runtime import validate_layout as validate_orochi_layout
+        validate_orochi_layout(plan)
+        return
     if len(plan.get('hooks', ())) == 71:
         if plan.get('tool_version') == '1.0.0-beta.5.3.2':
             from menu_preview_coldstart_portable import validate_layout as validate_reload_layout
@@ -411,7 +429,10 @@ def validate_ct_labels(source: str, local_labels: list[str]) -> None:
 
 
 def aa_source(plan: dict) -> str:
-    from menu_preview_coldstart_portable import ct_compatible_plan
+    if len(plan.get('hooks', ())) == 81:
+        from hinoenma_orochi_runtime import ct_compatible_plan
+    else:
+        from menu_preview_coldstart_portable import ct_compatible_plan
     # The standalone source tests also exercise an explicitly converted plan.
     # Accept only the exact conversion of the reconstructed source profile;
     # never infer numeric semantics from arbitrary modified assembly text.
@@ -422,7 +443,7 @@ def aa_source(plan: dict) -> str:
             from menu_preview_reload_portable import apply_menu_preview as beta531
             canonical = beta531(source_plan_beta52(plan))
         else:
-            canonical = source_plan(plan) if len(plan['hooks'])==71 else __import__('menu_preview_portable_integration').apply_menu_preview(source_plan_beta52(plan))
+            canonical = source_plan(plan) if len(plan['hooks'])==81 else source_plan_beta532(plan) if len(plan['hooks'])==71 else __import__('menu_preview_portable_integration').apply_menu_preview(source_plan_beta52(plan))
         if plan != ct_compatible_plan(canonical):
             raise ValueError('Expected raw source or exact CT numeric conversion')
         plan = canonical
