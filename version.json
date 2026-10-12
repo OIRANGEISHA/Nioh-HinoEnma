@@ -40,5 +40,6 @@
   "abyss_guide_revision": 1,
   "fresh_restart_guide_validation_pending": false,
   "gameplay_basis_version": "1.0.0-beta.5.5.1",
-  "beta56_exact_executable_gameplay_repeated": false
+  "beta56_exact_executable_gameplay_repeated": false,
+  "publication_pipeline_revision": 2
 }
