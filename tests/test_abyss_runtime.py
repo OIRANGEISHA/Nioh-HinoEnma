@@ -32,11 +32,15 @@ GPRS=(UC_X86_REG_RAX,UC_X86_REG_RBX,UC_X86_REG_RCX,UC_X86_REG_RDX,
 REGS=GPRS+(UC_X86_REG_EFLAGS,UC_X86_REG_MXCSR)+tuple(globals()['UC_X86_REG_XMM'+str(i)] for i in range(16))
 
 class CPU:
-    def __init__(self):
+    def __init__(self, plan=None):
+        # Keep each caller's source identity local. Guide tests must not replace
+        # this module's current production PLAN during test discovery.
+        self.plan = PLAN if plan is None else plan
         self.c=Uc(UC_ARCH_X86,UC_MODE_64)
-        for at,size in ((M,0x1200000),(M+0x18A0000,0x1000),(C,0x60000),(0x20000000,0x10000),(A,0xC0000)):
+        allocation_size = (self.plan['allocation_size'] + 0xFFF) & ~0xFFF
+        for at,size in ((M,0x1200000),(M+0x18A0000,0x1000),(C,allocation_size),(0x20000000,0x10000),(A,0xC0000)):
             self.c.mem_map(at,size)
-        for h in build.assemble(PLAN,M,C): self.c.mem_write(h['target'],h['payload'])
+        for h in build.assemble(self.plan,M,C): self.c.mem_write(h['target'],h['payload'])
         for rva in (0x8CEA40,0x8CEC80,0x755160,0x706070,0x917500):self.c.mem_write(M+rva,b'\xC3')
         self.calls=[];self.action_calls=[];self.references={};self.stop=None
         self.stops={END,M+0x75361C,M+0x8A2906,C+0xE806};self.callback=None
@@ -220,11 +224,45 @@ class Tests(unittest.TestCase):
         m.c.reg_write(UC_X86_REG_RCX,CTL+0x70);m.c.reg_write(UC_X86_REG_RDX,75);m.c.reg_write(UC_X86_REG_R8,A+0x9000)
         self.assertEqual(m.call(0x2F080),C+0xE806)
     def test_only_five_prior_payloads_changed_and_all_native_entries_preserved(self):
+        # Preserve the exact historical lifetime change set. The current LW
+        # revision has its own separately bounded change set below.
+        historical = build.source_plan_beta56(P)
         for module,allocation in ((M,C),(0x7FF709EB0000,0x7FF70CF20000)):
-            old,new=build.assemble(PREVIOUS,module,allocation),build.assemble(PLAN,module,allocation)
+            old,new=build.assemble(PREVIOUS,module,allocation),build.assemble(historical,module,allocation)
             self.assertEqual(tuple(i for i,(a,b) in enumerate(zip(old,new)) if a['payload']!=b['payload']),CHANGED_INDICES)
             for a,b in zip(old,new):self.assertEqual(a['patched'],b['patched'])
             for h in new:self.assertLessEqual(len(h['payload']),h['code_capacity'])
+    def test_production_lw_preserves_abyss_bodies_fixed_helpers_and_native_entries(self):
+        historical = build.source_plan_beta56(P)
+        changed = [36,37,38,39,72,73,74,75,76,77,81]
+        identity = ('name','rva','length','original')
+        self.assertEqual(PLAN['tool_version'], '1.0.0-beta.5.6.1')
+        self.assertEqual(PLAN['allocation_size'], 0x69000)
+        self.assertEqual(len(PLAN['hooks']), 82)
+        self.assertEqual(len(historical['hooks']), 82)
+        for key, value in historical['targets'].items():
+            self.assertEqual(PLAN['targets'].get(key), value, 'Inherited native target changed')
+        self.assertEqual(PLAN['data_offset'], historical['data_offset'])
+        self.assertEqual(PLAN['protected_data_pages'][:11], historical['protected_data_pages'])
+        for i, (old, current) in enumerate(zip(historical['hooks'], PLAN['hooks'])):
+            self.assertEqual(tuple(old[k] for k in identity), tuple(current[k] for k in identity))
+            if i == 36:
+                self.assertEqual((current['code_offset'],current['code_capacity']), (0x61000,0x8000))
+            else:
+                self.assertEqual((old['code_offset'],old['code_capacity']),
+                                 (current['code_offset'],current['code_capacity']))
+            if i in range(72,78):
+                self.assertTrue(current['asm'].endswith(old['asm']), 'Native fallback source changed')
+        for module in (M,0x7FF709EB0000,0x7FFA01000000):
+            for delta in (0x4000000,0x5110000,0x7FD0000):
+                allocation=module+delta
+                old=build.assemble(historical,module,allocation)
+                new=build.assemble(PLAN,module,allocation)
+                self.assertEqual([i for i,(a,b) in enumerate(zip(old,new)) if a['payload']!=b['payload']], changed)
+                self.assertEqual([i for i,(a,b) in enumerate(zip(old,new)) if a['patched']!=b['patched']], [36])
+                self.assertEqual(old[39]['payload'][5:], new[39]['payload'][5:])
+                self.assertEqual(old[81]['payload'], new[81]['payload'][:len(old[81]['payload'])])
+                for h in new:self.assertLessEqual(len(h['payload']),h['code_capacity'])
     def test_compiled_fixups_match_independent_assembler_in_all_aslr_positions(self):
         specs=build.relocation_specs(PLAN)
         for module in (M,0x7FF709EB0000,0x7FFA01000000):
@@ -240,7 +278,10 @@ class Tests(unittest.TestCase):
                         blob[fix['offset']:fix['offset']+len(value)]=value
                     self.assertEqual(bytes(blob),actual['payload'],(actual['name'],hex(module),hex(allocation)))
     def test_ct_number_conversion_and_all_declared_labels_preserve_source(self):
-        from hinoenma_abyss_runtime import ct_compatible_plan
+        if PLAN.get('living_weapon_start_production_layout_revision') == 1:
+            from living_weapon_start_ct import ct_compatible_plan
+        else:
+            from hinoenma_abyss_runtime import ct_compatible_plan
         converted=ct_compatible_plan(PLAN)
         raw,ct=build.assemble(PLAN,M,C),build.assemble(converted,M,C)
         self.assertEqual([h['payload'] for h in raw],[h['payload'] for h in ct])

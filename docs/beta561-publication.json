@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "version": "1.0.0-beta.5.6.1",
+  "tag": "v1.0.0-beta.5.6.1",
+  "repository": "OIRANGEISHA/Nioh-HinoEnma",
+  "publication_authorized": true,
+  "asset_branch": "release-assets/beta5.6.1",
+  "asset_commit": "696d80088279bbb28252fdcb8634a90c7fc44557",
+  "executable_sha256": "0327010814f1918a77e528744c87ab9517c8dcf01d082648df09f4ecfdade659",
+  "profile_sha256": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
+  "ct_sha256": "5a1cc4694d3105cfe9e44728b7962acd69bb1c31f27c17e7758e1a35ef8e366a",
+  "original_local_verification_sha256": "e871d0741e31eb1fd1a2301b1324d9ebf9cd8dc5e3615e3f4cd48876b51d0cfc",
+  "executable_origin": "local-source-build, exact fresh-process gameplay validated file",
+  "ci_rebuild_gameplay_validation": false,
+  "source_archive_origin": "final Git main commit and tree; includes publication wrapper",
+  "known_remaining_bug": "忍术道具目前无法使用"
+}

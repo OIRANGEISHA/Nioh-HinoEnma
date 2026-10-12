@@ -8,6 +8,8 @@ import unittest
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'tools'))
 from verify_beta52_baseline import verify,verify_plans
+from verify_beta52_baseline import BASELINE_SHA256, digest
+from build_profile import source_plan_beta56
 
 
 class Beta52BaselineTests(unittest.TestCase):
@@ -15,9 +17,14 @@ class Beta52BaselineTests(unittest.TestCase):
     def setUpClass(cls):
         cls.original=json.loads((ROOT/'profiles/baseline-beta5.2.json').read_text('utf-8'))
         cls.current=json.loads((ROOT/'profiles/steam-1.24.8.json').read_text('utf-8'))
+        # The immutable verifier proves the original60 through its explicit
+        # Beta5.6 lifetime basis; production LW changes are verified separately.
+        if cls.current.get('living_weapon_start_production_layout_revision') == 1:
+            cls.current=source_plan_beta56(cls.current)
 
     def test_published_blob_and_720_payloads(self):
-        result=verify()
+        self.assertEqual(digest(ROOT/'profiles/baseline-beta5.2.json'), BASELINE_SHA256)
+        result=verify_plans(self.original,self.current)
         self.assertEqual(result['payload_comparisons'],720)
         self.assertEqual(result['patch_comparisons'],720)
         self.assertEqual(result['current_changed_original_indices'],[1,8,9,39])

@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "version": "1.0.0-beta.5.6.1",
+  "date": "2026-10-12",
+  "status": "local_package_cold_gameplay_validation_passed",
+  "problem": "数字9启动99武器只召唤守护灵，缺少起手动画与冲击波",
+  "root_cause": [
+    "旧数字9分支直接初始化99并单独生成守护灵子动作，绕过原生169起手及其调度事件链。",
+    "原生事件调度在数字9接入位置之前已执行；此处只换起手动作会漏过第0帧初始化，造成仅视觉动作、量表没有激活。",
+    "威廉原始T键与飞缘魔数字9的绑定差异是预期行为，不是本问题根因。"
+  ],
+  "repair": [
+    "正式工具在首次按9时自动解析当前装备所属的原生169动作、主辅动画和事件资源；使用当前玩家、装备和资源身份校验，失败时不提交绑定。",
+    "在新按键、原生99未激活、精确起手记录、第0帧及空调度队列等条件满足时，只执行一次原生首次调度；不直接替代原生初始化事件。",
+    "保持固定辅助入口地址、已有资源寿命与附件保护，并在自然结束时恢复飞缘魔待机。",
+    "保持99期间再按9召唤守护灵的已有功能。"
+  ],
+  "failed_trials": [
+    {
+      "revision": 1,
+      "result": "尚未按9即闪退",
+      "cause": "扩展共享入口前缀移位了仍被其他钩子按固定地址调用的内部辅助代码。",
+      "correction": "仅替换原入口跳转，原内部代码及地址保持。"
+    },
+    {
+      "revision": 2,
+      "result": "待机移动菜单稳定，但数字9被就绪检查拒绝",
+      "cause": "把motion+8错误解释为角色反向引用，实际为动画资源槽。",
+      "correction": "撤除错误字段假设，并修正对应CPU测试夹具。"
+    },
+    {
+      "revision": 3,
+      "result": "起手动画和冲击波出现，但99量表未出现且能量不消耗",
+      "cause": "换到原生起手后漏过第0帧初始化事件，后续视觉事件不能代表原生99激活。",
+      "correction": "撤回候选并完整重启清理原生附着状态，再补齐严格单次的首次调度。"
+    }
+  ],
+  "successful_trials": [
+    {
+      "revision": 4,
+      "kind": "临时场景候选",
+      "result": "动画、冲击波、99量表、消耗、自然结束和控制恢复均正常",
+      "limitation": "仍使用场景候选资源绑定，不是正式工具自动空绑定启动。"
+    },
+    {
+      "revision": "Beta5.6.1",
+      "kind": "完整退出重启后的正式独立EXE",
+      "result": "全部正常；最初为空的绑定由正式工具自动生成，无临时补丁或手工资源绑定",
+      "evidence": "living-weapon-beta561-gameplay.json"
+    }
+  ],
+  "why_prior_checks_missed": [
+    "先前输入与初始化ABI合约测试证明了调用参数和寄存器保护，未执行真实原生第0帧事件时序，所以没发现只换动作不能激活99。",
+    "错误字段假设被同步写进合成测试夹具，使测试无法推翻该假设。",
+    "共享辅助代码含固定地址调用；扩展入口不能仅凭局部汇编与容量检查判断安全。"
+  ],
+  "validation": {
+    "native_hook_count": 82,
+    "allocation_size": "0x69000",
+    "builds": {
+      "Debug": {
+        "csharp_checks": 30,
+        "current_payload_comparisons": 984,
+        "historical_payload_comparisons": 7536
+      },
+      "Release": {
+        "csharp_checks": 30,
+        "current_payload_comparisons": 984,
+        "historical_payload_comparisons": 7536
+      }
+    },
+    "cpu_tests": {
+      "automatic_resource_bootstrap": 17,
+      "production_input_integration": 16,
+      "real_native_event_clock": 13
+    },
+    "cpu_boundaries": "输入集成仍使用原生调用ABI合约；真实原生事件时钟CPU在事件池之前停止。自动绑定CPU使用实际保存资源。完整游戏事件链最终由正式冷启动实测验证。",
+    "fresh_process_gameplay": {
+      "success": true,
+      "samples": 3113,
+      "errors": 0,
+      "transient_reads": 0,
+      "binding_empty_before_first9": true,
+      "automatic_bootstrap_observed": true,
+      "native_startups": 1,
+      "charge_before": 1400,
+      "charge_after": 0,
+      "user_confirmed": [
+        "起手动画",
+        "冲击波",
+        "99量表显示与消耗",
+        "自然结束",
+        "移动",
+        "菜单"
+      ]
+    },
+    "equipment_scope": "同一武器和守护灵；selected item1094/type11/family2；其他装备和关卡未全面实测",
+    "historical_boss_abyss_scenarios_replayed_in_this_test": false,
+    "ct_payloads_matched_offline": true,
+    "ct_direct_ce_gameplay_tested": false,
+    "public_regression_suite": {
+      "tests": 240,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "tested_source_unchanged": true,
+      "code_configuration_files": 146,
+      "receipt": "build-info/verification.json",
+      "receipt_sha256": "2f364aeb7b0fc4ec561dbd270da3710dddd63c359fd33d16d2c4b955eec78668"
+    }
+  },
+  "identity": {
+    "executable_sha256": "0327010814f1918a77e528744c87ab9517c8dcf01d082648df09f4ecfdade659",
+    "executable_bytes": 812032,
+    "profile_sha256": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
+    "file_version": "1.0.0.74"
+  },
+  "known_remaining_bug": "忍术道具目前无法使用",
+  "publication": {
+    "local_package_only": true,
+    "new_github_commit": false,
+    "new_git_tag": false,
+    "new_github_release": false
+  },
+  "provenance_note": "历史Boss与无间狱记录保留其原版本身份。源码重编译如生成不同EXE哈希，不继承本次精确文件的实测结果；不包含原始私有地址、游戏转储或凭据。",
+  "regression_audit": {
+    "finding": "木灵回归导入时覆盖资源寿命测试的全局PLAN，掩盖当前生产布局检查；与99漏过第0帧是分别记录的测试漏洞。",
+    "correction": "CPU夹具显式传plan；寿命与取消默认用5.6.1，历史guide和Beta5.2基线显式隔离；保留全部测试且新增严格生产变化集检查。"
+  }
+}

@@ -23,6 +23,9 @@ jobs:
       run:
         shell: pwsh
     steps:
+      - name: Preserve exact Git blob bytes
+        run: git config --global core.autocrlf false
+
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -45,10 +48,10 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
           python tools/check_source.py
           if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
-          python tools/run_regressions.py
+          python tools/run_beta561_regressions.py --report artifacts/beta561-regression-tests.json
           if ($LASTEXITCODE -ne 0) { throw 'Complete exact-source regressions failed.' }
-          python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation proof failed.' }
+          python tools/verify_beta561_ct.py --report artifacts/ct-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Current CT verification failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |
@@ -59,7 +62,7 @@ jobs:
 
       - name: Verify both build profiles and self-checks
         run: |
-          python tools/verify_beta56.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          python tools/verify_beta561.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
-          python tools/verify_beta56.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          python tools/verify_beta561.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }

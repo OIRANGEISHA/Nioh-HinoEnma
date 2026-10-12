@@ -10,12 +10,11 @@ import test_abyss_runtime as fixture
 
 BASELINE=json.loads((ROOT/'profiles/guide-baseline-beta5.5.json').read_text('utf-8'))
 PLAN=candidate.candidate_plan(BASELINE)
-fixture.PLAN=PLAN
 
 
 class CPU(fixture.CPU):
     def __init__(self,dispatch=46):
-        super().__init__()
+        super().__init__(plan=PLAN)
         self.u(fixture.INFO+0x48,dispatch&0xFFFFFFFF)
         self.u(fixture.BANK+0x130,7)
         self.c.mem_write(fixture.BANK+0x58,struct.pack('<HH',16384,16384))

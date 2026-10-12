@@ -1,377 +1,119 @@
-name: Prepare Beta release
+name: Publish exact cold-tested Beta5.6.1
 
 on:
-  # One-time paths for explicitly authorized uploads, including this exact Beta5.6.
   push:
     branches: [main]
     paths: [version.json]
   workflow_dispatch:
     inputs:
       expected_commit:
-        description: Exact reviewed main commit SHA (40 lowercase hex characters)
+        description: Exact reviewed main commit SHA
         required: true
         type: string
 
 permissions:
   contents: write
-  id-token: write
-  attestations: write
 
 concurrency:
-  group: prepare-beta-release
+  group: publish-beta561
   cancel-in-progress: false
 
 jobs:
-  gate:
-    if: github.ref == 'refs/heads/main' && github.repository == 'OIRANGEISHA/Nioh-HinoEnma' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    runs-on: windows-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    outputs:
-      run_release: ${{ steps.scope.outputs.run_release }}
-      one_time_current_release_publish: ${{ steps.scope.outputs.one_time_current_release_publish }}
-      source_sha: ${{ steps.scope.outputs.source_sha }}
-    steps:
-      - name: Read the exact source for the publication scope check
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-      - name: Limit push publication to an exact authorized Beta revision
-        id: scope
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-          EVENT_NAME: ${{ github.event_name }}
-          EXPECTED_COMMIT: ${{ github.event_name == 'workflow_dispatch' && inputs.expected_commit || github.sha }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          'run_release=false' >> $env:GITHUB_OUTPUT
-          'one_time_current_release_publish=false' >> $env:GITHUB_OUTPUT
-          $head = git rev-parse HEAD
-          if ($LASTEXITCODE -ne 0 -or $env:EXPECTED_COMMIT -cnotmatch '^[0-9a-f]{40}$' -or $head -cne $env:EXPECTED_COMMIT -or $head -cne $env:GITHUB_SHA) { throw 'Exact source mismatch.' }
-          if (git status --porcelain) { throw 'Scope checkout is not clean.' }
-          $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
-          if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
-          if ($env:EVENT_NAME -ceq 'push') {
-            $inheritedScope = $version.tag -ceq "v$($version.version)" -and $version.channel -ceq 'beta' -and $version.upstream_private_profile_version -ceq '0.60' -and $version.upstream_private_inherent_element_revision -eq 2 -and $version.menu_preview_revision -eq 2 -and $version.menu_preview_hook_count -eq 11 -and $version.menu_aura_revision -eq 1 -and $version.menu_camera_reload_revision -eq 1 -and $version.menu_camera_distance -eq 740.0 -and $version.menu_camera_height -eq -45.0 -and $version.menu_coldstart_revision -eq 1 -and $version.menu_asset_wait_frames -eq 1800 -and $version.menu_total_wait_frames -eq 7200
-            $authorizedBeta532 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.3.2'
-            $authorizedBeta541 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.4.1' -and $version.file_version -ceq '1.0.0.68' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_4_1.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2
-            $authorizedBeta542 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.4.2' -and $version.file_version -ceq '1.0.0.69' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_4_2.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2 -and $version.ninetails_execution_revision -eq 1 -and $version.ninetails_resource_revision -eq 1 -and $version.ninetails_wait_guard_revision -eq 1
-            $authorizedBeta56 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.6' -and $version.file_version -ceq '1.0.0.73' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_6.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2 -and $version.ninetails_execution_revision -eq 1 -and $version.ninetails_resource_revision -eq 1 -and $version.ninetails_wait_guard_revision -eq 1 -and $version.abyss_actions_revision -eq 3 -and $version.abyss_cancel_revision -eq 1 -and $version.abyss_resource_lifetime_revision -eq 1 -and $version.abyss_guide_revision -eq 1 -and $version.gameplay_basis_version -ceq '1.0.0-beta.5.5.1' -and $version.beta56_exact_executable_gameplay_repeated -eq $false
-            if ($authorizedBeta541) {
-              $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
-              if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.orochi_execution_revision -ne 3 -or $profile.orochi_hook_count -ne 10 -or $profile.orochi_resource_revision -ne 5 -or $profile.orochi_ray_guard_revision -ne 2 -or $profile.orochi_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.1 must identify the reviewed dynamic-resource 81-hook execution profile.' }
-            }
-            if ($authorizedBeta542) {
-              $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
-              if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.allocation_size -ne 331776 -or $profile.ninetails_execution_revision -ne 1 -or $profile.ninetails_binding_data_offset -ne 278528 -or $profile.ninetails_binding_data_size -ne 512 -or $profile.ninetails_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.2 must identify the reviewed dual-boss 81-hook profile.' }
-            }
-            if ($authorizedBeta56) {
-              $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
-              if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 82 -or $profile.allocation_size -ne 348160 -or $profile.data_offset -ne 61440 -or $profile.local_package_only -ne $false -or $profile.abyss_actions_revision -ne 3 -or $profile.abyss_cancel_revision -ne 1 -or $profile.abyss_resource_lifetime_revision -ne 1 -or $profile.abyss_boat_return_trial_revision -ne 1 -or $profile.abyss_boat_request_dispatch -ne 46 -or (@($profile.abyss_boat_common_actions) -join ',') -cne '170,1155,1156,1157' -or (@($profile.abyss_boat_motion_ids) -join ',') -cne '8,0' -or $profile.abyss_resource_data_offset -ne 339968 -or $profile.abyss_resource_data_size -ne 8192 -or $profile.abyss_resource_ticket_slots -ne 64) { throw 'Authorized Beta5.6 requires the reviewed82-hook resource-lifetime and guide profile.' }
-              if ((Get-FileHash -LiteralPath profiles/gameplay-tested-beta5.5.1.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '34324ce6558db94f419dd5342a1362889a08f7796b81782532a1bccc13126c2b') { throw 'Accepted Beta5.5.1 profile changed.' }
-            }
-            if (-not ($authorizedBeta532 -or $authorizedBeta541 -or $authorizedBeta542 -or $authorizedBeta56)) {
-              'Push publication skipped: only an exact explicitly authorized Beta revision may publish.' >> $env:GITHUB_STEP_SUMMARY
-              exit 0
-            }
-            git show-ref --verify --quiet "refs/tags/$($version.tag)"
-            $tagStatus = $LASTEXITCODE
-            if ($tagStatus -eq 0) {
-              'Reviewed release tag already exists; release work skipped without changing it.' >> $env:GITHUB_STEP_SUMMARY
-              exit 0
-            }
-            if ($tagStatus -ne 1) { throw 'Could not inspect tags.' }
-            $pages = gh api --paginate --slurp "repos/$env:GITHUB_REPOSITORY/releases?per_page=100"
-            if ($LASTEXITCODE -ne 0) { throw 'Could not inspect releases.' }
-            $releasePages = $pages | ConvertFrom-Json
-            $existing = @(foreach ($page in $releasePages) { foreach ($release in $page) { if ($release.tag_name -ceq $version.tag) { $release } } })
-            if ($existing.Count -ne 0) {
-              'Reviewed release already exists; release work skipped without changing it.' >> $env:GITHUB_STEP_SUMMARY
-              exit 0
-            }
-            'one_time_current_release_publish=true' >> $env:GITHUB_OUTPUT
-          } elseif ($env:EVENT_NAME -cne 'workflow_dispatch') { throw 'Unexpected release event.' }
-          "source_sha=$head" >> $env:GITHUB_OUTPUT
-          'run_release=true' >> $env:GITHUB_OUTPUT
-
-  prepare:
-    needs: gate
-    if: needs.gate.outputs.run_release == 'true' && github.ref == 'refs/heads/main' && github.repository == 'OIRANGEISHA/Nioh-HinoEnma'
+  publish:
+    if: github.repository == 'OIRANGEISHA/Nioh-HinoEnma' && github.ref == 'refs/heads/main'
     runs-on: windows-latest
     timeout-minutes: 20
     env:
       PYTHONUTF8: '1'
-      ONE_TIME_CURRENT_RELEASE_PUBLISH: ${{ needs.gate.outputs.one_time_current_release_publish }}
+      PYTHONDONTWRITEBYTECODE: '1'
+      RELEASE_STEM: Nioh-HinoEnma-1.0.0-beta.5.6.1
     defaults:
       run:
         shell: pwsh
     steps:
-      - name: Check out reviewed source
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Preserve exact Git blob bytes
+        run: git config --global core.autocrlf false
+
+      - name: Check out the exact source commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Require exact source and unused release version
+      - name: Restrict publication to the authorized version and assets
+        id: scope
         env:
-          EXPECTED_COMMIT: ${{ needs.gate.outputs.source_sha }}
-          GH_TOKEN: ${{ github.token }}
+          EXPECTED_COMMIT: ${{ github.event_name == 'workflow_dispatch' && inputs.expected_commit || github.sha }}
         run: |
           $ErrorActionPreference = 'Stop'
-          if ($env:EXPECTED_COMMIT -cnotmatch '^[0-9a-f]{40}$' -or (git rev-parse HEAD) -cne $env:EXPECTED_COMMIT) { throw 'Reviewed source commit mismatch.' }
-          if (git status --porcelain) { throw 'Checkout is not clean.' }
-          $version = Get-Content version.json -Raw | ConvertFrom-Json
-          if ($version.version -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-beta\.[1-9][0-9]*(\.[1-9][0-9]*)*(\.hotfix\.[1-9][0-9]*)?$' -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta') { throw 'Unexpected release version.' }
-          if ($version.repository -cne $env:GITHUB_REPOSITORY -or $version.release_owner -cne 'OIRANGEISHA') { throw 'Unexpected release owner or repository.' }
-          git show-ref --verify --quiet "refs/tags/$($version.tag)"
-          if ($LASTEXITCODE -eq 0) { throw 'Tag already exists; public versions must never be overwritten.' }
-          if ($LASTEXITCODE -ne 1) { throw 'Could not inspect local tags.' }
-          $releasePages = gh api --paginate --slurp "repos/$env:GITHUB_REPOSITORY/releases?per_page=100" | ConvertFrom-Json
-          if ($LASTEXITCODE -ne 0) { throw 'Could not inspect existing releases.' }
-          $releases = @(foreach ($page in $releasePages) { foreach ($release in $page) { $release } })
-          if ($releases | Where-Object tag_name -eq $version.tag) { throw 'Release already exists; inspect instead of replacing it.' }
-          "RELEASE_TAG=$($version.tag)" >> $env:GITHUB_ENV
-          "RELEASE_NAME=Nioh Hino-Enma $($version.display_version)" >> $env:GITHUB_ENV
-          "RELEASE_STEM=Nioh-HinoEnma-$($version.version)" >> $env:GITHUB_ENV
-          "RELEASE_OWNER=$($version.release_owner)" >> $env:GITHUB_ENV
+          'run=false' >> $env:GITHUB_OUTPUT
+          $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
+          if ($version.version -cne '1.0.0-beta.5.6.1') { exit 0 }
+          $source = git rev-parse HEAD
+          if ($LASTEXITCODE -ne 0 -or $source -cne $env:GITHUB_SHA -or $source -cne $env:EXPECTED_COMMIT -or $source -cnotmatch '^[0-9a-f]{40}$') { throw 'Exact source commit mismatch.' }
+          $publication = Get-Content -LiteralPath docs/beta561-publication.json -Raw | ConvertFrom-Json
+          if ($publication.publication_authorized -ne $true -or $publication.repository -cne 'OIRANGEISHA/Nioh-HinoEnma' -or $publication.version -cne $version.version -or $publication.tag -cne 'v1.0.0-beta.5.6.1' -or $publication.asset_commit -cne '696d80088279bbb28252fdcb8634a90c7fc44557' -or $publication.executable_sha256 -cne '0327010814f1918a77e528744c87ab9517c8dcf01d082648df09f4ecfdade659') { throw 'Authorized exact file scope differs.' }
+          if ((Get-FileHash -LiteralPath profiles/steam-1.24.8.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133') { throw 'Cold-tested profile changed.' }
+          'run=true' >> $env:GITHUB_OUTPUT
+
+      - name: Check out only the immutable cold-test assets
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 696d80088279bbb28252fdcb8634a90c7fc44557
+          path: artifacts/asset-source
+          fetch-depth: 1
+          persist-credentials: false
 
       - name: Set up verification Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.12'
 
-      - name: Install isolated verification dependencies
+      - name: Install isolated offline verification dependencies
+        if: steps.scope.outputs.run == 'true'
         run: |
           python -m pip install --disable-pip-version-check --target artifacts/python-deps -r requirements-dev.txt
-          if ($LASTEXITCODE -ne 0) { throw 'Verification dependency installation failed.' }
+          if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
           "PYTHONPATH=$((Resolve-Path artifacts/python-deps).Path)" >> $env:GITHUB_ENV
 
-      - name: Verify generated profile, complete regressions and historical baseline
+      - name: Verify source, CT and all 240 current regressions
+        if: steps.scope.outputs.run == 'true'
         run: |
           python tools/build_profile.py --check
-          if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
-          python tools/check_source.py
-          if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
-          python tools/run_regressions.py --report artifacts/regression-tests.json
-          if ($LASTEXITCODE -ne 0) { throw 'Complete exact-source regressions failed.' }
-          python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation proof failed.' }
+          if ($LASTEXITCODE -ne 0) { throw 'Generated source differs.' }
+          python tools/check_source.py | Set-Content -LiteralPath artifacts/source-checks.json -Encoding utf8
+          if ($LASTEXITCODE -ne 0) { throw 'Source check failed.' }
+          python tools/verify_beta561_ct.py --report artifacts/ct-verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'CT verification failed.' }
+          python tools/run_beta561_regressions.py --report artifacts/beta561-regression-tests.json
+          if ($LASTEXITCODE -ne 0) { throw 'Current regressions failed.' }
 
-      - name: Build Debug and optimized x64 Release
+      - name: Rebuild and verify both configurations as offline evidence
+        if: steps.scope.outputs.run == 'true'
         run: |
           ./tools/build.ps1 -Configuration Debug
           if ($LASTEXITCODE -ne 0) { throw 'Debug build failed.' }
           ./tools/build.ps1 -Configuration Release
           if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
+          python tools/verify_beta561.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Debug comparison failed.' }
+          python tools/verify_beta561.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          if ($LASTEXITCODE -ne 0) { throw 'Release comparison failed.' }
 
-      - name: Run portable checks on both builds
+      - name: Package exact tested EXE and final committed UTF-8 source
+        if: steps.scope.outputs.run == 'true'
         run: |
-          python tools/verify_beta56.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
-          python tools/verify_beta56.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }
+          python .github/scripts/publish_beta561.py --asset-dir artifacts/asset-source --prepare-only
+          if ($LASTEXITCODE -ne 0) { throw 'Exact asset/source preparation failed.' }
 
-      - name: Package exactly the EXE and Git-tracked source ZIP
-        run: |
-          python tools/package_beta56.py --source-commit "$env:GITHUB_SHA" --build-origin github-actions --publisher 'github-actions[bot]' --workflow-url "https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
-          if ($LASTEXITCODE -ne 0) { throw 'Packaging failed.' }
-
-      - name: Attest exact CI-built assets
-        id: attest
-        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
-        with:
-          subject-path: |
-            artifacts/dist/*.exe
-            artifacts/dist/*-source.zip
-
-      - name: Record attestation without an extra Release attachment
-        env:
-          BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
-          ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
-        run: |
-          $bundle = "artifacts/${env:RELEASE_STEM}-attestation.jsonl"
-          Copy-Item -LiteralPath $env:BUNDLE_PATH -Destination $bundle
-          $hash = (Get-FileHash -LiteralPath $bundle -Algorithm SHA256).Hash.ToLowerInvariant()
-          [IO.File]::WriteAllText($bundle + '.sha256', $hash + '  ' + (Split-Path -Leaf $bundle) + "`n", (New-Object Text.UTF8Encoding($false)))
-          Add-Content -LiteralPath artifacts/release-notes.md -Value "`nBuild attestation: $env:ATTESTATION_URL"
-
-      - name: Prepare immutable annotated tag and Draft Pre-release
+      - name: Verify Draft downloads and publish the authorized Pre-release
+        if: steps.scope.outputs.run == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $ErrorActionPreference = 'Stop'
-          if (git status --porcelain) { throw 'Tracked source changed during build.' }
-          if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed during build.' }
-          $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
-          if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed; do not publish an unreviewed head.' }
-          $remoteTag = git ls-remote origin "refs/tags/$env:RELEASE_TAG" "refs/tags/${env:RELEASE_TAG}^{}"
-          if ($LASTEXITCODE -ne 0) { throw 'Could not inspect remote tags.' }
-          if ($remoteTag) { throw 'Remote tag already exists; public versions must never be overwritten.' }
-          $prepared = Get-Content -LiteralPath artifacts/release-manifest.json -Raw | ConvertFrom-Json
-          if ($prepared.source_commit -cne $env:GITHUB_SHA -or $prepared.source_tree -cne (git rev-parse 'HEAD^{tree}') -or @($prepared.assets).Count -ne 2) { throw 'Prepared release manifest source/tree/assets differ.' }
-          $allowedNames = @("$($env:RELEASE_STEM)-windows-x64.exe", "$($env:RELEASE_STEM)-source.zip")
-          $distFiles = @(Get-ChildItem -LiteralPath artifacts/dist -File)
-          if ($distFiles.Count -ne 2) { throw 'Release must have exactly the EXE and source ZIP.' }
-          foreach ($file in $distFiles) {
-            $record = @($prepared.assets | Where-Object { $_.name -ceq $file.Name })
-            if ($file.Name -cnotin $allowedNames -or $record.Count -ne 1 -or $record[0].bytes -ne $file.Length -or $record[0].sha256 -cne (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()) { throw 'Prepared release asset differs.' }
-          }
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git tag -a "$env:RELEASE_TAG" "$env:GITHUB_SHA" -m "$env:RELEASE_NAME; Release Owner: $env:RELEASE_OWNER; prepared by authorized repository workflow"
-          if ($LASTEXITCODE -ne 0) { throw 'Annotated tag creation failed.' }
-          if ((git rev-parse "${env:RELEASE_TAG}^{}") -cne $env:GITHUB_SHA) { throw 'Annotated tag does not point to the reviewed source.' }
-          git push --atomic origin "refs/tags/$env:RELEASE_TAG"
-          if ($LASTEXITCODE -ne 0) { throw 'Tag push failed.' }
-          $assets = @(Get-ChildItem -LiteralPath artifacts/dist -File | ForEach-Object FullName)
-          gh release create "$env:RELEASE_TAG" @assets --repo "$env:GITHUB_REPOSITORY" --target "$env:GITHUB_SHA" --verify-tag --draft --prerelease --latest=false --title "$env:RELEASE_NAME" --notes-file artifacts/release-notes.md
-          if ($LASTEXITCODE -ne 0) { throw 'Draft preparation failed; inspect the existing tag before any retry.' }
-          'Draft prepared for exact source and asset readback inspection.' >> $env:GITHUB_STEP_SUMMARY
-
-      - name: Verify Draft readback and publish only the one-time authorized Beta upload
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          function Get-GitHubJson([string]$endpoint) {
-            $json = gh api $endpoint
-            if ($LASTEXITCODE -ne 0) { throw "GitHub readback failed: $endpoint" }
-            return ($json | ConvertFrom-Json)
-          }
-          function Save-GitHubAsset([long]$assetId, [string]$destination) {
-            # Preserve binary EXE/ZIP stdout instead of using text redirection.
-            $process = [System.Diagnostics.Process]::new()
-            $process.StartInfo.FileName = (Get-Command gh).Source
-            $process.StartInfo.UseShellExecute = $false
-            $process.StartInfo.CreateNoWindow = $true
-            $process.StartInfo.RedirectStandardOutput = $true
-            $process.StartInfo.RedirectStandardError = $true
-            foreach ($argument in @('api', "repos/$env:GITHUB_REPOSITORY/releases/assets/$assetId", '--header', 'Accept: application/octet-stream')) {
-              $process.StartInfo.ArgumentList.Add($argument)
-            }
-            $output = $null
-            try {
-              if (-not $process.Start()) { throw 'Could not start asset download.' }
-              $errorRead = $process.StandardError.ReadToEndAsync()
-              $output = [System.IO.File]::Create($destination)
-              $process.StandardOutput.BaseStream.CopyTo($output)
-              $output.Dispose()
-              $output = $null
-              $process.WaitForExit()
-              $null = $errorRead.GetAwaiter().GetResult()
-              if ($process.ExitCode -ne 0) { throw "Asset download failed: $assetId" }
-            } finally {
-              if ($null -ne $output) { $output.Dispose() }
-              $process.Dispose()
-            }
-          }
-          $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
-          if ($version.tag -cne $env:RELEASE_TAG -or "Nioh-HinoEnma-$($version.version)" -cne $env:RELEASE_STEM) { throw 'Release manifest changed.' }
-          if (git status --porcelain) { throw 'Tracked source changed before inspection.' }
-          if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed before inspection.' }
-          $sourceTree = git rev-parse 'HEAD^{tree}'
-          if ($LASTEXITCODE -ne 0) { throw 'Could not read the reviewed source tree.' }
-          $expectedNames = @("$($env:RELEASE_STEM)-windows-x64.exe", "$($env:RELEASE_STEM)-source.zip")
-          $localAssets = @(Get-ChildItem -LiteralPath artifacts/dist -File)
-          if ($localAssets.Count -ne $expectedNames.Count) { throw 'Unexpected prepared asset inventory.' }
-          $localByName = [System.Collections.Generic.Dictionary[string,object]]::new([System.StringComparer]::Ordinal)
-          foreach ($file in $localAssets) {
-            if ($file.Name -cnotin $expectedNames) { throw "Unselected asset in dist: $($file.Name)" }
-            $localByName.Add($file.Name, [pscustomobject]@{ Bytes = $file.Length; Sha256 = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant() })
-          }
-          function Test-ReleaseReadback([bool]$expectDraft, [string]$phase) {
-            $pages = gh api --paginate --slurp "repos/$env:GITHUB_REPOSITORY/releases?per_page=100"
-            if ($LASTEXITCODE -ne 0) { throw 'Could not inspect all releases.' }
-            $releasePages = $pages | ConvertFrom-Json
-            $matches = @(foreach ($page in $releasePages) { foreach ($entry in $page) { if ($entry.tag_name -ceq $env:RELEASE_TAG) { $entry } } })
-            if ($matches.Count -ne 1) { throw 'Release tag is missing or ambiguous.' }
-            $release = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/releases/$($matches[0].id)"
-            if ($release.draft -ne $expectDraft -or -not $release.prerelease -or $release.tag_name -cne $env:RELEASE_TAG -or $release.name -cne $env:RELEASE_NAME) { throw 'Release state, tag or title differs.' }
-            if ($release.author.login -cne 'github-actions[bot]' -or $release.target_commitish -cne $env:GITHUB_SHA) { throw 'Release publisher or target commit differs.' }
-            $expectedBody = (Get-Content -LiteralPath artifacts/release-notes.md -Raw).Replace(([string][char]13 + [char]10), [string][char]10).TrimEnd()
-            if ($release.body.Replace(([string][char]13 + [char]10), [string][char]10).TrimEnd() -cne $expectedBody) { throw 'Release body source and asset checksum records differ.' }
-            if (-not $expectDraft -and -not $release.published_at) { throw 'Release is not published.' }
-            $ref = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/git/ref/tags/$env:RELEASE_TAG"
-            if ($ref.object.type -cne 'tag') { throw 'Release tag is not annotated.' }
-            $tag = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/git/tags/$($ref.object.sha)"
-            if ($tag.object.type -cne 'commit' -or $tag.object.sha -cne $env:GITHUB_SHA -or $tag.tag -cne $env:RELEASE_TAG) { throw 'Annotated tag does not identify the reviewed source.' }
-            if ($tag.tagger.name -cne 'github-actions[bot]' -or $tag.tagger.email -cne '41898282+github-actions[bot]@users.noreply.github.com') { throw 'Unexpected tag publisher identity.' }
-            $remoteCommit = Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/git/commits/$env:GITHUB_SHA"
-            if ($remoteCommit.sha -cne $env:GITHUB_SHA -or $remoteCommit.tree.sha -cne $sourceTree) { throw 'Remote commit/tree differs from the reviewed source.' }
-            $assets = @(Get-GitHubJson "repos/$env:GITHUB_REPOSITORY/releases/$($release.id)/assets?per_page=100")
-            if ($assets.Count -ne $localAssets.Count) { throw 'Remote and local asset counts differ.' }
-            $readback = Join-Path artifacts ("readback-" + $phase)
-            if (Test-Path -LiteralPath $readback) { throw 'Readback directory already exists.' }
-            New-Item -ItemType Directory -Path $readback | Out-Null
-            $seen = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
-            $assetIds = [System.Collections.Generic.Dictionary[string,long]]::new([System.StringComparer]::Ordinal)
-            foreach ($asset in $assets) {
-              if (-not $localByName.ContainsKey($asset.name) -or -not $seen.Add($asset.name)) { throw 'Remote asset is unselected or duplicated.' }
-              $expected = $localByName[$asset.name]
-              if ($asset.state -cne 'uploaded' -or $asset.uploader.login -cne 'github-actions[bot]' -or $asset.size -ne $expected.Bytes) { throw "Asset identity or size differs: $($asset.name)" }
-              if ($asset.digest -and $asset.digest -cne ('sha256:' + $expected.Sha256)) { throw "Server asset digest differs: $($asset.name)" }
-              $destination = Join-Path $readback $asset.name
-              Save-GitHubAsset $asset.id $destination
-              if ((Get-Item -LiteralPath $destination).Length -ne $expected.Bytes -or (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash.ToLowerInvariant() -cne $expected.Sha256) { throw "Downloaded bytes differ: $($asset.name)" }
-              $assetIds.Add($asset.name, $asset.id)
-            }
-            $sourceReadback = python tools/package_beta56.py --source-commit "$env:GITHUB_SHA" --verify-source-zip (Join-Path $readback "$($env:RELEASE_STEM)-source.zip") --exe (Join-Path $readback "$($env:RELEASE_STEM)-windows-x64.exe")
-            if ($LASTEXITCODE -ne 0) { throw 'Downloaded source ZIP files and embedded build evidence differ.' }
-            $bundle = Get-Content -LiteralPath (Join-Path artifacts "$($env:RELEASE_STEM)-attestation.jsonl") -Raw | ConvertFrom-Json
-            if (-not $bundle.dsseEnvelope.payload) { throw 'Attestation bundle has no statement.' }
-            $statement = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($bundle.dsseEnvelope.payload)) | ConvertFrom-Json
-            if ($statement.predicateType -cne 'https://slsa.dev/provenance/v1') { throw 'Unexpected attestation predicate.' }
-            $subjects = @($statement.subject)
-            $subjectNames = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
-            $binaryNames = $expectedNames
-            if ($subjects.Count -ne $binaryNames.Count) { throw 'Attestation subject count differs.' }
-            foreach ($subject in $subjects) {
-              $name = [System.IO.Path]::GetFileName($subject.name)
-              if ($name -cnotin $binaryNames -or -not $subjectNames.Add($name) -or $subject.digest.sha256 -cne $localByName[$name].Sha256) { throw 'Attestation subject name or digest differs.' }
-            }
-            $definition = $statement.predicate.buildDefinition
-            $workflow = $definition.externalParameters.workflow
-            if ($workflow.repository -cne "https://github.com/$env:GITHUB_REPOSITORY" -or $workflow.path -cne '.github/workflows/release.yml' -or $workflow.ref -cne 'refs/heads/main') { throw 'Attestation workflow identity differs.' }
-            $dependencies = @($definition.resolvedDependencies | Where-Object { $_.digest.gitCommit -ceq $env:GITHUB_SHA -and $_.uri -clike "git+https://github.com/$env:GITHUB_REPOSITORY@*" })
-            if ($dependencies.Count -ne 1) { throw 'Attestation source commit differs.' }
-            return [pscustomobject]@{ ReleaseId = $release.id; TagObject = $ref.object.sha; AssetIds = $assetIds; Url = $release.html_url }
-          }
-          $draft = Test-ReleaseReadback $true 'draft'
-          if ($env:ONE_TIME_CURRENT_RELEASE_PUBLISH -cne 'true') {
-            'Verified Draft retained. Manual dispatch does not publish automatically.' >> $env:GITHUB_STEP_SUMMARY
-            exit 0
-          }
-          # This mutation is authorized only for an exact version accepted by the push gate above.
-          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cnotin @('1.0.0-beta.5.3.2', '1.0.0-beta.5.4.1', '1.0.0-beta.5.4.2', '1.0.0-beta.5.6') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
-          if (git status --porcelain) { throw 'Source changed after Draft inspection.' }
-          if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed after Draft inspection.' }
-          if ($version.upstream_private_profile_version -cne '0.60' -or $version.upstream_private_inherent_element_revision -ne 2 -or $version.menu_preview_revision -ne 2 -or $version.menu_preview_hook_count -ne 11 -or $version.menu_aura_revision -ne 1 -or $version.menu_camera_reload_revision -ne 1 -or $version.menu_camera_distance -ne 740.0 -or $version.menu_camera_height -ne -45.0 -or $version.menu_coldstart_revision -ne 1 -or $version.menu_asset_wait_frames -ne 1800 -or $version.menu_total_wait_frames -ne 7200) { throw 'Authorized Beta must identify the reviewed inherited profile and accepted menu preview reload/aura revision 2 and cold-start revision 1.' }
-          if ($version.version -ceq '1.0.0-beta.5.4.1') {
-            if ($version.file_version -cne '1.0.0.68' -or $version.ct_file -cne 'Nioh_HinoEnma_1.24.8_Beta5_4_1.CT' -or $version.local_package_only -ne $false -or $version.orochi_execution_revision -ne 3 -or $version.orochi_hook_count -ne 10 -or $version.orochi_resource_revision -ne 5 -or $version.orochi_ray_guard_revision -ne 2) { throw 'Authorized Beta 5.4.1 execution revision metadata differs.' }
-            $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
-            if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.orochi_execution_revision -ne 3 -or $profile.orochi_hook_count -ne 10 -or $profile.orochi_resource_revision -ne 5 -or $profile.orochi_ray_guard_revision -ne 2 -or $profile.orochi_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.1 execution profile differs.' }
-          }
-          if ($version.version -ceq '1.0.0-beta.5.4.2') {
-            if ($version.file_version -cne '1.0.0.69' -or $version.ct_file -cne 'Nioh_HinoEnma_1.24.8_Beta5_4_2.CT' -or $version.local_package_only -ne $false -or $version.orochi_execution_revision -ne 3 -or $version.orochi_hook_count -ne 10 -or $version.orochi_resource_revision -ne 5 -or $version.orochi_ray_guard_revision -ne 2 -or $version.ninetails_execution_revision -ne 1 -or $version.ninetails_resource_revision -ne 1 -or $version.ninetails_wait_guard_revision -ne 1) { throw 'Authorized Beta 5.4.2 execution revision metadata differs.' }
-            $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
-            if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.allocation_size -ne 331776 -or $profile.ninetails_execution_revision -ne 1 -or $profile.ninetails_binding_data_offset -ne 278528 -or $profile.ninetails_binding_data_size -ne 512 -or $profile.ninetails_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.2 dual-boss profile differs.' }
-          }
-          if ($version.version -ceq '1.0.0-beta.5.6') {
-            if ($version.file_version -cne '1.0.0.73' -or $version.ct_file -cne 'Nioh_HinoEnma_1.24.8_Beta5_6.CT' -or $version.local_package_only -ne $false -or $version.abyss_actions_revision -ne 3 -or $version.abyss_cancel_revision -ne 1 -or $version.abyss_resource_lifetime_revision -ne 1 -or $version.abyss_guide_revision -ne 1 -or $version.gameplay_basis_version -cne '1.0.0-beta.5.5.1' -or $version.beta56_exact_executable_gameplay_repeated -ne $false) { throw 'Authorized Beta5.6 version or gameplay scope differs.' }
-            $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
-            if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 82 -or $profile.allocation_size -ne 348160 -or $profile.data_offset -ne 61440 -or $profile.local_package_only -ne $false -or $profile.abyss_actions_revision -ne 3 -or $profile.abyss_cancel_revision -ne 1 -or $profile.abyss_resource_lifetime_revision -ne 1 -or $profile.abyss_boat_return_trial_revision -ne 1 -or $profile.abyss_boat_request_dispatch -ne 46 -or (@($profile.abyss_boat_common_actions) -join ',') -cne '170,1155,1156,1157' -or (@($profile.abyss_boat_motion_ids) -join ',') -cne '8,0' -or $profile.abyss_resource_data_offset -ne 339968 -or $profile.abyss_resource_data_size -ne 8192 -or $profile.abyss_resource_ticket_slots -ne 64) { throw 'Authorized Beta5.6 full profile differs.' }
-            if ((Get-FileHash -LiteralPath profiles/gameplay-tested-beta5.5.1.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '34324ce6558db94f419dd5342a1362889a08f7796b81782532a1bccc13126c2b') { throw 'Accepted Beta5.5.1 basis changed before publication.' }
-          }
-          $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
-          if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed after Draft inspection.' }
-          gh release edit "$env:RELEASE_TAG" --repo "$env:GITHUB_REPOSITORY" --draft=false --prerelease --latest=false
-          if ($LASTEXITCODE -ne 0) { throw 'One-time publication failed; inspect the existing Draft before any manual retry.' }
-          $published = Test-ReleaseReadback $false 'published'
-          if ($published.ReleaseId -ne $draft.ReleaseId -or $published.TagObject -cne $draft.TagObject) { throw 'Release or tag identity changed during publication.' }
-          foreach ($name in $expectedNames) {
-            if ($published.AssetIds[$name] -ne $draft.AssetIds[$name]) { throw 'Asset identity changed during publication.' }
-          }
-          "One-time authorized Beta Pre-release published and verified: $($published.Url). Exact source, publisher, annotated tag and all $($localAssets.Count) downloaded asset hashes match. Future versions remain manual Draft-only." >> $env:GITHUB_STEP_SUMMARY
+          python .github/scripts/publish_beta561.py --asset-dir artifacts/asset-source --publish
+          if ($LASTEXITCODE -ne 0) { throw 'Publication stopped; preserve Draft and inspect readback.' }
+          $receipt = Get-Content -LiteralPath artifacts/publish-beta561/publication-readback.json -Raw | ConvertFrom-Json
+          "Verified published Beta5.6.1: $($receipt.url). The exact local cold-tested EXE and all source/asset downloads were verified." >> $env:GITHUB_STEP_SUMMARY

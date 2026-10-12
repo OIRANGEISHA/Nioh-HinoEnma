@@ -211,9 +211,26 @@ def source_plan_beta542(frozen: dict) -> dict:
     return apply_ninetails_execution(source_plan_beta541(frozen), menu_guard())
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_beta56(frozen: dict) -> dict:
     from hinoenma_abyss_runtime import apply_abyss
     return apply_abyss(source_plan_beta542(frozen))
+
+
+def source_plan(frozen: dict) -> dict:
+    if frozen.get('living_weapon_start_production_layout_revision') != 1:
+        return source_plan_beta56(frozen)
+    from living_weapon_start_production import apply_native_start
+    basis = deepcopy(frozen)
+    for key in list(basis):
+        if key.startswith('living_weapon_start_') or key == 'scene_bound_startup_candidate':
+            del basis[key]
+    basis['tool_version'] = '1.0.0-beta.5.6'
+    basis['allocation_size'] = 0x55000
+    basis['protected_data_pages'] = basis['protected_data_pages'][:11]
+    basis['hooks'][36].update(code_offset=0xD000, code_capacity=0x1000)
+    previous = source_plan_beta56(basis)
+    previous['tool_version'] = '1.0.0-beta.5.6'
+    return apply_native_start(previous)
 
 
 def legacy_plans(frozen: dict) -> list[dict]:
@@ -239,6 +256,10 @@ def legacy_plans(frozen: dict) -> list[dict]:
 
 
 def validate_layout(plan: dict) -> None:
+    if plan.get('living_weapon_start_production_layout_revision') == 1:
+        from living_weapon_start_production_layout import validate_production_layout
+        validate_production_layout(plan)
+        return
     if len(plan.get('hooks', ())) == 82:
         from hinoenma_abyss_runtime import validate_layout as validate_abyss_layout
         validate_abyss_layout(plan)
@@ -459,7 +480,14 @@ def validate_ct_labels(source: str, local_labels: list[str]) -> None:
 
 
 def aa_source(plan: dict) -> str:
-    if len(plan.get('hooks', ())) == 82:
+    if plan.get('living_weapon_start_production_layout_revision') == 1:
+        from living_weapon_start_ct import ct_compatible_plan
+        canonical = load_plan()
+        if plan != canonical:
+            if plan != ct_compatible_plan(canonical):
+                raise ValueError('Expected exact Beta5.6.1 source or CT conversion')
+            plan = canonical
+    elif len(plan.get('hooks', ())) == 82:
         from hinoenma_abyss_runtime import ct_compatible_plan
     elif len(plan.get('hooks', ())) == 81:
         if plan.get('tool_version') == '1.0.0-beta.5.4.2':
@@ -654,6 +682,8 @@ def ct_source(plan: dict, display_version: str) -> str:
         '盐的全部受击方向与连续受击分支未逐一实测；离线合成 CPU 检查不等同实机验证。\n'
         '武器切换只补教学操作。实际射击和 Boss 实际武器槽切换尚未实现。\n'
         '九十九保留飞缘魔招式；守护灵召唤未执行威廉挥刀的额外精力费用。\n'
+        'Beta5.6.1 修复数字9的原生九十九起手、冲击波和量表流程；独立EXE已在完整重启后实测。\n'
+        '本轮实测使用同一武器与守护灵，未覆盖全部装备；忍术道具目前仍无法使用。\n'
         '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'
         'Hotfix1 修复梯子途中自动掉下、每步瞬移及离梯过高；当前与待切换公共攀爬动作均使用一致的位移缩放。\n'
         '已测梯子上下攀爬和离梯正常，全部梯子、受击中断仍未逐一实测。\n'

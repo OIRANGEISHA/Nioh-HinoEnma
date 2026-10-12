@@ -222,8 +222,8 @@ namespace HinoEnmaTool
                 });
                 test("code protection excludes every gameplay and menu writable page", delegate
                 {
-                    Require(Profile.AllocationSize==0x55000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==11,"Complete player lifetime protected layout");
-                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000,0x42000,0x44000,0x53000,0x54000};
+                    Require(Profile.AllocationSize==0x69000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==23,"Complete player lifetime protected layout");
+                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000,0x42000,0x44000,0x53000,0x54000,0x55000,0x56000,0x57000,0x58000,0x59000,0x5A000,0x5B000,0x5C000,0x5D000,0x5E000,0x5F000,0x60000};
                     List<MemorySpan> spans=Checks.CodePages(Profile.Hooks,Profile.AllocationSize,Profile.ProtectedDataPages);
                     foreach(HookSpec hook in Profile.Hooks)
                     {
@@ -316,14 +316,14 @@ namespace HinoEnmaTool
                     Require(beta541.Version=="1.0.0-beta.5.4.1" && beta541.Hooks.Length==81,"Exact published Beta5.4.1 identity");
                     for(int i=0;i<81;i++)
                     {
-                        if((i>=71 && i<=77) || i==80 || i==1 || i==8 || i==9 || i==39 || i==70) continue;
+                        if((i>=71 && i<=77) || i==80 || i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
                         Require(Checks.Equal(Profile.Hooks[i].Template,beta541.Hooks[i].Template),"Other73 templates preserved from Beta5.4.1");
                     }
                     for(int i=0;i<71;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];
-                        Require(current.Name==old.Name && current.Rva==old.Rva && current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity,"Previous hook slot identity");
-                        if(i==1 || i==8 || i==9 || i==39 || i==70) continue;
+                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Previous hook slot identity");
+                        if(i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Previous encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Previous relocation encoding");
@@ -342,8 +342,8 @@ namespace HinoEnmaTool
                     for(int i=0;i<60;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta52.Hooks[i];
-                        Require(current.Name==old.Name && current.Rva==old.Rva && current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity,"Original slot identity");
-                        if(i==1 || i==8 || i==9 || i==39) continue;
+                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Original slot identity");
+                        if(i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Original encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Original relocation encoding");
@@ -355,22 +355,22 @@ namespace HinoEnmaTool
                             }
                     }
                 });
-                test("player lifetime and the five changed bodies preserve complete Beta542 identity", delegate
+                test("player lifetime and scoped LW bodies preserve complete Beta542 identity", delegate
                 {
                     LegacyProfile old=Profile.LegacyProfiles[8];
                     Require(old.Version=="1.0.0-beta.5.4.2" && old.Hooks.Length==81,"Exact released Beta542 basis");
                     for(int i=0;i<81;i++)
                     {
                         HookSpec current=Profile.Hooks[i],prior=old.Hooks[i];
-                        Require(current.Name==prior.Name && current.Rva==prior.Rva && current.CodeOffset==prior.CodeOffset && current.CodeCapacity==prior.CodeCapacity && Checks.Equal(current.Original,prior.Original),"Every previous native and private slot identity");
-                        bool changed=i==1 || i==8 || i==9 || i==39 || i==70;
-                        Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only scoped five bodies differ");
+                        Require(current.Name==prior.Name && current.Rva==prior.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==prior.CodeOffset && current.CodeCapacity==prior.CodeCapacity) && Checks.Equal(current.Original,prior.Original),"Every previous native and scoped private slot identity");
+                        bool changed=i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
+                        Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only scoped fourteen bodies differ");
                         foreach(long module in new long[]{Module,0x7FF83AA00000})
                             foreach(int slot in new int[]{0,37,511})
                             {
                                 long at=Checks.FirstAllocation(module)+slot*0x10000L;
-                                Require(Checks.Equal(current.Jump(module,at),prior.Jump(module,at)),"All81 previous native patches preserved");
-                                if(!changed) Require(Checks.Equal(current.Payload(module,at),prior.Payload(module,at)),"Other76 relocated payloads preserved");
+                                Require(Checks.Equal(current.Jump(module,at),prior.Jump(module,at))==(i!=36),"Only h36 previous native jump moves");
+                                if(!changed) Require(Checks.Equal(current.Payload(module,at),prior.Payload(module,at)),"Other67 relocated payloads preserved");
                             }
                     }
                     HookSpec release=Profile.Hooks[81];
