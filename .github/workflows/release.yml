@@ -1,7 +1,7 @@
 name: Prepare Beta release
 
 on:
-  # One-time paths for the explicitly authorized Beta 5.3.2, 5.4.1 and 5.4.2 uploads.
+  # One-time paths for explicitly authorized uploads, including this exact Beta5.6.
   push:
     branches: [main]
     paths: [version.json]
@@ -59,6 +59,7 @@ jobs:
             $authorizedBeta532 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.3.2'
             $authorizedBeta541 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.4.1' -and $version.file_version -ceq '1.0.0.68' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_4_1.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2
             $authorizedBeta542 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.4.2' -and $version.file_version -ceq '1.0.0.69' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_4_2.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2 -and $version.ninetails_execution_revision -eq 1 -and $version.ninetails_resource_revision -eq 1 -and $version.ninetails_wait_guard_revision -eq 1
+            $authorizedBeta56 = $inheritedScope -and $version.version -ceq '1.0.0-beta.5.6' -and $version.file_version -ceq '1.0.0.73' -and $version.ct_file -ceq 'Nioh_HinoEnma_1.24.8_Beta5_6.CT' -and $version.local_package_only -eq $false -and $version.orochi_execution_revision -eq 3 -and $version.orochi_hook_count -eq 10 -and $version.orochi_resource_revision -eq 5 -and $version.orochi_ray_guard_revision -eq 2 -and $version.ninetails_execution_revision -eq 1 -and $version.ninetails_resource_revision -eq 1 -and $version.ninetails_wait_guard_revision -eq 1 -and $version.abyss_actions_revision -eq 3 -and $version.abyss_cancel_revision -eq 1 -and $version.abyss_resource_lifetime_revision -eq 1 -and $version.abyss_guide_revision -eq 1 -and $version.gameplay_basis_version -ceq '1.0.0-beta.5.5.1' -and $version.beta56_exact_executable_gameplay_repeated -eq $false
             if ($authorizedBeta541) {
               $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
               if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.orochi_execution_revision -ne 3 -or $profile.orochi_hook_count -ne 10 -or $profile.orochi_resource_revision -ne 5 -or $profile.orochi_ray_guard_revision -ne 2 -or $profile.orochi_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.1 must identify the reviewed dynamic-resource 81-hook execution profile.' }
@@ -67,7 +68,12 @@ jobs:
               $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
               if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.allocation_size -ne 331776 -or $profile.ninetails_execution_revision -ne 1 -or $profile.ninetails_binding_data_offset -ne 278528 -or $profile.ninetails_binding_data_size -ne 512 -or $profile.ninetails_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.2 must identify the reviewed dual-boss 81-hook profile.' }
             }
-            if (-not ($authorizedBeta532 -or $authorizedBeta541 -or $authorizedBeta542)) {
+            if ($authorizedBeta56) {
+              $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
+              if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 82 -or $profile.allocation_size -ne 348160 -or $profile.data_offset -ne 61440 -or $profile.local_package_only -ne $false -or $profile.abyss_actions_revision -ne 3 -or $profile.abyss_cancel_revision -ne 1 -or $profile.abyss_resource_lifetime_revision -ne 1 -or $profile.abyss_guide_revision -ne 1 -or $profile.abyss_resource_data_offset -ne 339968 -or $profile.abyss_resource_data_size -ne 8192 -or $profile.abyss_resource_ticket_slots -ne 64) { throw 'Authorized Beta5.6 requires the reviewed82-hook resource-lifetime and guide profile.' }
+              if ((Get-FileHash -LiteralPath profiles/gameplay-tested-beta5.5.1.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '34324ce6558db94f419dd5342a1362889a08f7796b81782532a1bccc13126c2b') { throw 'Accepted Beta5.5.1 profile changed.' }
+            }
+            if (-not ($authorizedBeta532 -or $authorizedBeta541 -or $authorizedBeta542 -or $authorizedBeta56)) {
               'Push publication skipped: only an exact explicitly authorized Beta revision may publish.' >> $env:GITHUB_STEP_SUMMARY
               exit 0
             }
@@ -143,7 +149,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Verification dependency installation failed.' }
           "PYTHONPATH=$((Resolve-Path artifacts/python-deps).Path)" >> $env:GITHUB_ENV
 
-      - name: Verify generated profile, complete regressions and four portable proofs
+      - name: Verify generated profile, complete regressions and historical baseline
         run: |
           python tools/build_profile.py --check
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
@@ -153,12 +159,6 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Complete exact-source regressions failed.' }
           python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation proof failed.' }
-          python tools/verify_menu_preview.py --report artifacts/menu-preview-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Portable menu source and CPU proof failed.' }
-          python tools/verify_orochi_execution.py --report artifacts/orochi-execution-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Portable execution source and CPU proof failed.' }
-          python tools/verify_ninetails_execution.py --report artifacts/ninetails-execution-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Portable Nine Tails source and CPU proof failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |
@@ -169,14 +169,14 @@ jobs:
 
       - name: Run portable checks on both builds
         run: |
-          python tools/verify.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          python tools/verify_beta56.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
-          python tools/verify.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          python tools/verify_beta56.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }
 
       - name: Package exactly the EXE and Git-tracked source ZIP
         run: |
-          python tools/package.py --source-commit "$env:GITHUB_SHA" --build-origin github-actions --publisher 'github-actions[bot]' --workflow-url "https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+          python tools/package_beta56.py --source-commit "$env:GITHUB_SHA" --build-origin github-actions --publisher 'github-actions[bot]' --workflow-url "https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
           if ($LASTEXITCODE -ne 0) { throw 'Packaging failed.' }
 
       - name: Attest exact CI-built assets
@@ -318,7 +318,7 @@ jobs:
               if ((Get-Item -LiteralPath $destination).Length -ne $expected.Bytes -or (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash.ToLowerInvariant() -cne $expected.Sha256) { throw "Downloaded bytes differ: $($asset.name)" }
               $assetIds.Add($asset.name, $asset.id)
             }
-            $sourceReadback = python tools/package.py --source-commit "$env:GITHUB_SHA" --verify-source-zip (Join-Path $readback "$($env:RELEASE_STEM)-source.zip") --exe (Join-Path $readback "$($env:RELEASE_STEM)-windows-x64.exe")
+            $sourceReadback = python tools/package_beta56.py --source-commit "$env:GITHUB_SHA" --verify-source-zip (Join-Path $readback "$($env:RELEASE_STEM)-source.zip") --exe (Join-Path $readback "$($env:RELEASE_STEM)-windows-x64.exe")
             if ($LASTEXITCODE -ne 0) { throw 'Downloaded source ZIP files and embedded build evidence differ.' }
             $bundle = Get-Content -LiteralPath (Join-Path artifacts "$($env:RELEASE_STEM)-attestation.jsonl") -Raw | ConvertFrom-Json
             if (-not $bundle.dsseEnvelope.payload) { throw 'Attestation bundle has no statement.' }
@@ -345,7 +345,7 @@ jobs:
             exit 0
           }
           # This mutation is authorized only for an exact version accepted by the push gate above.
-          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cnotin @('1.0.0-beta.5.3.2', '1.0.0-beta.5.4.1', '1.0.0-beta.5.4.2') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
+          if ($env:GITHUB_EVENT_NAME -cne 'push' -or $version.version -cnotin @('1.0.0-beta.5.3.2', '1.0.0-beta.5.4.1', '1.0.0-beta.5.4.2', '1.0.0-beta.5.6') -or $version.tag -cne "v$($version.version)" -or $version.channel -cne 'beta' -or $env:RELEASE_TAG -cne $version.tag) { throw 'One-time reviewed Beta publication scope mismatch.' }
           if (git status --porcelain) { throw 'Source changed after Draft inspection.' }
           if ((git rev-parse HEAD) -cne $env:GITHUB_SHA) { throw 'Source commit changed after Draft inspection.' }
           if ($version.upstream_private_profile_version -cne '0.60' -or $version.upstream_private_inherent_element_revision -ne 2 -or $version.menu_preview_revision -ne 2 -or $version.menu_preview_hook_count -ne 11 -or $version.menu_aura_revision -ne 1 -or $version.menu_camera_reload_revision -ne 1 -or $version.menu_camera_distance -ne 740.0 -or $version.menu_camera_height -ne -45.0 -or $version.menu_coldstart_revision -ne 1 -or $version.menu_asset_wait_frames -ne 1800 -or $version.menu_total_wait_frames -ne 7200) { throw 'Authorized Beta must identify the reviewed inherited profile and accepted menu preview reload/aura revision 2 and cold-start revision 1.' }
@@ -358,6 +358,12 @@ jobs:
             if ($version.file_version -cne '1.0.0.69' -or $version.ct_file -cne 'Nioh_HinoEnma_1.24.8_Beta5_4_2.CT' -or $version.local_package_only -ne $false -or $version.orochi_execution_revision -ne 3 -or $version.orochi_hook_count -ne 10 -or $version.orochi_resource_revision -ne 5 -or $version.orochi_ray_guard_revision -ne 2 -or $version.ninetails_execution_revision -ne 1 -or $version.ninetails_resource_revision -ne 1 -or $version.ninetails_wait_guard_revision -ne 1) { throw 'Authorized Beta 5.4.2 execution revision metadata differs.' }
             $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
             if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 81 -or $profile.allocation_size -ne 331776 -or $profile.ninetails_execution_revision -ne 1 -or $profile.ninetails_binding_data_offset -ne 278528 -or $profile.ninetails_binding_data_size -ne 512 -or $profile.ninetails_bootstrap_instance_addresses -ne $false) { throw 'Authorized Beta 5.4.2 dual-boss profile differs.' }
+          }
+          if ($version.version -ceq '1.0.0-beta.5.6') {
+            if ($version.file_version -cne '1.0.0.73' -or $version.ct_file -cne 'Nioh_HinoEnma_1.24.8_Beta5_6.CT' -or $version.local_package_only -ne $false -or $version.abyss_actions_revision -ne 3 -or $version.abyss_cancel_revision -ne 1 -or $version.abyss_resource_lifetime_revision -ne 1 -or $version.abyss_guide_revision -ne 1 -or $version.gameplay_basis_version -cne '1.0.0-beta.5.5.1' -or $version.beta56_exact_executable_gameplay_repeated -ne $false) { throw 'Authorized Beta5.6 version or gameplay scope differs.' }
+            $profile = Get-Content -LiteralPath profiles/steam-1.24.8.json -Raw | ConvertFrom-Json
+            if ($profile.tool_version -cne $version.version -or @($profile.hooks).Count -ne 82 -or $profile.allocation_size -ne 348160 -or $profile.data_offset -ne 61440 -or $profile.local_package_only -ne $false -or $profile.abyss_actions_revision -ne 3 -or $profile.abyss_cancel_revision -ne 1 -or $profile.abyss_resource_lifetime_revision -ne 1 -or $profile.abyss_guide_revision -ne 1 -or $profile.abyss_resource_data_offset -ne 339968 -or $profile.abyss_resource_data_size -ne 8192 -or $profile.abyss_resource_ticket_slots -ne 64) { throw 'Authorized Beta5.6 full profile differs.' }
+            if ((Get-FileHash -LiteralPath profiles/gameplay-tested-beta5.5.1.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '34324ce6558db94f419dd5342a1362889a08f7796b81782532a1bccc13126c2b') { throw 'Accepted Beta5.5.1 basis changed before publication.' }
           }
           $remoteMain = (git ls-remote origin refs/heads/main).Split("`t")[0]
           if ($LASTEXITCODE -ne 0 -or $remoteMain -cne $env:GITHUB_SHA) { throw 'Main changed after Draft inspection.' }

@@ -49,12 +49,6 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Complete exact-source regressions failed.' }
           python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Immutable Beta 5.2 payload preservation proof failed.' }
-          python tools/verify_menu_preview.py --report artifacts/menu-preview-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Portable menu source and CPU proof failed.' }
-          python tools/verify_orochi_execution.py --report artifacts/orochi-execution-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Portable execution source and CPU proof failed.' }
-          python tools/verify_ninetails_execution.py --report artifacts/ninetails-execution-verification.json
-          if ($LASTEXITCODE -ne 0) { throw 'Portable Nine Tails source and CPU proof failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |
@@ -65,7 +59,7 @@ jobs:
 
       - name: Verify both build profiles and self-checks
         run: |
-          python tools/verify.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          python tools/verify_beta56.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
-          python tools/verify.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          python tools/verify_beta56.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }

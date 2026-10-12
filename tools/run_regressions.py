@@ -7,12 +7,13 @@ import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_TESTS = 203
+EXPECTED_TESTS = 239
 
 
 def source_files():
     paths = [path for directory in ('src', 'tools', 'tests')
              for path in (ROOT/directory).glob('*.py')]
+    paths += list((ROOT/'src').glob('*.json'))
     paths += list((ROOT/'launcher').glob('*.cs'))
     paths += [ROOT/'version.json', ROOT/'profiles/steam-1.24.8.json', ROOT/'profiles/legacy-beta5.4.json']
     return {path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()

@@ -102,7 +102,8 @@ def source_plan_v050(frozen: dict) -> dict:
     """
     specs, targets = baseline_specs()
     signatures = {hook['name']: hook for hook in frozen['hooks']}
-    baseline = deepcopy(frozen)
+    baseline = {key:value for key,value in deepcopy(frozen).items()
+                if not key.startswith('abyss_')}
     baseline.update(tool_version='0.35', allocation_size=0x10000, data_offset=0xF000,
                     targets=targets, hooks=[])
     offset = 0
@@ -204,10 +205,15 @@ def source_plan_beta541(frozen: dict) -> dict:
     return {key:value for key,value in plan.items() if not key.startswith('ninetails_') or key=='ninetails_execution_validated'}
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_beta542(frozen: dict) -> dict:
     from hinoenma_ninetails_runtime import apply_ninetails_execution
     from hinoenma_manual_purification import menu_guard
     return apply_ninetails_execution(source_plan_beta541(frozen), menu_guard())
+
+
+def source_plan(frozen: dict) -> dict:
+    from hinoenma_abyss_runtime import apply_abyss
+    return apply_abyss(source_plan_beta542(frozen))
 
 
 def legacy_plans(frozen: dict) -> list[dict]:
@@ -223,10 +229,20 @@ def legacy_plans(frozen: dict) -> list[dict]:
     if (beta54['tool_version'] != '1.0.0-beta.5.4' or len(beta54['hooks']) != 80
             or beta54['allocation_size'] != 0x43000 or beta54['data_offset'] != 0xF000):
         raise ValueError('Complete delivered Beta5.4 identity required')
-    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen)), beta531(source_plan_beta52(frozen)), source_plan_beta532(frozen), beta54, source_plan_beta541(frozen)]
+    beta542_bytes = (ROOT/'profiles/legacy-beta5.4.2.json').read_bytes()
+    if hashlib.sha256(beta542_bytes).hexdigest() != '566e21cac4835023f4d573c8a7b02467e929a315f3d643ce01b2f4adaa2540c4':
+        raise ValueError('Exact delivered Beta5.4.2 identity changed')
+    beta542 = json.loads(beta542_bytes.decode('utf-8'))
+    if beta542['tool_version'] != '1.0.0-beta.5.4.2' or len(beta542['hooks']) != 81:
+        raise ValueError('Complete Beta5.4.2 identity required')
+    return [beta51, source_plan_hotfix(frozen), source_plan_beta52(frozen), beta53(source_plan_beta52(frozen)), beta531(source_plan_beta52(frozen)), source_plan_beta532(frozen), beta54, source_plan_beta541(frozen), beta542]
 
 
 def validate_layout(plan: dict) -> None:
+    if len(plan.get('hooks', ())) == 82:
+        from hinoenma_abyss_runtime import validate_layout as validate_abyss_layout
+        validate_abyss_layout(plan)
+        return
     if len(plan.get('hooks', ())) == 81:
         if plan.get('tool_version') == '1.0.0-beta.5.4.2':
             from hinoenma_ninetails_runtime import validate_layout as validate_execution_layout
@@ -327,6 +343,10 @@ def relocation_specs(plan: dict) -> list[dict]:
         # Keep data out of instruction/relocation decoding; every byte still
         # participates in all compiled-payload and CT namespace comparisons.
         ranges = [(0, len(hook["payload"]))]
+        if hook['name'] in plan.get('abyss_assembly_code_intervals', {}):
+            ranges = plan['abyss_assembly_code_intervals'][hook['name']]
+            if any(not (0 <= start < end <= len(hook['payload'])) for start,end in ranges):
+                raise ValueError('Invalid Abyss code intervals')
         if hook["name"] == "HE_Preload" and plan.get("salt_damage205_draft"):
             end = ROUTES_OFFSET + len(ROUTE_BYTES)
             if hook["payload"][ROUTES_OFFSET:end] != ROUTE_BYTES or end != len(hook["payload"]):
@@ -439,7 +459,9 @@ def validate_ct_labels(source: str, local_labels: list[str]) -> None:
 
 
 def aa_source(plan: dict) -> str:
-    if len(plan.get('hooks', ())) == 81:
+    if len(plan.get('hooks', ())) == 82:
+        from hinoenma_abyss_runtime import ct_compatible_plan
+    elif len(plan.get('hooks', ())) == 81:
         if plan.get('tool_version') == '1.0.0-beta.5.4.2':
             from hinoenma_ninetails_runtime import ct_compatible_plan
         else:
@@ -456,7 +478,7 @@ def aa_source(plan: dict) -> str:
             from menu_preview_reload_portable import apply_menu_preview as beta531
             canonical = beta531(source_plan_beta52(plan))
         else:
-            canonical = source_plan(plan) if len(plan['hooks'])==81 else source_plan_beta532(plan) if len(plan['hooks'])==71 else __import__('menu_preview_portable_integration').apply_menu_preview(source_plan_beta52(plan))
+            canonical = source_plan(plan) if len(plan['hooks'])==82 else source_plan_beta542(plan) if len(plan['hooks'])==81 else source_plan_beta532(plan) if len(plan['hooks'])==71 else __import__('menu_preview_portable_integration').apply_menu_preview(source_plan_beta52(plan))
         if plan != ct_compatible_plan(canonical):
             raise ValueError('Expected raw source or exact CT numeric conversion')
         plan = canonical
@@ -499,6 +521,9 @@ def aa_source(plan: dict) -> str:
             checks.append('db ' + ' '.join(['90'] * (hook["length"] - 5)))
     checks += ["[DISABLE]", "{$lua}", "if syntaxcheck then return end",
                'if _G.HE_Prototype_PID~=getOpenedProcessID() then error("游戏进程已变化，请重新打开测试表。") end']
+    if plan.get('abyss_resource_lifetime_revision'):
+        checks += [
+            'error("资源寿命版不支持游戏运行中卸载；可选择威廉后正常重新载入，或完整重启游戏。")']
     # Refuse to restore over another table's edits. Allocations remain until process exit,
     # so a game thread already inside a hook cannot jump into freed memory.
     for hook in plan["hooks"]:

@@ -146,7 +146,7 @@ namespace HinoEnmaTool
                     foreach(HookSpec hook in Profile.Hooks)
                         if(hook.Payload(Module, Allocation).Length > source.Length)
                             source = hook.Payload(Module, Allocation);
-                    Require(source.Length > 0x2000 && source.Length <= 0x4000,"Complete dual execution payload");
+                    Require(source.Length > 0x4000 && source.Length <= 0x7000,"Complete common-action carrier payload");
                     int calls = 0, total = 0;
                     byte[] actual = MemoryReader.Read(Allocation, source.Length, delegate(long at, int size)
                     {
@@ -165,7 +165,7 @@ namespace HinoEnmaTool
                         catch(InvalidOperationException){rejected=true;}
                         Require(rejected,"Address boundary guard");
                     }
-                    foreach(int length in new int[]{0,-1,0x4001})
+                    foreach(int length in new int[]{0,-1,0x7001})
                     {
                         bool rejected=false;
                         try { MemoryReader.Read(Allocation,length,delegate(long a,int n){throw new Exception("Unvalidated native read");}); }
@@ -183,8 +183,8 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==81 && Profile.LegacyProfiles.Length==8,"Complete local and prior release identities");
-                    int index=0; int[] counts={55,59,60,70,71,71,80,81}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000,0x36000,0x43000,0x43000};
+                    Require(Profile.Hooks.Length==82 && Profile.LegacyProfiles.Length==9,"Complete local and prior release identities");
+                    int index=0; int[] counts={55,59,60,70,71,71,80,81,81}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000,0x36000,0x43000,0x43000,0x51000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
                         Require(previous.Hooks.Length==counts[index],"Complete prior hook list");
@@ -222,8 +222,8 @@ namespace HinoEnmaTool
                 });
                 test("code protection excludes every gameplay and menu writable page", delegate
                 {
-                    Require(Profile.AllocationSize==0x51000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==9,"Complete execution protected layout");
-                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000,0x42000,0x44000};
+                    Require(Profile.AllocationSize==0x55000 && Profile.DataOffset==0xF000 && Profile.ProtectedDataPages.Length==11,"Complete player lifetime protected layout");
+                    int[] starts={0xF000,0x13000,0x1F000,0x24000,0x29000,0x2C000,0x35000,0x42000,0x44000,0x53000,0x54000};
                     List<MemorySpan> spans=Checks.CodePages(Profile.Hooks,Profile.AllocationSize,Profile.ProtectedDataPages);
                     foreach(HookSpec hook in Profile.Hooks)
                     {
@@ -270,7 +270,7 @@ namespace HinoEnmaTool
                 test("all eleven menu entries require complete payloads and native sites", delegate
                 {
                     string[] names={"HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapAppearancePrivate","HE_MapNativeIdlePrivate","HE_MapIdleSelectionPrivate","HE_MapLoadoutAppearancePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate","HE_MapPreviewAuraCopiedHash"};
-                    Require(Profile.Hooks.Length==81,"Exact total execution build inventory");
+                    Require(Profile.Hooks.Length==82,"Exact total execution build inventory");
                     for(int i=60;i<71;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
@@ -287,7 +287,7 @@ namespace HinoEnmaTool
                 test("all ten execution entries are required and preserve the previous71 profile", delegate
                 {
                     string[] names={"HE_OrochiHeavyTransition","HE_OrochiWeaponBankRead","HE_OrochiWeaponMotionRead","HE_OrochiWeaponMotionPresence","HE_OrochiWeaponEventRead","HE_OrochiWeaponBlendPresence","HE_OrochiWeaponBlendRead","HE_OrochiZeroLengthRay","HE_OrochiStalledInvalidRayExit","HE_OrochiPendingLivingWeaponGuard"};
-                    Require(Profile.Hooks.Length==81,"Exact complete execution inventory");
+                    Require(Profile.Hooks.Length==82,"Exact complete execution inventory");
                     for(int i=71;i<81;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
@@ -316,13 +316,14 @@ namespace HinoEnmaTool
                     Require(beta541.Version=="1.0.0-beta.5.4.1" && beta541.Hooks.Length==81,"Exact published Beta5.4.1 identity");
                     for(int i=0;i<81;i++)
                     {
-                        if((i>=71 && i<=77) || i==80) continue;
+                        if((i>=71 && i<=77) || i==80 || i==1 || i==8 || i==9 || i==39 || i==70) continue;
                         Require(Checks.Equal(Profile.Hooks[i].Template,beta541.Hooks[i].Template),"Other73 templates preserved from Beta5.4.1");
                     }
                     for(int i=0;i<71;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];
                         Require(current.Name==old.Name && current.Rva==old.Rva && current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity,"Previous hook slot identity");
+                        if(i==1 || i==8 || i==9 || i==39 || i==70) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Previous encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Previous relocation encoding");
@@ -342,6 +343,7 @@ namespace HinoEnmaTool
                     {
                         HookSpec current=Profile.Hooks[i],old=beta52.Hooks[i];
                         Require(current.Name==old.Name && current.Rva==old.Rva && current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity,"Original slot identity");
+                        if(i==1 || i==8 || i==9 || i==39) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Original encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Original relocation encoding");
@@ -352,6 +354,43 @@ namespace HinoEnmaTool
                                 Require(Checks.Equal(current.Payload(module,at),old.Payload(module,at)) && Checks.Equal(current.Jump(module,at),old.Jump(module,at)),"Original relocated bytes");
                             }
                     }
+                });
+                test("player lifetime and the five changed bodies preserve complete Beta542 identity", delegate
+                {
+                    LegacyProfile old=Profile.LegacyProfiles[8];
+                    Require(old.Version=="1.0.0-beta.5.4.2" && old.Hooks.Length==81,"Exact released Beta542 basis");
+                    for(int i=0;i<81;i++)
+                    {
+                        HookSpec current=Profile.Hooks[i],prior=old.Hooks[i];
+                        Require(current.Name==prior.Name && current.Rva==prior.Rva && current.CodeOffset==prior.CodeOffset && current.CodeCapacity==prior.CodeCapacity && Checks.Equal(current.Original,prior.Original),"Every previous native and private slot identity");
+                        bool changed=i==1 || i==8 || i==9 || i==39 || i==70;
+                        Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only scoped five bodies differ");
+                        foreach(long module in new long[]{Module,0x7FF83AA00000})
+                            foreach(int slot in new int[]{0,37,511})
+                            {
+                                long at=Checks.FirstAllocation(module)+slot*0x10000L;
+                                Require(Checks.Equal(current.Jump(module,at),prior.Jump(module,at)),"All81 previous native patches preserved");
+                                if(!changed) Require(Checks.Equal(current.Payload(module,at),prior.Payload(module,at)),"Other76 relocated payloads preserved");
+                            }
+                    }
+                    HookSpec release=Profile.Hooks[81];
+                    Require(release.Name=="HE_PlayerResourceLifetimeCleanup" && release.Rva==0x753616U && release.CodeOffset==0x51000 && release.CodeCapacity==0x2000 && Checks.Equal(release.Original,new byte[]{0x48,0x8B,0x0E,0x48,0x8B,0xD7}),"Exact post-cleanup boundary");
+                    foreach(bool payload in new bool[]{true,false})
+                    {
+                        FakeMemory memory=Memory(true);long at;
+                        byte[] bytes=memory.Blocks[payload?Allocation+release.CodeOffset:Module+release.Rva];
+                        bytes[bytes.Length-1]^=1;
+                        Require(Checks.Inspect(memory.Read,Module,out at)==HookState.Other,"Incomplete lifetime code refused");
+                    }
+                    Require(ThreadInstallGuard.AbyssNativeFrames.Length==5,"Complete owned lifetime native frames");
+                    foreach(MemorySpan span in ThreadInstallGuard.AbyssNativeFrames)
+                        foreach(long address in new long[]{Module+span.Start,Module+(span.Start+span.End)/2,Module+span.End-1})
+                        {
+                            bool rejected=false;
+                            try { ThreadInstallGuard.VerifySavedReturnBytes(BitConverter.GetBytes(address),Module); }
+                            catch(InvalidOperationException) { rejected=true; }
+                            Require(rejected,"Nested return into lifetime/native interaction frame refused");
+                        }
                 });
                 test("unrelated modification rejected", delegate
                 { FakeMemory m=Memory(false); m.Blocks[Module+Profile.Hooks[0].Rva][0]=0xCC; long a; Require(Checks.Inspect(m.Read,Module,out a)==HookState.Other,"Other modification"); });

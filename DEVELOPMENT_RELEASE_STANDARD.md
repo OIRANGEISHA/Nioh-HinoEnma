@@ -1,3 +1,20 @@
+# Beta 5.6 当前发布范围
+
+2026-10-12 用户要求“beta版本改成beta5.6，推送到github”，授权将已验收的木灵引导、无间狱连续换层及资源持有修复以 Beta5.6 推送到现有公开仓库 OIRANGEISHA/Nioh-HinoEnma 的 main，并发布 v1.0.0-beta.5.6 预发布版，附件为独立 Windows x64 EXE 和完整源码 ZIP，latest=false。版本1.0.0-beta.5.6、file1.0.0.73、CT Beta5_6，82处补丁和0x55000分配。已验收Beta5.5.1的实机证据及原EXE哈希保持；Beta5.6是版本标记更新，不声称此精确EXE重新经过实机测试。
+
+要求239项源码回归、Debug和Release各30项离线检查、984项当前载荷比较及7536项历史比较；在9种ASLR布局中与热候选、已验收Beta5.5.1逐处比较载荷和跳转。源码提交和树需精确匹配，源码ZIP每个成员、CRC、元数据、构建证明以及上传后下载的两项附件均校验。GitHub连接器Git对象传输若用于推送，应记录方式并同步本地干净检出；Actions构建和发布身份是github-actions[bot]。历史标签、附件、原始验收记录保持。
+
+下面各版本记录描述当时范围，不代表这些旧版未修复问题在Beta5.6仍未修复，也不代表旧版每条实机测试都重新执行。当前状态见README、CHANGELOG和本版发布说明。
+
+---
+# Beta 5.5 当前范围
+
+2026-10-12 用户要求“弄好这没问题的话就先打包为beta5.5”，授权当前修复的本地交付。保留完整重启候选的82处载荷，版本为1.0.0-beta.5.5、file1.0.0.71。新EXE的离线证明与候选实机证据区分记录；源码ZIP及EXE复制后逐文件读回。坐船仍待单独复测和修复。没有新增此版本的公开推送或发布操作。
+
+以下记录保留各历史版本当时的授权和验收范围，不作为Beta5.5已经完成CI发布或旧版全部测试已重复执行的证明。
+
+---
+
 # Nioh Hino-Enma development and release standard
 
 Current work: **1.0.0-beta.5.4.1**, file **1.0.0.68**. Local verification, packaging and technical records are complete. On 2026-10-11 (Asia/Shanghai), the user authorized the reviewed source push to `main`, and after that CI passed requested the actual GitHub Release. This current authorization includes the Beta 5.4.1 annotated tag, inspected Draft and publication as Pre-release with latest=false and exactly the Windows x64 EXE and complete source ZIP. Use [the current build instructions](docs/BUILD.md) and `tools/package.py` from an exact clean reviewed commit. The version-scoped Actions publisher permits this one Beta 5.4.1 publication after all 177 regressions, three source proofs, both build verifications, source ZIP and downloaded asset readback pass. Preserve the original local snapshot/EXE and all historical tags/assets. Record CI-built results separately from the locally gameplay-tested EXE. The Beta 5.3.2 authorization remains historical; future versions require their own authorization.

@@ -286,7 +286,7 @@ namespace HinoEnmaTool
         internal static byte[] Read(long address, int length, Func<long, int, byte[]> readChunk)
         {
             const long limit = 0x0000800000000000L;
-            if (length < 1 || length > 0x4000 || address < 0x10000 || address > limit - length)
+            if (length < 1 || length > 0x7000 || address < 0x10000 || address > limit - length)
                 throw new InvalidOperationException("读取超出工具允许范围。");
             byte[] result = new byte[length];
             for (int offset = 0; offset < length; offset += 0x1000)

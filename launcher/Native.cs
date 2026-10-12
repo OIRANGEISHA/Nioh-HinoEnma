@@ -79,6 +79,11 @@ namespace HinoEnmaTool
             new MemorySpan(0x2165F0,0x216B82), new MemorySpan(0x6E84EA,0x6E8754),
             new MemorySpan(0x7DEB70,0x7DEE1D), new MemorySpan(0x736CB0,0x73AB00) };
 
+        internal static readonly MemorySpan[] AbyssNativeFrames = new MemorySpan[] {
+            new MemorySpan(0x8A26B0,0x8A2C16), new MemorySpan(0x750700,0x751C4E),
+            new MemorySpan(0x753580,0x75362D),
+            new MemorySpan(0x8CEA40,0x8CEC14), new MemorySpan(0x8CEC80,0x8CEE3D) };
+
         internal static bool InNativeSpan(long address, long moduleBase)
         {
             if (address >= moduleBase + SamplerRva && address < moduleBase + SamplerRva + SamplerLength)
@@ -87,6 +92,9 @@ namespace HinoEnmaTool
                 if (address >= moduleBase + span.Start && address < moduleBase + span.End)
                     return true;
             foreach (MemorySpan span in ExecutionNativeFrames)
+                if (address >= moduleBase + span.Start && address < moduleBase + span.End)
+                    return true;
+            foreach (MemorySpan span in AbyssNativeFrames)
                 if (address >= moduleBase + span.Start && address < moduleBase + span.End)
                     return true;
             foreach (HookSpec hook in Profile.Hooks)

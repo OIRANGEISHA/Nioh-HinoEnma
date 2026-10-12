@@ -1,52 +1,24 @@
-# Beta 5.4.2 build and verification
+# Beta 5.6 本地构建
 
-The profile has 81 hooks and file version 1.0.0.69. Eight shared payloads route the independent Nine Tails chain and retain the full original Orochi bodies; 73 payloads remain identical to Beta 5.4.1. The current owned resources are discovered at runtime. Allocation size is 0x51000, including nine writable, non-executable data pages and a separate 512-byte Nine Tails binding at offset 0x44000. Saved scene addresses are excluded.
-
-## Rebuild on Windows x64
-
-Use Python 3.12 with the pinned requirements and the x64 .NET Framework C# compiler selected by tools/build.ps1. No game assets, private research files or running game are needed for these checks. The EXE itself does not require Python.
+在 Windows 64 位系统准备 Python、requirements-dev.txt 中的依赖及 .NET Framework C# 编译器，运行：
 
 ```powershell
-python -m pip install --target artifacts/python-deps -r requirements-dev.txt
-$env:PYTHONPATH = (Resolve-Path artifacts/python-deps).Path
 python tools/build_profile.py --check
 python tools/check_source.py
 python tools/run_regressions.py
-python tools/verify_beta52_baseline.py --report artifacts/baseline-verification.json
-python tools/verify_menu_preview.py --report artifacts/menu-preview-verification.json
-python tools/verify_orochi_execution.py --report artifacts/orochi-execution-verification.json
-python tools/verify_ninetails_execution.py --report artifacts/ninetails-execution-verification.json
 ./tools/build.ps1 -Configuration Debug
 ./tools/build.ps1 -Configuration Release
-python tools/verify.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.5.4.2-windows-x64.exe --report artifacts/Debug/verification.json
-python tools/verify.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.4.2-windows-x64.exe --report artifacts/Release/verification.json
+python tools/verify_beta56.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.6-windows-x64.exe --report artifacts/Release/verification.json
 ```
 
-The complete suite has 203 tests, including 34 frozen Orochi tests and 24 Nine Tails tests. The runner records exact source hashes and refuses a source change during the run. The independent execution proofs also verify source identities, original bodies and relocated payloads. CPU stubs and copied-resource replay do not certify gameplay.
+当前回归要求239项，其中12项为木灵引导验证，原有资源寿命、连续换层、取消、大蛇、九尾等回归保持。Debug、Release分别要求30项C#检查。CT命名空间12种布局984项比较通过。
 
-## Local package
+`src/hinoenma_abyss_guide.py` 在正常源码链中生成限定EA6E/kind2/instance0/46的兼容。参数、转移和事件来自地址无关的JSON；构建不依赖本机游戏快照或研究目录。只有70号私有载荷在Beta5.5基础上改变，原aura可达代码、另外81个载荷和全部82处原生入口保持。
 
-Complete all checks above, finalize the exact gameplay scope in docs/validation-beta5.4.2.json, then use an empty output directory:
+当前验证工具将82处载荷/跳转与实测热候选在9种ASLR布局下比较，各738项一致。离线证明与正式重启实测记录分开，后者见 `docs/guide-restart-gameplay.json`。旧版本验证和打包脚本保留为历史工具，本版使用上述当前命令。
 
-```powershell
-python tools/package_local.py --destination <empty-directory>
-python tools/package_local.py --verify-source-zip <source.zip> --exe <exe>
-```
+源码包build-info保存逐文件manifest、构建证明、正式重启验收及EXE哈希。归档不含游戏文件、原始堆转储、凭据或本机依赖。
 
-The packager rejects stale source, build, proof and regression receipts. It verifies the full UTF-8 snapshot and manifest, four source proofs, both compiled EXEs and the distributed checksum. Outputs are 飞缘魔启动工具.exe, Nioh-HinoEnma-1.0.0-beta.5.4.2-source.zip and 使用说明.txt. The source ZIP includes the repair record and build-info receipts but excludes game resources, save files, private process dumps and development binaries.
+`version.json` 与离线证明中的重启待验证字段描述构建时状态，不改写原证明和EXE；通过状态由独立验收JSON记录。独立重编译可产生不同EXE哈希，不能继承这个精确文件的游戏实测身份。
 
-The local packager does not create a commit, tag, GitHub Release or CI attestation. The original Beta 5.4.2 local snapshot remains unchanged. On 2026-10-11 (Asia/Shanghai), the user authorized the current source push and Release. The exact-version push workflow now permits this Beta 5.4.2 only, with local_package_only=false, four source proofs, all 203 regressions, both builds and downloaded-asset readback. It exports exact Git source via tools/package.py, creates an immutable annotated tag and inspected Draft, then publishes Pre-release with latest=false. CI assets have separate hashes and provenance; local gameplay evidence is not relabeled as a CI game test. Earlier tags and assets remain immutable.
-
-## Completed offline coverage
-
-Debug and Release each passed 29 self-checks, 972 current-profile comparisons over 12 layouts and 6564 complete historical-profile comparisons over 96 layouts. Eight historical identities contain 55/59/60/70/71/71/80/81 hooks. The launcher reads large payloads in bounded 0x1000 chunks and refuses partial or excessive reads; the relocated heavy payload requires the new 0x4000 ceiling.
-
-The Nine Tails proof passed 24 tests and preserves 73 payloads and patches over 12 layouts (876 comparisons each), plus eight original Orochi bodies. It covers discovery, both resource layers, descriptor bounds, DWORD overflow rejection, fresh bindings, generation invalidation, pending pairing, stale Nine Tails routing to Orochi, native fallback and Win64 ABI. The unchanged Orochi proof passed 34 tests, 852 earlier71 payload/patch comparisons and ten complete native frame guards. The immutable Beta 5.2 basis passed 720 payload and 720 patch comparisons.
-
-The retained menu proof passed 59 tests. Its frozen 41 menu tests retain 4280 byte comparisons and 15880 CPU comparisons; the 18 cold-start tests retain 19892 CPU frames, 852 payload comparisons and 840 unchanged other-hook comparisons. Those suites use their exact predecessor inputs and do not claim 81-hook coverage.
-
-## Gameplay evidence
-
-The scene-bound Nine Tails candidate completed the native paired action, HP 0, native death state 1 and cleanup. The user confirmed story continuation and restored control. The exact new Release EXE's full-restart result and SHA-256 are recorded separately in docs/validation-beta5.4.2.json. Offline proofs always keep final_exe_gameplay_validated=false; the separate gameplay receipt is authoritative for the tested encounter.
-
-Beta 5.4.2 has not repeated the full Orochi fight. It retains the original code and eight CPU routes; Beta 5.4.1's historical full-restart gameplay stays in its original record. Other weapon packages, difficulty variants, multiplayer and direct CT activation have not been individually tested.
+GitHub 发布工作流从精确源码提交重建 Debug 和 Release，验证后生成带源码提交、树、逐文件清单和构建证明的源码包。公开发布标签为 `v1.0.0-beta.5.6`；实际提交和 CI 运行链接写入发布包的 build-info。

@@ -1,0 +1,161 @@
+{
+  "success": true,
+  "report_generation_game_access": false,
+  "created_utc": "2026-10-12T02:43:26.594536+00:00",
+  "version": "1.0.0-beta.5.5.1",
+  "user_response": "正常了",
+  "user_confirmed_full_restart_and_named_tool": true,
+  "user_confirmed_return_to_shore_movement_and_menu": true,
+  "formal_restart_gameplay_validated": true,
+  "pid": 25712,
+  "previous_trial_pid": 7288,
+  "code_writes_in_fresh_run": 0,
+  "executable_sha256": "f6b3b9543a5c6426a86d3740754daa178a011573988993a0483a77c3938328b4",
+  "offline_build_proof_sha256": "7b2f1aa5d2fa93ae7368f4486cc84963df9454d21917d18612d8a6e1cd2a169b",
+  "history_sha256": "00233f1d6b8abf46e03b48876c31ae024457aab75d0980812156928f484babff",
+  "source_file_bindings": {
+    "fresh_reader_source_sha256": "ec4003012da69df863d31e7ab7d5946009ad2ae132d5d39dc391e062dbb9b69e",
+    "observer_source_sha256": "a486eac3bc5c3d3ea860d86f51e1b4121cc8af94778066af8458aafbafa0ecaf",
+    "reader_source_sha256": "0791150e0e55119294206aeff1b365dc051ada5c9822e689d1748b5e1f97ae10",
+    "active_reader_source_sha256": "b29c2f6a1da1374a9dd26c5a2d796357f437b63b5151d4c1c465179b3e6de5e2"
+  },
+  "verified_hooks": 82,
+  "samples": 3066,
+  "request_changes": 37,
+  "valid_guide_request_samples": 28,
+  "errors": 0,
+  "transient_reads": 0,
+  "final_core": {
+    "selected": 364126,
+    "loaded": 364126,
+    "native_actor": "0x16fb0ec9780",
+    "captured_actor": "0x16fb0ec9780",
+    "spawn_count": 1,
+    "init_count": 1
+  },
+  "final_lifetime": {
+    "header": {
+      "acquire_count": 1,
+      "duplicate_count": 1,
+      "release_count": 0,
+      "conflict_count": 0,
+      "full_count": 0,
+      "uncertain_count": 0,
+      "generation_count": 1,
+      "outstanding_count": 1,
+      "deferred_cleanup_count": 0
+    },
+    "tickets": [
+      {
+        "slot": 0,
+        "state": 2,
+        "template": "0x58e5e",
+        "actor": "0x16fb0ec9780",
+        "returned_main_handle": "0x1701132f830",
+        "acquire_count": 1,
+        "duplicate_count": 1,
+        "release_count": 0,
+        "epoch": 1,
+        "generation": 1
+      }
+    ]
+  },
+  "action_changes": [
+    {
+      "elapsed": 0.016,
+      "action_motion": [
+        0,
+        0
+      ]
+    },
+    {
+      "elapsed": 71.156,
+      "action_motion": [
+        1155,
+        8
+      ]
+    },
+    {
+      "elapsed": 71.469,
+      "action_motion": [
+        1157,
+        0
+      ]
+    },
+    {
+      "elapsed": 71.516,
+      "action_motion": [
+        0,
+        0
+      ]
+    },
+    {
+      "elapsed": 72.578,
+      "action_motion": [
+        984,
+        410
+      ]
+    },
+    {
+      "elapsed": 75.562,
+      "action_motion": [
+        0,
+        0
+      ]
+    },
+    {
+      "elapsed": 76.375,
+      "action_motion": [
+        10,
+        51
+      ]
+    },
+    {
+      "elapsed": 77.719,
+      "action_motion": [
+        0,
+        51
+      ]
+    },
+    {
+      "elapsed": 78.016,
+      "action_motion": [
+        0,
+        0
+      ]
+    },
+    {
+      "elapsed": 80.922,
+      "action_motion": [
+        3,
+        20
+      ]
+    },
+    {
+      "elapsed": 81.078,
+      "action_motion": [
+        0,
+        0
+      ]
+    },
+    {
+      "elapsed": 81.141,
+      "action_motion": [
+        3,
+        20
+      ]
+    },
+    {
+      "elapsed": 81.703,
+      "action_motion": [
+        0,
+        0
+      ]
+    }
+  ],
+  "full_action_chain_sampled": false,
+  "trace_limit": "170/1156 were not sampled; guide1155 and1157 exit were sampled. User confirmed arrival and controls.",
+  "inactive_object_info_ignored": true,
+  "inactive_info_limit": "A null pending/active object can retain a stale info pointer; those info bytes are not interpreted as an active request.",
+  "outbound_boat": "Original Beta5.5 outbound trip passed earlier; guide return is a separate interaction."
+}

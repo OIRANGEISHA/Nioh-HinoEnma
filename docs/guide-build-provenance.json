@@ -1,0 +1,8 @@
+{
+  "game_access": false,
+  "build": "E:\\mod\\research\\beta551-guide-build",
+  "baseline": "E:\\mod\\research\\beta55-local-build",
+  "tested_candidate_profile_sha256": "280a83ad7e7e1bf2b13ba7f73a8f236336665921b311a1a27fc4304f7b530ab1",
+  "preserved_original_delivery": true,
+  "new_version": "1.0.0-beta.5.5.1"
+}

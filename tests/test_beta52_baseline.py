@@ -20,6 +20,9 @@ class Beta52BaselineTests(unittest.TestCase):
         result=verify()
         self.assertEqual(result['payload_comparisons'],720)
         self.assertEqual(result['patch_comparisons'],720)
+        self.assertEqual(result['current_changed_original_indices'],[1,8,9,39])
+        self.assertEqual(result['unchanged_current_original_hooks'],56)
+        self.assertTrue(result['current_scoped_reconstruction_verified'])
 
     def reject(self,change):
         current=deepcopy(self.current);change(current)
@@ -27,6 +30,11 @@ class Beta52BaselineTests(unittest.TestCase):
 
     def test_changed_old_assembly_refused(self):
         self.reject(lambda p:p['hooks'][0].__setitem__('asm',p['hooks'][0]['asm']+'\nnop'))
+
+    def test_changed_modified_baseline_body_refused(self):
+        for index in (1,8,9,39):
+            with self.subTest(index=index):
+                self.reject(lambda p:p['hooks'][index].__setitem__('asm',p['hooks'][index]['asm']+'\nnop'))
 
     def test_changed_old_native_signature_refused(self):
         self.reject(lambda p:p['hooks'][5].__setitem__('original','90'+p['hooks'][5]['original'][2:]))
