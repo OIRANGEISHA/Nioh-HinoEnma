@@ -1,43 +1,115 @@
 {
-  "version": "1.0.0-beta.5.6.1",
-  "builds": {
-    "Debug": {
-      "compiler": "Windows .NET Framework C# compiler",
-      "pe_machine": "x64",
-      "windows_version": "10.0.26300.0",
-      "compiler_file_version": "4.8.9221.0 built by: NET481REL1LAST_25H2",
-      "powershell_version": "7.6.5",
-      "product_version": "1.0.0-beta.5.6.1",
-      "configuration": "Debug",
-      "file_version": "1.0.0.74",
-      "offline_self_checks": 30,
-      "authenticode_status": "NotSigned"
+  "version": "1.0.0-beta.5.6.2",
+  "game_access": false,
+  "gameplay": {
+    "schema": 1,
+    "version": "1.0.0-beta.5.6.2",
+    "success": true,
+    "exact_executable_gameplay_validated": false,
+    "payload_equivalent_to_cold_tested": true,
+    "temporary_runtime_patch": false,
+    "manual_resource_binding": false,
+    "equipment_scope": "Fresh-process second-load gameplay: Taro Tachi (odachi), family 6; seven families covered offline, not seven live playthroughs.",
+    "basis": {
+      "version": "1.0.0-beta.5.6.1",
+      "file_version": "1.0.0.76",
+      "executable_sha256": "004f0000b0411218ee6dd94f39a5b69c189f6bd48fde875db135dea693dd5b7f",
+      "profile_sha256": "6ac7bc436bb3870682b0e399d451cfd26501d51f44ba7343c67f117070918773",
+      "exact_standalone_gameplay_validated": true,
+      "complete_restart_and_actual_second_load_verified": true,
+      "initialized_count": 2,
+      "verified_hooks": 82,
+      "selected_item": 8311,
+      "family_key": 6,
+      "user_confirmation": "全部正常：起手动画、冲击波、量表显示与消耗、结束后的移动和菜单",
+      "user_energy_modifier_confirmation": "已重载，已关闭能量修改",
+      "summary": {
+        "startup_action_ids": [
+          3378
+        ],
+        "startup_motion_ids": [
+          9000
+        ],
+        "startup_frame_range": [
+          1.0,
+          189.0
+        ],
+        "native_startup_children": [
+          1503
+        ],
+        "paused_native_start_seen": true,
+        "unpaused_native_active_seen": true,
+        "native_controller_bit40_seen": true,
+        "attachment_applied_values": [
+          0
+        ],
+        "event_layer_values": [
+          0
+        ],
+        "attempts_delta": 1,
+        "starts_delta": 1,
+        "charge_before": 1500,
+        "maximum": 1500,
+        "last_private": {
+          "latch": 1,
+          "starts": 1,
+          "epoch": 2,
+          "owned": 0,
+          "attempts": 1,
+          "skipped_visuals": 1442,
+          "in_initializer": 0
+        },
+        "last_native": {
+          "state": 0,
+          "animation_latch": 0,
+          "charge": 0,
+          "charge_max": 1500,
+          "gauge": 0.0,
+          "exhaustion": 0,
+          "attachment_applied": 0,
+          "resource_110": 0,
+          "retained_118": "0x0"
+        },
+        "last_action": 0,
+        "visual_effect_requires_user_confirmation": true,
+        "automatic_bootstrap_observed": true,
+        "binding_magic_before": 0,
+        "automatic_equipment_item": 8311
+      },
+      "samples": 2632,
+      "errors": 0,
+      "transient_reads": 0,
+      "observation_sha256": "65c1e7c38fbbb647009bdedc8a7fb4268da8327a7e6ae77fe79a0a56206f0ea0"
     },
-    "Release": {
-      "configuration": "Release",
-      "offline_self_checks": 30,
-      "powershell_version": "7.6.5",
-      "compiler_file_version": "4.8.9221.0 built by: NET481REL1LAST_25H2",
-      "file_version": "1.0.0.74",
-      "pe_machine": "x64",
-      "authenticode_status": "NotSigned",
-      "windows_version": "10.0.26300.0",
-      "compiler": "Windows .NET Framework C# compiler",
-      "product_version": "1.0.0-beta.5.6.1"
-    }
+    "version_promotion_note": "Beta5.6.2 is a new versioned build. The exact FileVersion 76 binary was gameplay-tested; the new executable is verified offline and its complete runtime payloads are compared to that tested binary. No new exact-file gameplay test is claimed.",
+    "executable_sha256": "c636fd81d3b1aeffaad8b3a0f9d514c9ce133e151d740393b68565c314dea444",
+    "profile_sha256": "25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b"
+  },
+  "promotion": {
+    "version": "1.0.0-beta.5.6.2",
+    "success": true,
+    "game_access": false,
+    "tested_executable_sha256": "004f0000b0411218ee6dd94f39a5b69c189f6bd48fde875db135dea693dd5b7f",
+    "tested_profile_sha256": "6ac7bc436bb3870682b0e399d451cfd26501d51f44ba7343c67f117070918773",
+    "release_profile_sha256": "25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b",
+    "payload_comparisons": 984,
+    "native_patch_comparisons": 984,
+    "layout_count": 12,
+    "runtime_payloads_identical": true,
+    "exact_release_executable_gameplay_tested": false
   },
   "checks": {
     "Debug": {
-      "version": "1.0.0-beta.5.6.1",
+      "version": "1.0.0-beta.5.6.2",
       "success": true,
       "game_access": false,
       "executable_versions": {
-        "product_version": "1.0.0-beta.5.6.1",
-        "file_version": "1.0.0.74"
+        "product_version": "1.0.0-beta.5.6.2",
+        "file_version": "1.0.0.77"
       },
       "generated_source_matches": true,
-      "generated_source_sha256": "62dd9814e3aaf57bcdcf7fde58e73fc000bce9de6786c70c2ff88de4d7311d88",
-      "profile_sha256": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
+      "generated_source_sha256": "1d53eacb3b7e4eb10b3a337154881fac4683bcd0bcf6ce565b8c90b09d9b55d6",
+      "profile_sha256": "25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b",
       "self_checks": 30,
       "payload_comparisons": 984,
       "layout_count": 12,
@@ -56,20 +128,20 @@
       "legacy_payload_comparisons": 7536,
       "legacy_layout_count": 108,
       "pe_machine": "x64",
-      "executable_bytes": 815616,
-      "executable_sha256": "e126e66ad6c09a5871d297f6b142f53c64471b220e9edae9cf76672b142e9ee5"
+      "executable_bytes": 818176,
+      "executable_sha256": "e16f7408f793546fa0641e8bae1d38da3902e374dbc6d37b1c05921eb72ede0f"
     },
     "Release": {
-      "version": "1.0.0-beta.5.6.1",
+      "version": "1.0.0-beta.5.6.2",
       "success": true,
       "game_access": false,
       "executable_versions": {
-        "product_version": "1.0.0-beta.5.6.1",
-        "file_version": "1.0.0.74"
+        "product_version": "1.0.0-beta.5.6.2",
+        "file_version": "1.0.0.77"
       },
       "generated_source_matches": true,
-      "generated_source_sha256": "62dd9814e3aaf57bcdcf7fde58e73fc000bce9de6786c70c2ff88de4d7311d88",
-      "profile_sha256": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
+      "generated_source_sha256": "1d53eacb3b7e4eb10b3a337154881fac4683bcd0bcf6ce565b8c90b09d9b55d6",
+      "profile_sha256": "25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b",
       "self_checks": 30,
       "payload_comparisons": 984,
       "layout_count": 12,
@@ -88,13 +160,39 @@
       "legacy_payload_comparisons": 7536,
       "legacy_layout_count": 108,
       "pe_machine": "x64",
-      "executable_bytes": 812032,
-      "executable_sha256": "0327010814f1918a77e528744c87ab9517c8dcf01d082648df09f4ecfdade659"
+      "executable_bytes": 814592,
+      "executable_sha256": "c636fd81d3b1aeffaad8b3a0f9d514c9ce133e151d740393b68565c314dea444"
+    }
+  },
+  "builds": {
+    "Debug": {
+      "pe_machine": "x64",
+      "compiler": "Windows .NET Framework C# compiler",
+      "offline_self_checks": 30,
+      "powershell_version": "7.6.5",
+      "configuration": "Debug",
+      "file_version": "1.0.0.77",
+      "product_version": "1.0.0-beta.5.6.2",
+      "windows_version": "10.0.26300.0",
+      "compiler_file_version": "4.8.9221.0 built by: NET481REL1LAST_25H2",
+      "authenticode_status": "NotSigned"
+    },
+    "Release": {
+      "pe_machine": "x64",
+      "compiler": "Windows .NET Framework C# compiler",
+      "offline_self_checks": 30,
+      "powershell_version": "7.6.5",
+      "configuration": "Release",
+      "file_version": "1.0.0.77",
+      "product_version": "1.0.0-beta.5.6.2",
+      "windows_version": "10.0.26300.0",
+      "compiler_file_version": "4.8.9221.0 built by: NET481REL1LAST_25H2",
+      "authenticode_status": "NotSigned"
     }
   },
   "regressions": {
     "schema": 1,
-    "version": "1.0.0-beta.5.6.1",
+    "version": "1.0.0-beta.5.6.2",
     "success": true,
     "game_access": false,
     "tests_run": 240,
@@ -105,10 +203,10 @@
     "tested_source_unchanged": true,
     "source_files": {
       "launcher/app.manifest": "2675e4ee5235c58d7e9846aeb50cba9ef2a3d053e9f1eb7fa48c11e1a288f28d",
-      "launcher/AssemblyInfo.cs": "07b8575a2f51d5c2ce24895459f344f9fd8c548dd7acfc3ce82fab1816ea0d0e",
+      "launcher/AssemblyInfo.cs": "b35ad1a8f98bdf8d5eb17432b6f4d1da3f41eb4799a2dbf3fede3d1ce15cd553",
       "launcher/Injector.cs": "d6f7d8c83565d2c5eb419384c6ddf9f3a031b7d9be4d83c5f82dafe66fe9d52f",
       "launcher/Native.cs": "e98b68d884b43343cc31928c867f6b8e1ba893282adee738caacdb4ddef6d350",
-      "launcher/Profile.generated.cs": "62dd9814e3aaf57bcdcf7fde58e73fc000bce9de6786c70c2ff88de4d7311d88",
+      "launcher/Profile.generated.cs": "1d53eacb3b7e4eb10b3a337154881fac4683bcd0bcf6ce565b8c90b09d9b55d6",
       "launcher/Program.cs": "3e3782c14fad13f830c77fcd501e7063075be63ed6058a861f27cd4aa7a2e5f2",
       "launcher/SelfTests.cs": "8746bbb234404cf28f2728a6f8e896f45527876df828b2d5c3f961ebda8c2ce8",
       "profiles/baseline-beta5.2.json": "41f543e4a7b032000baa21eadc94d3b14f7f181d84a298b858986a1199aafbf3",
@@ -118,7 +216,7 @@
       "profiles/guide-baseline-beta5.5.json": "3e82bbd8109253205c64ea27e3f964234418f913e4c6198aa9700a749836e260",
       "profiles/legacy-beta5.4.2.json": "566e21cac4835023f4d573c8a7b02467e929a315f3d643ce01b2f4adaa2540c4",
       "profiles/legacy-beta5.4.json": "3e864d373a4175bad8b5748c20579bdadde4dd1bacb28a8792980a2a32985da9",
-      "profiles/steam-1.24.8.json": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
+      "profiles/steam-1.24.8.json": "25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b",
       "src/hinoenma_abyss_actions.py": "15b3bdaaecada166ce12c4230630d97af805379c04d0057b8d6bbcdc8907da20",
       "src/hinoenma_abyss_assembly.py": "dbe070b272f05c143cfec3f02f94d60b7d89368cbaeaaffcded6d6f2b546635c",
       "src/hinoenma_abyss_guide.py": "4f5fa032b52141c6ebb566db31ade6cf885d53781ea238d98dc173e3978407a5",
@@ -187,17 +285,17 @@
       "src/hinoenma_tutorial_shot.py": "1e693fc2938fa861cb75f3f5ee7dc7c8111e0ff5b228989abf79fd5a88b168c2",
       "src/hinoenma_tutorial_weapon.py": "5d3b24f00d4f9e9c72547b2eadd0fe3ff631cfe58d4cceac5659c1413eec4804",
       "src/hinoenma_weapon_view.py": "4c0bbcf576033e59ea69d1358a81242134b23ed6a3d67a3ef318d078592801af",
-      "src/living_weapon_start_bootstrap.py": "ca65b8af48aa12dda5d7e955a22733bc275789300af6edf39f4ab3abbe34c6be",
-      "src/living_weapon_start_ct.py": "bc3c6ded38bc6f70aa21dfdd6aca9681b2f02b8d430573db7f94abb890f23c71",
+      "src/living_weapon_start_bootstrap.py": "a7a4a14d492f156e1ff5a92c2d048562f8a92b6203b96d2d7abfd2f50397a7f0",
+      "src/living_weapon_start_ct.py": "9ebc8fe767ca3deda0792502ba247776690c26ef43e8d3fa83602e87b5185792",
       "src/living_weapon_start_input.py": "2169c3d4ffaab371fc806568adb85fd69640f90c9b60f10c3ae0aa1f70a39575",
       "src/living_weapon_start_production.py": "e3c7d0a28f9c9c8aab1798a6190d399f7aebbaf4acf7dc1e307c8e6632b5eccf",
-      "src/living_weapon_start_production_layout.py": "48ef685e2b2f6d1aaa77e86d5b133e22c0187e9be2a4bb86dcf18dc04f125a87",
+      "src/living_weapon_start_production_layout.py": "504052acf9051b1aa571e29c54a93e1430e8e0899be1e2abfca891ae7fc8df36",
       "src/living_weapon_start_views.py": "c135b1d63722d43d061b4ec93856c7e42befc5ccbe36f45bde8714aed4cfcc86",
       "src/source_assembler.py": "66acbcd215366b311bcf7a604779567c0d1669c96b1169a48e6134bea5c02abf",
       "tests/orochi_fixture.py": "72dacf8d16f9053c75268fbeebdafb0d11ab8249e3def7ed810a8be0432c15c6",
       "tests/portable_machine.py": "9b2b79767042fbf8a3ae49be84325c9b4fbc21560c2900fae8aad437efd1cc1a",
       "tests/test_abyss_guide.py": "d370a74b1a06197ffb94ef4121fc3bfb58a6610aa5f13e26897b212f2904e1d8",
-      "tests/test_abyss_runtime.py": "dfde3fb7c5491c649fb83b6d0b217776b699fd14f2d255e0b61cc5c9a8f32292",
+      "tests/test_abyss_runtime.py": "e3c4d2ab998d314e387660045cadbe4bfbb2be986ec4dab8082fc1882fdbe657",
       "tests/test_beta52_baseline.py": "23085bab06bd20d1e0c5d8f92d853bee18d1b1f54332dc4b19e37ad23389d60b",
       "tests/test_beta56_publication.py": "e93ba30c19706f081609735fef97d6aee13dc08ce667bb65401c4eb1f69aea3f",
       "tests/test_inherent_element_portable.py": "5273a9cde43c1870abfd1e8be47d0bec5c8080e012b7b37fbefea38b36a35926",
@@ -212,8 +310,8 @@
       "tests/test_special_items_portable.py": "36d88684deadd063f427c27bd1440a42cf8ee9be2089d93bbcfe612c5b26fdf4",
       "tools/build.ps1": "8d0314e98ec9e224446eea25f9e243df257b89052bf5831f547ec6e57632ea12",
       "tools/build_hinoenma.py": "e7776f07e3ae68e7c06c6bac3c5ebcffd95602514d2743c4a43e3677498ec3ee",
-      "tools/build_profile.py": "8637187bd14ef84d57879cc56b67593dd8beffb31be795451ebe900a8e09acf5",
-      "tools/check_source.py": "88fbb2cf1c01e6113d8db489706edcb3001ea8cd76c53ffc6290fb81781af457",
+      "tools/build_profile.py": "00ac56be3ec6767d3cdc64e09898769630ff5ea346d126a3a75820cdb081d4b5",
+      "tools/check_source.py": "16e2c6f1af13f7e6c66044517dde1ab3790725813baf0c5409b4c963613346c0",
       "tools/menu_preview_appearance_rev2_hooks.py": "9670c24b7ec269f6f4ad3e0096b8f6c3d0913d5edad166fafbfb92e98fca514b",
       "tools/menu_preview_appearance_rev3_hooks.py": "05a17a2eaf91acaf001b29e162ef859fd395409ff96fa604d7ddaf359feae158",
       "tools/menu_preview_appearance_rev4_hooks.py": "8d7a440b963e4f5bae43c884c95c9f8d3cf03dda1754dbc649bebe6e03ac9fc7",
@@ -234,6 +332,7 @@
       "tools/package_local.py": "58f43c72d3c559b98ccb4fa8548cf2518a4ca3ed512a8d69edc65dec98e55e4e",
       "tools/replace_beta51_hotfix.ps1": "40fffa88b59a905bd932747e80fa8544d34728e19eb0f752c5ad65b22b5620e7",
       "tools/run_beta561_regressions.py": "e4cc591c1bbd98bef4000d509f527a2db6efe5935ebeae8d4f073babb009aaf1",
+      "tools/run_beta562_regressions.py": "3a0b59d13d79984a11038f59e9836d728830b63813b0e7682931f268bfe8dc78",
       "tools/run_regressions.py": "e15d9facf340d47b7a50b34fae6cd7e24cd5078f4fc86b9e46be0f212ec74219",
       "tools/test_menu_preview_coldstart_portable.py": "f754763a0e30422593102c7d1c0d2fb2207782b9881747c22f7a27614afdf175",
       "tools/test_menu_preview_portable_integration.py": "40b416b758749de4e03d07a3a696e4fb4691f2c33653255244231601c537fa00",
@@ -245,151 +344,104 @@
       "tools/verify_beta56.py": "883d146a5a88f91b87220d72a021fe645e135f0052cafa27d06c1952c59ab883",
       "tools/verify_beta561.py": "e962e453753219785b54bed446d36d989b4d3b0a82946762ab31776a57790702",
       "tools/verify_beta561_ct.py": "47e08a76102b11346caa3613d095b9975e98c9270ba9610fd2c98ada11873569",
+      "tools/verify_beta562.py": "d105f46ba2487dcb4cf15c2d6e623642515760eef67a560a6a293ea904f573c0",
+      "tools/verify_beta562_ct.py": "fdba2d1283bc19625ce79e8d31923be28e065e1a514bbae497633948174e53dd",
+      "tools/verify_beta562_promotion.py": "32f41a27fede6841e12e642b7c6893979cf37bc3fbd307068b834e38dad17672",
       "tools/verify_living_weapon_start_trial.py": "e962e453753219785b54bed446d36d989b4d3b0a82946762ab31776a57790702",
       "tools/verify_menu_preview.py": "c5f89da8b18d8d3bec5d92182dce3e1a7b4b2cd62f2e2e0347736a93cda8092a",
       "tools/verify_ninetails_execution.py": "7a633cbcf9f719a5961b377e9232b08e58913ad8ed19842654adb8f4352929a1",
       "tools/verify_orochi_execution.py": "ab747a14ea4eb940021d94dd37e56fae2cfa288c147665ee31b2bb6b813d0cd1",
-      "version.json": "b3909ef31ec574e2e99038cf13ef7be8878efb9b860fb5d7f5d05b13b3ee98a6"
+      "version.json": "cc1f0e6f4ce08c2e4510ba71a4d91fef45a9cd38fff82835567d615c402417db"
     },
     "failure_details": [],
     "error_details": []
   },
   "ct": {
     "success": true,
-    "version": "1.0.0-beta.5.6.1",
+    "version": "1.0.0-beta.5.6.2",
     "game_access": false,
     "hook_count": 82,
     "layout_count": 12,
     "three_way_payload_comparisons": 984,
     "native_patch_comparisons": 984,
-    "ct_local_labels": 1088,
+    "ct_local_labels": 1103,
     "source_input_unchanged": true,
     "negative_guards": 5,
     "private_dependencies_imported": false,
     "ct_direct_gameplay_tested": false,
-    "profile_sha256": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
-    "generated_source_sha256": "62dd9814e3aaf57bcdcf7fde58e73fc000bce9de6786c70c2ff88de4d7311d88",
-    "ct_sha256": "5a1cc4694d3105cfe9e44728b7962acd69bb1c31f27c17e7758e1a35ef8e366a",
-    "ct_bytes": 1119100,
-    "verifier_sha256": "47e08a76102b11346caa3613d095b9975e98c9270ba9610fd2c98ada11873569",
-    "converter_sha256": "bc3c6ded38bc6f70aa21dfdd6aca9681b2f02b8d430573db7f94abb890f23c71"
+    "profile_sha256": "25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b",
+    "generated_source_sha256": "1d53eacb3b7e4eb10b3a337154881fac4683bcd0bcf6ce565b8c90b09d9b55d6",
+    "ct_sha256": "34c426c8402229c5a09cfa08326d849f628a6f4577873deb73cd1258bdc01d53",
+    "ct_bytes": 1125991,
+    "verifier_sha256": "fdba2d1283bc19625ce79e8d31923be28e065e1a514bbae497633948174e53dd",
+    "converter_sha256": "9ebc8fe767ca3deda0792502ba247776690c26ef43e8d3fa83602e87b5185792"
   },
-  "gameplay": {
-    "schema": 1,
-    "version": "1.0.0-beta.5.6.1",
-    "created_utc": "2026-10-12T13:01:12.559571+00:00",
+  "source_check": {
     "success": true,
-    "exact_executable_gameplay_validated": true,
-    "validation_kind": "fresh game process, standalone automatic install; VM_READ-only observation",
-    "executable_sha256": "0327010814f1918a77e528744c87ab9517c8dcf01d082648df09f4ecfdade659",
-    "executable_bytes": 812032,
-    "profile_sha256": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
-    "file_version": "1.0.0.74",
-    "native_hook_count": 82,
-    "allocation_size": "0x69000",
-    "temporary_runtime_patch": false,
-    "manual_resource_binding": false,
-    "automatic_bootstrap_observed": true,
-    "binding_empty_before_first9": true,
-    "samples": 3113,
-    "transient_reads": 0,
-    "errors": [],
-    "native_summary": {
-      "startup_action_ids": [
-        3377
-      ],
-      "startup_motion_ids": [
-        9000
-      ],
-      "startup_frame_range": [
-        4.0,
-        190.0
-      ],
-      "native_startup_children": [
-        1503
-      ],
-      "paused_native_start_seen": true,
-      "unpaused_native_active_seen": true,
-      "native_controller_bit40_seen": true,
-      "attachment_applied_values": [
-        0
-      ],
-      "event_layer_values": [
-        0
-      ],
-      "attempts_delta": 1,
-      "starts_delta": 1,
-      "charge_before": 1400,
-      "maximum": 1400,
-      "last_private": {
-        "latch": 1,
-        "starts": 1,
-        "epoch": 1,
-        "owned": 0,
-        "attempts": 1,
-        "skipped_visuals": 1117,
-        "in_initializer": 0
-      },
-      "last_native": {
-        "state": 4294967295,
-        "animation_latch": 0,
-        "charge": 0,
-        "charge_max": 1400,
-        "gauge": 0.0,
-        "exhaustion": 0,
-        "attachment_applied": 0,
-        "resource_110": 0,
-        "retained_118": "0x0"
-      },
-      "last_action": 0,
-      "visual_effect_requires_user_confirmation": true,
-      "automatic_bootstrap_observed": true,
-      "binding_magic_before": 0,
-      "automatic_equipment_item": 1094
-    },
-    "user_confirmation": "全部正常：起手动画和冲击波、99量表显示与消耗、结束后的移动和菜单",
-    "equipment_scope": "同一武器和守护灵；已测 selected item 1094/type 11/family 2；其他装备与关卡未全面实测",
-    "private_observation_sha256": "4b24fbeb6c74b468053092e753da01d42a29c135044903232fbf47d0afd8864e",
-    "build_freeze_sha256": "d1b4741ab65b6da36835c628bb975d39f8692b65056294beee801d5bd8ba9647",
-    "known_remaining_bug": "忍术道具目前无法使用",
-    "ct_direct_activation_gameplay_tested": false,
-    "github_publication": false
-  },
-  "cpu_summary": {
-    "schema": 1,
-    "version": "1.0.0-beta.5.6.1",
     "game_access": false,
-    "bootstrap": {
-      "passed": true,
-      "tests": 17,
-      "scenarios": 29,
-      "errors": 0,
-      "failures": 0,
-      "skipped": 0,
-      "source_sha256": "ca65b8af48aa12dda5d7e955a22733bc275789300af6edf39f4ab3abbe34c6be",
-      "private_proof_sha256": "a51df0ad980a46d2e6dda9a1352002a5a95cabc67baa6d8e83ac949db5176520",
-      "oracle_fields": 69,
-      "actual_saved_fixture": true,
-      "actual_bootstrap_execution": true,
-      "native_stubs": false,
-      "scope": "actual saved resource reads, full generated bootstrap execution, ABI/private-write/ASLR/moving-resource cases; fixture bytes excluded from public source"
-    },
-    "production_input": {
-      "passed": true,
-      "tests": 16,
-      "errors": [],
-      "failures": [],
-      "private_proof_sha256": "49bd132983cb04bd7b55183cb698571662b4d82f5f974f7e875799aee6e7098d",
-      "profile_sha256": "92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133",
-      "full_input_wrapper_executed": true,
-      "bootstrap_and_native_calls": "ABI contracts only; actual discovery/effects not proved here"
-    },
-    "native_event_clock": {
-      "tests": 13,
-      "execution": "actual704E50/703AA0 in isolated CPU; stop before native eventpool; does not prove full game callbacks",
-      "private_proof_sha256": "86c96d2c9ebe33d23266fd1f4534ecaa5a671ec50fb4bc36f014f11dc00a629b"
-    },
-    "reproducibility": "Current public regression/CT/compiled payload checks are reproducible from source. Real saved-resource and native-code CPU fixture tests require excluded game bytes; counts are separate archived evidence, not included in 240 public regressions.",
-    "scope": "Private-proof digests preserved; no raw process addresses or resource bytes distributed"
+    "private_dependencies_imported": false,
+    "hook_count": 82,
+    "ct_local_labels": 1103,
+    "source_input_unchanged": true,
+    "layout_count": 12,
+    "ct_namespace_payload_comparisons": 984,
+    "negative_guards": 26,
+    "historical_hook_counts": [
+      55,
+      59,
+      60,
+      70,
+      71,
+      71,
+      80,
+      81,
+      81
+    ],
+    "protected_data_pages": [
+      61440,
+      77824,
+      126976,
+      147456,
+      167936,
+      180224,
+      217088,
+      270336,
+      278528,
+      339968,
+      344064,
+      348160,
+      352256,
+      356352,
+      360448,
+      364544,
+      368640,
+      372736,
+      376832,
+      380928,
+      385024,
+      389120,
+      393216
+    ]
+  },
+  "private_offline_basis": {
+    "schema": 1,
+    "basis_version": "1.0.0-beta.5.6.1",
+    "basis_file_version": "1.0.0.76",
+    "bootstrap_cases": 38,
+    "native_scheduler_cases": 49,
+    "resource_families": 7,
+    "proofs": [
+      {
+        "name": "living-weapon-family-cpu-proof.json",
+        "sha256": "ccab601a745cb6f8a0dce130d379c36a48a8b67d5d463fc9a81d983fb64c3b06"
+      },
+      {
+        "name": "living-weapon-family-native-clock-proof.json",
+        "sha256": "a62fec5ef7b7a65b74c9c01207f086a31f790f09497d1e5f9b90a35a84cf4c68"
+      }
+    ],
+    "scope": "Seven real loaded resource families; six fixture-only selected-type overlays, actual selected odachi unchanged.49 native scheduler event selections. No game-stat, inventory or save writes.",
+    "private_native_memory_fixtures_included": false,
+    "public_regressions": 240
   }
 }
