@@ -10,7 +10,7 @@ import hashlib
 import json
 
 BASE_VERSION = '1.0.0-beta.5.6'
-VERSION = '1.0.0-beta.5.6.1'
+VERSION = '1.0.0-beta.5.6.2'
 LAYOUT_REVISION = 1
 ALLOCATION_SIZE = 0x69000
 INPUT_CODE_OFFSET = 0x61000

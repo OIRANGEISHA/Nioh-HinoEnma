@@ -1,4 +1,4 @@
-"""Strict Cheat Engine numeric conversion of the canonical Beta5.6.1 source."""
+"""Strict Cheat Engine numeric conversion of the canonical Beta5.6.2 source."""
 from copy import deepcopy
 
 
@@ -8,7 +8,7 @@ def ct_compatible_plan(plan):
     from menu_preview_portable_integration import frozen
     validate_production_layout(plan)
     if plan != load_plan():
-        raise ValueError('Exact reconstructed Beta5.6.1 source required for CT conversion')
+        raise ValueError('Exact reconstructed Beta5.6.2 source required for CT conversion')
     result = deepcopy(plan)
     for hook in result['hooks']:
         hook['asm'] = '\n'.join(

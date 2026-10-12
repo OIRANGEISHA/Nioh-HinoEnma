@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "version": "1.0.0-beta.5.6.2",
+  "success": true,
+  "exact_executable_gameplay_validated": false,
+  "payload_equivalent_to_cold_tested": true,
+  "temporary_runtime_patch": false,
+  "manual_resource_binding": false,
+  "equipment_scope": "Fresh-process second-load gameplay: Taro Tachi (odachi), family 6; seven families covered offline, not seven live playthroughs.",
+  "basis": {
+    "version": "1.0.0-beta.5.6.1",
+    "file_version": "1.0.0.76",
+    "executable_sha256": "004f0000b0411218ee6dd94f39a5b69c189f6bd48fde875db135dea693dd5b7f",
+    "profile_sha256": "6ac7bc436bb3870682b0e399d451cfd26501d51f44ba7343c67f117070918773",
+    "exact_standalone_gameplay_validated": true,
+    "complete_restart_and_actual_second_load_verified": true,
+    "initialized_count": 2,
+    "verified_hooks": 82,
+    "selected_item": 8311,
+    "family_key": 6,
+    "user_confirmation": "全部正常：起手动画、冲击波、量表显示与消耗、结束后的移动和菜单",
+    "user_energy_modifier_confirmation": "已重载，已关闭能量修改",
+    "summary": {
+      "startup_action_ids": [
+        3378
+      ],
+      "startup_motion_ids": [
+        9000
+      ],
+      "startup_frame_range": [
+        1.0,
+        189.0
+      ],
+      "native_startup_children": [
+        1503
+      ],
+      "paused_native_start_seen": true,
+      "unpaused_native_active_seen": true,
+      "native_controller_bit40_seen": true,
+      "attachment_applied_values": [
+        0
+      ],
+      "event_layer_values": [
+        0
+      ],
+      "attempts_delta": 1,
+      "starts_delta": 1,
+      "charge_before": 1500,
+      "maximum": 1500,
+      "last_private": {
+        "latch": 1,
+        "starts": 1,
+        "epoch": 2,
+        "owned": 0,
+        "attempts": 1,
+        "skipped_visuals": 1442,
+        "in_initializer": 0
+      },
+      "last_native": {
+        "state": 0,
+        "animation_latch": 0,
+        "charge": 0,
+        "charge_max": 1500,
+        "gauge": 0.0,
+        "exhaustion": 0,
+        "attachment_applied": 0,
+        "resource_110": 0,
+        "retained_118": "0x0"
+      },
+      "last_action": 0,
+      "visual_effect_requires_user_confirmation": true,
+      "automatic_bootstrap_observed": true,
+      "binding_magic_before": 0,
+      "automatic_equipment_item": 8311
+    },
+    "samples": 2632,
+    "errors": 0,
+    "transient_reads": 0,
+    "observation_sha256": "65c1e7c38fbbb647009bdedc8a7fb4268da8327a7e6ae77fe79a0a56206f0ea0"
+  },
+  "version_promotion_note": "Beta5.6.2 is a new versioned build. The exact FileVersion 76 binary was gameplay-tested; the new executable is verified offline and its complete runtime payloads are compared to that tested binary. No new exact-file gameplay test is claimed.",
+  "executable_sha256": "c636fd81d3b1aeffaad8b3a0f9d514c9ce133e151d740393b68565c314dea444",
+  "profile_sha256": "25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b"
+}

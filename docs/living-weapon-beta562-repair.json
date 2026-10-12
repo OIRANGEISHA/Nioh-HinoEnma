@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "version": "1.0.0-beta.5.6.2",
+  "causes": [
+    "Initialization count must accept every nonzero lifetime count.",
+    "Native families1/3/6/7 use local7/8/9 and shared10039; families2/4/5 use local12/34/13/35/37.",
+    "Odachi main and auxiliary motion-event schedules have legitimate different effect timings."
+  ],
+  "change": "Bound shared event descriptors through native manager/resource geometry; retain exact known startup schemas; independently pin all four native schedules.",
+  "review_of_prior_gap": "Earlier fixture and gameplay scope covered first initialization and only local-event weapon families. Both the helper and diagnostic resolver inherited those assumptions.",
+  "offline_scope": "Seven real loaded resource families; six fixture-only selected-type overlays, actual selected odachi unchanged.49 native scheduler event selections. No game-stat, inventory or save writes.",
+  "unsupported_downloaded_loadout": "Item39175/type18 remains outside native melee mapping9..15; its origin and behavior are unverified. No rarity restriction is applied.",
+  "native_hook_count": 82,
+  "private_hook": 36,
+  "native_entry_changes": 0,
+  "known_remaining_bug": "忍术道具目前无法使用",
+  "historical_gameplay": "Orochi, Nine Tails, Abyss and Kodama records retain their original version identities; not replayed in this fix."
+}

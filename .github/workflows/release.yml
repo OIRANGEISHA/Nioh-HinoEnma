@@ -1,4 +1,4 @@
-name: Publish exact cold-tested Beta5.6.1
+name: Publish payload-verified Beta5.6.2
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: publish-beta561
+  group: publish-beta562
   cancel-in-progress: false
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
     env:
       PYTHONUTF8: '1'
       PYTHONDONTWRITEBYTECODE: '1'
-      RELEASE_STEM: Nioh-HinoEnma-1.0.0-beta.5.6.1
+      RELEASE_STEM: Nioh-HinoEnma-1.0.0-beta.5.6.2
     defaults:
       run:
         shell: pwsh
@@ -48,19 +48,19 @@ jobs:
           $ErrorActionPreference = 'Stop'
           'run=false' >> $env:GITHUB_OUTPUT
           $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
-          if ($version.version -cne '1.0.0-beta.5.6.1') { exit 0 }
+          if ($version.version -cne '1.0.0-beta.5.6.2') { exit 0 }
           $source = git rev-parse HEAD
           if ($LASTEXITCODE -ne 0 -or $source -cne $env:GITHUB_SHA -or $source -cne $env:EXPECTED_COMMIT -or $source -cnotmatch '^[0-9a-f]{40}$') { throw 'Exact source commit mismatch.' }
-          $publication = Get-Content -LiteralPath docs/beta561-publication.json -Raw | ConvertFrom-Json
-          if ($publication.publication_authorized -ne $true -or $publication.repository -cne 'OIRANGEISHA/Nioh-HinoEnma' -or $publication.version -cne $version.version -or $publication.tag -cne 'v1.0.0-beta.5.6.1' -or $publication.asset_commit -cne '696d80088279bbb28252fdcb8634a90c7fc44557' -or $publication.executable_sha256 -cne '0327010814f1918a77e528744c87ab9517c8dcf01d082648df09f4ecfdade659') { throw 'Authorized exact file scope differs.' }
-          if ((Get-FileHash -LiteralPath profiles/steam-1.24.8.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '92a8b48de9d2e9241b3819874af12c25718fe8de121d5e60a1f78f531ea06133') { throw 'Cold-tested profile changed.' }
+          $publication = Get-Content -LiteralPath docs/beta562-publication.json -Raw | ConvertFrom-Json
+          if ($publication.publication_authorized -ne $true -or $publication.repository -cne 'OIRANGEISHA/Nioh-HinoEnma' -or $publication.version -cne $version.version -or $publication.tag -cne 'v1.0.0-beta.5.6.2' -or $publication.asset_commit -cne 'cca45b709d625688d9b48867db513067817cc9f8' -or $publication.executable_sha256 -cne 'c636fd81d3b1aeffaad8b3a0f9d514c9ce133e151d740393b68565c314dea444') { throw 'Authorized exact file scope differs.' }
+          if ((Get-FileHash -LiteralPath profiles/steam-1.24.8.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '25a113a885867f922308eb75c8b87cf3b5088274496121318197ab69225e3f7b') { throw 'Versioned profile changed.' }
           'run=true' >> $env:GITHUB_OUTPUT
 
-      - name: Check out only the immutable cold-test assets
+      - name: Check out only the immutable versioned assets
         if: steps.scope.outputs.run == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: 696d80088279bbb28252fdcb8634a90c7fc44557
+          ref: cca45b709d625688d9b48867db513067817cc9f8
           path: artifacts/asset-source
           fetch-depth: 1
           persist-credentials: false
@@ -81,13 +81,15 @@ jobs:
       - name: Verify source, CT and all 240 current regressions
         if: steps.scope.outputs.run == 'true'
         run: |
+          python tools/verify_beta562_promotion.py
+          if ($LASTEXITCODE -ne 0) { throw 'Cold-tested payload equivalence failed.' }
           python tools/build_profile.py --check
           if ($LASTEXITCODE -ne 0) { throw 'Generated source differs.' }
           python tools/check_source.py | Set-Content -LiteralPath artifacts/source-checks.json -Encoding utf8
           if ($LASTEXITCODE -ne 0) { throw 'Source check failed.' }
-          python tools/verify_beta561_ct.py --report artifacts/ct-verification.json
+          python tools/verify_beta562_ct.py --report artifacts/ct-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'CT verification failed.' }
-          python tools/run_beta561_regressions.py --report artifacts/beta561-regression-tests.json
+          python tools/run_beta562_regressions.py --report artifacts/beta562-regression-tests.json
           if ($LASTEXITCODE -ne 0) { throw 'Current regressions failed.' }
 
       - name: Rebuild and verify both configurations as offline evidence
@@ -97,15 +99,15 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Debug build failed.' }
           ./tools/build.ps1 -Configuration Release
           if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
-          python tools/verify_beta561.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          python tools/verify_beta562.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Debug comparison failed.' }
-          python tools/verify_beta561.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          python tools/verify_beta562.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release comparison failed.' }
 
-      - name: Package exact tested EXE and final committed UTF-8 source
+      - name: Package verified versioned EXE and final committed UTF-8 source
         if: steps.scope.outputs.run == 'true'
         run: |
-          python .github/scripts/publish_beta561.py --asset-dir artifacts/asset-source --prepare-only
+          python .github/scripts/publish_beta562.py --asset-dir artifacts/asset-source --prepare-only
           if ($LASTEXITCODE -ne 0) { throw 'Exact asset/source preparation failed.' }
 
       - name: Verify Draft downloads and publish the authorized Pre-release
@@ -113,7 +115,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python .github/scripts/publish_beta561.py --asset-dir artifacts/asset-source --publish
+          python .github/scripts/publish_beta562.py --asset-dir artifacts/asset-source --publish
           if ($LASTEXITCODE -ne 0) { throw 'Publication stopped; preserve Draft and inspect readback.' }
-          $receipt = Get-Content -LiteralPath artifacts/publish-beta561/publication-readback.json -Raw | ConvertFrom-Json
-          "Verified published Beta5.6.1: $($receipt.url). The exact local cold-tested EXE and all source/asset downloads were verified." >> $env:GITHUB_STEP_SUMMARY
+          $receipt = Get-Content -LiteralPath artifacts/publish-beta562/publication-readback.json -Raw | ConvertFrom-Json
+          "Verified published Beta5.6.2: $($receipt.url). The verified local versioned EXE and all source/asset downloads were verified." >> $env:GITHUB_STEP_SUMMARY

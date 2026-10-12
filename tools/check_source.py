@@ -28,7 +28,7 @@ def main() -> None:
     original = deepcopy(frozen)
     plan = load_plan()
     if (len(plan['hooks']) != 82 or source_plan(frozen)['tool_version'] != plan['tool_version']
-            or plan['tool_version'] not in ('1.0.0-beta.5.6', '1.0.0-beta.5.6.1')):
+            or plan['tool_version'] not in ('1.0.0-beta.5.6', '1.0.0-beta.5.6.2')):
         raise AssertionError('Expected the complete current source chain')
     if frozen != original:
         raise AssertionError('Source reconstruction changed its frozen input')

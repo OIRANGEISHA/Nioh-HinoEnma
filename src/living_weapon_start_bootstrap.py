@@ -16,12 +16,14 @@ STAGE_A, STAGE_B = 0x200, 0x400
 JOURNAL_FIRST, JOURNAL_END = 0x600, 0x2000
 SORT_OFFSET, SORT_SIZE = 0x2000, 0x4000
 LONG_SCHEDULE, SHORT_SCHEDULE = 0x6000, 0x9000
+SCHEDULE_SIDE_BYTES, SCHEDULE_CAPACITY = 0x1800, 512
 ITERATION_BUDGET = 4000000
 
 
 def targets():
     return dict(lw_item_hash_manager=0x18BACE0, lw_item_database=0x1871720,
-                lw_item_family_keys=0x11A1880)
+                lw_item_family_keys=0x11A1880, lw_common_event_manager=0x1871540,
+                lw_common_event_vtable=0x13C7B78)
 
 
 def layout():
@@ -31,8 +33,10 @@ def layout():
                 allocation_size=ALLOCATION_SIZE, stage_a=WORKSPACE_OFFSET+STAGE_A,
                 stage_b=WORKSPACE_OFFSET+STAGE_B, journal=(WORKSPACE_OFFSET+JOURNAL_FIRST,WORKSPACE_OFFSET+JOURNAL_END),
                 sort=(WORKSPACE_OFFSET+SORT_OFFSET,WORKSPACE_OFFSET+SORT_OFFSET+SORT_SIZE),
-                schedules=((WORKSPACE_OFFSET+LONG_SCHEDULE,WORKSPACE_OFFSET+SHORT_SCHEDULE),
-                           (WORKSPACE_OFFSET+SHORT_SCHEDULE,WORKSPACE_END)),
+                schedules=tuple((WORKSPACE_OFFSET+start+side*SCHEDULE_SIDE_BYTES,
+                                 WORKSPACE_OFFSET+start+(side+1)*SCHEDULE_SIDE_BYTES)
+                                for side in range(2) for start in (LONG_SCHEDULE, SHORT_SCHEDULE)),
+                schedule_capacity=SCHEDULE_CAPACITY, independent_main_aux_schedules=True,
                 entry_abi='RCX actor,RDX ctl,R8 core,R9 binding; EAX bool; nonvolatile/allXMM/MXCSR/EFLAGS/DF preserved',
                 native_calls=0, phase_on_success=0, magic_published_last=True)
 
@@ -191,7 +195,7 @@ ret
 '''
     return s+discover_source(p)+scope_source(p)+equipment_source(p)+package_source(p)+\
         catalog_source(p)+action_source(p)+start_source(p)+motion_source(p)+events_source(p)+\
-        hash_source(p)+sort_source(p)+pin_source(p)+roots_source(p)+f'''{p}_false:
+        hash_source(p)+sort_source(p)+pin_source(p)+roots_source(p)+event_descriptor_source(p)+f'''{p}_false:
 xor eax, eax
 ret
 '''
@@ -309,6 +313,7 @@ ret
 
 
 def scope_source(p):
+    # core+0x20 counts player initializations across loads; any nonzero count is valid.
     bad=p+'_false'
     s=f'''{p}_scope:
 '''+ptr('r12',bad,'rax')+ptr('r13',bad,'rax')+f'''mov rax, {{player_slot}}
@@ -316,8 +321,8 @@ cmp qword ptr [rax], r12
 jne {bad}
 cmp qword ptr [r14+0x10], r12
 jne {bad}
-cmp dword ptr [r14+0x20], 1
-jne {bad}
+cmp dword ptr [r14+0x20], 0
+je {bad}
 mov eax, dword ptr [r14+0x1C]
 test eax, eax
 je {bad}
@@ -513,10 +518,9 @@ mov ebx, 16
 movsx edx, word ptr [r10]
 test edx, edx
 js {p}_action_refs_next
-movzx ecx, word ptr [rbp+0x88]
-cmp edx, ecx
-jae {bad}
-mov rdx, qword ptr [r8+rdx*8]
+call {p}_descriptor
+test eax, eax
+je {bad}
 '''+ptr('rdx',bad,'rax')+pin(p,'rdx',0x80,bad)+f'''{p}_action_refs_next:
 add r10, 6
 dec ebx
@@ -967,10 +971,32 @@ je {bad}
 add r8, 0x40
 mov ebx, 16
 xor ebp, ebp
+mov dword ptr [rsi+0xD0], 0
+mov eax, dword ptr [rsi+0x40]
+cmp eax, 2
+je {p}_start_schema
+cmp eax, 4
+je {p}_start_schema
+cmp eax, 5
+je {p}_start_schema
+cmp eax, 1
+je {p}_start_shared_schema
+cmp eax, 3
+je {p}_start_shared_schema
+cmp eax, 6
+je {p}_start_shared_schema
+cmp eax, 7
+jne {bad}
+{p}_start_shared_schema:
+mov dword ptr [rsi+0xD0], 1
 {p}_start_schema:
 movsx eax, word ptr [r8]
 test eax, eax
 js {p}_start_schema_next
+cmp word ptr [r8+4], -1
+jne {bad}
+cmp dword ptr [rsi+0xD0], 1
+je {p}_start_shared_ref
 cmp eax, 13
 je {p}_start_ref13
 cmp eax, 37
@@ -1016,6 +1042,49 @@ mov eax, 10
 cmp word ptr [r8+2], ax
 jne {bad}
 mov edx, 4
+jmp {p}_start_schema_set
+{p}_start_shared_ref:
+cmp eax, 9
+je {p}_start_shared_end
+cmp eax, 10039
+je {p}_start_shared_common
+mov ecx, 7
+cmp dword ptr [rsi+0xC0], 0
+je {p}_start_shared_init
+mov ecx, 8
+{p}_start_shared_init:
+cmp eax, ecx
+jne {bad}
+cmp word ptr [r8+2], 0
+jne {bad}
+mov edx, 1
+jmp {p}_start_schema_set
+{p}_start_shared_end:
+mov ecx, 130
+cmp dword ptr [rsi+0xC0], 0
+je {p}_start_shared_end_frame
+mov ecx, 45
+{p}_start_shared_end_frame:
+cmp word ptr [r8+2], cx
+jne {bad}
+mov edx, 2
+jmp {p}_start_schema_set
+{p}_start_shared_common:
+cmp dword ptr [rsi+0xC0], 0
+jne {p}_start_shared_short_common
+cmp word ptr [r8+2], 65
+je {p}_start_shared_early
+cmp word ptr [r8+2], 171
+jne {bad}
+mov edx, 4
+jmp {p}_start_schema_set
+{p}_start_shared_early:
+mov edx, 8
+jmp {p}_start_schema_set
+{p}_start_shared_short_common:
+cmp word ptr [r8+2], 10
+jne {bad}
+mov edx, 4
 {p}_start_schema_set:
 test ebp, edx
 jne {bad}
@@ -1040,6 +1109,13 @@ je {p}_start_init_descriptor
 mov edx, 34
 mov ecx, 1504
 {p}_start_init_descriptor:
+cmp dword ptr [rsi+0xD0], 1
+jne {p}_start_init_descriptor_local
+mov edx, 7
+cmp dword ptr [rsi+0xC0], 0
+je {p}_start_init_descriptor_local
+mov edx, 8
+{p}_start_init_descriptor_local:
 mov rdx, qword ptr [rax+rdx*8]
 '''+ptr('rdx',bad,'rax')+f'''cmp byte ptr [rdx+0x16], 1
 jne {bad}
@@ -1281,7 +1357,7 @@ mov qword ptr [rsi+0x178], r8
 mov ecx, dword ptr [r8+4]
 test ecx, ecx
 je {bad}
-cmp ecx, 1024
+cmp ecx, {SCHEDULE_CAPACITY}
 ja {bad}
 mov dword ptr [rsi+0x180], ecx
 mov eax, dword ptr [r8+8]
@@ -1305,18 +1381,15 @@ mov r8, qword ptr [rsi+0x188]
 mov qword ptr [rsi+rdx+0x1C0], r8
 mov eax, dword ptr [rsi+0x180]
 mov dword ptr [rsi+rdx+0x1C8], eax
-cmp dword ptr [rsi+0x120], 0
-je {p}_events_count_ok
-mov edx, ebp
-shl edx, 4
-cmp eax, dword ptr [rsi+rdx+0x1C8]
-jne {bad}
-{p}_events_count_ok:
 lea r9, [rsi+0x{LONG_SCHEDULE:X}]
 test ebp, ebp
 je {p}_events_buffer
 lea r9, [rsi+0x{SHORT_SCHEDULE:X}]
 {p}_events_buffer:
+cmp dword ptr [rsi+0x120], 0
+je {p}_events_side_buffer
+add r9, 0x{SCHEDULE_SIDE_BYTES:X}
+{p}_events_side_buffer:
 mov ecx, dword ptr [rsi+0x180]
 xor r10d, r10d
 {p}_events_schedule:
@@ -1327,8 +1400,6 @@ cmp eax, r10d
 jb {bad}
 mov r10d, eax
 cmp dword ptr [rsi+8], 1
-jne {p}_events_compare_triple
-cmp dword ptr [rsi+0x120], 0
 jne {p}_events_compare_triple
 mov rax, qword ptr [r8]
 mov qword ptr [r9], rax
@@ -1511,12 +1582,16 @@ shl eax, 4
 mov ecx, dword ptr [rsi+rax+0x1C8]
 test ecx, ecx
 je {p}_false
-cmp ecx, 1024
+cmp ecx, {SCHEDULE_CAPACITY}
 ja {p}_false
 lea r9, [rsi+0x{LONG_SCHEDULE:X}]
 test ebp, 1
-je {p}_replay_schedule_triple
+je {p}_replay_schedule_buffer
 lea r9, [rsi+0x{SHORT_SCHEDULE:X}]
+{p}_replay_schedule_buffer:
+cmp ebp, 2
+jb {p}_replay_schedule_triple
+add r9, 0x{SCHEDULE_SIDE_BYTES:X}
 {p}_replay_schedule_triple:
 '''+budget(p+'_false')+f'''mov rax, qword ptr [r8]
 cmp rax, qword ptr [r9]
@@ -1682,3 +1757,70 @@ mov eax, 1
 ret
 '''
     return s
+
+def event_descriptor_source(p):
+    # EDX index / RBP local bank -> RDX descriptor / EAX bool.
+    # Native704E50 uses manager1871540 and6DFED0 for indices >=10000.
+    # Preserve the action scan's R8 and R10; pin the complete global root path.
+    bad=p+'_descriptor_bad'
+    return f'''{p}_descriptor:
+push rbx
+push r8
+push r10
+sub rsp, 0x20
+mov ebx, edx
+test ebx, ebx
+js {bad}
+cmp ebx, 10000
+jae {p}_descriptor_global
+mov r8, qword ptr [rbp+0x80]
+'''+ptr('r8',bad,'rax')+f'''movzx ecx, word ptr [rbp+0x88]
+test ecx, ecx
+je {bad}
+cmp ecx, 4096
+ja {bad}
+cmp ebx, ecx
+jae {bad}
+mov rdx, qword ptr [r8+rbx*8]
+'''+ptr('rdx',bad,'rax')+f'''jmp {p}_descriptor_ok
+{p}_descriptor_global:
+sub ebx, 10000
+cmp ebx, 4096
+jae {bad}
+mov r10, {{lw_common_event_manager}}
+'''+pin(p,'r10',8,bad)+f'''mov r10, qword ptr [r10]
+'''+ptr('r10',bad,'rax')+pin(p,'r10',8,bad)+f'''mov r10, qword ptr [r10]
+'''+ptr('r10',bad,'rax')+span('r10','0x478',bad)+f'''mov rax, {{lw_common_event_vtable}}
+cmp qword ptr [r10], rax
+jne {bad}
+'''+pin(p,'r10',8,bad)+f'''lea rcx, [r10+0x468]
+mov edx, 16
+call {p}_pin
+test eax, eax
+je {bad}
+mov r8, qword ptr [r10+0x468]
+'''+ptr('r8',bad,'rax')+f'''mov rdx, qword ptr [r10+0x470]
+'''+ptr('rdx',bad,'rax')+f'''cmp rdx, r8
+jbe {bad}
+sub rdx, r8
+test rdx, 0x7F
+jne {bad}
+cmp rdx, 0x80000
+ja {bad}
+mov eax, ebx
+shl rax, 7
+cmp rax, rdx
+jae {bad}
+lea rdx, [r8+rax]
+{p}_descriptor_ok:
+mov eax, 1
+jmp {p}_descriptor_done
+{bad}:
+xor eax, eax
+{p}_descriptor_done:
+add rsp, 0x20
+pop r10
+pop r8
+pop rbx
+ret
+'''

@@ -236,7 +236,7 @@ class Tests(unittest.TestCase):
         historical = build.source_plan_beta56(P)
         changed = [36,37,38,39,72,73,74,75,76,77,81]
         identity = ('name','rva','length','original')
-        self.assertEqual(PLAN['tool_version'], '1.0.0-beta.5.6.1')
+        self.assertEqual(PLAN['tool_version'], '1.0.0-beta.5.6.2')
         self.assertEqual(PLAN['allocation_size'], 0x69000)
         self.assertEqual(len(PLAN['hooks']), 82)
         self.assertEqual(len(historical['hooks']), 82)
