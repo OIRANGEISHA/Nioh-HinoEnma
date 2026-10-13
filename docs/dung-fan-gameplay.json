@@ -1,0 +1,28 @@
+{
+  "stage": "three_item_runtime_trial",
+  "baseline": "Beta5.6.3 plus confirmed Harakiri revision1",
+  "items": [
+    {"name": "Dung Ball", "id": 32016, "common_action": 165, "motion": 103},
+    {"name": "Noble Dung Ball", "id": 6518, "common_action": 165, "motion": 103},
+    {"name": "Tengu's Fan", "id": 44220, "common_action": 1225, "motion": 150}
+  ],
+  "implementation": "Select native common172 for exact confirmed requests; original events own object generation, attacks and consumption.",
+  "offline_tests_passed": 8,
+  "offline_tests_are_gameplay_proof": false,
+  "current_native_definitions_transitions_and_motion_resources_verified": true,
+  "runtime_installed": true,
+  "all_82_hooks_verified_after_installation": true,
+  "user_gameplay_confirmation_pending": false,
+  "user_confirmed_gameplay": {
+    "date": "2026-10-13",
+    "inventory_use_of_all_three_items": true,
+    "quantity_and_throw_or_fan_effects_normal": true,
+    "movement_J_I_and_digit5_normal_after_use": true,
+    "confirmation_source": "User replied that all three items can be used and the requested checks are normal."
+  },
+  "runtime_observer_captured_item_use": false,
+  "runtime_observer_note": "The bounded observer ended without capturing these uses. Gameplay confirmation is from the user's test, not the trace.",
+  "cold_launch_tested": false,
+  "release_exe_updated": false,
+  "release_integration_pending": true
+}

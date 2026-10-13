@@ -68,6 +68,14 @@ ALLOCATION = 0x144000000
 IDENTIFIER = r'[A-Za-z_][A-Za-z0-9_]*'
 LABEL_DEFINITION = re.compile(r'(?m)^\s*(' + IDENTIFIER + r'):')
 LABEL_DECLARATION = re.compile(r'(?m)^label\((' + IDENTIFIER + r')\)$')
+BETA563_BASELINE_SHA256 = '7bfd8636d28db7e67196c201979b4d2522fd8e6133c637e698c3b554efb54695'
+
+
+def _frozen_beta563() -> dict:
+    raw = (ROOT / 'profiles/baseline-beta5.6.3.json').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != BETA563_BASELINE_SHA256:
+        raise ValueError('Exact delivered Beta5.6.3 basis changed')
+    return json.loads(raw.decode('utf-8'))
 
 
 def baseline_specs() -> tuple[list[dict], dict]:
@@ -233,20 +241,48 @@ def source_plan_beta562(frozen: dict) -> dict:
     return apply_native_start(previous)
 
 
+def source_plan_beta563(frozen: dict) -> dict:
+    """Rebuild the unchanged growth release from its historical metadata only."""
+    if frozen.get('tool_version') != '1.0.0-beta.5.6.3':
+        raise ValueError('The dedicated Beta5.6.3 builder requires its own frozen basis')
+    from hinoenma_growth750_release import apply_release
+    basis = deepcopy(frozen)
+    for key in list(basis):
+        if key.startswith('growth750_'):
+            del basis[key]
+    basis['tool_version'] = '1.0.0-beta.5.6.2'
+    return apply_release(source_plan_beta562(basis))
+
+
 def source_plan(frozen: dict) -> dict:
+    if frozen.get('beta6_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6':
+        from hinoenma_beta6_release import apply_release
+        canonical = apply_release(source_plan_beta563(_frozen_beta563()))
+        # Source owns ASM, but the caller's native signatures and allocation
+        # must still describe this exact release. Do not silently replace a
+        # corrupt or mismatched manifest with a valid unrelated baseline.
+        identity_keys = ('tool_version', 'allocation_size', 'data_offset',
+                         'protected_data_pages', 'disk_sha256', 'disk_md5',
+                         'image_size', 'pe_timestamp_hex', 'targets')
+        if any(frozen.get(key) != canonical.get(key) for key in identity_keys):
+            raise ValueError('Beta6 manifest identity or layout differs from source')
+        geometry_keys = ('name', 'rva', 'length', 'original',
+                         'code_offset', 'code_capacity')
+        if (len(frozen.get('hooks', ())) != len(canonical['hooks'])
+                or any(any(actual.get(key) != expected.get(key)
+                           for key in geometry_keys)
+                       for actual, expected in zip(frozen['hooks'], canonical['hooks']))):
+            raise ValueError('Beta6 native hook signature or geometry differs from source')
+        return canonical
     if frozen.get('growth750_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.5.6.3':
-        from hinoenma_growth750_release import apply_release
-        basis = deepcopy(frozen)
-        for key in list(basis):
-            if key.startswith('growth750_'):
-                del basis[key]
-        basis['tool_version'] = '1.0.0-beta.5.6.2'
-        return apply_release(source_plan_beta562(basis))
+        return source_plan_beta563(frozen)
     return source_plan_beta562(frozen)
 
 
 def legacy_plans(frozen: dict) -> list[dict]:
     """Exact older payloads are read-only identities, never migration inputs."""
+    if frozen.get('beta6_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6':
+        frozen = _frozen_beta563()
     beta51 = source_plan_v059(frozen)
     beta51.update(tool_version='1.0.0-beta.5.1', allocation_size=0x19000)
     from menu_preview_portable_integration import apply_menu_preview as beta53
@@ -268,6 +304,10 @@ def legacy_plans(frozen: dict) -> list[dict]:
 
 
 def validate_layout(plan: dict) -> None:
+    if plan.get('beta6_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6':
+        from hinoenma_beta6_release import validate_release
+        validate_release(plan)
+        return
     if plan.get('growth750_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.5.6.3':
         from hinoenma_growth750_release import validate_release
         validate_release(plan)
@@ -319,12 +359,7 @@ def source_specs() -> tuple[list[dict], dict]:
     return plan['hooks'], plan['targets']
 
 
-def load_plan() -> dict:
-    plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
-    version = json.loads((ROOT / "version.json").read_text("utf-8"))
-    if plan["tool_version"] != version["version"]:
-        raise ValueError("Manifest and release version differ")
-    rebuilt = source_plan(plan)
+def _validate_loaded_plan(plan: dict, rebuilt: dict) -> dict:
     specs, targets = rebuilt['hooks'], rebuilt['targets']
     if len(specs) != len(plan["hooks"]):
         raise ValueError("Frozen hook list differs from source")
@@ -348,6 +383,20 @@ def load_plan() -> dict:
     if any(left[1] > right[0] for left, right in zip(native_ranges, native_ranges[1:])):
         raise ValueError("Native hook sites overlap")
     return plan
+
+
+def load_beta563_plan() -> dict:
+    """Load the fixed pre-item-repair basis for historical trials and regressions."""
+    plan = _frozen_beta563()
+    return _validate_loaded_plan(plan, source_plan_beta563(plan))
+
+
+def load_plan() -> dict:
+    plan = json.loads((ROOT / "profiles/steam-1.24.8.json").read_text("utf-8"))
+    version = json.loads((ROOT / "version.json").read_text("utf-8"))
+    if plan["tool_version"] != version["version"]:
+        raise ValueError("Manifest and release version differ")
+    return _validate_loaded_plan(plan, source_plan(plan))
 
 
 def assemble(plan: dict, module_base: int, allocation: int) -> list[dict]:
@@ -699,7 +748,10 @@ def ct_source(plan: dict, display_version: str) -> str:
         '武器切换只补教学操作。实际射击和 Boss 实际武器槽切换尚未实现。\n'
         '九十九保留飞缘魔招式；守护灵召唤未执行威廉挥刀的额外精力费用。\n'
         'Beta5.6.2 修复换存档后数字9无响应及武器资源兼容；补丁与已冷测的修正版一致。\n'
-        '修正版已完整重启并二次载入，以太郎太刀验证99完整流程；忍术道具目前仍无法使用。\n'
+        '修正版已完整重启并二次载入，以太郎太刀验证99完整流程；其他忍术道具仍未完成通用兼容。\n'
+        'Beta6新增已实测切腹短刀、粪球、高贵的粪球、天狗团扇、石头、火药弹、焙烙弹、焚火油壶、御箭护符与迟钝符。\n'
+        '保留原生使用动作、效果与次数扣除；迟钝符仅覆盖当前核对过的准备术定义，未泛化全部同名变体。\n'
+        '上述修订已热接入并获实测确认；本次打包的EXE尚未再次完整重启实测。\n'
         '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'
         'Hotfix1 修复梯子途中自动掉下、每步瞬移及离梯过高；当前与待切换公共攀爬动作均使用一致的位移缩放。\n'
         '已测梯子上下攀爬和离梯正常，全部梯子、受击中断仍未逐一实测。\n'

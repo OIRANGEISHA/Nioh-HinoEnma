@@ -15,7 +15,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT/'src'), str(ROOT/'tools')]
-from build_profile import assemble, load_plan, source_plan_v059, source_plan_beta52
+from build_profile import assemble, load_beta563_plan as load_plan, source_plan_v059, source_plan_beta52
 from hinoenma_ladder_scale import (ALLOCATION_SIZE, CODE_CAPACITY, CODE_OFFSETS,
     DATA_OFFSET, NATIVE_SIGNATURES, PLAYER_SLOT_RVA, PROTECTED_DATA_PAGES, apply_ladder_scale)
 from capstone import Cs, CS_ARCH_X86, CS_MODE_64, CS_OP_MEM

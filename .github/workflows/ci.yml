@@ -44,15 +44,15 @@ jobs:
 
       - name: Verify generated source, CT and public CPU regressions
         run: |
-          python tools/verify_beta563_growth.py
-          if ($LASTEXITCODE -ne 0) { throw 'Warm-growth payload equivalence failed.' }
+          python tools/verify_beta6_items.py
+          if ($LASTEXITCODE -ne 0) { throw 'Warm-item payload equivalence failed.' }
           python tools/build_profile.py --check
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
           python tools/check_source.py
           if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
-          python tools/run_beta563_regressions.py --report artifacts/beta563-regression-tests.json
+          python tools/run_beta6_regressions.py --report artifacts/beta6-regression-tests.json
           if ($LASTEXITCODE -ne 0) { throw 'Complete exact-source regressions failed.' }
-          python tools/verify_beta563_ct.py --report artifacts/ct-verification.json
+          python tools/verify_beta6_ct.py --report artifacts/beta6-ct-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Current CT verification failed.' }
 
       - name: Build Debug and optimized x64 Release
@@ -64,7 +64,7 @@ jobs:
 
       - name: Verify both build profiles and self-checks
         run: |
-          python tools/verify_beta563.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
+          python tools/verify_beta6.py --exe "artifacts/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Debug/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
-          python tools/verify_beta563.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
+          python tools/verify_beta6.py --exe "artifacts/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }

@@ -12,7 +12,7 @@ import test_inherent_element_portable as harness
 from test_inherent_element_portable import (
     OverlayMachine, ACTOR, COMPONENT, METADATA, STACK, reg, XMMS, LAYOUTS,
 )
-from build_profile import load_plan, assemble
+from build_profile import load_beta563_plan as load_plan, assemble
 from hinoenma_growth750 import apply_growth750, mapped_index, HOOK_NAME
 
 from build_profile import ROOT, source_plan_beta562

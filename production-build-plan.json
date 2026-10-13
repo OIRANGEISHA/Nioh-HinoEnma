@@ -1,10 +1,27 @@
 {
-  "tool_version": "1.0.0-beta.5.6.3",
-  "profile_sha256": "7bfd8636d28db7e67196c201979b4d2522fd8e6133c637e698c3b554efb54695",
+  "tool_version": "1.0.0-beta.6",
+  "profile_sha256": "7f8e4fa3dc9144ebd8d65ab06826fb447a8691c341abab904223c33e13e38f86",
   "hooks": 82,
   "allocation_size": 430080,
   "data_pages": 23,
   "gameplay_payload_equivalence": true,
+  "gameplay_basis_version": "1.0.0-beta.5.6.3",
+  "confirmed_item_count": 10,
+  "changed_hooks": [
+    "HE_InputA",
+    "HE_InputB",
+    "HE_HimorogiFragment",
+    "HE_Consumables",
+    "HE_LivingWeaponDigitNine",
+    "HE_LadderCommonLookup",
+    "HE_InherentDirectElement"
+  ],
   "exact_executable_gameplay_validated": false,
-  "published_artifacts_changed": false
+  "published_artifacts_changed": false,
+  "local_package_only": true,
+  "item_instruction_interval": [
+    16384,
+    26103
+  ],
+  "item_instruction_interval_fully_decoded": true
 }

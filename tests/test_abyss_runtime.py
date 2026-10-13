@@ -19,9 +19,9 @@ from hinoenma_abyss_resources import resources
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_64, UC_HOOK_CODE
 from unicorn.x86_const import *
 
-P=json.loads((ROOT/'profiles/steam-1.24.8.json').read_text('utf-8'))
+P=json.loads((ROOT/'profiles/baseline-beta5.6.3.json').read_text('utf-8'))
 PREVIOUS=json.loads((ROOT/'profiles/legacy-beta5.4.2.json').read_text('utf-8'))
-PLAN=build.source_plan(P)
+PLAN=build.source_plan_beta563(P)
 M,C,S,A=0x140000000,0x144000000,0x20008000,0x30000000
 D=C+0xF000; LD=C+DATA_OFFSET; END=0x2000F000
 CTL=A+0x1000; OBJ=A+0x2000; INFO=A+0x3000; IDLE=A+0x7000
@@ -280,14 +280,17 @@ class Tests(unittest.TestCase):
                         blob[fix['offset']:fix['offset']+len(value)]=value
                     self.assertEqual(bytes(blob),actual['payload'],(actual['name'],hex(module),hex(allocation)))
     def test_ct_number_conversion_and_all_declared_labels_preserve_source(self):
-        if PLAN.get('living_weapon_start_production_layout_revision') == 1:
+        # CT conversion intentionally accepts only the current canonical
+        # release; keep the historical lifetime tests above on Beta5.6.3.
+        ct_plan = build.load_plan()
+        if ct_plan.get('living_weapon_start_production_layout_revision') == 1:
             from living_weapon_start_ct import ct_compatible_plan
         else:
             from hinoenma_abyss_runtime import ct_compatible_plan
-        converted=ct_compatible_plan(PLAN)
-        raw,ct=build.assemble(PLAN,M,C),build.assemble(converted,M,C)
+        converted=ct_compatible_plan(ct_plan)
+        raw,ct=build.assemble(ct_plan,M,C),build.assemble(converted,M,C)
         self.assertEqual([h['payload'] for h in raw],[h['payload'] for h in ct])
-        source=build.aa_source(PLAN)
+        source=build.aa_source(ct_plan)
         self.assertNotIn('.byte',source)
         self.assertIn('资源寿命版不支持游戏运行中卸载',source)
         names=build.LABEL_DEFINITION.findall(source)

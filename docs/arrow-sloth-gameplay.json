@@ -1,0 +1,77 @@
+{
+  "stage": "arrow_sloth_runtime_trial",
+  "baseline": "Beta5.6.3 plus confirmed Harakiri, dung/fan and four-throwable repairs",
+  "items": [
+    {
+      "name": "Arrowproof Amulet",
+      "id": 64367,
+      "kind": 1,
+      "subtype": 0,
+      "category": 7,
+      "common_action": 41,
+      "motion": 110,
+      "native_query": 192,
+      "effect_id": 45657
+    },
+    {
+      "name": "Sloth Talisman",
+      "id": 4998,
+      "kind": 2,
+      "subtype": 15,
+      "category": 9,
+      "common_action": 42,
+      "motion": 111,
+      "native_query": 194,
+      "spawn_id": 273175
+    }
+  ],
+  "implementation": "Enter native common172 for two exact definitions; preserve native cast selection, buff/projectile events, ordinary item consumption and prepared-jutsu stock consumption. A scoped lookup resolves common41/110 and42/111 for the exact owned request instead of colliding private Boss actions. Input guards cover only those common cast records; other lookups retain the previous chain.",
+  "offline_tests_passed": 8,
+  "lookup_revision": 1,
+  "lookup_offline_tests_passed": 9,
+  "lookup_offline_test_scope": "Actual public wrapper with CPU-executed synthetic native bank search reproduces the private/common ID collision and covers idle preflight, common172 transitions with pending cleared, full ABI, exact request/resource guards and fallback preservation.",
+  "offline_tests_are_gameplay_proof": false,
+  "current_native_definitions_transitions_events_and_motion_resources_verified": true,
+  "runtime_installed": true,
+  "all_82_hooks_verified_after_installation": true,
+  "prior_trial_failure": {
+    "arrow_sloth_revision": 1,
+    "user_report": "Both items still had no response and no quantity consumption.",
+    "trace_limitation": "The five-minute observer ended with only an idle snapshot; it did not capture the reported attempt.",
+    "verified_cause": "Native lookup resolves enabled private41/motion1010 and42/motion1011 before the common41/110 and42/111 cast records, failing the helper's common-owner check."
+  },
+  "user_gameplay_confirmation_pending": false,
+  "other_sloth_definitions_supported": false,
+  "interrupted_cast_gameplay_tested": false,
+  "cold_launch_tested": false,
+  "release_exe_updated": false,
+  "release_integration_pending": true,
+  "user_confirmed_gameplay": {
+    "date": "2026-10-13",
+    "reply": "正常",
+    "confirmation_source": "User replied normal to the requested check of both inventory casts, stock consumption, Arrowproof buff, Sloth effect, movement, J/I and digit5.",
+    "reported_both_items_and_post_cast_gameplay_normal": true
+  },
+  "effect_and_stock_gameplay_confirmed_by_user": true,
+  "effect_and_stock_observed_directly_in_trace": false,
+  "runtime_observer_captured_item_use": true,
+  "observed_actions": [
+    {
+      "item": 64367,
+      "observed_common_action": 41,
+      "record": "0x1b2c4fc80a0",
+      "first_action_at": 40.953,
+      "request_cleared_and_idle_at": 43.391,
+      "animation_ready_flag_seen": true
+    },
+    {
+      "item": 4998,
+      "observed_common_action": 42,
+      "record": "0x1b2c4fc8170",
+      "first_action_at": 58.11,
+      "request_cleared_and_idle_at": 59.782,
+      "animation_ready_flag_seen": false
+    }
+  ],
+  "runtime_observer_note": "Each exact item selected its common cast record instead of the colliding private Boss action, then returned to idle with a cleared request. Stock, buff and enemy slow effects are confirmed by the user; the observer does not measure them."
+}

@@ -90,7 +90,7 @@ def _once(text, old, new):
     return text.replace(old,new,1)
 
 
-def _definition_scope():
+def _definition_scope(items=ITEM_SPECS):
     text = '''mov rax, qword ptr [rdi+0x548]
 mov qword ptr [rsp+0xC0], rax
 mov rcx, {item_assets}
@@ -109,10 +109,10 @@ test rax, rax
 je special_item_restore
 mov qword ptr [rsp+0xC8], rax
 '''
-    for ident,*_ in ITEM_SPECS:
+    for ident,*_ in items:
         text += f'cmp dword ptr [rdi+0x548], {ident}\nje special_item_definition_{ident}\n'
     text += 'jmp special_item_restore\n'
-    for ident,kind,sub,cat,flags,effects,spawn,action,motion,_ in ITEM_SPECS:
+    for ident,kind,sub,cat,flags,effects,spawn,action,motion,_ in items:
         text += f'special_item_definition_{ident}:\n'
         fields=((0,ident),(4,kind|(sub<<8)),(0x104,flags),(0x10C,cat),
                 *((0x110+i*4,v) for i,v in enumerate(effects)),(0x11C,spawn))
@@ -125,17 +125,17 @@ mov qword ptr [rsp+0xC8], rax
     return text+'special_item_definition_done:\n'
 
 
-def _schedules():
+def _schedules(schedules=SCHEDULE_HEX, guards=EVENT_GUARDS):
     # Expected bytes live inside unreachable, fixed-width MOVABS immediates.
     # The complete payload remains instructions for the EXE relocation parser.
     text='special_item_schedule:\nsub rsp, 0x28\nmov qword ptr [rsp], rax\nmov qword ptr [rsp+8], r8\n'
-    for action in SCHEDULE_HEX:
+    for action in schedules:
         text += f'cmp edx, {action}\nje special_item_schedule_{action}\n'
     text += 'jmp special_item_schedule_false\n'
-    for action in SCHEDULE_HEX:
+    for action in schedules:
         text += f'special_item_schedule_{action}:\n'
         text += (f'lea r11, [rip+special_item_schedule_data_{action}]\n'
-                 f'mov dword ptr [rsp+0x18], {len(EVENT_GUARDS[action])}\njmp special_item_schedule_compare\n')
+                 f'mov dword ptr [rsp+0x18], {len(guards[action])}\njmp special_item_schedule_compare\n')
     text+='''special_item_schedule_compare:
 mov rax, qword ptr [rsp]
 add rax, 0x40
@@ -221,14 +221,14 @@ xor eax, eax
 add rsp, 0x28
 ret
 '''
-    for action,raw in SCHEDULE_HEX.items():
+    for action,raw in schedules.items():
         data=bytes.fromhex(raw)
         if len(data)!=0x60:
             raise ValueError('Expected exactly sixteen six-byte event references')
         text+=f'special_item_schedule_data_{action}:\n'
         for off in range(0,0x60,8):
             text+=f'movabs rax, {struct.unpack_from("<Q",data,off)[0]}\n'
-        for index,opcode,template,bone,commit,channel,word52 in EVENT_GUARDS[action]:
+        for index,opcode,template,bone,commit,channel,word52 in guards[action]:
             first=struct.pack('<HBBi',index,opcode&255,commit,template)
             second=struct.pack('<hBh3x',bone,channel,word52)
             for value in (first,second):

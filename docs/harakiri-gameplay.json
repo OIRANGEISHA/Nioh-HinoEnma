@@ -1,0 +1,23 @@
+{
+  "baseline_version": "1.0.0-beta.5.6.3",
+  "harakiri_revision": 1,
+  "status": "warm_runtime_gameplay_confirmed",
+  "user_confirmation": {
+    "date": "2026-10-13",
+    "timezone": "Asia/Shanghai",
+    "user_reply": "正常",
+    "backpack_use": true,
+    "native_death": true,
+    "shrine_respawn": true,
+    "movement_after_respawn": true,
+    "attacks_J_I_after_respawn": true
+  },
+  "candidate_sha256": "8a43da2a6226a1404cd6e3cd19d979b2a04de9e6765e0d792446e618e5d1ecbb",
+  "source_sha256": "83f2578d3660923bd6db8281cca4d6223925ee0f3b9cd9497da3aac5a31f4fc1",
+  "native_death_observed": true,
+  "respawn_observed": true,
+  "release_exe_updated": false,
+  "github_published": false,
+  "cold_launch_tested": false,
+  "release_integration_pending": true
+}
