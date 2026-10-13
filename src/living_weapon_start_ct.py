@@ -4,7 +4,7 @@ from copy import deepcopy
 
 def ct_compatible_plan(plan):
     from build_profile import load_plan
-    from living_weapon_start_production_layout import validate_production_layout
+    from build_profile import validate_layout as validate_production_layout
     from menu_preview_portable_integration import frozen
     validate_production_layout(plan)
     if plan != load_plan():

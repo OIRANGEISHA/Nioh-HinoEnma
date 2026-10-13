@@ -216,7 +216,7 @@ def source_plan_beta56(frozen: dict) -> dict:
     return apply_abyss(source_plan_beta542(frozen))
 
 
-def source_plan(frozen: dict) -> dict:
+def source_plan_beta562(frozen: dict) -> dict:
     if frozen.get('living_weapon_start_production_layout_revision') != 1:
         return source_plan_beta56(frozen)
     from living_weapon_start_production import apply_native_start
@@ -231,6 +231,18 @@ def source_plan(frozen: dict) -> dict:
     previous = source_plan_beta56(basis)
     previous['tool_version'] = '1.0.0-beta.5.6'
     return apply_native_start(previous)
+
+
+def source_plan(frozen: dict) -> dict:
+    if frozen.get('growth750_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.5.6.3':
+        from hinoenma_growth750_release import apply_release
+        basis = deepcopy(frozen)
+        for key in list(basis):
+            if key.startswith('growth750_'):
+                del basis[key]
+        basis['tool_version'] = '1.0.0-beta.5.6.2'
+        return apply_release(source_plan_beta562(basis))
+    return source_plan_beta562(frozen)
 
 
 def legacy_plans(frozen: dict) -> list[dict]:
@@ -256,6 +268,10 @@ def legacy_plans(frozen: dict) -> list[dict]:
 
 
 def validate_layout(plan: dict) -> None:
+    if plan.get('growth750_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.5.6.3':
+        from hinoenma_growth750_release import validate_release
+        validate_release(plan)
+        return
     if plan.get('living_weapon_start_production_layout_revision') == 1:
         from living_weapon_start_production_layout import validate_production_layout
         validate_production_layout(plan)
@@ -667,7 +683,7 @@ def ct_source(plan: dict, display_version: str) -> str:
         f'飞缘魔 {display_version}，适配已核对的 Steam《仁王 完全版》1.24.8（窗口 1.24.08）。\n'
         '根据 Bryanyora 的 Character Change CT 重新适配，保留原作者署名。\n'
         f'同一套 {len(plan["hooks"])} 处处理保留飞缘魔模型、招式、原生 Buff 和成长与装备加成。\n'
-        '生命、精力、攻击和防御按神社等级 1—400 映射到 Boss 成长档位 1—1410；保留更高原生档位。\n'
+        '0—750级线性映射1—4525档；401级起Boss基础生命×2、攻击×1.2，再叠加成长、装备与修正LV。\n'
         '数字 1 吸血；5 地面及空中吼叫；9 原生九十九与守护灵战斗召唤；F6 净化常世。\n'
         '支持已测试的元素符、道祖神护符、守护灵取回、梯子及温泉坐下和起身；道具从背包使用。\n'
         '当前这处温泉中，飞缘魔与同版本威廉对照均在松开输入后短暂停留再起身，保留原生流程。\n'

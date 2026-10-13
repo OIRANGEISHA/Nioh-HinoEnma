@@ -316,14 +316,14 @@ namespace HinoEnmaTool
                     Require(beta541.Version=="1.0.0-beta.5.4.1" && beta541.Hooks.Length==81,"Exact published Beta5.4.1 identity");
                     for(int i=0;i<81;i++)
                     {
-                        if((i>=71 && i<=77) || i==80 || i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
-                        Require(Checks.Equal(Profile.Hooks[i].Template,beta541.Hooks[i].Template),"Other73 templates preserved from Beta5.4.1");
+                        if((i>=71 && i<=77) || i==80 || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
+                        Require(Checks.Equal(Profile.Hooks[i].Template,beta541.Hooks[i].Template),"Unchanged templates preserved from Beta5.4.1");
                     }
                     for(int i=0;i<71;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];
                         Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Previous hook slot identity");
-                        if(i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
+                        if(i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Previous encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Previous relocation encoding");
@@ -335,15 +335,24 @@ namespace HinoEnmaTool
                             }
                     }
                 });
-                test("all original sixty templates fixups and relocated payloads remain identical", delegate
+                test("reviewed growth payload and unchanged original templates match their exact identities", delegate
                 {
                     LegacyProfile beta52=Profile.LegacyProfiles[2];
                     Require(beta52.Version=="1.0.0-beta.5.2" && beta52.Hooks.Length==60,"Exact published baseline");
+                    HookSpec growth=Profile.Hooks[15];
+                    Require(growth.Name=="HE_AttributeOverlay" && growth.Rva==0x7C82DBU &&
+                        growth.CodeOffset==0x1B000 && growth.CodeCapacity==0x1000 && growth.Template.Length==3188,
+                        "Exact Growth750 native entry and bounded payload");
+                    using(System.Security.Cryptography.SHA256 hash=System.Security.Cryptography.SHA256.Create())
+                        Require(BitConverter.ToString(hash.ComputeHash(growth.Template)).Replace("-","").ToLowerInvariant()==
+                            "7c023e2a968862a78371cf511a567d19d1ad5637ead02eb2600bae5e95e4bc10",
+                            "Growth750 template matches the live-confirmed source bytes");
+                    Require(!Checks.Equal(growth.Template,beta52.Hooks[15].Template),"Growth750 revision replaces the old attribute calculation");
                     for(int i=0;i<60;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta52.Hooks[i];
                         Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Original slot identity");
-                        if(i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39) continue;
+                        if(i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Original encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Original relocation encoding");
@@ -363,14 +372,14 @@ namespace HinoEnmaTool
                     {
                         HookSpec current=Profile.Hooks[i],prior=old.Hooks[i];
                         Require(current.Name==prior.Name && current.Rva==prior.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==prior.CodeOffset && current.CodeCapacity==prior.CodeCapacity) && Checks.Equal(current.Original,prior.Original),"Every previous native and scoped private slot identity");
-                        bool changed=i==1 || i==8 || i==9 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
-                        Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only scoped fourteen bodies differ");
+                        bool changed=i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
+                        Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only reviewed lifetime, LW and growth bodies differ");
                         foreach(long module in new long[]{Module,0x7FF83AA00000})
                             foreach(int slot in new int[]{0,37,511})
                             {
                                 long at=Checks.FirstAllocation(module)+slot*0x10000L;
                                 Require(Checks.Equal(current.Jump(module,at),prior.Jump(module,at))==(i!=36),"Only h36 previous native jump moves");
-                                if(!changed) Require(Checks.Equal(current.Payload(module,at),prior.Payload(module,at)),"Other67 relocated payloads preserved");
+                                if(!changed) Require(Checks.Equal(current.Payload(module,at),prior.Payload(module,at)),"Other relocated payloads preserved");
                             }
                     }
                     HookSpec release=Profile.Hooks[81];

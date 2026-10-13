@@ -234,9 +234,11 @@ class Tests(unittest.TestCase):
             for h in new:self.assertLessEqual(len(h['payload']),h['code_capacity'])
     def test_production_lw_preserves_abyss_bodies_fixed_helpers_and_native_entries(self):
         historical = build.source_plan_beta56(P)
-        changed = [36,37,38,39,72,73,74,75,76,77,81]
+        # Growth750 is the only added change over the verified LW revision.
+        changed = [15,36,37,38,39,72,73,74,75,76,77,81]
+        self.assertEqual(PLAN['hooks'][15]['name'], 'HE_AttributeOverlay')
         identity = ('name','rva','length','original')
-        self.assertEqual(PLAN['tool_version'], '1.0.0-beta.5.6.2')
+        self.assertEqual(PLAN['tool_version'], '1.0.0-beta.5.6.3')
         self.assertEqual(PLAN['allocation_size'], 0x69000)
         self.assertEqual(len(PLAN['hooks']), 82)
         self.assertEqual(len(historical['hooks']), 82)

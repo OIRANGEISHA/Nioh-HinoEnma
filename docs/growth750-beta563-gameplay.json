@@ -1,0 +1,74 @@
+{
+  "base": "1.0.0-beta.5.6.2",
+  "mapping": {
+    "level_min": 0,
+    "level_max": 750,
+    "index_min": 1,
+    "index_max": 4525,
+    "rounding": "floor",
+    "formula": "1 + floor(4524 * level / 750)"
+  },
+  "threshold_level": 401,
+  "hp_multiplier": 2,
+  "attack_multiplier": 1.2,
+  "portable_tests_passed": 248,
+  "native_curve_levels_tested": 750,
+  "native_focus_cases": 25,
+  "live_level": 750,
+  "live_effective_index": 4525,
+  "live_hp_max": 301211,
+  "live_hp_current": 121693,
+  "live_stats": {
+    "hp": {
+      "boss_basis": 234896,
+      "player_equipment_delta": 6073,
+      "derived_total": 240969,
+      "sum_matches": true
+    },
+    "ki": {
+      "boss_basis": 288,
+      "player_equipment_delta": 137,
+      "derived_total": 425,
+      "sum_matches": true
+    },
+    "defense": {
+      "boss_basis": 8808,
+      "player_equipment_delta": 12744,
+      "derived_total": 21552,
+      "sum_matches": true
+    },
+    "attack": {
+      "boss_basis": 25426,
+      "player_equipment_delta": 6450,
+      "derived_total": 31876,
+      "sum_matches": true
+    }
+  },
+  "live_attack_flat": [
+    209,
+    209,
+    209,
+    209,
+    209
+  ],
+  "live_attack_totals": [
+    32085,
+    32085,
+    32085,
+    32085,
+    32085
+  ],
+  "user_confirmed_movement_and_J_I": true,
+  "remaining_validation": [
+    "Nonzero live HP/defense/luck Focus allocations",
+    "Actual level-up across400/401",
+    "Future packaged EXE cold start/lifecycle regression"
+  ],
+  "version": "1.0.0-beta.5.6.3",
+  "gameplay_basis": "growth750 warm injection, then native equipment refresh",
+  "growth_source_sha256": "33d1d635b6d0783c390bac32e26a418904bf1ecb043968bebd7f52966635ee01",
+  "validated_trial_profile_sha256": "c1c7ac7f98a49953362c234fbd5b71d145a4fb5dcab3c1bbc7c87479432a9c90",
+  "exact_executable_gameplay_validated": false,
+  "github_published": false,
+  "recorded_utc": "2026-10-13T01:42:44.307089+00:00"
+}

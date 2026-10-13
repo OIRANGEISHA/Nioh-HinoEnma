@@ -1,23 +1,22 @@
-# Beta 5.6.2 构建与验证
+# Beta5.6.3 构建、验证与发布
 
-在 Windows x64、.NET Framework 4.x、Python 3.12 环境安装 `requirements-dev.txt` 后运行：
+Windows x64、.NET Framework4.x、Python3.12；Python依赖见requirements-dev.txt。
 
 ```powershell
 python tools/build_profile.py --check
 python tools/check_source.py
-python tools/verify_beta562_promotion.py
-python tools/run_beta562_regressions.py --report artifacts/beta562-regression-tests.json
+python tools/verify_beta563_growth.py
+python tools/run_beta563_regressions.py --report artifacts/beta563-regression-tests.json
 ./tools/build.ps1 -Configuration Debug
 ./tools/build.ps1 -Configuration Release
-python tools/verify_beta562.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.5.6.2-windows-x64.exe --report artifacts/Debug/verification.json
-python tools/verify_beta562.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.6.2-windows-x64.exe --report artifacts/Release/verification.json
-python tools/verify_beta562_ct.py --report artifacts/ct-verification.json
+python tools/verify_beta563.py --exe artifacts/Debug/Nioh-HinoEnma-1.0.0-beta.5.6.3-windows-x64.exe --report artifacts/Debug/verification.json
+python tools/verify_beta563.py --exe artifacts/Release/Nioh-HinoEnma-1.0.0-beta.5.6.3-windows-x64.exe --report artifacts/Release/verification.json
+python tools/verify_beta563_ct.py --report artifacts/ct-verification.json
+python tools/package_beta563_local.py --destination <empty-output-directory>
 ```
 
-版本提升验证器使用从精确实测 FileVersion 1.0.0.76 EXE 独立导出的逐布局摘要，比较全部 82 个运行载荷与原生跳转。新生成 C# 与编译文件另作 12 种地址布局的独立汇编比较；两者合起来验证新构建与实测补丁一致。新 EXE 未重复实机测试，不继承原 EXE 的精确文件测试身份。
+成长源模块保持实机测试的原字节身份；正式源生成链只增加版本封装。Beta5.6.2历史生成链及冻结配置保留；12种布局核对只有属性载荷改变，其余81处载荷、全部原生跳转不变。源码包含完整重建源、逐文件清单和离线构建验证；不含游戏文件、存档、内存快照、凭据或本机Python依赖。
 
-当前源码运行全部 240 项回归，拒绝跳过及测试期间源码变化。Debug、Release 各验证 30 项自检、984 次当前载荷和 7536 次历史载荷。CT 验证 984 次三方比较，CE 直接启用未实机测试。修正版的 38 项资源绑定和 49 项原生时钟检查是历史离线证据；私有原生资源夹具没有打包。
+原生游戏叶函数的750等级和25组Focus分配检查是本地研究证据，不能从不带游戏资源的源码包重跑；公开便携CPU测试使用明确的ABI替代函数。当前新EXE冷启动实机验证未重复。此前版本的CI发布脚本和证据保持原版本身份。当前使用版本限定的 publish_beta563.py；GitHub Actions 从固定资产提交提取原本地EXE，以最终Git提交生成源码包，检验Draft和公开附件。CI重新构建的EXE仅作离线证明，不替换原本地文件。
 
-[实测记录](living-weapon-beta562-gameplay.json)覆盖完整重启、实际二次载入、太郎太刀 99 启动与自然结束。旧 Boss、无间狱等测试保留原版本身份。忍术道具仍未修复。
-
-发布工作流使用 `.github/scripts/publish_beta562.py`，从固定资产提交取回已在本地离线核对的新版本 EXE，验证当前源码、CT 和所有 Draft 下载后发布。CI 重编译的 EXE 仅作离线验证。源码包来自最终 Git 提交，记录逐文件哈希、提交与 tree；完整包含 EXE、CT、源码和记录。旧 `beta561` 工具保留为历史发布脚本，不适用于当前版本。发布前应先生成 `artifacts/source-checks.json`，并在固定资产 checkout 下执行发布脚本的 `--prepare-only` 模式。
+发布资产来源固定在docs/beta563-publication.json。发布程序先核对原EXE与原始本地记录，再针对当前提交运行全部检查；源码包保留所有构建源与build-info证明，完整包包含EXE、源码、CT、使用/键位说明及验证记录。公开EXE无需Python或CE。

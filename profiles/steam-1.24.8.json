@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "profile_kind": "experimental_type2",
-  "tool_version": "1.0.0-beta.5.6.2",
+  "tool_version": "1.0.0-beta.5.6.3",
   "scoped_living_weapon_hint": true,
   "living_weapon_teaching_revision": 1,
   "living_weapon_teaching_key": "T",
@@ -247,8 +247,8 @@
       "rva": 8159963,
       "length": 5,
       "code_capacity": 4096,
-      "purpose": "Boss baseline plus native growth/equipment; use selected melee weapon, or the sole equipped weapon if the selected slot is empty; map saved player levels 1..400 linearly to native Boss indices 1..1410, cap higher valid levels at 400, retain higher scene index and additive native player/equipment delta; extend the same mapped saved-level basis to native Ki, five physical attack scalars and defense with exact native modifiers; cache only selected native permanent element before unchanged Boss-row restoration",
-      "asm": "call {boss_stats}\n\npushfq\npush rax\npush rcx\npush rdx\npush r8\npush r9\npush r10\npush r11\nsub rsp, 0xC80\nmovups xmmword ptr [rsp+0x20], xmm0\nmovups xmmword ptr [rsp+0x30], xmm1\nmovups xmmword ptr [rsp+0x40], xmm2\nmovups xmmword ptr [rsp+0x50], xmm3\nmovups xmmword ptr [rsp+0x60], xmm4\nmovups xmmword ptr [rsp+0x70], xmm5\n\nmov r11, {data}\ncmp byte ptr [r11+0x58], 1\njne attr_overlay_done\ncmp r14, qword ptr [r11+0x10]\njne attr_overlay_done\nmov rax, {player_slot}\ncmp r14, qword ptr [rax]\njne attr_overlay_done\nmov eax, dword ptr [r14]\ncmp eax, 0x58E5E\nje attr_overlay_done_template\ncmp eax, 0x51BE1\njne attr_overlay_done\nattr_overlay_done_template:\ncmp eax, dword ptr [r11+0x04]\njne attr_overlay_done\ncmp word ptr [r14+0x06], 1\njne attr_overlay_done\ncmp dword ptr [r14+0xEF0], 0\njne attr_overlay_done\ncmp r14, qword ptr [rsi]\njne attr_overlay_done\ncmp rsi, qword ptr [r14+0x240]\njne attr_overlay_done\ncmp qword ptr [rsi+0xB98], 0\njne attr_overlay_done\nmov rax, qword ptr [r14+0xE90]\ntest rax, rax\nje attr_overlay_done\ntest byte ptr [rax+0x04], 3\njne attr_overlay_done\ncmp dword ptr [rax+0x0C], 1\njne attr_overlay_done\n\nlea rax, [rsi+0x9D8]\ncmp rax, r12\njne attr_overlay_done\ncmp qword ptr [r12+0x198], 0\nje attr_overlay_done\ncmp qword ptr [r12+0x1A8], 0\nje attr_overlay_done\ncmp r14, qword ptr [rsi+0x108]\njne combat_growth_keep_native\nmov rcx, qword ptr [r14+0xE90]\nmov eax, dword ptr [r14]\ncmp eax, dword ptr [rcx]\njne combat_growth_keep_native\nmov rax, {hp_growth_saved_manager}\nmov rax, qword ptr [rax]\ntest rax, rax\nje combat_growth_keep_native\nmov edx, dword ptr [rax+0xAE5C4]\ncmp edx, 1\njb combat_growth_keep_native\ncmp edx, 750\nja combat_growth_keep_native\ncmp edx, 400\njbe hp_growth_map_level\nmov edx, 400\nhp_growth_map_level:\nmov eax, edx\ndec eax\nimul eax, eax, 1409\nxor edx, edx\nmov r8d, 399\ndiv r8d\nlea edx, [rax+1]\ncmp edx, dword ptr [rsi+8]\njbe combat_growth_keep_native\nstmxcsr dword ptr [rsp+0x8C]\nmov dword ptr [rsp+0x80], edx\ncall {hp_growth_native_hp}\nmov dword ptr [r12], eax\nmov ecx, dword ptr [rsp+0x80]\ncall {combat_growth_native_ki}\nmov rdx, qword ptr [r14+0xE90]\nmov eax, dword ptr [rdx+0xD0]\nxorps xmm1, xmm1\ncvtsi2ss xmm1, rax\nmulss xmm0, xmm1\ncvttss2si rax, xmm0\nmov dword ptr [r12+4], eax\nmov rcx, qword ptr [r14+0xE90]\nmov edx, dword ptr [rsp+0x80]\ncall {combat_growth_native_attack}\nmov eax, eax\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, dword ptr [rsi+0x12A0]\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x84], eax\nmov rcx, qword ptr [r14+0xE90]\nmov edx, dword ptr [rsp+0x80]\ncall {combat_growth_native_defense}\nmov eax, eax\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, dword ptr [rsi+0x12A4]\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x88], eax\nmov rax, {combat_growth_world_slot}\nmov rax, qword ptr [rax]\ncmp qword ptr [rax+0x560], 0\nje combat_growth_write_baseline\ncall {combat_growth_difficulty_index}\nmovsxd rdx, eax\nmov r10, {combat_growth_one}\nmovss xmm4, dword ptr [r10]\nmovaps xmm5, xmm4\ncmp byte ptr [rsi+0x12CC], 0\njne combat_growth_ordinary_factors\nlea r10, [rsi+0x12AD]\nmov ecx, 32\ncombat_growth_status_scan:\ncmp byte ptr [r10], 0\njne combat_growth_status_factors\ninc r10\ndec ecx\njne combat_growth_status_scan\ncombat_growth_ordinary_factors:\nmov rax, qword ptr [r14+0xE90]\ntest byte ptr [rax+4], 2\njne combat_growth_write_baseline\ncmp byte ptr [r14+0x44F], 0\njne combat_growth_write_baseline\ncmp edx, 5\njl combat_growth_write_baseline\nmov r10, {combat_growth_attack_high_factor}\nmovss xmm4, dword ptr [r10]\njmp combat_growth_apply_factors\ncombat_growth_status_factors:\nmov rax, qword ptr [r14+0xE90]\nmovzx ecx, word ptr [rax+0xFC]\nmovd xmm2, ecx\ncvtdq2ps xmm2, xmm2\nmov r10, {combat_growth_percent}\nmulss xmm2, dword ptr [r10]\nmovaps xmm4, xmm2\nmov r10, {combat_growth_attack_factor_table}\nmulss xmm4, dword ptr [r10+rdx*4]\nmovaps xmm0, xmm5\nsubss xmm0, xmm4\nxorps xmm3, xmm3\ncomiss xmm0, xmm3\njb combat_growth_attack_factor_ready\nmovaps xmm4, xmm5\ncombat_growth_attack_factor_ready:\nmov r10, {combat_growth_defense_factor_table}\nmulss xmm2, dword ptr [r10+rdx*4]\nmovaps xmm0, xmm5\nsubss xmm0, xmm2\ncomiss xmm0, xmm3\njae combat_growth_apply_factors\nmovaps xmm5, xmm2\ncombat_growth_apply_factors:\nmov eax, dword ptr [rsp+0x84]\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, xmm4\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x84], eax\nmov eax, dword ptr [rsp+0x88]\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, xmm5\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x88], eax\ncombat_growth_write_baseline:\nmov eax, dword ptr [rsp+0x84]\nmov dword ptr [r12+0x08], eax\nmov dword ptr [r12+0x30], eax\nmov dword ptr [r12+0x58], eax\nmov dword ptr [r12+0x80], eax\nmov dword ptr [r12+0xA8], eax\nmov eax, dword ptr [rsp+0x88]\nmov dword ptr [r12+0xE0], eax\nldmxcsr dword ptr [rsp+0x8C]\ncombat_growth_keep_native:\nxor ecx, ecx\nattr_copy_boss:\nmov eax, dword ptr [r12+rcx]\nmov dword ptr [rsp+rcx+0x80], eax\nadd ecx, 4\ncmp ecx, 0x198\njb attr_copy_boss\nlea rcx, [rsp+0x3C0]\ncall {equipment_construct}\nmov rcx, qword ptr [r12+0x1A8]\ncall {growth_reset}\nmov r10, qword ptr [r12+0x1A8]\nmov dword ptr [r10], 1\nmov rax, 0x0005000500050005\nmov qword ptr [r10+0x04], rax\nmov qword ptr [r10+0x0C], rax\nlea rdx, [rsp+0x3C0]\nmov rcx, r12\nxor r8d, r8d\nxor r9d, r9d\ncall {player_stats}\nxor ecx, ecx\nattr_copy_reference:\nmov eax, dword ptr [r12+rcx]\nmov dword ptr [rsp+rcx+0x220], eax\nadd ecx, 4\ncmp ecx, 0x198\njb attr_copy_reference\nmov rcx, qword ptr [r12+0x1A8]\ncall {growth_load}\nmov byte ptr [r12+0x1B8], 0\nlea rcx, [rsp+0x3C0]\ncall {equipment_load}\nmov al, byte ptr [rsi+0x9CC]\n\ntest al, al\nje attr_sole_weapon_second\ncmp dword ptr [rsp+0x3C0], -1\njne attr_sole_weapon_done\ncmp dword ptr [rsp+0x3C0+0xC8], -1\nje attr_sole_weapon_done\nxor eax, eax\njmp attr_sole_weapon_done\nattr_sole_weapon_second:\ncmp dword ptr [rsp+0x3C0+0xC8], -1\njne attr_sole_weapon_done\ncmp dword ptr [rsp+0x3C0], -1\nje attr_sole_weapon_done\nmov al, 1\nattr_sole_weapon_done:\nmov byte ptr [rsp+0xC64], al\nlea rdx, [rsp+0x3C0]\nmov rcx, r12\nxor r8d, r8d\nxor r9d, r9d\ncall {player_stats}\n\nmov r11, {data}\ninc dword ptr [r11+0x60]\nmov eax, dword ptr [rsp+0x80]\nmov dword ptr [r11+0x64], eax\nmov eax, dword ptr [r12]\nsub eax, dword ptr [rsp+0x220]\nmov dword ptr [r11+0x68], eax\nmov eax, dword ptr [rsp+0x84]\nmov dword ptr [r11+0x6C], eax\nmov eax, dword ptr [r12+4]\nsub eax, dword ptr [rsp+0x224]\nmov dword ptr [r11+0x70], eax\nmov eax, dword ptr [rsp+0x160]\nmov dword ptr [r11+0x74], eax\nmov eax, dword ptr [r12+0xE0]\nsub eax, dword ptr [rsp+0x300]\nmov dword ptr [r11+0x78], eax\nmov eax, dword ptr [rsp+0x88]\nmov dword ptr [r11+0x7C], eax\nmov eax, dword ptr [r12+8]\nsub eax, dword ptr [rsp+0x228]\nmov dword ptr [r11+0x80], eax\n\nxor edx, edx\ncmp byte ptr [rsp+0xC64], 0\nsete dl\nmov dword ptr [r11+0x8C], edx\nimul eax, edx, 0xC8\nmov eax, dword ptr [rsp+rax+0x3C0]\nmov dword ptr [r11+0x98], eax\nimul edx, edx, 0x28\nmov eax, dword ptr [r12+rdx+8]\nmov dword ptr [r11+0x90], eax\nmov ecx, dword ptr [rsp+rdx+0x228]\nmov dword ptr [r11+0x94], ecx\nsub eax, ecx\nmov dword ptr [r11+0x80], eax\ninc dword ptr [r11+0x9C]\nmov r9, {data}\nadd r9, 0x10000\nmov eax, dword ptr [r9]\ntest al, 1\njne innate_capture_skipped\nlea edx, [rax+1]\nlock cmpxchg dword ptr [r9], edx\njne innate_capture_skipped\nmov dword ptr [r9+0x08], -1\nmov dword ptr [r9+0x0C], 0\nmov qword ptr [r9+0x10], r14\nmov qword ptr [r9+0x18], rsi\nmov eax, dword ptr [r11+0x1C]\nmov dword ptr [r9+0x20], eax\nmov eax, dword ptr [r11+0x98]\nmov dword ptr [r9+0x24], eax\nmov ecx, dword ptr [r11+0x8C]\nmov dword ptr [r9+0x28], ecx\nmov eax, dword ptr [r11+0x9C]\nmov dword ptr [r9+0x2C], eax\ncmp ecx, 1\nja innate_capture_commit\ncmp dword ptr [r9+0x24], -1\nje innate_capture_commit\nimul ecx, ecx, 0x28\nmov edx, dword ptr [r12+rcx+0x1C]\ncmp edx, 4\nja innate_capture_commit\nmov eax, dword ptr [r12+rcx+0x20]\ntest eax, eax\njle innate_capture_commit\nmov dword ptr [r9+0x08], edx\nmov dword ptr [r9+0x0C], eax\ninnate_capture_commit:\nlock inc dword ptr [r9]\ninnate_capture_skipped:\nmov edx, 8\nattr_restore_boss_weapon:\nmov r8d, dword ptr [r11+0x80]\nxor eax, eax\ntest r8d, r8d\ncmovs r8d, eax\nadd r8d, dword ptr [rsp+rdx+0x80]\nmovups xmm0, xmmword ptr [rsp+rdx+0x80]\nmovups xmm1, xmmword ptr [rsp+rdx+0x90]\nmov rax, qword ptr [rsp+rdx+0xA0]\nmovups xmmword ptr [r12+rdx], xmm0\nmovups xmmword ptr [r12+rdx+0x10], xmm1\nmov qword ptr [r12+rdx+0x20], rax\nmov dword ptr [r12+rdx], r8d\nadd edx, 0x28\ncmp edx, 0xD0\njb attr_restore_boss_weapon\n\nmov edx, 0x124\nmov ecx, 0xC70\nattr_save_player_thresholds:\nmov ax, word ptr [r12+rdx]\nmov word ptr [rsp+rcx], ax\nadd edx, 8\nadd ecx, 2\ncmp edx, 0x15C\njb attr_save_player_thresholds\nmov ax, word ptr [r12+0x15C]\nmov word ptr [rsp+0xC7E], ax\nmov edx, 0x124\nattr_restore_boss_status_records:\nmov eax, dword ptr [rsp+rdx+0x80]\nmov dword ptr [r12+rdx], eax\nadd edx, 4\ncmp edx, 0x170\njb attr_restore_boss_status_records\n\n\nmov eax, dword ptr [r12+0x0]\nsub eax, dword ptr [rsp+0x220]\nadd eax, dword ptr [rsp+0x80]\nmov dword ptr [r12+0x0], eax\n\nmov eax, dword ptr [r12+0x4]\nsub eax, dword ptr [rsp+0x224]\nadd eax, dword ptr [rsp+0x84]\nmov dword ptr [r12+0x4], eax\n\nmov eax, dword ptr [r12+0xD0]\nsub eax, dword ptr [rsp+0x2F0]\nadd eax, dword ptr [rsp+0x150]\nmov dword ptr [r12+0xD0], eax\n\nmov eax, dword ptr [r12+0xD4]\nsub eax, dword ptr [rsp+0x2F4]\nadd eax, dword ptr [rsp+0x154]\nmov dword ptr [r12+0xD4], eax\n\nmov eax, dword ptr [r12+0xD8]\nsub eax, dword ptr [rsp+0x2F8]\nadd eax, dword ptr [rsp+0x158]\nmov dword ptr [r12+0xD8], eax\n\nmov eax, dword ptr [r12+0xE0]\nsub eax, dword ptr [rsp+0x300]\nadd eax, dword ptr [rsp+0x160]\nmov dword ptr [r12+0xE0], eax\n\nmov eax, dword ptr [r12+0xE4]\nsub eax, dword ptr [rsp+0x304]\nadd eax, dword ptr [rsp+0x164]\nmov dword ptr [r12+0xE4], eax\n\nmov eax, dword ptr [r12+0xE8]\nsub eax, dword ptr [rsp+0x308]\nadd eax, dword ptr [rsp+0x168]\nmov dword ptr [r12+0xE8], eax\n\nmov eax, dword ptr [r12+0xEC]\nsub eax, dword ptr [rsp+0x30C]\nadd eax, dword ptr [rsp+0x16C]\nmov dword ptr [r12+0xEC], eax\n\nmov eax, dword ptr [r12+0xF0]\nsub eax, dword ptr [rsp+0x310]\nadd eax, dword ptr [rsp+0x170]\nmov dword ptr [r12+0xF0], eax\n\nmov eax, dword ptr [r12+0xF4]\nsub eax, dword ptr [rsp+0x314]\nadd eax, dword ptr [rsp+0x174]\nmov dword ptr [r12+0xF4], eax\n\nmov eax, dword ptr [r12+0xF8]\nsub eax, dword ptr [rsp+0x318]\nadd eax, dword ptr [rsp+0x178]\nmov dword ptr [r12+0xF8], eax\n\nmov eax, dword ptr [r12+0xFC]\nsub eax, dword ptr [rsp+0x31C]\nadd eax, dword ptr [rsp+0x17C]\nmov dword ptr [r12+0xFC], eax\n\nmov eax, dword ptr [r12+0x100]\nsub eax, dword ptr [rsp+0x320]\nadd eax, dword ptr [rsp+0x180]\nmov dword ptr [r12+0x100], eax\n\nmov eax, dword ptr [r12+0x104]\nsub eax, dword ptr [rsp+0x324]\nadd eax, dword ptr [rsp+0x184]\nmov dword ptr [r12+0x104], eax\n\nmov eax, dword ptr [r12+0x108]\nsub eax, dword ptr [rsp+0x328]\nadd eax, dword ptr [rsp+0x188]\nmov dword ptr [r12+0x108], eax\n\nmov eax, dword ptr [r12+0x10C]\nsub eax, dword ptr [rsp+0x32C]\nadd eax, dword ptr [rsp+0x18C]\nmov dword ptr [r12+0x10C], eax\n\nmov eax, dword ptr [r12+0x110]\nsub eax, dword ptr [rsp+0x330]\nadd eax, dword ptr [rsp+0x190]\nmov dword ptr [r12+0x110], eax\n\nmov eax, dword ptr [r12+0x114]\nsub eax, dword ptr [rsp+0x334]\nadd eax, dword ptr [rsp+0x194]\nmov dword ptr [r12+0x114], eax\n\nmov eax, dword ptr [r12+0x118]\nsub eax, dword ptr [rsp+0x338]\nadd eax, dword ptr [rsp+0x198]\nmov dword ptr [r12+0x118], eax\n\nmov eax, dword ptr [r12+0x11C]\nsub eax, dword ptr [rsp+0x33C]\nadd eax, dword ptr [rsp+0x19C]\nmov dword ptr [r12+0x11C], eax\n\nmov eax, dword ptr [r12+0x120]\nsub eax, dword ptr [rsp+0x340]\nadd eax, dword ptr [rsp+0x1A0]\nmov dword ptr [r12+0x120], eax\n\nmovzx eax, word ptr [rsp+0xC70]\nmovzx ecx, word ptr [rsp+0x344]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1A4]\nadd eax, ecx\nmov word ptr [r12+0x124], ax\n\nmovzx eax, word ptr [rsp+0xC72]\nmovzx ecx, word ptr [rsp+0x34C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1AC]\nadd eax, ecx\nmov word ptr [r12+0x12C], ax\n\nmovzx eax, word ptr [rsp+0xC74]\nmovzx ecx, word ptr [rsp+0x354]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1B4]\nadd eax, ecx\nmov word ptr [r12+0x134], ax\n\nmovzx eax, word ptr [rsp+0xC76]\nmovzx ecx, word ptr [rsp+0x35C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1BC]\nadd eax, ecx\nmov word ptr [r12+0x13C], ax\n\nmovzx eax, word ptr [rsp+0xC78]\nmovzx ecx, word ptr [rsp+0x364]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1C4]\nadd eax, ecx\nmov word ptr [r12+0x144], ax\n\nmovzx eax, word ptr [rsp+0xC7A]\nmovzx ecx, word ptr [rsp+0x36C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1CC]\nadd eax, ecx\nmov word ptr [r12+0x14C], ax\n\nmovzx eax, word ptr [rsp+0xC7C]\nmovzx ecx, word ptr [rsp+0x374]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1D4]\nadd eax, ecx\nmov word ptr [r12+0x154], ax\n\nmovzx eax, word ptr [rsp+0xC7E]\nmovzx ecx, word ptr [rsp+0x37C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1DC]\nadd eax, ecx\nmov word ptr [r12+0x15C], ax\n\nmovss xmm0, dword ptr [r12+0xDC]\ndivss xmm0, dword ptr [rsp+0x2FC]\nmulss xmm0, dword ptr [rsp+0x15C]\nmovss dword ptr [r12+0xDC], xmm0\n\nmovss xmm0, dword ptr [r12+0x174]\ndivss xmm0, dword ptr [rsp+0x394]\nmulss xmm0, dword ptr [rsp+0x1F4]\nmovss dword ptr [r12+0x174], xmm0\n\nmov eax, dword ptr [rsp+0x1F8]\nadd dword ptr [r12+0x178], eax\n\nmov eax, dword ptr [rsp+0x1FC]\nadd dword ptr [r12+0x17C], eax\n\nmov eax, dword ptr [rsp+0x200]\nadd dword ptr [r12+0x180], eax\n\nmov eax, dword ptr [rsp+0x204]\nadd dword ptr [r12+0x184], eax\n\nmov eax, dword ptr [rsp+0x208]\nadd dword ptr [r12+0x188], eax\n\nmov eax, dword ptr [rsp+0x20C]\nadd dword ptr [r12+0x18C], eax\n\nmov eax, dword ptr [rsp+0x210]\nadd dword ptr [r12+0x190], eax\n\nmov eax, dword ptr [rsp+0x214]\nadd dword ptr [r12+0x194], eax\n\nmov eax, dword ptr [rsp+0x1F0]\nmov dword ptr [r12+0x170], eax\nattr_overlay_done:\n\nmovups xmm0, xmmword ptr [rsp+0x20]\nmovups xmm1, xmmword ptr [rsp+0x30]\nmovups xmm2, xmmword ptr [rsp+0x40]\nmovups xmm3, xmmword ptr [rsp+0x50]\nmovups xmm4, xmmword ptr [rsp+0x60]\nmovups xmm5, xmmword ptr [rsp+0x70]\nadd rsp, 0xC80\npop r11\npop r10\npop r9\npop r8\npop rdx\npop rcx\npop rax\npopfq\njmp {return}\n",
+      "purpose": "Boss baseline plus native growth/equipment; use selected melee weapon, or the sole equipped weapon if the selected slot is empty; map saved player levels 1..400 linearly to native Boss indices 1..1410, cap higher valid levels at 400, retain higher scene index and additive native player/equipment delta; extend the same mapped saved-level basis to native Ki, five physical attack scalars and defense with exact native modifiers; cache only selected native permanent element before unchanged Boss-row restoration; level0..750 -> index1..4525; from401 Boss-only HPx2/ATKx1.2; selected native signed flat-attack delta retained separately",
+      "asm": "call {boss_stats}\n\npushfq\npush rax\npush rcx\npush rdx\npush r8\npush r9\npush r10\npush r11\nsub rsp, 0xC80\nmovups xmmword ptr [rsp+0x20], xmm0\nmovups xmmword ptr [rsp+0x30], xmm1\nmovups xmmword ptr [rsp+0x40], xmm2\nmovups xmmword ptr [rsp+0x50], xmm3\nmovups xmmword ptr [rsp+0x60], xmm4\nmovups xmmword ptr [rsp+0x70], xmm5\n\nmov r11, {data}\ncmp byte ptr [r11+0x58], 1\njne attr_overlay_done\ncmp r14, qword ptr [r11+0x10]\njne attr_overlay_done\nmov rax, {player_slot}\ncmp r14, qword ptr [rax]\njne attr_overlay_done\nmov eax, dword ptr [r14]\ncmp eax, 0x58E5E\nje attr_overlay_done_template\ncmp eax, 0x51BE1\njne attr_overlay_done\nattr_overlay_done_template:\ncmp eax, dword ptr [r11+0x04]\njne attr_overlay_done\ncmp word ptr [r14+0x06], 1\njne attr_overlay_done\ncmp dword ptr [r14+0xEF0], 0\njne attr_overlay_done\ncmp r14, qword ptr [rsi]\njne attr_overlay_done\ncmp rsi, qword ptr [r14+0x240]\njne attr_overlay_done\ncmp qword ptr [rsi+0xB98], 0\njne attr_overlay_done\nmov rax, qword ptr [r14+0xE90]\ntest rax, rax\nje attr_overlay_done\ntest byte ptr [rax+0x04], 3\njne attr_overlay_done\ncmp dword ptr [rax+0x0C], 1\njne attr_overlay_done\n\nlea rax, [rsi+0x9D8]\ncmp rax, r12\njne attr_overlay_done\ncmp qword ptr [r12+0x198], 0\nje attr_overlay_done\ncmp qword ptr [r12+0x1A8], 0\nje attr_overlay_done\ncmp r14, qword ptr [rsi+0x108]\njne growth750_done\nmov rcx, qword ptr [r14+0xE90]\nmov eax, dword ptr [r14]\ncmp eax, dword ptr [rcx]\njne growth750_done\nmov rax, {hp_growth_saved_manager}\nmov rax, qword ptr [rax]\ntest rax, rax\nje growth750_done\nmov edx, dword ptr [rax+0xAE5C4]\ncmp edx, 1\njb growth750_done\ncmp edx, 750\nja growth750_done\nmov dword ptr [rsp+0x90], edx\nmov eax, edx\nimul eax, eax, 4524\nxor edx, edx\nmov r8d, 750\ndiv r8d\nlea edx, [rax+1]\ncmp edx, dword ptr [rsi+8]\njbe growth750_multiply\nstmxcsr dword ptr [rsp+0x8C]\nmov dword ptr [rsp+0x80], edx\ncall {hp_growth_native_hp}\nmov dword ptr [r12], eax\nmov ecx, dword ptr [rsp+0x80]\ncall {combat_growth_native_ki}\nmov rdx, qword ptr [r14+0xE90]\nmov eax, dword ptr [rdx+0xD0]\nxorps xmm1, xmm1\ncvtsi2ss xmm1, rax\nmulss xmm0, xmm1\ncvttss2si rax, xmm0\nmov dword ptr [r12+4], eax\nmov rcx, qword ptr [r14+0xE90]\nmov edx, dword ptr [rsp+0x80]\ncall {combat_growth_native_attack}\nmov eax, eax\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, dword ptr [rsi+0x12A0]\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x84], eax\nmov rcx, qword ptr [r14+0xE90]\nmov edx, dword ptr [rsp+0x80]\ncall {combat_growth_native_defense}\nmov eax, eax\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, dword ptr [rsi+0x12A4]\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x88], eax\nmov rax, {combat_growth_world_slot}\nmov rax, qword ptr [rax]\ncmp qword ptr [rax+0x560], 0\nje combat_growth_write_baseline\ncall {combat_growth_difficulty_index}\nmovsxd rdx, eax\nmov r10, {combat_growth_one}\nmovss xmm4, dword ptr [r10]\nmovaps xmm5, xmm4\ncmp byte ptr [rsi+0x12CC], 0\njne combat_growth_ordinary_factors\nlea r10, [rsi+0x12AD]\nmov ecx, 32\ncombat_growth_status_scan:\ncmp byte ptr [r10], 0\njne combat_growth_status_factors\ninc r10\ndec ecx\njne combat_growth_status_scan\ncombat_growth_ordinary_factors:\nmov rax, qword ptr [r14+0xE90]\ntest byte ptr [rax+4], 2\njne combat_growth_write_baseline\ncmp byte ptr [r14+0x44F], 0\njne combat_growth_write_baseline\ncmp edx, 5\njl combat_growth_write_baseline\nmov r10, {combat_growth_attack_high_factor}\nmovss xmm4, dword ptr [r10]\njmp combat_growth_apply_factors\ncombat_growth_status_factors:\nmov rax, qword ptr [r14+0xE90]\nmovzx ecx, word ptr [rax+0xFC]\nmovd xmm2, ecx\ncvtdq2ps xmm2, xmm2\nmov r10, {combat_growth_percent}\nmulss xmm2, dword ptr [r10]\nmovaps xmm4, xmm2\nmov r10, {combat_growth_attack_factor_table}\nmulss xmm4, dword ptr [r10+rdx*4]\nmovaps xmm0, xmm5\nsubss xmm0, xmm4\nxorps xmm3, xmm3\ncomiss xmm0, xmm3\njb combat_growth_attack_factor_ready\nmovaps xmm4, xmm5\ncombat_growth_attack_factor_ready:\nmov r10, {combat_growth_defense_factor_table}\nmulss xmm2, dword ptr [r10+rdx*4]\nmovaps xmm0, xmm5\nsubss xmm0, xmm2\ncomiss xmm0, xmm3\njae combat_growth_apply_factors\nmovaps xmm5, xmm2\ncombat_growth_apply_factors:\nmov eax, dword ptr [rsp+0x84]\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, xmm4\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x84], eax\nmov eax, dword ptr [rsp+0x88]\nxorps xmm0, xmm0\ncvtsi2ss xmm0, rax\nmulss xmm0, xmm5\ncvttss2si rax, xmm0\nmov dword ptr [rsp+0x88], eax\ncombat_growth_write_baseline:\nmov eax, dword ptr [rsp+0x84]\nmov dword ptr [r12+0x08], eax\nmov dword ptr [r12+0x30], eax\nmov dword ptr [r12+0x58], eax\nmov dword ptr [r12+0x80], eax\nmov dword ptr [r12+0xA8], eax\nmov eax, dword ptr [rsp+0x88]\nmov dword ptr [r12+0xE0], eax\nldmxcsr dword ptr [rsp+0x8C]\ngrowth750_multiply:\ncmp dword ptr [rsp+0x90], 401\njb growth750_done\nmov eax, dword ptr [r12]\nshl rax, 1\nmov r8d, 0xFFFFFFFF\ncmp rax, r8\ncmova rax, r8\nmov dword ptr [r12], eax\nmov eax, dword ptr [r12+0x8]\nimul rax, rax, 6\nxor edx, edx\nmov ecx, 5\ndiv rcx\ncmp rax, r8\ncmova rax, r8\nmov dword ptr [r12+0x8], eax\nmov eax, dword ptr [r12+0x30]\nimul rax, rax, 6\nxor edx, edx\nmov ecx, 5\ndiv rcx\ncmp rax, r8\ncmova rax, r8\nmov dword ptr [r12+0x30], eax\nmov eax, dword ptr [r12+0x58]\nimul rax, rax, 6\nxor edx, edx\nmov ecx, 5\ndiv rcx\ncmp rax, r8\ncmova rax, r8\nmov dword ptr [r12+0x58], eax\nmov eax, dword ptr [r12+0x80]\nimul rax, rax, 6\nxor edx, edx\nmov ecx, 5\ndiv rcx\ncmp rax, r8\ncmova rax, r8\nmov dword ptr [r12+0x80], eax\nmov eax, dword ptr [r12+0xA8]\nimul rax, rax, 6\nxor edx, edx\nmov ecx, 5\ndiv rcx\ncmp rax, r8\ncmova rax, r8\nmov dword ptr [r12+0xA8], eax\ngrowth750_done:\nxor ecx, ecx\nattr_copy_boss:\nmov eax, dword ptr [r12+rcx]\nmov dword ptr [rsp+rcx+0x80], eax\nadd ecx, 4\ncmp ecx, 0x198\njb attr_copy_boss\nlea rcx, [rsp+0x3C0]\ncall {equipment_construct}\nmov rcx, qword ptr [r12+0x1A8]\ncall {growth_reset}\nmov r10, qword ptr [r12+0x1A8]\nmov dword ptr [r10], 1\nmov rax, 0x0005000500050005\nmov qword ptr [r10+0x04], rax\nmov qword ptr [r10+0x0C], rax\nlea rdx, [rsp+0x3C0]\nmov rcx, r12\nxor r8d, r8d\nxor r9d, r9d\ncall {player_stats}\nxor ecx, ecx\nattr_copy_reference:\nmov eax, dword ptr [r12+rcx]\nmov dword ptr [rsp+rcx+0x220], eax\nadd ecx, 4\ncmp ecx, 0x198\njb attr_copy_reference\nmov rcx, qword ptr [r12+0x1A8]\ncall {growth_load}\nmov byte ptr [r12+0x1B8], 0\nlea rcx, [rsp+0x3C0]\ncall {equipment_load}\nmov al, byte ptr [rsi+0x9CC]\n\ntest al, al\nje attr_sole_weapon_second\ncmp dword ptr [rsp+0x3C0], -1\njne attr_sole_weapon_done\ncmp dword ptr [rsp+0x3C0+0xC8], -1\nje attr_sole_weapon_done\nxor eax, eax\njmp attr_sole_weapon_done\nattr_sole_weapon_second:\ncmp dword ptr [rsp+0x3C0+0xC8], -1\njne attr_sole_weapon_done\ncmp dword ptr [rsp+0x3C0], -1\nje attr_sole_weapon_done\nmov al, 1\nattr_sole_weapon_done:\nmov byte ptr [rsp+0xC64], al\nlea rdx, [rsp+0x3C0]\nmov rcx, r12\nxor r8d, r8d\nxor r9d, r9d\ncall {player_stats}\n\nmov r11, {data}\ninc dword ptr [r11+0x60]\nmov eax, dword ptr [rsp+0x80]\nmov dword ptr [r11+0x64], eax\nmov eax, dword ptr [r12]\nsub eax, dword ptr [rsp+0x220]\nmov dword ptr [r11+0x68], eax\nmov eax, dword ptr [rsp+0x84]\nmov dword ptr [r11+0x6C], eax\nmov eax, dword ptr [r12+4]\nsub eax, dword ptr [rsp+0x224]\nmov dword ptr [r11+0x70], eax\nmov eax, dword ptr [rsp+0x160]\nmov dword ptr [r11+0x74], eax\nmov eax, dword ptr [r12+0xE0]\nsub eax, dword ptr [rsp+0x300]\nmov dword ptr [r11+0x78], eax\nmov eax, dword ptr [rsp+0x88]\nmov dword ptr [r11+0x7C], eax\nmov eax, dword ptr [r12+8]\nsub eax, dword ptr [rsp+0x228]\nmov dword ptr [r11+0x80], eax\n\nxor edx, edx\ncmp byte ptr [rsp+0xC64], 0\nsete dl\nmov dword ptr [r11+0x8C], edx\nimul eax, edx, 0xC8\nmov eax, dword ptr [rsp+rax+0x3C0]\nmov dword ptr [r11+0x98], eax\nimul edx, edx, 0x28\nmovsxd rax, dword ptr [r12+rdx+0x0C]\nmovsxd rcx, dword ptr [rsp+rdx+0x22C]\nsub rax, rcx\nmov qword ptr [rsp+0x218], rax\nmov eax, dword ptr [r12+rdx+8]\nmov dword ptr [r11+0x90], eax\nmov ecx, dword ptr [rsp+rdx+0x228]\nmov dword ptr [r11+0x94], ecx\nsub eax, ecx\nmov dword ptr [r11+0x80], eax\ninc dword ptr [r11+0x9C]\nmov r9, {data}\nadd r9, 0x10000\nmov eax, dword ptr [r9]\ntest al, 1\njne innate_capture_skipped\nlea edx, [rax+1]\nlock cmpxchg dword ptr [r9], edx\njne innate_capture_skipped\nmov dword ptr [r9+0x08], -1\nmov dword ptr [r9+0x0C], 0\nmov qword ptr [r9+0x10], r14\nmov qword ptr [r9+0x18], rsi\nmov eax, dword ptr [r11+0x1C]\nmov dword ptr [r9+0x20], eax\nmov eax, dword ptr [r11+0x98]\nmov dword ptr [r9+0x24], eax\nmov ecx, dword ptr [r11+0x8C]\nmov dword ptr [r9+0x28], ecx\nmov eax, dword ptr [r11+0x9C]\nmov dword ptr [r9+0x2C], eax\ncmp ecx, 1\nja innate_capture_commit\ncmp dword ptr [r9+0x24], -1\nje innate_capture_commit\nimul ecx, ecx, 0x28\nmov edx, dword ptr [r12+rcx+0x1C]\ncmp edx, 4\nja innate_capture_commit\nmov eax, dword ptr [r12+rcx+0x20]\ntest eax, eax\njle innate_capture_commit\nmov dword ptr [r9+0x08], edx\nmov dword ptr [r9+0x0C], eax\ninnate_capture_commit:\nlock inc dword ptr [r9]\ninnate_capture_skipped:\nmov edx, 8\nattr_restore_boss_weapon:\nmov r8d, dword ptr [r11+0x80]\nxor eax, eax\ntest r8d, r8d\ncmovs r8d, eax\nadd r8d, dword ptr [rsp+rdx+0x80]\nmovups xmm0, xmmword ptr [rsp+rdx+0x80]\nmovups xmm1, xmmword ptr [rsp+rdx+0x90]\nmov rax, qword ptr [rsp+rdx+0xA0]\nmovups xmmword ptr [r12+rdx], xmm0\nmovups xmmword ptr [r12+rdx+0x10], xmm1\nmov qword ptr [r12+rdx+0x20], rax\nmov dword ptr [r12+rdx], r8d\nmovsxd rax, dword ptr [r12+rdx+4]\nadd rax, qword ptr [rsp+0x218]\nmov r9d, 0x7FFFFFFF\ncmp rax, r9\ncmovg rax, r9\nmov r9, -2147483648\ncmp rax, r9\ncmovl rax, r9\nmov dword ptr [r12+rdx+4], eax\nadd edx, 0x28\ncmp edx, 0xD0\njb attr_restore_boss_weapon\n\nmov edx, 0x124\nmov ecx, 0xC70\nattr_save_player_thresholds:\nmov ax, word ptr [r12+rdx]\nmov word ptr [rsp+rcx], ax\nadd edx, 8\nadd ecx, 2\ncmp edx, 0x15C\njb attr_save_player_thresholds\nmov ax, word ptr [r12+0x15C]\nmov word ptr [rsp+0xC7E], ax\nmov edx, 0x124\nattr_restore_boss_status_records:\nmov eax, dword ptr [rsp+rdx+0x80]\nmov dword ptr [r12+rdx], eax\nadd edx, 4\ncmp edx, 0x170\njb attr_restore_boss_status_records\n\n\nmov eax, dword ptr [r12+0x0]\nsub eax, dword ptr [rsp+0x220]\nadd eax, dword ptr [rsp+0x80]\nmov dword ptr [r12+0x0], eax\n\nmov eax, dword ptr [r12+0x4]\nsub eax, dword ptr [rsp+0x224]\nadd eax, dword ptr [rsp+0x84]\nmov dword ptr [r12+0x4], eax\n\nmov eax, dword ptr [r12+0xD0]\nsub eax, dword ptr [rsp+0x2F0]\nadd eax, dword ptr [rsp+0x150]\nmov dword ptr [r12+0xD0], eax\n\nmov eax, dword ptr [r12+0xD4]\nsub eax, dword ptr [rsp+0x2F4]\nadd eax, dword ptr [rsp+0x154]\nmov dword ptr [r12+0xD4], eax\n\nmov eax, dword ptr [r12+0xD8]\nsub eax, dword ptr [rsp+0x2F8]\nadd eax, dword ptr [rsp+0x158]\nmov dword ptr [r12+0xD8], eax\n\nmov eax, dword ptr [r12+0xE0]\nsub eax, dword ptr [rsp+0x300]\nadd eax, dword ptr [rsp+0x160]\nmov dword ptr [r12+0xE0], eax\n\nmov eax, dword ptr [r12+0xE4]\nsub eax, dword ptr [rsp+0x304]\nadd eax, dword ptr [rsp+0x164]\nmov dword ptr [r12+0xE4], eax\n\nmov eax, dword ptr [r12+0xE8]\nsub eax, dword ptr [rsp+0x308]\nadd eax, dword ptr [rsp+0x168]\nmov dword ptr [r12+0xE8], eax\n\nmov eax, dword ptr [r12+0xEC]\nsub eax, dword ptr [rsp+0x30C]\nadd eax, dword ptr [rsp+0x16C]\nmov dword ptr [r12+0xEC], eax\n\nmov eax, dword ptr [r12+0xF0]\nsub eax, dword ptr [rsp+0x310]\nadd eax, dword ptr [rsp+0x170]\nmov dword ptr [r12+0xF0], eax\n\nmov eax, dword ptr [r12+0xF4]\nsub eax, dword ptr [rsp+0x314]\nadd eax, dword ptr [rsp+0x174]\nmov dword ptr [r12+0xF4], eax\n\nmov eax, dword ptr [r12+0xF8]\nsub eax, dword ptr [rsp+0x318]\nadd eax, dword ptr [rsp+0x178]\nmov dword ptr [r12+0xF8], eax\n\nmov eax, dword ptr [r12+0xFC]\nsub eax, dword ptr [rsp+0x31C]\nadd eax, dword ptr [rsp+0x17C]\nmov dword ptr [r12+0xFC], eax\n\nmov eax, dword ptr [r12+0x100]\nsub eax, dword ptr [rsp+0x320]\nadd eax, dword ptr [rsp+0x180]\nmov dword ptr [r12+0x100], eax\n\nmov eax, dword ptr [r12+0x104]\nsub eax, dword ptr [rsp+0x324]\nadd eax, dword ptr [rsp+0x184]\nmov dword ptr [r12+0x104], eax\n\nmov eax, dword ptr [r12+0x108]\nsub eax, dword ptr [rsp+0x328]\nadd eax, dword ptr [rsp+0x188]\nmov dword ptr [r12+0x108], eax\n\nmov eax, dword ptr [r12+0x10C]\nsub eax, dword ptr [rsp+0x32C]\nadd eax, dword ptr [rsp+0x18C]\nmov dword ptr [r12+0x10C], eax\n\nmov eax, dword ptr [r12+0x110]\nsub eax, dword ptr [rsp+0x330]\nadd eax, dword ptr [rsp+0x190]\nmov dword ptr [r12+0x110], eax\n\nmov eax, dword ptr [r12+0x114]\nsub eax, dword ptr [rsp+0x334]\nadd eax, dword ptr [rsp+0x194]\nmov dword ptr [r12+0x114], eax\n\nmov eax, dword ptr [r12+0x118]\nsub eax, dword ptr [rsp+0x338]\nadd eax, dword ptr [rsp+0x198]\nmov dword ptr [r12+0x118], eax\n\nmov eax, dword ptr [r12+0x11C]\nsub eax, dword ptr [rsp+0x33C]\nadd eax, dword ptr [rsp+0x19C]\nmov dword ptr [r12+0x11C], eax\n\nmov eax, dword ptr [r12+0x120]\nsub eax, dword ptr [rsp+0x340]\nadd eax, dword ptr [rsp+0x1A0]\nmov dword ptr [r12+0x120], eax\n\nmovzx eax, word ptr [rsp+0xC70]\nmovzx ecx, word ptr [rsp+0x344]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1A4]\nadd eax, ecx\nmov word ptr [r12+0x124], ax\n\nmovzx eax, word ptr [rsp+0xC72]\nmovzx ecx, word ptr [rsp+0x34C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1AC]\nadd eax, ecx\nmov word ptr [r12+0x12C], ax\n\nmovzx eax, word ptr [rsp+0xC74]\nmovzx ecx, word ptr [rsp+0x354]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1B4]\nadd eax, ecx\nmov word ptr [r12+0x134], ax\n\nmovzx eax, word ptr [rsp+0xC76]\nmovzx ecx, word ptr [rsp+0x35C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1BC]\nadd eax, ecx\nmov word ptr [r12+0x13C], ax\n\nmovzx eax, word ptr [rsp+0xC78]\nmovzx ecx, word ptr [rsp+0x364]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1C4]\nadd eax, ecx\nmov word ptr [r12+0x144], ax\n\nmovzx eax, word ptr [rsp+0xC7A]\nmovzx ecx, word ptr [rsp+0x36C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1CC]\nadd eax, ecx\nmov word ptr [r12+0x14C], ax\n\nmovzx eax, word ptr [rsp+0xC7C]\nmovzx ecx, word ptr [rsp+0x374]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1D4]\nadd eax, ecx\nmov word ptr [r12+0x154], ax\n\nmovzx eax, word ptr [rsp+0xC7E]\nmovzx ecx, word ptr [rsp+0x37C]\nsub eax, ecx\nmovzx ecx, word ptr [rsp+0x1DC]\nadd eax, ecx\nmov word ptr [r12+0x15C], ax\n\nmovss xmm0, dword ptr [r12+0xDC]\ndivss xmm0, dword ptr [rsp+0x2FC]\nmulss xmm0, dword ptr [rsp+0x15C]\nmovss dword ptr [r12+0xDC], xmm0\n\nmovss xmm0, dword ptr [r12+0x174]\ndivss xmm0, dword ptr [rsp+0x394]\nmulss xmm0, dword ptr [rsp+0x1F4]\nmovss dword ptr [r12+0x174], xmm0\n\nmov eax, dword ptr [rsp+0x1F8]\nadd dword ptr [r12+0x178], eax\n\nmov eax, dword ptr [rsp+0x1FC]\nadd dword ptr [r12+0x17C], eax\n\nmov eax, dword ptr [rsp+0x200]\nadd dword ptr [r12+0x180], eax\n\nmov eax, dword ptr [rsp+0x204]\nadd dword ptr [r12+0x184], eax\n\nmov eax, dword ptr [rsp+0x208]\nadd dword ptr [r12+0x188], eax\n\nmov eax, dword ptr [rsp+0x20C]\nadd dword ptr [r12+0x18C], eax\n\nmov eax, dword ptr [rsp+0x210]\nadd dword ptr [r12+0x190], eax\n\nmov eax, dword ptr [rsp+0x214]\nadd dword ptr [r12+0x194], eax\n\nmov eax, dword ptr [rsp+0x1F0]\nmov dword ptr [r12+0x170], eax\nattr_overlay_done:\n\nmovups xmm0, xmmword ptr [rsp+0x20]\nmovups xmm1, xmmword ptr [rsp+0x30]\nmovups xmm2, xmmword ptr [rsp+0x40]\nmovups xmm3, xmmword ptr [rsp+0x50]\nmovups xmm4, xmmword ptr [rsp+0x60]\nmovups xmm5, xmmword ptr [rsp+0x70]\nadd rsp, 0xC80\npop r11\npop r10\npop r9\npop r8\npop rdx\npop rcx\npop rax\npopfq\njmp {return}\n",
       "original": "E8 A0 00 FF FF",
       "code_offset": 110592
     },
@@ -1088,12 +1088,12 @@
     750
   ],
   "hp_growth_level_mapping": {
-    "level_min": 1,
-    "level_max": 400,
+    "level_min": 0,
+    "level_max": 750,
     "index_min": 1,
-    "index_max": 1410,
+    "index_max": 4525,
     "rounding": "floor",
-    "higher_valid_levels": "cap_at_level_400"
+    "formula": "1 + floor(4524 * level / 750)"
   },
   "hp_growth_keeps_higher_native_scene_index": true,
   "hp_growth_gameplay_confirmation_pending": true,
@@ -1105,12 +1105,12 @@
     750
   ],
   "combat_growth_level_mapping": {
-    "level_min": 1,
-    "level_max": 400,
+    "level_min": 0,
+    "level_max": 750,
     "index_min": 1,
-    "index_max": 1410,
+    "index_max": 4525,
     "rounding": "floor",
-    "higher_valid_levels": "cap_at_level_400"
+    "formula": "1 + floor(4524 * level / 750)"
   },
   "combat_growth_keeps_higher_native_scene_index": true,
   "combat_growth_preserves_secondary_curve_fields": true,
@@ -1578,7 +1578,7 @@
     85,
     96
   ],
-  "stage": "local_beta56_living_weapon_restart_trial",
+  "stage": "local_beta563_growth750",
   "postdefeat_grab_revision": 1,
   "postdefeat_grab_state_offset": 3072,
   "postdefeat_grab_state_size": 512,
@@ -1829,6 +1829,54 @@
   "ninetails_execution_validated": false,
   "local_package_only": true,
   "interaction_label": "Abyss Kodama guide-to-shore / 引导至此岸",
+  "living_weapon_save_switch_candidate_revision": 1,
+  "living_weapon_save_switch_gameplay_validated": false,
+  "living_weapon_family_candidate_revision": 1,
+  "living_weapon_family_gameplay_validated": false,
+  "living_weapon_family_bootstrap_layout": {
+    "core_offset": 61440,
+    "binding_offset": 279040,
+    "binding_size": 512,
+    "workspace_offset": 348160,
+    "workspace_size": 49152,
+    "code_offset": 401408,
+    "code_capacity": 28672,
+    "allocation_size": 430080,
+    "stage_a": 348672,
+    "stage_b": 349184,
+    "journal": [
+      349696,
+      356352
+    ],
+    "sort": [
+      356352,
+      372736
+    ],
+    "schedules": [
+      [
+        372736,
+        378880
+      ],
+      [
+        385024,
+        391168
+      ],
+      [
+        378880,
+        385024
+      ],
+      [
+        391168,
+        397312
+      ]
+    ],
+    "schedule_capacity": 512,
+    "independent_main_aux_schedules": true,
+    "entry_abi": "RCX actor,RDX ctl,R8 core,R9 binding; EAX bool; nonvolatile/allXMM/MXCSR/EFLAGS/DF preserved",
+    "native_calls": 0,
+    "phase_on_success": 0,
+    "magic_published_last": true
+  },
   "ninetails_execution_revision": 1,
   "ninetails_binding_data_offset": 278528,
   "ninetails_binding_data_size": 512,
@@ -2004,52 +2052,29 @@
   "living_weapon_start_input_payload_size": 3557,
   "living_weapon_start_automatic_resources": true,
   "living_weapon_start_production_gameplay_validated": false,
-  "living_weapon_save_switch_candidate_revision": 1,
-  "living_weapon_save_switch_gameplay_validated": false,
-  "living_weapon_family_candidate_revision": 1,
-  "living_weapon_family_gameplay_validated": false,
-  "living_weapon_family_bootstrap_layout": {
-    "core_offset": 61440,
-    "binding_offset": 279040,
-    "binding_size": 512,
-    "workspace_offset": 348160,
-    "workspace_size": 49152,
-    "code_offset": 401408,
-    "code_capacity": 28672,
-    "allocation_size": 430080,
-    "stage_a": 348672,
-    "stage_b": 349184,
-    "journal": [
-      349696,
-      356352
+  "growth750_revision": 1,
+  "growth750_base_version": "1.0.0-beta.5.6.2",
+  "growth750_trial": false,
+  "growth750_extra_multipliers": {
+    "first_level": 401,
+    "hp": [
+      2,
+      1
     ],
-    "sort": [
-      356352,
-      372736
-    ],
-    "schedules": [
-      [
-        372736,
-        378880
-      ],
-      [
-        385024,
-        391168
-      ],
-      [
-        378880,
-        385024
-      ],
-      [
-        391168,
-        397312
-      ]
-    ],
-    "schedule_capacity": 512,
-    "independent_main_aux_schedules": true,
-    "entry_abi": "RCX actor,RDX ctl,R8 core,R9 binding; EAX bool; nonvolatile/allXMM/MXCSR/EFLAGS/DF preserved",
-    "native_calls": 0,
-    "phase_on_success": 0,
-    "magic_published_last": true
-  }
+    "attack": [
+      6,
+      5
+    ]
+  },
+  "growth750_focus_channels": [
+    "hp",
+    "attack",
+    "defense",
+    "luck"
+  ],
+  "growth750_flat_attack_separate": true,
+  "growth750_gameplay_confirmation_pending": false,
+  "growth750_release_revision": 1,
+  "growth750_warm_gameplay_validated": true,
+  "growth750_exact_executable_gameplay_validated": false
 }
