@@ -283,15 +283,18 @@ namespace HinoEnmaTool
     {
         // Payloads can exceed one page. Keep every native read bounded and
         // reject incomplete chunks before recognition or write verification.
+        // This is the largest owned code slot, not an arbitrary process read.
+        internal const int MaximumLength = 0x8000;
+        internal const int ChunkLength = 0x1000;
         internal static byte[] Read(long address, int length, Func<long, int, byte[]> readChunk)
         {
             const long limit = 0x0000800000000000L;
-            if (length < 1 || length > 0x7000 || address < 0x10000 || address > limit - length)
+            if (length < 1 || length > MaximumLength || address < 0x10000 || address > limit - length)
                 throw new InvalidOperationException("读取超出工具允许范围。");
             byte[] result = new byte[length];
-            for (int offset = 0; offset < length; offset += 0x1000)
+            for (int offset = 0; offset < length; offset += ChunkLength)
             {
-                int size = Math.Min(0x1000, length - offset);
+                int size = Math.Min(ChunkLength, length - offset);
                 byte[] chunk = readChunk(address + offset, size);
                 if (chunk == null || chunk.Length != size)
                     throw new IOException("游戏数据未完整读取。");

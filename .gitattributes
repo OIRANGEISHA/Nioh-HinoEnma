@@ -11,3 +11,10 @@ docs/harakiri-gameplay.json -text whitespace=cr-at-eol
 *.exe binary
 *.zip binary
 *.png binary
+
+# Preserve the original Beta 6.1 tested source and evidence bytes.
+docs/beta61-live-payload-identities.json -text whitespace=cr-at-eol
+docs/validation-beta6.1.json -text whitespace=cr-at-eol
+docs/wind-weakness-dragon-gameplay.json -text whitespace=cr-at-eol
+docs/wind-weakness-dragon-offline-trial.json -text whitespace=cr-at-eol
+src/hinoenma_wind_weakness_dragon.py -text whitespace=cr-at-eol

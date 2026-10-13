@@ -69,6 +69,14 @@ IDENTIFIER = r'[A-Za-z_][A-Za-z0-9_]*'
 LABEL_DEFINITION = re.compile(r'(?m)^\s*(' + IDENTIFIER + r'):')
 LABEL_DECLARATION = re.compile(r'(?m)^label\((' + IDENTIFIER + r')\)$')
 BETA563_BASELINE_SHA256 = '7bfd8636d28db7e67196c201979b4d2522fd8e6133c637e698c3b554efb54695'
+BETA6_BASELINE_SHA256 = '7f8e4fa3dc9144ebd8d65ab06826fb447a8691c341abab904223c33e13e38f86'
+
+
+def _frozen_beta6() -> dict:
+    raw = (ROOT / 'profiles/baseline-beta6.json').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != BETA6_BASELINE_SHA256:
+        raise ValueError('Exact delivered Beta6 basis changed')
+    return json.loads(raw.decode('utf-8'))
 
 
 def _frozen_beta563() -> dict:
@@ -255,6 +263,22 @@ def source_plan_beta563(frozen: dict) -> dict:
 
 
 def source_plan(frozen: dict) -> dict:
+    if frozen.get('beta61_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6.1':
+        from hinoenma_beta61_release import apply_release
+        canonical = apply_release(source_plan(_frozen_beta6()))
+        identity_keys = ('tool_version', 'allocation_size', 'data_offset',
+                         'protected_data_pages', 'disk_sha256', 'disk_md5',
+                         'image_size', 'pe_timestamp_hex', 'targets')
+        if any(frozen.get(key) != canonical.get(key) for key in identity_keys):
+            raise ValueError('Beta6.1 manifest identity or layout differs from source')
+        geometry_keys = ('name', 'rva', 'length', 'original',
+                         'code_offset', 'code_capacity')
+        if (len(frozen.get('hooks', ())) != len(canonical['hooks'])
+                or any(any(actual.get(key) != expected.get(key)
+                           for key in geometry_keys)
+                       for actual, expected in zip(frozen['hooks'], canonical['hooks']))):
+            raise ValueError('Beta6.1 native hook signature or geometry differs from source')
+        return canonical
     if frozen.get('beta6_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6':
         from hinoenma_beta6_release import apply_release
         canonical = apply_release(source_plan_beta563(_frozen_beta563()))
@@ -304,6 +328,10 @@ def legacy_plans(frozen: dict) -> list[dict]:
 
 
 def validate_layout(plan: dict) -> None:
+    if plan.get('beta61_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6.1':
+        from hinoenma_beta61_release import validate_release
+        validate_release(plan)
+        return
     if plan.get('beta6_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6':
         from hinoenma_beta6_release import validate_release
         validate_release(plan)
@@ -389,6 +417,12 @@ def load_beta563_plan() -> dict:
     """Load the fixed pre-item-repair basis for historical trials and regressions."""
     plan = _frozen_beta563()
     return _validate_loaded_plan(plan, source_plan_beta563(plan))
+
+
+def load_beta6_plan() -> dict:
+    """Load the immutable Beta6 basis for historical three-spell trials."""
+    plan = _frozen_beta6()
+    return _validate_loaded_plan(plan, source_plan(plan))
 
 
 def load_plan() -> dict:
@@ -750,6 +784,7 @@ def ct_source(plan: dict, display_version: str) -> str:
         'Beta5.6.2 修复换存档后数字9无响应及武器资源兼容；补丁与已冷测的修正版一致。\n'
         '修正版已完整重启并二次载入，以太郎太刀验证99完整流程；其他忍术道具仍未完成通用兼容。\n'
         'Beta6新增已实测切腹短刀、粪球、高贵的粪球、天狗团扇、石头、火药弹、焙烙弹、焚火油壶、御箭护符与迟钝符。\n'
+        'Beta6.1新增已实测风箭符、克金符与火炎龙术卷轴，保留原生施法、效果与次数消耗。\n'
         '保留原生使用动作、效果与次数扣除；迟钝符仅覆盖当前核对过的准备术定义，未泛化全部同名变体。\n'
         '上述修订已热接入并获实测确认；本次打包的EXE尚未再次完整重启实测。\n'
         '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'

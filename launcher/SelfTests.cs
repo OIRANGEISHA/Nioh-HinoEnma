@@ -74,10 +74,10 @@ namespace HinoEnmaTool
                 return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();
         }
 
-        // These seven exact identities are the confirmed Beta6 delta. Historical
+        // These seven exact identities are the confirmed Beta6 / Beta6.1 item delta. Historical
         // equality checks may exempt one only after its full template, fixup
         // sequence and relocated payload/site bytes pass independent hashes.
-        private static bool VerifiedBeta6Item(int index)
+        private static bool VerifiedCurrentItem(int index)
         {
             int[] indices={6,7,11,13,36,39,59};
             int selected=Array.IndexOf(indices,index);
@@ -86,39 +86,39 @@ namespace HinoEnmaTool
             uint[] rvas={0x721044U,0x721099U,0x75185DU,0x751862U,0x715D4BU,0x73FA40U,0x717F06U};
             int[] offsets={0x1800,0x1C00,0x2C00,0x3400,0x61000,0xE800,0x1E000};
             int[] capacities={0x400,0x400,0x400,0x400,0x8000,0x800,0x1000};
-            int[] lengths={496,496,971,1001,26103,1899,1703};
+            int[] lengths={543,543,971,1001,32164,1899,1703};
             string[] original={"440fbe420c","440fbe470e","4584f6752d","83bf4c050000007424","498b7338410f2873f0","48895c2408","0f104c24300f114d88"};
             string[] templates={
-                "b3b0a36457a0fae26d7ac04f9d7257451bfa391f2781fc68be92ca3037d6ae21",
-                "f3b60e9c63f947180cf7f8118263e3266073eecd93735aa3b570446632be4b90",
+                "135b62144cb624c5f8643ec31cf5da45e4553e051460e7d05930484c6acb5fe2",
+                "a81f815752df649968e22fbeb54fbe9d3f695a6d41838a00d12d59fa983c4e9c",
                 "a39bd07e5a12f76d8513d765ceb04013225ac3538fd0f9732b3402232e0b3e94",
                 "b61ccfde922a42e29706d0a7e782d923edbbd1e07283cb45df2b1a8a52245cb2",
-                "6f32eef2591ccc94ad36010b81e8bf1ae60daf2f5d22437f3a145914e8c71ff8",
+                "2105902beb9d8f8af8bfcd9e1b43f93ea99d0525a067f3ed67586f48167cc047",
                 "76d8a27599e74cffb855dcf1235c66f7c3fbdb829c5cca51769811ffb61a407f",
                 "a29254be3839c5f03ffcd4573ebc32fede64c26bfe34c18cd69ba3da92e21391"};
             string[] fixups={
-                "584c4a576e4201b0e2a55571ba95593e7875c559e90cc6f8f08a0ebac081bb1d",
-                "4caca4c83cd04d8f02d341bd9db5a55bf0e91eb84b1521ac8f866b186d8179a8",
+                "66c080ae77da0f5a31bf23390e45b02063aa760680a5c5bfc9bd188a93353502",
+                "e4deecfc0ae7cca70fdca8ec55d9adda7ff06e80166a5143e07c02385f4f49d7",
                 "ccc4899cff026b16e0c4143c1449502f6c5465b992a8068a829f8f08fc2ba14e",
                 "cf1035ca88cc901263ccf1b1c0f18202ccb9cc8c476a36dff01eae9d7c81e8e2",
-                "ab4c2bd3be5e705365e0c5d533c5c8f0aa993bacc57d577b5d5c5932c1f9b434",
+                "5f29291d4e55f94b475807ee779187062220b769e21442f280c5b6d9115ceceb",
                 "7987c1442ba07b4fd5801a987709564240f7cc0332c12cd8555483297d3b9415",
                 "87790ad5b5a43c3353fc9ab9dd276f2421eb86743d84bfe43cf21db50bde2737"};
             string[] relocated={
-                "17079854ff9bac6d14971a589e87c23743d2a417edc9c3a83a84f3c304c62fc4",
-                "e4e73636f18e443a01c45a5363d30780a25634ee9e6313813284a88535d5646d",
+                "cf87c80a78c71ea411788113f5c4aff95391fad26f64230e8f0e260f0b154634",
+                "fe5da23a244a5db4f7f29f3255f2a5113fa6f834924b3ddf1c4558f4a7e1be42",
                 "8a543b6c15d920740c74099caf9a39f1ed0536e10b1f7cc8ff0a03797686d2f5",
                 "b277fa0be53248d603173b8a2a9a76b3983ff0fedc6a882fa1b332ad23ca38b0",
-                "adbaa0f575302b174d2fdc761273fb40ef0ef2cbb2f778686d413cfb856a1aae",
+                "20fc222d096be0c06e97b9334302c9fd45722217fa277a180de31c12713b9671",
                 "c20a067de67f088439d1a0b5706f9b069f0d60095b1ab16f5905bb0029fd73b9",
                 "0f43bd32405c34a73e3c29b8f28d5cdac53bdf9c368aca282559a177778aab04"};
             HookSpec hook=Profile.Hooks[index];
-            Require(Profile.Version=="1.0.0-beta.6" && hook.Name==names[selected] &&
+            Require(Profile.Version=="1.0.0-beta.6.1" && hook.Name==names[selected] &&
                 hook.Rva==rvas[selected] && hook.CodeOffset==offsets[selected] &&
                 hook.CodeCapacity==capacities[selected] && hook.Template.Length==lengths[selected] &&
                 BitConverter.ToString(hook.Original).Replace("-", "").ToLowerInvariant()==original[selected],
-                "Exact confirmed Beta6 item hook geometry: "+hook.Name);
-            Require(Sha256(hook.Template)==templates[selected],"Exact confirmed Beta6 item template: "+hook.Name);
+                "Exact confirmed Beta6.1 item hook geometry: "+hook.Name);
+            Require(Sha256(hook.Template)==templates[selected],"Exact confirmed Beta6.1 item template: "+hook.Name);
             using(MemoryStream bytes=new MemoryStream())
             using(BinaryWriter writer=new BinaryWriter(bytes))
             {
@@ -128,7 +128,7 @@ namespace HinoEnmaTool
                     writer.Write(fixup.Target); writer.Write(fixup.Next);
                 }
                 writer.Flush();
-                Require(Sha256(bytes.ToArray())==fixups[selected],"Exact Beta6 item relocation specification: "+hook.Name);
+                Require(Sha256(bytes.ToArray())==fixups[selected],"Exact Beta6.1 item relocation specification: "+hook.Name);
             }
             using(MemoryStream bytes=new MemoryStream())
             {
@@ -139,7 +139,7 @@ namespace HinoEnmaTool
                         byte[] payload=hook.Payload(module,at),jump=hook.Jump(module,at);
                         bytes.Write(payload,0,payload.Length); bytes.Write(jump,0,jump.Length);
                     }
-                Require(Sha256(bytes.ToArray())==relocated[selected],"Exact Beta6 item payload and entry at twelve layouts: "+hook.Name);
+                Require(Sha256(bytes.ToArray())==relocated[selected],"Exact Beta6.1 item payload and entry at twelve layouts: "+hook.Name);
             }
             return true;
         }
@@ -222,7 +222,13 @@ namespace HinoEnmaTool
                     foreach(HookSpec hook in Profile.Hooks)
                         if(hook.Payload(Module, Allocation).Length > source.Length)
                             source = hook.Payload(Module, Allocation);
-                    Require(source.Length > 0x4000 && source.Length <= 0x7000,"Complete common-action carrier payload");
+                    Require(source.Length > 0x7000 && source.Length <= MemoryReader.MaximumLength,
+                        "Complete expanded common-action carrier payload");
+                    int maximumSlot=0;
+                    foreach(HookSpec hook in Profile.Hooks)
+                        maximumSlot=Math.Max(maximumSlot,hook.CodeCapacity);
+                    Require(MemoryReader.MaximumLength==0x8000 && maximumSlot==MemoryReader.MaximumLength &&
+                        MemoryReader.ChunkLength==0x1000,"Reader limit matches largest owned slot; page reads remain bounded");
                     int calls = 0, total = 0;
                     byte[] actual = MemoryReader.Read(Allocation, source.Length, delegate(long at, int size)
                     {
@@ -231,6 +237,20 @@ namespace HinoEnmaTool
                         total += size; calls++; return chunk;
                     });
                     Require(calls == (source.Length+0xFFF)/0x1000 && total == source.Length && Checks.Equal(actual,source),"Every payload byte preserved");
+                    // Exercise the inclusive size and canonical-address limits,
+                    // including the eighth page that the former cap rejected.
+                    byte[] boundary=new byte[0x8000];
+                    for(int i=0;i<boundary.Length;i++) boundary[i]=(byte)(i*31+17);
+                    long endOfUserRange=0x0000800000000000L-boundary.Length;
+                    calls=0; total=0;
+                    actual=MemoryReader.Read(endOfUserRange,boundary.Length,delegate(long at,int size)
+                    {
+                        Require(at==endOfUserRange+total && size==0x1000,"Eight sequential page-sized boundary reads");
+                        byte[] chunk=new byte[size]; Buffer.BlockCopy(boundary,total,chunk,0,size);
+                        total+=size; calls++; return chunk;
+                    });
+                    Require(calls==8 && total==boundary.Length && Checks.Equal(actual,boundary),
+                        "Full maximum-size payload including last byte is returned");
                 });
                 test("memory reader rejects invalid ranges and incomplete later chunks", delegate
                 {
@@ -241,7 +261,7 @@ namespace HinoEnmaTool
                         catch(InvalidOperationException){rejected=true;}
                         Require(rejected,"Address boundary guard");
                     }
-                    foreach(int length in new int[]{0,-1,0x7001})
+                    foreach(int length in new int[]{0,-1,0x8001,int.MaxValue})
                     {
                         bool rejected=false;
                         try { MemoryReader.Read(Allocation,length,delegate(long a,int n){throw new Exception("Unvalidated native read");}); }
@@ -252,6 +272,29 @@ namespace HinoEnmaTool
                     try { MemoryReader.Read(Allocation,0x16CD,delegate(long a,int n){calls++;return new byte[calls==2?n-1:n];}); }
                     catch(IOException){partial=true;}
                     Require(partial && calls==2,"Later partial chunk refused");
+                    foreach(int missing in new int[]{0,1})
+                    {
+                        calls=0; partial=false;
+                        try
+                        {
+                            MemoryReader.Read(Allocation,0x8000,delegate(long a,int n)
+                            {
+                                calls++;
+                                if(calls==8) return missing==0 ? null : new byte[n-1];
+                                return new byte[n];
+                            });
+                        }
+                        catch(IOException){partial=true;}
+                        Require(partial && calls==8,"Missing or short eighth chunk never returns a partial payload");
+                    }
+                    bool overEnd=false;
+                    try
+                    {
+                        MemoryReader.Read(0x0000800000000000L-0x8000+1,0x8000,
+                            delegate(long a,int n){throw new Exception("Unvalidated native read");});
+                    }
+                    catch(InvalidOperationException){overEnd=true;}
+                    Require(overEnd,"Maximum-size read crossing canonical user range rejected before callbacks");
                 });
                 test("pristine instructions recognized", delegate
                 { long a; Require(Checks.Inspect(Memory(false).Read, Module, out a) == HookState.Original, "Original state"); });
@@ -392,14 +435,14 @@ namespace HinoEnmaTool
                     Require(beta541.Version=="1.0.0-beta.5.4.1" && beta541.Hooks.Length==81,"Exact published Beta5.4.1 identity");
                     for(int i=0;i<81;i++)
                     {
-                        if(VerifiedBeta6Item(i) || (i>=71 && i<=77) || i==80 || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
+                        if(VerifiedCurrentItem(i) || (i>=71 && i<=77) || i==80 || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
                         Require(Checks.Equal(Profile.Hooks[i].Template,beta541.Hooks[i].Template),"Unchanged templates preserved from Beta5.4.1");
                     }
                     for(int i=0;i<71;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];
                         Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Previous hook slot identity");
-                        if(VerifiedBeta6Item(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
+                        if(VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Previous encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Previous relocation encoding");
@@ -428,7 +471,7 @@ namespace HinoEnmaTool
                     {
                         HookSpec current=Profile.Hooks[i],old=beta52.Hooks[i];
                         Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Original slot identity");
-                        if(VerifiedBeta6Item(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39) continue;
+                        if(VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Original encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
                             Require(current.Fixups[f].Offset==old.Fixups[f].Offset && current.Fixups[f].Kind==old.Fixups[f].Kind && current.Fixups[f].Target==old.Fixups[f].Target && current.Fixups[f].Next==old.Fixups[f].Next,"Original relocation encoding");
@@ -448,7 +491,7 @@ namespace HinoEnmaTool
                     {
                         HookSpec current=Profile.Hooks[i],prior=old.Hooks[i];
                         Require(current.Name==prior.Name && current.Rva==prior.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==prior.CodeOffset && current.CodeCapacity==prior.CodeCapacity) && Checks.Equal(current.Original,prior.Original),"Every previous native and scoped private slot identity");
-                        bool changed=VerifiedBeta6Item(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
+                        bool changed=VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
                         Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only reviewed lifetime, LW and growth bodies differ");
                         foreach(long module in new long[]{Module,0x7FF83AA00000})
                             foreach(int slot in new int[]{0,37,511})

@@ -12,7 +12,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / 'tools'), str(ROOT / 'src')]
-from build_profile import (load_plan, load_beta563_plan, source_plan,
+from build_profile import (load_beta6_plan as load_plan, load_beta563_plan, source_plan,
                            source_plan_beta563, assemble, validate_layout, relocation_specs)
 from verify_beta56 import expected_layouts
 from hinoenma_harakiri import apply_harakiri
@@ -41,8 +41,9 @@ class Beta6ReleaseTests(unittest.TestCase):
         cls.plan = load_plan()
 
     def test_release_metadata_and_frozen_beta563_identity_are_independent(self):
-        metadata = json.loads((ROOT / 'version.json').read_text('utf-8'))
-        self.assertEqual((metadata['version'], metadata['file_version']), ('1.0.0-beta.6', '1.0.0.79'))
+        historical = (ROOT / 'profiles/baseline-beta6.json').read_bytes()
+        self.assertEqual(hashlib.sha256(historical).hexdigest(),
+                         '7f8e4fa3dc9144ebd8d65ab06826fb447a8691c341abab904223c33e13e38f86')
         self.assertEqual(self.plan['tool_version'], '1.0.0-beta.6')
         frozen = (ROOT / 'profiles/baseline-beta5.6.3.json').read_bytes()
         self.assertEqual(hashlib.sha256(frozen).hexdigest(), BASELINE_SHA256)
