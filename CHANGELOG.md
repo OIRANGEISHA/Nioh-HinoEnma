@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.0.0-beta.6.1.3 — 2026-10-15
+
+- 新增粘液罐、散变符兼容；修复散变符在动作结束后仍不能及时再次施放，已连续四次实测正常。
+- 新增封力符、活源符、封气符、火／水／风／雷／土弹符、发气符兼容，保留原生投射物、效果及次数消耗。
+- 修复宿心解放符读取飞缘魔自身装备而错误禁用的问题，接入原生光刃和当前武器爱用度消耗。至少 300 爱用度的原生要求保留。
+- 包含此前五种禁属性晴明符、道具受击恢复、连续施法、风箭符／克金符、护灵招来符及污泥罐修复。
+
+使用方法：完整重启游戏，在主菜单运行 EXE 并启用飞缘魔。兼容道具从背包或第一栏数字 2 使用。详细键位见随包说明；数字 1 吸血、5 吼叫、9 九十九、F6 净化常世。
+
+本批修订在运行中的游戏里实测正常。源码、编译程序和 CT 另做离线检查；新 EXE 尚未完整重启实测，其他武器种类及所有受击组合未逐一验证。**仍有部分阴阳术的使用尚未修复。** 其他术、同名变体和部分非关键道具仍未修复或验证。
+
+源码包包含 CT、构建工具、验证记录、说明和键位；不包含游戏文件或存档。GitHub Release 仅提供原本地 EXE 与最终提交源码 ZIP 两个附件，说明、键位、CT 和验证记录包含在源码包中；历史文件保留。
+
+
+## 1.0.0-beta.6.1.2 (2026-10-15)
+
+- Add the five tested fire/water/wind/lightning/earth Seimei resistance talismans through the native common41 cast and buff path.
+- Preserve native reuse rules; these definitions have no displayed quantity. Confirm five buffs and three sampled fire-talisman injury recoveries followed by reuse.
+- Retain Beta 6.1.1 repairs and all other 81 hook payloads. Ship a separate local EXE/source package; exact-file cold gameplay remains untested.
+
+## 1.0.0-beta.6.1.1 — 2026-10-15
+
+- 修复风箭符、克金符只有动作／特效而未生成实际符咒、未扣除次数的问题，保留原生事件、命中和库存流程。
+- 修复已支持道具受击后误选飞缘魔撑伞、飞起或吼叫动作的问题，并补上移动后连续施法的公共动作查找；已测连续克金与石头使用正常。
+- 新增护灵招来符和污泥罐从背包使用兼容，召唤攻击、投掷效果、数量扣除和后续移动／招式已获用户确认。
+- 保留成长、装备、四类修正 LV、九十九、附魔、预览与交互；键位不变，道具快捷位为第一栏数字 2。
+- 本地打包 EXE 和完整源码 ZIP，旁附说明、键位与校验信息。运行中修订已实测，新 EXE 单独进行离线验证，尚未完整重启实测；部分非关键道具和全部受击分支仍未全面验证。
+
 ## 1.0.0-beta.6.1 — 2026-10-13
 
 - 修复风箭符、克金符和火炎龙术卷轴的已测试定义从背包使用无反应、次数不扣除的问题，恢复原生施法、效果及火龙收招流程。

@@ -11,7 +11,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / 'tools'), str(ROOT / 'src')]
-from build_profile import (load_plan, load_beta6_plan, source_plan, assemble,
+from build_profile import (load_beta61_plan as load_plan, load_beta6_plan, source_plan, assemble,
                            validate_layout, relocation_specs, legacy_plans)
 from hinoenma_beta61_release import apply_release, validate_release
 from hinoenma_wind_weakness_dragon import apply_wind_weakness_dragon
@@ -30,7 +30,7 @@ class Beta61ReleaseTests(unittest.TestCase):
         cls.plan = load_plan()
 
     def test_release_metadata_is_distinct_from_warm_trial_and_frozen_parent(self):
-        meta = json.loads((ROOT / 'version.json').read_text('utf-8'))
+        meta = json.loads((ROOT / 'profiles/baseline-beta6.1-version.json').read_text('utf-8'))
         self.assertEqual((meta['version'], meta['file_version']),
                          ('1.0.0-beta.6.1', '1.0.0.80'))
         for path, expected in (('profiles/baseline-beta6.json', BETA6_SHA),

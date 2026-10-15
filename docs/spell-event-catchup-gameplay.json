@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "status": "warm_runtime_spell_effects_confirmed",
+  "date": "2026-10-15",
+  "baseline": "1.0.0-beta.6.1",
+  "source_file": "src/hinoenma_spell_event_catchup.py",
+  "source_sha256": "2080696c35fc97f9c9075b91eea820f1a68392bbee9e96140094ec49a13d110b",
+  "private_record_sha256": "8cf504145a4a907255a64d9927a068640dd387f772f3519a17b82ac11a706aa1",
+  "items": [
+    {
+      "id": 26116,
+      "name": "风箭符",
+      "common_action": 1165,
+      "native_spawn_template": "0xD3A86"
+    },
+    {
+      "id": 44930,
+      "name": "克金符",
+      "common_action": 42,
+      "native_spawn_template": "0x7ED63"
+    }
+  ],
+  "diagnosis": "Initial action frame advanced from 0 to about 76/77, skipping native projectile creation at frame17. Original release frame104 remained reachable.",
+  "implementation": "Arm on verified owned frame0, then enable native event catch-up once for the first frame jump past17 and before104. Native events retain projectile creation, release and stock ownership.",
+  "user_reply": "但是效果已经正常了",
+  "effects_confirmed_by_user": true,
+  "native_spawn_commit_release_observed": true,
+  "stock_decrements_observed": true,
+  "native_actor_inventory_or_save_fields_written_directly": false,
+  "existing_salt_event_catchup_preserved": true,
+  "regression_report": "The user then reported unrelated Boss animations after being hit during a shortcut cast; that is tracked separately in item-cast-interruption-trial.json.",
+  "interruption_fix_confirmed": false,
+  "release_exe_updated": false,
+  "cold_launch_tested": false,
+  "limitations": "Ordinary cast effects are confirmed for the warm candidate. This does not prove interrupted-cast behavior or a cold launch of a newly built executable."
+}

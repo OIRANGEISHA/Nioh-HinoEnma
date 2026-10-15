@@ -70,6 +70,33 @@ LABEL_DEFINITION = re.compile(r'(?m)^\s*(' + IDENTIFIER + r'):')
 LABEL_DECLARATION = re.compile(r'(?m)^label\((' + IDENTIFIER + r')\)$')
 BETA563_BASELINE_SHA256 = '7bfd8636d28db7e67196c201979b4d2522fd8e6133c637e698c3b554efb54695'
 BETA6_BASELINE_SHA256 = '7f8e4fa3dc9144ebd8d65ab06826fb447a8691c341abab904223c33e13e38f86'
+BETA61_BASELINE_SHA256 = '9726a12e900b91eda692cf9721c56c131b3933ed5512d5aa6e096c8a09f435dd'
+
+
+BETA611_BASELINE_SHA256 = '0b9941751ce724b531795613c3f6a3d3e7c3ec973dd6d06445aa1bcaaaf24d05'
+
+
+BETA612_BASELINE_SHA256 = 'b6c5a560dd605ab114870e633e22d87e0b4a6c5dd8da8743dc71ef19f907311c'
+
+def _frozen_beta612() -> dict:
+    raw = (ROOT / 'profiles/baseline-beta6.1.2.json').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != BETA612_BASELINE_SHA256:
+        raise ValueError('Exact delivered Beta6.1.2 basis changed')
+    return json.loads(raw.decode('utf-8'))
+
+
+def _frozen_beta611() -> dict:
+    raw = (ROOT / 'profiles/baseline-beta6.1.1.json').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != BETA611_BASELINE_SHA256:
+        raise ValueError('Exact delivered Beta6.1.1 basis changed')
+    return json.loads(raw.decode('utf-8'))
+
+
+def _frozen_beta61() -> dict:
+    raw = (ROOT / 'profiles/baseline-beta6.1.json').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != BETA61_BASELINE_SHA256:
+        raise ValueError('Exact delivered Beta6.1 basis changed')
+    return json.loads(raw.decode('utf-8'))
 
 
 def _frozen_beta6() -> dict:
@@ -263,6 +290,18 @@ def source_plan_beta563(frozen: dict) -> dict:
 
 
 def source_plan(frozen: dict) -> dict:
+    if frozen.get('beta613_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6.1.3':
+        from hinoenma_beta613_release import apply_release, validate_release
+        validate_release(frozen)
+        return apply_release(source_plan(_frozen_beta612()))
+    if frozen.get('beta612_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6.1.2':
+        from hinoenma_beta612_release import apply_release, validate_release
+        validate_release(frozen)
+        return apply_release(source_plan(_frozen_beta611()))
+    if frozen.get('beta611_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6.1.1':
+        from hinoenma_beta611_release import apply_release, validate_release
+        validate_release(frozen)
+        return apply_release(source_plan(_frozen_beta61()))
     if frozen.get('beta61_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6.1':
         from hinoenma_beta61_release import apply_release
         canonical = apply_release(source_plan(_frozen_beta6()))
@@ -328,6 +367,18 @@ def legacy_plans(frozen: dict) -> list[dict]:
 
 
 def validate_layout(plan: dict) -> None:
+    if plan.get('beta613_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6.1.3':
+        from hinoenma_beta613_release import validate_release
+        validate_release(plan)
+        return
+    if plan.get('beta612_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6.1.2':
+        from hinoenma_beta612_release import validate_release
+        validate_release(plan)
+        return
+    if plan.get('beta611_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6.1.1':
+        from hinoenma_beta611_release import validate_release
+        validate_release(plan)
+        return
     if plan.get('beta61_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6.1':
         from hinoenma_beta61_release import validate_release
         validate_release(plan)
@@ -422,6 +473,24 @@ def load_beta563_plan() -> dict:
 def load_beta6_plan() -> dict:
     """Load the immutable Beta6 basis for historical three-spell trials."""
     plan = _frozen_beta6()
+    return _validate_loaded_plan(plan, source_plan(plan))
+
+
+def load_beta61_plan() -> dict:
+    """Keep pre-hotfix spell/item CPU fixtures on their immutable input."""
+    plan = _frozen_beta61()
+    return _validate_loaded_plan(plan, source_plan(plan))
+
+
+def load_beta611_plan() -> dict:
+    """Keep the confirmed resistance trial on its exact packaged input."""
+    plan = _frozen_beta611()
+    return _validate_loaded_plan(plan, source_plan(plan))
+
+
+def load_beta612_plan() -> dict:
+    """Preserve the exact input of the twelve-item trial and old release tests."""
+    plan = _frozen_beta612()
     return _validate_loaded_plan(plan, source_plan(plan))
 
 
@@ -785,6 +854,8 @@ def ct_source(plan: dict, display_version: str) -> str:
         '修正版已完整重启并二次载入，以太郎太刀验证99完整流程；其他忍术道具仍未完成通用兼容。\n'
         'Beta6新增已实测切腹短刀、粪球、高贵的粪球、天狗团扇、石头、火药弹、焙烙弹、焚火油壶、御箭护符与迟钝符。\n'
         'Beta6.1新增已实测风箭符、克金符与火炎龙术卷轴，保留原生施法、效果与次数消耗。\n'
+        'Beta6.1.1修复风箭符/克金符只有动作而未发射、道具受击误触招式及移动后连续施法，并新增护灵招来符和污泥罐兼容。\n'
+        'Beta6.1.2新增禁火/禁水/禁风/禁雷/禁土晴明符；保留原生增益和复用规则，不以数量扣除判断这五种符。\n'
         '保留原生使用动作、效果与次数扣除；迟钝符仅覆盖当前核对过的准备术定义，未泛化全部同名变体。\n'
         '上述修订已热接入并获实测确认；本次打包的EXE尚未再次完整重启实测。\n'
         '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'

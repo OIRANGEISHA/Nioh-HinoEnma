@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0-beta.6.1.3",
+  "repository": "OIRANGEISHA/Nioh-HinoEnma",
+  "tag": "v1.0.0-beta.6.1.3",
+  "publication_authorized": true,
+  "authorization": "2026-10-15: user requested push到github吧, explicitly authorized GitHub publication without further questions, and asked to state that some Onmyo magic remains unfixed. Publish EXE and source ZIP only.",
+  "asset_commit": "2ff0b2e0ae0963d8ed95a46816e98215c5dd9de8",
+  "asset_branch": "release-assets/beta613",
+  "executable_sha256": "92a3440150efd53194f9683c7c6c2ced91a367d0a4c68b4a29d69ee83f57ea45",
+  "profile_sha256": "7204b9bd34a16e75b2b72b3101c47a599f0ef22a94ae2dd4eefc8bb2018957c5",
+  "ct_sha256": "f8b6e438d809fe45b843cc2185425d61b9e0f93cd05cae0477017140557d54f5",
+  "original_local_verification_sha256": "f361ce5665fa3079c87af742aa01a08e5bba926e3098ddc72ac9ca1a0153af6c",
+  "exact_executable_gameplay_validated": false,
+  "warm_payload_equivalence": true,
+  "historical_local_package_only_metadata_preserved": true
+}

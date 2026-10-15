@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "status": "warm_trial_five_buffs_and_sampled_cast_interruptions_user_confirmed",
+  "date": "2026-10-15",
+  "baseline": "1.0.0-beta.6.1.1",
+  "source_file": "src/hinoenma_elemental_resistance_items.py",
+  "source_sha256": "6dd05586bcb02f7ca2d3c85ed75ba234d7a34c50cd0d96d2739f57051a7fdf51",
+  "test_file": "tests/test_elemental_resistance_items_portable.py",
+  "test_sha256": "129969ff92bab8fe48dd7948ae1857dfd5fbb3ba737ed59517a053945dbe8ca3",
+  "candidate_sha256": "10de9812cc866951b6868145ff2c9942d5e2694f7214db9945911072c25d2a92",
+  "parent_canonical_sha256": "1ca87b85f836f695b69c0fc7befb8c09efd596bd351fc95a83ec4d4e8ede1e79",
+  "implementation": "Admit only five exact observed kind3 resistance requests through existing native common172 entry and common41/motion110 cast, keeping native buff/reuse rules, injury lookup and moving recast resolution.",
+  "items": [
+    {
+      "name": "禁火晴明符",
+      "item_id": 7785,
+      "kind": 3,
+      "native_action": 41,
+      "native_motion": 110,
+      "effect_id": 63190,
+      "effect_type": 40,
+      "first_observed_cast_seconds": 34.937,
+      "first_aggregate_change_seconds": 36.203,
+      "aggregate_component_offset": "0x1120",
+      "aggregate_value": 35
+    },
+    {
+      "name": "禁水晴明符",
+      "item_id": 805,
+      "kind": 3,
+      "native_action": 41,
+      "native_motion": 110,
+      "effect_id": 62930,
+      "effect_type": 41,
+      "first_observed_cast_seconds": 48.062,
+      "first_aggregate_change_seconds": 49.312,
+      "aggregate_component_offset": "0x1124",
+      "aggregate_value": 35
+    },
+    {
+      "name": "禁风晴明符",
+      "item_id": 64630,
+      "kind": 3,
+      "native_action": 41,
+      "native_motion": 110,
+      "effect_id": 45181,
+      "effect_type": 42,
+      "first_observed_cast_seconds": 55.218,
+      "first_aggregate_change_seconds": 56.39,
+      "aggregate_component_offset": "0x1128",
+      "aggregate_value": 35
+    },
+    {
+      "name": "禁雷晴明符",
+      "item_id": 35156,
+      "kind": 3,
+      "native_action": 41,
+      "native_motion": 110,
+      "effect_id": 51630,
+      "effect_type": 43,
+      "first_observed_cast_seconds": 59.953,
+      "first_aggregate_change_seconds": 61.218,
+      "aggregate_component_offset": "0x112c",
+      "aggregate_value": 35
+    },
+    {
+      "name": "禁土晴明符",
+      "item_id": 10101,
+      "kind": 3,
+      "native_action": 41,
+      "native_motion": 110,
+      "effect_id": 21144,
+      "effect_type": 44,
+      "first_observed_cast_seconds": 64.422,
+      "first_aggregate_change_seconds": 65.578,
+      "aggregate_component_offset": "0x1130",
+      "aggregate_value": 35
+    }
+  ],
+  "quantity_decrement_not_an_acceptance_requirement": true,
+  "all_five_casts_and_buff_icons_user_confirmed": true,
+  "all_five_native_aggregate_changes_observed": true,
+  "aggregate_mapping_evidence": "Offsets correlated with each exact item cast and corresponding effect types 40 through 44; not an independent disassembly of the elemental damage formula.",
+  "ordinary_buff_linked_list_empty_for_these_effects": true,
+  "portable_cpu_tests": 7,
+  "additional_injury_regression_methods": 6,
+  "injury_regression_method_names": [
+    "test_each_supported_item_cast_uses_all_selected_native_leaves",
+    "test_callers_templates_aslr_and_null_bank_output_preserve_abi",
+    "test_consecutive_native_injury_can_continue_without_persistent_token",
+    "test_normal_skills_idle_unrelated_callers_and_role_mismatches_fall_through",
+    "test_complete_selected_descriptor_and_full_cast_schedule_checked",
+    "test_unique_membership_ranges_owned_records_and_clips_required"
+  ],
+  "native_callers_tested": 3,
+  "abi_layouts_tested": 3,
+  "sampled_injury_evidence": [
+    {
+      "elapsed_seconds": 233.687,
+      "item_id": 7785,
+      "cast_common_action": 41,
+      "selected_native_queries": [
+        52,
+        56
+      ],
+      "injury_common_action": 91,
+      "injury_motion": 30008,
+      "hp_drop": 748
+    },
+    {
+      "elapsed_seconds": 236.5,
+      "item_id": 7785,
+      "cast_common_action": 41,
+      "selected_native_queries": [
+        52,
+        60
+      ],
+      "injury_common_action": 96,
+      "injury_motion": 30014,
+      "hp_drop": 816
+    },
+    {
+      "elapsed_seconds": 248.781,
+      "item_id": 7785,
+      "cast_common_action": 41,
+      "selected_native_queries": [
+        52,
+        60
+      ],
+      "injury_common_action": 96,
+      "injury_motion": 30014,
+      "hp_drop": 816
+    }
+  ],
+  "observed_reuse_after_injury": {
+    "elapsed_seconds": 239.875,
+    "item_id": 7785,
+    "common_action": 41,
+    "motion": 110
+  },
+  "postcast_movement_observation": {
+    "common_action": 1003,
+    "motion": 20,
+    "elapsed_seconds": 242.047,
+    "subsequent_front_reaction_boss_actions": [
+      91,
+      92
+    ],
+    "subsequent_front_reaction_motions": [
+      4,
+      5
+    ],
+    "classification": "Existing native frontal recovery retained after movement; these are not the umbrella-taunt or flying-roar motions. Earlier preservation is documented in src/hinoenma_salt_hurt_compatibility.py and docs/specs/1.0.0-beta.5.md."
+  },
+  "user_feedback": {
+    "five_items": "一切正常",
+    "interruption": "没问题"
+  },
+  "user_confirmation_pending": false,
+  "all_82_hooks_verified_after_recording": true,
+  "recorder_finished": true,
+  "native_entry_sites_unchanged": true,
+  "changed_owned_payloads": [
+    "HE_LivingWeaponDigitNine"
+  ],
+  "other_81_payloads_unchanged": true,
+  "injury_and_recast_handlers_preserved": true,
+  "additional_injury_patch_needed_for_sampled_routes": false,
+  "direct_actor_inventory_save_writes": false,
+  "cold_launch_tested": false,
+  "each_elemental_damage_mitigation_measured": false,
+  "all_five_individually_interrupted": false,
+  "source_saved": true,
+  "live_candidate_installed": true,
+  "default_release_plan_updated": false,
+  "release_exe_updated": false,
+  "existing_beta611_exe_sha256": "981e8a19cf37bedbc4144aa10e1ee1665221cf456b7e7aafe3c120b3ce74260d",
+  "private_evidence_hashes": {
+    "elemental-resistance-proof-20261015.json": "da959458e1c3bac8dce8ac2ad6f9efad62ca2e70006edc98f7624cdd127115eb",
+    "elemental-resistance-install-20261015.json": "dc09c6c0f3b8324b00e7fc656865789fca152e2393fc035b2a52e15979060204",
+    "elemental-resistance-fixed01.json": "88de3d0d82f5aa4e1a20b3d0e878b9e852ab14ad583ba3849dc1d12ab83cf5de",
+    "elemental-resistance-buffs-before01.json": "ed57127b62655c11476f3e2c815e3d2e4f7583a98e44059ef31a5172af9b78fb",
+    "elemental-resistance-injury-regression-20261015.json": "af552cc3046deadc7cdf1d490ed75d9e43ca5b0ede5746c474f0bd891057f14c"
+  },
+  "limitations": [
+    "Live interruptions were sampled for the fire resistance talisman; all five use the same guarded common41 cast. This does not establish every enemy/attack interruption or individual elemental mitigation amount.",
+    "Portable CPU tests use synthetic records and native-call stubs; they do not render animation or execute the complete game damage/effect engine.",
+    "This confirmation supplements the immutable offline proof and install reports, whose pending flags predate user testing. It does not promote or rebuild the Beta6.1.1 EXE."
+  ]
+}

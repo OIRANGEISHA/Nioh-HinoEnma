@@ -1,10 +1,11 @@
-param([ValidateSet('Debug','Release')][string]$Configuration = 'Release')
+param([ValidateSet('Debug','Release')][string]$Configuration = 'Release',
+      [string]$ArtifactRoot = 'artifacts')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $version = Get-Content -LiteralPath (Join-Path $projectRoot 'version.json') -Raw | ConvertFrom-Json
 $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 if (-not (Test-Path -LiteralPath $compiler)) { throw 'Windows x64 .NET Framework C# compiler not found.' }
-$destination = Join-Path $projectRoot "artifacts\$Configuration"
+$destination = Join-Path (Join-Path $projectRoot $ArtifactRoot) $Configuration
 New-Item -ItemType Directory -Path $destination -Force | Out-Null
 $executable = Join-Path $destination "Nioh-HinoEnma-$($version.version)-windows-x64.exe"
 $arguments = @('/nologo','/target:winexe','/platform:x64','/utf8output','/codepage:65001','/warnaserror+',

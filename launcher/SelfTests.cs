@@ -74,51 +74,30 @@ namespace HinoEnmaTool
                 return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();
         }
 
-        // These seven exact identities are the confirmed Beta6 / Beta6.1 item delta. Historical
+        // These thirteen exact identities cover the confirmed Beta6 through Beta6.1.3 item delta. Historical
         // equality checks may exempt one only after its full template, fixup
         // sequence and relocated payload/site bytes pass independent hashes.
         private static bool VerifiedCurrentItem(int index)
         {
-            int[] indices={6,7,11,13,36,39,59};
+            int[] indices={6,7,11,13,36,39,42,48,49,51,52,59,61,62,63,65,82,83};
             int selected=Array.IndexOf(indices,index);
             if(selected<0) return false;
-            string[] names={"HE_InputA","HE_InputB","HE_HimorogiFragment","HE_Consumables","HE_LivingWeaponDigitNine","HE_LadderCommonLookup","HE_InherentDirectElement"};
-            uint[] rvas={0x721044U,0x721099U,0x75185DU,0x751862U,0x715D4BU,0x73FA40U,0x717F06U};
-            int[] offsets={0x1800,0x1C00,0x2C00,0x3400,0x61000,0xE800,0x1E000};
-            int[] capacities={0x400,0x400,0x400,0x400,0x8000,0x800,0x1000};
-            int[] lengths={543,543,971,1001,32164,1899,1703};
-            string[] original={"440fbe420c","440fbe470e","4584f6752d","83bf4c050000007424","498b7338410f2873f0","48895c2408","0f104c24300f114d88"};
-            string[] templates={
-                "135b62144cb624c5f8643ec31cf5da45e4553e051460e7d05930484c6acb5fe2",
-                "a81f815752df649968e22fbeb54fbe9d3f695a6d41838a00d12d59fa983c4e9c",
-                "a39bd07e5a12f76d8513d765ceb04013225ac3538fd0f9732b3402232e0b3e94",
-                "b61ccfde922a42e29706d0a7e782d923edbbd1e07283cb45df2b1a8a52245cb2",
-                "2105902beb9d8f8af8bfcd9e1b43f93ea99d0525a067f3ed67586f48167cc047",
-                "76d8a27599e74cffb855dcf1235c66f7c3fbdb829c5cca51769811ffb61a407f",
-                "a29254be3839c5f03ffcd4573ebc32fede64c26bfe34c18cd69ba3da92e21391"};
-            string[] fixups={
-                "66c080ae77da0f5a31bf23390e45b02063aa760680a5c5bfc9bd188a93353502",
-                "e4deecfc0ae7cca70fdca8ec55d9adda7ff06e80166a5143e07c02385f4f49d7",
-                "ccc4899cff026b16e0c4143c1449502f6c5465b992a8068a829f8f08fc2ba14e",
-                "cf1035ca88cc901263ccf1b1c0f18202ccb9cc8c476a36dff01eae9d7c81e8e2",
-                "5f29291d4e55f94b475807ee779187062220b769e21442f280c5b6d9115ceceb",
-                "7987c1442ba07b4fd5801a987709564240f7cc0332c12cd8555483297d3b9415",
-                "87790ad5b5a43c3353fc9ab9dd276f2421eb86743d84bfe43cf21db50bde2737"};
-            string[] relocated={
-                "cf87c80a78c71ea411788113f5c4aff95391fad26f64230e8f0e260f0b154634",
-                "fe5da23a244a5db4f7f29f3255f2a5113fa6f834924b3ddf1c4558f4a7e1be42",
-                "8a543b6c15d920740c74099caf9a39f1ed0536e10b1f7cc8ff0a03797686d2f5",
-                "b277fa0be53248d603173b8a2a9a76b3983ff0fedc6a882fa1b332ad23ca38b0",
-                "20fc222d096be0c06e97b9334302c9fd45722217fa277a180de31c12713b9671",
-                "c20a067de67f088439d1a0b5706f9b069f0d60095b1ab16f5905bb0029fd73b9",
-                "0f43bd32405c34a73e3c29b8f28d5cdac53bdf9c368aca282559a177778aab04"};
+            string[] names={"HE_InputA","HE_InputB","HE_HimorogiFragment","HE_Consumables","HE_LivingWeaponDigitNine","HE_LadderCommonLookup","HE_ProjectileElementInheritance","HE_SameTemplateUnloadResources","HE_SaltEventCatchup","HE_PostDefeatDamage","HE_PostDefeatRestore","HE_InherentDirectElement","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapNativeIdlePrivate","HE_SoulReleaseEligibility","HE_SoulReleaseFamiliarity"};
+            uint[] rvas={0x721044U,0x721099U,0x75185dU,0x751862U,0x715d4bU,0x73fa40U,0x7e2959U,0x8b1a10U,0x718950U,0x717caeU,0x70ece0U,0x717f06U,0x8c5407U,0x7604e7U,0x760778U,0x9530baU,0x766455U,0x7e28a9U};
+            int[] offsets={6144,7168,11264,13312,397312,59392,114688,71680,4160,86016,90112,122880,135168,139264,143360,155648,93184,97280};
+            int[] capacities={1024,1024,1024,1024,32768,2048,4096,6144,960,4096,3072,4096,4096,4096,4096,4096,1024,1024};
+            int[] lengths={560,560,971,1001,32458,1899,3192,5837,5,3150,1359,1703,3480,3296,3039,2907,135,117};
+            string[] original={"440fbe420c","440fbe470e","4584f6752d","83bf4c050000007424","498b7338410f2873f0","48895c2408","0f104d070f114f18","e80bff6d00","e8fbc4feff","4c8bb6b0050000","488bc4574154","0f104c24300f114d88","e854fde8ff","4885c00f8450030000","498b85c0000000","488b472048894328","4803c88339ff","833c08ff0f8490000000"};
+            string[] templates={"d5c0091d7aa744137a90a031e3ab0451cf047f82c8ca60c54fb47b9a5f2073c4","efaf98657a68a9f4b5f72b09c4c2f00d5fa699f6ff1962b837b2c177af983b89","a39bd07e5a12f76d8513d765ceb04013225ac3538fd0f9732b3402232e0b3e94","b61ccfde922a42e29706d0a7e782d923edbbd1e07283cb45df2b1a8a52245cb2","a08217f091b5067206b94463ae920570114a93d980bbf1a58b8082c0c77bc6ff","bac1eef3a530116968962dd8ee12a3fa637a8c5c58e3cbe574b2b1cf7f38f742","8a6435503f2618f4afbaf7b1ebe8f73951e6eb039347438bde6e6f7d128959e7","5254effa7be5ccf6dafcf289d47a10dff0d84278b4cef6fe6c79f61304fd07a6","0a315b2859baf393decc7e79cd488b3b763ed2359e59b744dac205a8eef690da","3036fab63f6425883c59ff1a3539a8588c2b6328c7549fd585990817163153fc","51c06abbc7396d72194ce789d56b452293aed6fedb0fdd51cb3e6d06dca2ad92","a29254be3839c5f03ffcd4573ebc32fede64c26bfe34c18cd69ba3da92e21391","1963b4a7c601a6a41361fd6eb3cb6a33b2f1a96bdc6ebd61e2e9809206a4b38f","9b0fb259d3abc0831c6a5d9e696bc1e4fc3aa42ca4d8fc53b0880dcf50364bbb","d96405cb3fdc828dfd73766a60bd18e256ebdaf963f6b13f9148d9de1846de6f","6e12c712c106456250e0cdadc15c167f5896fe906f7e035cf4808af5ab736c89","69f79f40d3355eb3399397c0cd5c8eec2e3c5daa06b67648fe7b34fae00aecb1","e45d61b4a53e6450e58a9dc78f03731efa00407693dddb3dc6a1a0f0a623d6b1"};
+            string[] fixups={"7ca4aa022235971dc357d1bf3f2acab362898e7f85c33d65fa17233c8e8d247f","c3025821ba3bd3ecddeaa4459a234f428fb8f1d2403906e936414a36b4a97898","ccc4899cff026b16e0c4143c1449502f6c5465b992a8068a829f8f08fc2ba14e","cf1035ca88cc901263ccf1b1c0f18202ccb9cc8c476a36dff01eae9d7c81e8e2","98bbc051aa80e4ccc7dc569bc299f5e29b2a0f62470db4da13119b71a433cd5f","7987c1442ba07b4fd5801a987709564240f7cc0332c12cd8555483297d3b9415","85bd2643459e19693d5bf502450b54fa28fee1587c2ac4f76f6981e3d8b10dff","a98bb04d41bbbd63de08a57315766ce09f32a7a6bae65933bb28a51ce6d47a9b","e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","777883705f9546e4574539973769d8f1330a9201f1476156ee2878980af38581","8395e2b699f742078c4fc41b23b48f53b780604c4334b136c22d91956f04b061","87790ad5b5a43c3353fc9ab9dd276f2421eb86743d84bfe43cf21db50bde2737","37ba7ab33a1aad42d0522d95e2e9361b1b4a5467517a78e96959690e6e90ae4a","003a72fbeac452cdc38bd3d52335a769f02ddbcb5c29922e0110174ea8b95918","6a187659a3861944b58534fbc26d6f907a80efc3ad271d92b4de186dca54da5e","f446c82add38658de2d3e5d2191e8db2f7023477bbfbdad85daeb4b003de7729","a9dbc2fd0cc34c912562c9cbe5050898057cdf278a429ecde6ae23ed1526642d","158bae6d0bfb0aea144246f96a3e2c52734f7d43a886ad0ec9e2420ea515e54b"};
+            string[] relocated={"0429a8c4356a67ef8b6563f55c2f6b213ae0a557e0858656c5c0213ecf4c29e1","e5700fa64cc3333f2fa6bff4732727e1300ae02ffb8d1c316e13d967125994b0","8a543b6c15d920740c74099caf9a39f1ed0536e10b1f7cc8ff0a03797686d2f5","b277fa0be53248d603173b8a2a9a76b3983ff0fedc6a882fa1b332ad23ca38b0","057481b8d71669b7fb9634f74843adb1551929af2f1b0dcfcaa947b698a14db2","c19e4e3f575d124a6ed8ed3344525986e0f331171cf1ae08ffabea0f1f1421bc","be5ac97a82d500fd3deb4bb2141d7954ba3d06bf3371d0040bc425b3e1959556","1296c3a7ca127f5fae2e9482069ff5d540971f6153761103c5002d521c957479","a63a486cade98be7cd1093701365953f27d4f7bb3da07cb92470762781b9687c","326e70840d5c2dc204a521b1992222035e220b11c5b16773dc86e9a4663459b4","64abb841941e4d6fe18f16de43eb9f3048ae35b91686a63a01957330df136773","0f43bd32405c34a73e3c29b8f28d5cdac53bdf9c368aca282559a177778aab04","f146791f508dc1f6f989311e6965667e5bf58c0f757c61330d8d7defacdea860","ff1ff7e0a28cec1732d35686787d4323c6074771c9c7077667a842571431289b","f3f298a82a27a32c1438f475ce5d5cd0f5bf64a117b8f5a1e6004c35f8234dee","63d85d6c5875e39ba79312b919cb24702bfca509a720447f5bc1350f239f2585","080869cb08b9e0418b1f0995545b249e04ddf340e229eaf2aa5d3509b747e9a4","0e4830df4951256209bb08d1baf2d784ef322b6a8954ca4fd1ae885203dc00c2"};
             HookSpec hook=Profile.Hooks[index];
-            Require(Profile.Version=="1.0.0-beta.6.1" && hook.Name==names[selected] &&
+            Require(Profile.Version=="1.0.0-beta.6.1.3" && hook.Name==names[selected] &&
                 hook.Rva==rvas[selected] && hook.CodeOffset==offsets[selected] &&
                 hook.CodeCapacity==capacities[selected] && hook.Template.Length==lengths[selected] &&
                 BitConverter.ToString(hook.Original).Replace("-", "").ToLowerInvariant()==original[selected],
-                "Exact confirmed Beta6.1 item hook geometry: "+hook.Name);
-            Require(Sha256(hook.Template)==templates[selected],"Exact confirmed Beta6.1 item template: "+hook.Name);
+                "Exact confirmed Beta6.1.3 item hook geometry: "+hook.Name);
+            Require(Sha256(hook.Template)==templates[selected],"Exact confirmed Beta6.1.3 item template: "+hook.Name);
             using(MemoryStream bytes=new MemoryStream())
             using(BinaryWriter writer=new BinaryWriter(bytes))
             {
@@ -128,7 +107,7 @@ namespace HinoEnmaTool
                     writer.Write(fixup.Target); writer.Write(fixup.Next);
                 }
                 writer.Flush();
-                Require(Sha256(bytes.ToArray())==fixups[selected],"Exact Beta6.1 item relocation specification: "+hook.Name);
+                Require(Sha256(bytes.ToArray())==fixups[selected],"Exact Beta6.1.3 item relocation specification: "+hook.Name);
             }
             using(MemoryStream bytes=new MemoryStream())
             {
@@ -139,7 +118,7 @@ namespace HinoEnmaTool
                         byte[] payload=hook.Payload(module,at),jump=hook.Jump(module,at);
                         bytes.Write(payload,0,payload.Length); bytes.Write(jump,0,jump.Length);
                     }
-                Require(Sha256(bytes.ToArray())==relocated[selected],"Exact Beta6.1 item payload and entry at twelve layouts: "+hook.Name);
+                Require(Sha256(bytes.ToArray())==relocated[selected],"Exact Beta6.1.3 item payload and entry at twelve layouts: "+hook.Name);
             }
             return true;
         }
@@ -302,7 +281,7 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==82 && Profile.LegacyProfiles.Length==9,"Complete local and prior release identities");
+                    Require(Profile.Hooks.Length==84 && Profile.LegacyProfiles.Length==9,"Complete local and prior release identities");
                     int index=0; int[] counts={55,59,60,70,71,71,80,81,81}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000,0x36000,0x43000,0x43000,0x51000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
@@ -389,7 +368,7 @@ namespace HinoEnmaTool
                 test("all eleven menu entries require complete payloads and native sites", delegate
                 {
                     string[] names={"HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapAppearancePrivate","HE_MapNativeIdlePrivate","HE_MapIdleSelectionPrivate","HE_MapLoadoutAppearancePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate","HE_MapPreviewAuraCopiedHash"};
-                    Require(Profile.Hooks.Length==82,"Exact total execution build inventory");
+                    Require(Profile.Hooks.Length==84,"Exact total execution build inventory");
                     for(int i=60;i<71;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
@@ -406,7 +385,8 @@ namespace HinoEnmaTool
                 test("all ten execution entries are required and preserve the previous71 profile", delegate
                 {
                     string[] names={"HE_OrochiHeavyTransition","HE_OrochiWeaponBankRead","HE_OrochiWeaponMotionRead","HE_OrochiWeaponMotionPresence","HE_OrochiWeaponEventRead","HE_OrochiWeaponBlendPresence","HE_OrochiWeaponBlendRead","HE_OrochiZeroLengthRay","HE_OrochiStalledInvalidRayExit","HE_OrochiPendingLivingWeaponGuard"};
-                    Require(Profile.Hooks.Length==82,"Exact complete execution inventory");
+                    Require(Profile.Hooks.Length==84,"Exact complete execution inventory");
+                    Require(VerifiedCurrentItem(82) && VerifiedCurrentItem(83),"Both owned Soul Release native views match their tested identities");
                     for(int i=71;i<81;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
@@ -441,7 +421,7 @@ namespace HinoEnmaTool
                     for(int i=0;i<71;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];
-                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Previous hook slot identity");
+                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==0xC00 && old.CodeCapacity==0x1000 : current.CodeCapacity==old.CodeCapacity)),"Previous hook slot identity");
                         if(VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Previous encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
@@ -470,7 +450,7 @@ namespace HinoEnmaTool
                     for(int i=0;i<60;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta52.Hooks[i];
-                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && current.CodeCapacity==old.CodeCapacity),"Original slot identity");
+                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==0xC00 && old.CodeCapacity==0x1000 : current.CodeCapacity==old.CodeCapacity)),"Original slot identity");
                         if(VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Original encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
@@ -490,7 +470,7 @@ namespace HinoEnmaTool
                     for(int i=0;i<81;i++)
                     {
                         HookSpec current=Profile.Hooks[i],prior=old.Hooks[i];
-                        Require(current.Name==prior.Name && current.Rva==prior.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==prior.CodeOffset && current.CodeCapacity==prior.CodeCapacity) && Checks.Equal(current.Original,prior.Original),"Every previous native and scoped private slot identity");
+                        Require(current.Name==prior.Name && current.Rva==prior.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==prior.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==0xC00 && prior.CodeCapacity==0x1000 : current.CodeCapacity==prior.CodeCapacity)) && Checks.Equal(current.Original,prior.Original),"Every previous native and scoped private slot identity");
                         bool changed=VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
                         Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only reviewed lifetime, LW and growth bodies differ");
                         foreach(long module in new long[]{Module,0x7FF83AA00000})
