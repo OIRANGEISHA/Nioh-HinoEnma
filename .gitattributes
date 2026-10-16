@@ -55,9 +55,20 @@ src/*.py -text whitespace=cr-at-eol
 tools/*.py -text whitespace=cr-at-eol
 tools/*.ps1 -text whitespace=cr-at-eol
 tests/*.py -text whitespace=cr-at-eol
+tests/fixtures/*.json -text whitespace=cr-at-eol
 launcher/*.cs -text whitespace=cr-at-eol
 profiles/*.json -text whitespace=cr-at-eol
 docs/*.json -text whitespace=cr-at-eol
 ct/*.CT -text whitespace=cr-at-eol
 version.json -text whitespace=cr-at-eol
 production-build-plan.json -text whitespace=cr-at-eol
+
+# Beta6.1.4 runtime source and evidence use exact bytes across checkouts.
+src/hinoenma_general_jutsu.py -text whitespace=cr-at-eol
+src/hinoenma_general_jutsu_data.py -text whitespace=cr-at-eol
+src/hinoenma_general_jutsu_timing.py -text whitespace=cr-at-eol
+src/hinoenma_general_jutsu_recovery.py -text whitespace=cr-at-eol
+src/hinoenma_beta614_release.py -text whitespace=cr-at-eol
+docs/beta614-live-payload-identities.json -text whitespace=cr-at-eol
+docs/general-jutsu-trial.json -text whitespace=cr-at-eol
+docs/general-jutsu-special-cases.json -text whitespace=cr-at-eol

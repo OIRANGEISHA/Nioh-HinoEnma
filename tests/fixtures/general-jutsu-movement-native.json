@@ -1,0 +1,4441 @@
+{
+  "source": "Nioh 1.24.08 read-only native catalogue, 2026-10-15",
+  "actions": {
+    "1002": {
+      "id": 1002,
+      "params_raw": "00000000000000000000ffffea03ffffffff0000000000000000100000000000ffffffffffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": -1,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            70,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "4600ffffffffffffffff001f05ffff0000000000eb03000800806464300000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            70,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "4600ffffffffffffffff002005ffff0000000000ec03000800806464300000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            70,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "4600ffffffffffffffff002105ffff0000000000f703000800806464300000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            70,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "4600ffffffffffffffff002205ffff0000000000f803000800806464300000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "ffffffffffffffffffff001f05ffff0000000000eb03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "ffffffffffffffffffff002005ffff0000000000ec03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "ffffffffffffffffffff002105ffff0000000000f703000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "ffffffffffffffffffff002205ffff0000000000f803000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1003": {
+      "id": 1003,
+      "params_raw": "03010000000008000000ff03eb030affff090000000000000000d0130004000014000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 20,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000eb030000ff806464140000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            141,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "ffffffff8d00ffffffff00ffffffff0000000000eb03ff03008064640000000010001000ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3023,
+          "raw": "8600ffffffffffffffff001401ffff0000000000cf0b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "8600ffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 25,
+          "raw": "ffffffffffffffffffff000500ffff00000000001900000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002001f04000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002104000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002204000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff000200ffff000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 30,
+          "raw": "fc001c014700ffffffff0002031f0400000000001e00000300806464000001000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 32,
+          "raw": "fc001c014700ffffffff000203210400000000002000000300806464000008000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 33,
+          "raw": "fc001c014700ffffffff000203220400000000002100000300806464000002000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 31,
+          "raw": "fc001c014700ffffffff000203ffff00000000001f00000300806464000004000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "8700ffffffffffffffff011f05ffff0000000000eb030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "8700ffffffffffffffff002005ffff0000000000ec03000800806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "8700ffffffffffffffff002105ffff0000000000f703000800806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "8700ffffffffffffffff002205ffff0000000000f803000800806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff001f07ffff0000000000fa03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff002007ffff0000000000fb03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff002107ffff0000000000fc03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff002207ffff0000000000fd03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "8800ffffffffffffffff002004ffff000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "ffffffffffffffffffff0020050200000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            141,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "8d00ffff4700ffffffffff230502000000000000b700000300806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "8800ffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 12,
+          "raw": "8800ffffffffffffffff002305ffff00000000000c00040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1004": {
+      "id": 1004,
+      "params_raw": "03010000000008000000ff03ec030affff090000000000000000d0130004000018000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 24,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000ec030000ff806464140000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            141,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "ffffffff8d00ffffffff00ffffffff0000000000ec03ff03008064640000000010001000ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3023,
+          "raw": "8600ffffffffffffffff001401ffff0000000000cf0b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "8600ffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 25,
+          "raw": "ffffffffffffffffffff000500ffff00000000001900000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002001f04000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002104000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002204000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff000200ffff000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 30,
+          "raw": "fc001c014700ffffffff0002031f0400000000001e00000300806464000001000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 32,
+          "raw": "fc001c014700ffffffff000203210400000000002000000300806464000008000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 33,
+          "raw": "fc001c014700ffffffff000203220400000000002100000300806464000002000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 31,
+          "raw": "fc001c014700ffffffff000203ffff00000000001f00000300806464000004000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "8700ffffffffffffffff001f05ffff0000000000eb03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "8700ffffffffffffffff012005ffff0000000000ec030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "8700ffffffffffffffff002105ffff0000000000f703000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "8700ffffffffffffffff002205ffff0000000000f803000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff001f07ffff0000000000fa03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff002007ffff0000000000fb03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff002107ffff0000000000fc03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff002207ffff0000000000fd03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "8800ffffffffffffffff002004ffff000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "ffffffffffffffffffffff20050200000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            141,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "8d00ffff4700ffffffffff230502000000000000b700000300806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "8800ffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 12,
+          "raw": "8800ffffffffffffffff002305ffff00000000000c00040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1015": {
+      "id": 1015,
+      "params_raw": "03010000000008000000ff03f7030affff090000000000000000d013000400001a000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 26,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000f7030000ff806464140000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            141,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "ffffffff8d00ffffffff00ffffffff0000000000f703ff03008064640000000010001000ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3023,
+          "raw": "8600ffffffffffffffff001401ffff0000000000cf0b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "8600ffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 25,
+          "raw": "ffffffffffffffffffff000500ffff00000000001900000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002001f04000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002104000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002204000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff000200ffff000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 30,
+          "raw": "fc001c014700ffffffff0002031f0400000000001e00000300806464000001000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 32,
+          "raw": "fc001c014700ffffffff000203210400000000002000000300806464000008000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 33,
+          "raw": "fc001c014700ffffffff000203220400000000002100000300806464000002000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 31,
+          "raw": "fc001c014700ffffffff000203ffff00000000001f00000300806464000004000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "8700ffffffffffffffff001f05ffff0000000000eb03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "8700ffffffffffffffff002005ffff0000000000ec03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "8700ffffffffffffffff012105ffff0000000000f7030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "8700ffffffffffffffff002205ffff0000000000f803000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff001f07ffff0000000000fa03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff002007ffff0000000000fb03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff002107ffff0000000000fc03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff002207ffff0000000000fd03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "8800ffffffffffffffff002004ffff000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "ffffffffffffffffffff0020050200000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            141,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "8d00ffff4700ffffffffff230502000000000000b700000300806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "8800ffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 12,
+          "raw": "8800ffffffffffffffff002305ffff00000000000c00040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1016": {
+      "id": 1016,
+      "params_raw": "03010000000008000000ff03f8030affff090000000000000000d013000400001c000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 28,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000f8030000ff806464140000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            141,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "ffffffff8d00ffffffff00ffffffff0000000000f803ff03008064640000000010001000ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3023,
+          "raw": "8600ffffffffffffffff001401ffff0000000000cf0b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "8600ffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 25,
+          "raw": "ffffffffffffffffffff000500ffff00000000001900000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002001f04000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002104000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff0002002204000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "fc00ffff4700ffffffff000200ffff000c000000b700000300806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 30,
+          "raw": "fc001c014700ffffffff0002031f0400000000001e00000300806464000001000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 32,
+          "raw": "fc001c014700ffffffff000203210400000000002000000300806464000008000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 33,
+          "raw": "fc001c014700ffffffff000203220400000000002100000300806464000002000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            252,
+            284,
+            71,
+            -1,
+            -1
+          ],
+          "target": 31,
+          "raw": "fc001c014700ffffffff000203ffff00000000001f00000300806464000004000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1003,
+          "raw": "8700ffffffffffffffff001f05ffff0000000000eb03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1004,
+          "raw": "8700ffffffffffffffff002005ffff0000000000ec03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1015,
+          "raw": "8700ffffffffffffffff002105ffff0000000000f703000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1016,
+          "raw": "8700ffffffffffffffff012205ffff0000000000f8030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff001f07ffff0000000000fa03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff002007ffff0000000000fb03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff002107ffff0000000000fc03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff002207ffff0000000000fd03000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "8800ffffffffffffffff002004ffff000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 2,
+          "raw": "ffffffffffffffffffff0020050200000000000002000000ff806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            141,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 183,
+          "raw": "8d00ffff4700ffffffffff230502000000000000b700000300806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "8800ffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 12,
+          "raw": "8800ffffffffffffffff002305ffff00000000000c00040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1017": {
+      "id": 1017,
+      "params_raw": "00000000000000000000fffff903ffffffff0000000000000000100000000000ffffffffffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": -1,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "ffffffffffffffffffff001f07ffff0000000000fa03000800806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "ffffffffffffffffffff002007ffff0000000000fb03000800806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "ffffffffffffffffffff002107ffff0000000000fc03000800806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "ffffffffffffffffffff002207ffff0000000000fd03000800806464200000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1018": {
+      "id": 1018,
+      "params_raw": "01010000000008000000ff03fa030bffff090000000000000000d017000400001e000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 30,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000fa030000ff806464040000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3024,
+          "raw": "8600ffffffffffffffff001401ffff0000000000d00b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "ffffffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff0002011f040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020121040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020122040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff000201ffff0000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff011f07ffff0000000000fa030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff002007ffff0000000000fb03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff002107ffff0000000000fc03190800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff002207ffff0000000000fd031e0800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1002,
+          "raw": "8700ffffffffffffffff002305ffff0000000000ea030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "8800ffffffffffffffff002004ffff000000000003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "ffffffffffffffffffff0020050200000000100003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff002305020000000010000800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 4,
+          "raw": "ffffffffffffffffffff002305ffff00000000000400040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000000802300ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c900000800806464000000003200ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000014002100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000022003100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1019": {
+      "id": 1019,
+      "params_raw": "01010000000008000000ff03fb030bffff090000000000000000d017000400001f000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 31,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000fb030000ff806464040000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3024,
+          "raw": "8600ffffffffffffffff001401ffff0000000000d00b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "ffffffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff0002011f040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020121040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020122040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff000201ffff0000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff001f07ffff0000000000fa03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff012007ffff0000000000fb030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff002107ffff0000000000fc03190800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff002207ffff0000000000fd031e0800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1002,
+          "raw": "8700ffffffffffffffff002305ffff0000000000ea030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "8800ffffffffffffffff002004ffff000000000003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "ffffffffffffffffffff0020050200000000100003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff002305020000000010000800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 4,
+          "raw": "ffffffffffffffffffff002305ffff00000000000400040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000000802300ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c900000800806464000000003200ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000014002100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000022003100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1020": {
+      "id": 1020,
+      "params_raw": "01010000000008000000ff03fc030bffff090000000000000000d0170004000020000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 32,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000fc030000ff806464040000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3024,
+          "raw": "8600ffffffffffffffff001401ffff0000000000d00b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "ffffffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff0002011f040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020121040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020122040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff000201ffff0000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff001f07ffff0000000000fa03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff002007ffff0000000000fb03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff012107ffff0000000000fc030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff002207ffff0000000000fd031e0800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1002,
+          "raw": "8700ffffffffffffffff002305ffff0000000000ea030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "8800ffffffffffffffff002004ffff000000000003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "ffffffffffffffffffff0020050200000000100003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff002305020000000010000800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 4,
+          "raw": "ffffffffffffffffffff002305ffff00000000000400040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000000802300ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c900000800806464000000003200ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000014002100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000022003100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    },
+    "1021": {
+      "id": 1021,
+      "params_raw": "01010000000008000000ff03fd030bffff090000000000000000d0170004000021000000ffffffffffff000001000200ffffff00ffffffff000000000000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffffffff0000ffff",
+      "motion": 33,
+      "alternate": -1,
+      "transitions": [
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "ffffffffffffffffffff01ffffffff0000000000fd030000ff806464040000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            134,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3024,
+          "raw": "8600ffffffffffffffff001401ffff0000000000d00b000400806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3008,
+          "raw": "ffffffffffffffffffff000101ffff0000000000c00b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3007,
+          "raw": "ffffffffffffffffffff000001ffff0000000000bf0b000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 24,
+          "raw": "ffffffffffffffffffff000500ffff00000000001800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff0002011f040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020121040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff00020122040000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            71,
+            -1,
+            -1
+          ],
+          "target": 182,
+          "raw": "ffffffff4700ffffffff000201ffff0000000000b6000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1018,
+          "raw": "8700ffffffffffffffff001f07ffff0000000000fa03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1019,
+          "raw": "8700ffffffffffffffff002007ffff0000000000fb03000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1020,
+          "raw": "8700ffffffffffffffff002107ffff0000000000fc03190800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1021,
+          "raw": "8700ffffffffffffffff012207ffff0000000000fd030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            135,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 1002,
+          "raw": "8700ffffffffffffffff002305ffff0000000000ea030000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "8800ffffffffffffffff002004ffff000000000003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 3,
+          "raw": "ffffffffffffffffffff0020050200000000100003000000ff806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff002305020000000010000800000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff001f07ffff00000000000d00000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 8,
+          "raw": "ffffffffffffffffffff001f05ffff00000000000800000800806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 4,
+          "raw": "ffffffffffffffffffff002305ffff00000000000400040600806464100000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            136,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 13,
+          "raw": "8800ffffffffffffffff002304ffff00000000000d00000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000000802300ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c900000800806464000000003200ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000014002100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 201,
+          "raw": "ffffffffffffffffffff002303ffff0000000000c9000008008064640000000022003100ffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 0,
+          "raw": "ffffffffffffffffffff002303ffff00000000000000000800806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            1,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 17,
+          "raw": "01001800ffffffffffff00ffffffff00000000001100000800800000010020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            468,
+            24,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 225,
+          "raw": "d4011800ffffffffffff00ffffffff0000000000e1000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            433,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 206,
+          "raw": "b101ffffffffffffffff00ffffffff0000000000ce000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 224,
+          "raw": "3400ffffffffffffffff00ffffffff0000000000e0000000ff806464400020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            230,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 582,
+          "raw": "e600ffffffffffffffff00ffffffff000000000046020a00ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            416,
+            87,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 169,
+          "raw": "a0015700ffffffffffff002f01ffff0000000000a9000000ff806464000020000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 170,
+          "raw": "ffffffffffffffffffff001501ffff0000000000aa00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 172,
+          "raw": "ffffffffffffffffffff001801ffff0000000000ac00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 171,
+          "raw": "ffffffffffffffffffff001901ffff0000000000ab00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 76,
+          "raw": "ffffffffffffffffffff0010010c0100000000004c00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 79,
+          "raw": "ffffffffffffffffffff0010010d0100000000004f00000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 167,
+          "raw": "ffffffffffffffffffff0010010e010000000000a700000300806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 998,
+          "raw": "ffffffffffffffffffff0010011a010000000000e603000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 999,
+          "raw": "ffffffffffffffffffff0010011b010000000000e703000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 997,
+          "raw": "ffffffffffffffffffff0010011c010000000000e503000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 16,
+          "raw": "ffffffffffffffffffff001001ffff00000000001000000c00806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 325,
+          "raw": "e500ffffffffffffffff000b00ffff00000000004501000600806464000000000080ff7fffffffffffffffffffffffff"
+        },
+        {
+          "queries": [
+            229,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "target": 326,
+          "raw": "e500ffffffffffffffff000601ffff00000000004601000600806464100000000080ff7fffffffffffffffffffffffff"
+        }
+      ]
+    }
+  }
+}

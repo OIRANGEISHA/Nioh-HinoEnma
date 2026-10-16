@@ -1,0 +1,1160 @@
+{
+  "title": "忍术／阴阳术特殊机制兼容检查",
+  "game": "Nioh 1.24.08",
+  "date": "2026-10-16",
+  "method": "只读核对原生道具定义、中文说明、公共动作及现有源码；未逐项执行所有效果。",
+  "source_evidence": [
+    {
+      "file": "general-jutsu-catalogue-20261015.json",
+      "sha256": "426e38ae5eb17742494f4445fee063ae321b04f2f50813214497b753f04b6aef"
+    },
+    {
+      "file": "general-jutsu-names-20261016.json",
+      "sha256": "d786faa9e4a0b84df891cd320972726fe12f534cbcc7daef4d30097b86aa6e4c"
+    },
+    {
+      "file": "general-jutsu-special-descriptions-20261016.json",
+      "sha256": "4235b615c5141257d0ea796405e306728d8db6f5e9bf63eaba67aad6acbb3ef4"
+    },
+    {
+      "file": "general-jutsu-special-descriptions-extra-20261016.json",
+      "sha256": "0b5a5d6a47bdb8d4e0bc914268f780f4dc1e368e69e58563f95f74c32761842d"
+    }
+  ],
+  "captured_jutsu_definition_rows": 113,
+  "named_non_placeholder_rows": 101,
+  "unique_named_jutsu": 87,
+  "count_note": "定义含同名变体；空白／无名道具不是宣称可用的独立术法。",
+  "cases": [
+    {
+      "key": "movement-injury-and-consecutive-throws",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 57728,
+          "name": "苦无",
+          "native_category": 11
+        },
+        {
+          "id": 58071,
+          "name": "散弹苦无",
+          "native_category": 11
+        },
+        {
+          "id": 49130,
+          "name": "毒手里剑",
+          "native_category": 5
+        },
+        {
+          "id": 32331,
+          "name": "麻痹手里剑",
+          "native_category": 5
+        },
+        {
+          "id": 49321,
+          "name": "火药镖",
+          "native_category": 5
+        },
+        {
+          "id": 379,
+          "name": "手里剑",
+          "native_category": 24
+        }
+      ],
+      "classification": "连续投掷与受击切换",
+      "mechanism": "苦无使用 986/612 交替动作；毒／麻痹手里剑等使用 166/613。普通手里剑属于独立类别 24，有 1145/1146 与 1232/1233 分支。",
+      "current_status": "苦无投射物、连续使用及受击恢复已获用户确认；普通手里剑仅有使用正常的反馈。其余变种不能由苦无测试替代。",
+      "checks": [
+        "普通手里剑的两套分支与受击恢复",
+        "散弹苦无的多发弹体及一次消耗",
+        "毒／麻痹效果与火药镖的爆炸",
+        "移动后连投、受击后再用"
+      ]
+    },
+    {
+      "key": "kodama-transformation",
+      "priority": "high",
+      "items": [
+        {
+          "id": 19707,
+          "name": "木灵变化术卷轴",
+          "native_category": 28
+        }
+      ],
+      "classification": "独立变身流程",
+      "mechanism": "类别 28，原生动作 1205 使用动作 122 与辅助资源 60012；会改变外观和被发现条件。",
+      "current_status": "不属于这次 13 类通用动作适配；尚未验证，不能标为已修复。",
+      "checks": [
+        "变身与解除",
+        "重新恢复飞缘魔模型、骨骼、伞和菜单预览",
+        "受击／死亡／换场景的退出流程"
+      ]
+    },
+    {
+      "key": "familiarity-cost",
+      "priority": "high",
+      "items": [
+        {
+          "id": 64629,
+          "name": "宿心解放符",
+          "native_category": 17
+        },
+        {
+          "id": 51944,
+          "name": "宿心升华符",
+          "native_category": 7
+        }
+      ],
+      "classification": "武器爱用度门槛与消耗",
+      "mechanism": "两者都要求当前武器爱用度至少 300，并消耗全部爱用度；解放符释放光刃，升华符增加攻击和幸运。",
+      "current_status": "宿心解放符已有专门修复并经实测。宿心升华符可匹配通用施法类别 7，但现有武器读取入口只明确处理道具 64629，不能据此认定升华符的可用性或消耗已兼容。",
+      "checks": [
+        "爱用度 299／300／999 下的按钮状态",
+        "读取实际装备武器",
+        "只扣原生爱用度一次",
+        "光刃或攻击／幸运增益及结束恢复"
+      ]
+    },
+    {
+      "key": "guardian-and-dragon",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 62705,
+          "name": "护灵招来符",
+          "native_category": 22
+        },
+        {
+          "id": 44607,
+          "name": "火炎龙术卷轴",
+          "native_category": 30
+        }
+      ],
+      "classification": "召唤与多段专用动作",
+      "mechanism": "护灵招来符依赖守护灵状态和生成物阵营；火炎龙有 1227→1228 的独立起手、恢复和原生事件。",
+      "current_status": "已有单独修复及用户实测，继续保留原流程；本轮未重新测试所有守护灵。",
+      "checks": [
+        "守护灵存在／丢失时的原生限制",
+        "正确阵营和实际攻击",
+        "火龙的炎阵与火球",
+        "被打断后恢复和再使用"
+      ]
+    },
+    {
+      "key": "persistent-ground-effects",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 49521,
+          "name": "埋火",
+          "native_category": 20
+        },
+        {
+          "id": 23005,
+          "name": "埋火‧地胆",
+          "native_category": 20
+        },
+        {
+          "id": 16552,
+          "name": "埋火‧水母",
+          "native_category": 20
+        },
+        {
+          "id": 29670,
+          "name": "埋火‧秽土",
+          "native_category": 20
+        },
+        {
+          "id": 8950,
+          "name": "撒菱",
+          "native_category": 6
+        },
+        {
+          "id": 53380,
+          "name": "烟雾弹",
+          "native_category": 16
+        },
+        {
+          "id": 54811,
+          "name": "水牙符",
+          "native_category": 23
+        },
+        {
+          "id": 53226,
+          "name": "土轰符",
+          "native_category": 23
+        },
+        {
+          "id": 40718,
+          "name": "活源符",
+          "native_category": 23
+        },
+        {
+          "id": 35389,
+          "name": "发气符",
+          "native_category": 23
+        }
+      ],
+      "classification": "地面物件、范围效果和持续存在的对象",
+      "mechanism": "埋火与土轰由踩中或计时触发；撒菱、烟雾、活源等依赖地面位置、持续时间、对象释放和阵营。",
+      "current_status": "施法入口归入通用类别；活源／发气曾获用户正常反馈，其余不能只凭动作或生成对象就认定效果完整。",
+      "checks": [
+        "脚下位置与不同地形",
+        "实际踩中、回复或遮蔽效果",
+        "对象消失后再用",
+        "保留游戏对同时存在数量的原生限制"
+      ]
+    },
+    {
+      "key": "death-and-damage-triggers",
+      "priority": "high",
+      "items": [
+        {
+          "id": 48799,
+          "name": "替身术卷轴",
+          "native_category": 18
+        },
+        {
+          "id": 51914,
+          "name": "凤仙花术卷轴",
+          "native_category": 18
+        },
+        {
+          "id": 13267,
+          "name": "蓄力奉还术卷轴",
+          "native_category": 18
+        }
+      ],
+      "classification": "先附加状态、后触发效果",
+      "mechanism": "替身在致命受击时触发；凤仙花在生命归零时爆炸；蓄力奉还按受伤累积下一次攻击的加成。",
+      "current_status": "施法类别已纳入，但没有本轮触发实测；状态图标不是最终生效证据。",
+      "checks": [
+        "真实触发条件",
+        "存活／死亡流程",
+        "飞缘魔各类攻击是否消耗或继承效果",
+        "效果仅触发一次、结束后可重用"
+      ]
+    },
+    {
+      "key": "teleport",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 63348,
+          "name": "缩地符",
+          "native_category": 7
+        }
+      ],
+      "classification": "场景移动",
+      "mechanism": "缩地符返回最后参拜的神社；虽然使用类别是普通增益类别 7，最终效果包含传送。",
+      "current_status": "通用施法已覆盖其定义，尚未专门验证缩地符。不能以先前道祖神护符成功替代这件术法的验证。",
+      "checks": [
+        "确认及地图允许条件",
+        "实际到达神社",
+        "传送后角色／相机／输入恢复"
+      ]
+    },
+    {
+      "key": "weapon-coatings",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 33470,
+          "name": "召火符",
+          "native_category": 8
+        },
+        {
+          "id": 62302,
+          "name": "召水符",
+          "native_category": 8
+        },
+        {
+          "id": 58078,
+          "name": "召风符",
+          "native_category": 8
+        },
+        {
+          "id": 32718,
+          "name": "召雷符",
+          "native_category": 8
+        },
+        {
+          "id": 55045,
+          "name": "召土符",
+          "native_category": 8
+        },
+        {
+          "id": 8825,
+          "name": "附子汁",
+          "native_category": 15
+        },
+        {
+          "id": 14231,
+          "name": "大芹汁",
+          "native_category": 15
+        }
+      ],
+      "classification": "武器附魔和毒／麻痹涂抹",
+      "mechanism": "召属性符走类别 8，附子汁与大芹汁走类别 15；需要当前武器与攻击事件真正继承效果。",
+      "current_status": "保留既有附魔兼容。各类缠属性道具曾实测成功，但此处全部卷轴与涂毒变种尚未逐项确认。",
+      "checks": [
+        "原生使用条件和计时",
+        "J／I／冲撞／麻针／吸血的效果继承",
+        "保留招式原有麻痹",
+        "结束后重复使用；不扩展受保护的吼叫元素伤害"
+      ]
+    },
+    {
+      "key": "money-and-ammunition",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 44744,
+          "name": "掷币术卷轴",
+          "native_category": 4
+        },
+        {
+          "id": 48557,
+          "name": "假箭弹术卷轴",
+          "native_category": 18
+        },
+        {
+          "id": 7942,
+          "name": "影弹符",
+          "native_category": 7
+        }
+      ],
+      "classification": "特殊资源消耗",
+      "mechanism": "掷币术消耗持有金钱，假箭弹术影响无箭弹时的远程射击，影弹符可能使箭弹或投掷物不扣数量。",
+      "current_status": "已按原生定义归入施法类别；特殊资源效果未在本轮实测。数量不变不一定是故障，需区分影弹等原生免消耗。",
+      "checks": [
+        "金钱实际扣除一次且与原生一致",
+        "远程射击时触发",
+        "影弹的概率性免消耗不被补丁覆盖"
+      ]
+    },
+    {
+      "key": "target-restriction",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 11256,
+          "name": "操身符",
+          "native_category": 9
+        }
+      ],
+      "classification": "限制目标种类",
+      "mechanism": "操身符只对游戏允许的较弱人类等目标强制动作，并非所有敌人都有效。",
+      "current_status": "发射入口已纳入类别 9；目标限制保留，尚未专门验证合格目标。",
+      "checks": [
+        "有效人类目标出现相应动作",
+        "不合格目标维持原生拒绝",
+        "发射、消耗和连续使用"
+      ]
+    },
+    {
+      "key": "event-driven-self-buffs",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 32514,
+          "name": "波动符",
+          "native_category": 7
+        },
+        {
+          "id": 13011,
+          "name": "夺灵符",
+          "native_category": 7
+        },
+        {
+          "id": 41852,
+          "name": "飞剑符",
+          "native_category": 7
+        },
+        {
+          "id": 24057,
+          "name": "拳力符",
+          "native_category": 7
+        },
+        {
+          "id": 26764,
+          "name": "浮云术卷轴",
+          "native_category": 18
+        },
+        {
+          "id": 58710,
+          "name": "昂灵符",
+          "native_category": 7
+        },
+        {
+          "id": 42088,
+          "name": "护身符",
+          "native_category": 7
+        }
+      ],
+      "classification": "依赖残心、命中、武器判定、场地或承伤的增益",
+      "mechanism": "波动需残心事件；夺灵需攻击命中；飞剑需周身碰撞；拳力需空手判定。浮云、昂灵和护身也须观察各自实际效果。",
+      "current_status": "施法或增益图标可用不代表飞缘魔必然触发后续事件。此次仅确认原生说明和定义。",
+      "checks": [
+        "波动与飞缘魔 F6 净化／教学残心分别核对",
+        "各招式命中的精华生成",
+        "飞剑的生成位置和阵营",
+        "拳力的武器装备判定",
+        "场地／精华积累／吸收伤害实际变化"
+      ]
+    },
+    {
+      "key": "buff-stages-and-cancellation",
+      "priority": "normal",
+      "items": [
+        {
+          "id": 37484,
+          "name": "仙身符",
+          "native_category": 7
+        },
+        {
+          "id": 45079,
+          "name": "燃生符",
+          "native_category": 7
+        },
+        {
+          "id": 59788,
+          "name": "衰气符",
+          "native_category": 7
+        },
+        {
+          "id": 46457,
+          "name": "潜气符",
+          "native_category": 7
+        },
+        {
+          "id": 20920,
+          "name": "粹然符",
+          "native_category": 7
+        }
+      ],
+      "classification": "双向效果、阶段切换和状态清除",
+      "mechanism": "仙身、燃生、衰气带代价与收益；潜气先降低再提高精力回复；粹然会使正负状态变化无效。",
+      "current_status": "归入类别 7。应保留原生代价和清除规则，不能把其正常负面效果误当成兼容错误。",
+      "checks": [
+        "加减项均生效",
+        "时间到期后的切换与还原",
+        "粹然对其他增益的清除符合原生规则"
+      ]
+    }
+  ],
+  "priority": [
+    "先保留已验证的苦无投出、连投与受击修订。",
+    "后续优先检查宿心升华的武器读取、木灵变化的角色还原、替身等延迟触发。",
+    "再按持续物件、资源消耗、目标限制抽测；避免逐个术法重复修相同施法入口。"
+  ],
+  "named_definitions": [
+    {
+      "id": 13257,
+      "name": "扫毒丹",
+      "subtype": 14,
+      "category": 2,
+      "flags": 5
+    },
+    {
+      "id": 46246,
+      "name": "紫金丸",
+      "subtype": 14,
+      "category": 2,
+      "flags": 5
+    },
+    {
+      "id": 379,
+      "name": "手里剑",
+      "subtype": 14,
+      "category": 24,
+      "flags": 5
+    },
+    {
+      "id": 49130,
+      "name": "毒手里剑",
+      "subtype": 14,
+      "category": 5,
+      "flags": 5
+    },
+    {
+      "id": 32331,
+      "name": "麻痹手里剑",
+      "subtype": 14,
+      "category": 5,
+      "flags": 5
+    },
+    {
+      "id": 57728,
+      "name": "苦无",
+      "subtype": 14,
+      "category": 11,
+      "flags": 5
+    },
+    {
+      "id": 49321,
+      "name": "火药镖",
+      "subtype": 14,
+      "category": 5,
+      "flags": 5
+    },
+    {
+      "id": 30218,
+      "name": "伊贺流火药弹",
+      "subtype": 14,
+      "category": 4,
+      "flags": 5
+    },
+    {
+      "id": 40447,
+      "name": "伊贺流焙烙弹",
+      "subtype": 14,
+      "category": 4,
+      "flags": 5
+    },
+    {
+      "id": 9691,
+      "name": "伊贺流大焙烙弹",
+      "subtype": 14,
+      "category": 19,
+      "flags": 5
+    },
+    {
+      "id": 8950,
+      "name": "撒菱",
+      "subtype": 14,
+      "category": 6,
+      "flags": 5
+    },
+    {
+      "id": 19742,
+      "name": "菱钉弹",
+      "subtype": 14,
+      "category": 4,
+      "flags": 5
+    },
+    {
+      "id": 10816,
+      "name": "地胆粉",
+      "subtype": 14,
+      "category": 4,
+      "flags": 5
+    },
+    {
+      "id": 33671,
+      "name": "水母粉",
+      "subtype": 14,
+      "category": 4,
+      "flags": 5
+    },
+    {
+      "id": 2443,
+      "name": "盲目弹",
+      "subtype": 14,
+      "category": 4,
+      "flags": 5
+    },
+    {
+      "id": 53380,
+      "name": "烟雾弹",
+      "subtype": 14,
+      "category": 16,
+      "flags": 5
+    },
+    {
+      "id": 33470,
+      "name": "召火符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 62302,
+      "name": "召水符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 58078,
+      "name": "召风符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 32718,
+      "name": "召雷符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 55045,
+      "name": "召土符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 4998,
+      "name": "迟钝符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 30654,
+      "name": "结界符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 8825,
+      "name": "附子汁",
+      "subtype": 14,
+      "category": 15,
+      "flags": 5
+    },
+    {
+      "id": 14231,
+      "name": "大芹汁",
+      "subtype": 14,
+      "category": 15,
+      "flags": 5
+    },
+    {
+      "id": 48557,
+      "name": "假箭弹术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 18476,
+      "name": "猫步术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 17405,
+      "name": "虎驱术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 61216,
+      "name": "刚力丹",
+      "subtype": 14,
+      "category": 2,
+      "flags": 5
+    },
+    {
+      "id": 49521,
+      "name": "埋火",
+      "subtype": 14,
+      "category": 20,
+      "flags": 5
+    },
+    {
+      "id": 48799,
+      "name": "替身术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 64093,
+      "name": "透波术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 44744,
+      "name": "掷币术卷轴",
+      "subtype": 14,
+      "category": 4,
+      "flags": 32775
+    },
+    {
+      "id": 19707,
+      "name": "木灵变化术卷轴",
+      "subtype": 14,
+      "category": 28,
+      "flags": 5
+    },
+    {
+      "id": 58071,
+      "name": "散弹苦无",
+      "subtype": 14,
+      "category": 11,
+      "flags": 5
+    },
+    {
+      "id": 23005,
+      "name": "埋火‧地胆",
+      "subtype": 14,
+      "category": 20,
+      "flags": 5
+    },
+    {
+      "id": 16552,
+      "name": "埋火‧水母",
+      "subtype": 14,
+      "category": 20,
+      "flags": 5
+    },
+    {
+      "id": 29670,
+      "name": "埋火‧秽土",
+      "subtype": 14,
+      "category": 20,
+      "flags": 5
+    },
+    {
+      "id": 51914,
+      "name": "凤仙花术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 44607,
+      "name": "火炎龙术卷轴",
+      "subtype": 14,
+      "category": 30,
+      "flags": 5
+    },
+    {
+      "id": 13267,
+      "name": "蓄力奉还术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 26764,
+      "name": "浮云术卷轴",
+      "subtype": 14,
+      "category": 18,
+      "flags": 5
+    },
+    {
+      "id": 49673,
+      "name": "禁火符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 44655,
+      "name": "禁水符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 22221,
+      "name": "禁风符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 1393,
+      "name": "禁雷符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 13051,
+      "name": "禁土符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 28205,
+      "name": "金刚符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 8389,
+      "name": "加持符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 52306,
+      "name": "封力符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 44930,
+      "name": "克金符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 50088,
+      "name": "通占符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 65059,
+      "name": "开运符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 55721,
+      "name": "养身符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 42088,
+      "name": "护身符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 40718,
+      "name": "活源符",
+      "subtype": 15,
+      "category": 23,
+      "flags": 5
+    },
+    {
+      "id": 62705,
+      "name": "护灵招来符",
+      "subtype": 15,
+      "category": 22,
+      "flags": 8197
+    },
+    {
+      "id": 58710,
+      "name": "昂灵符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 13011,
+      "name": "夺灵符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 7942,
+      "name": "影弹符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 19803,
+      "name": "封气符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 39291,
+      "name": "修罗符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 8024,
+      "name": "集财符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 32514,
+      "name": "波动符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 64629,
+      "name": "宿心解放符",
+      "subtype": 15,
+      "category": 17,
+      "flags": 1029
+    },
+    {
+      "id": 24057,
+      "name": "拳力符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 31267,
+      "name": "火弹符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 3735,
+      "name": "水弹符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 52147,
+      "name": "风弹符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 3944,
+      "name": "雷弹符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 24932,
+      "name": "土弹符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 5696,
+      "name": "召火符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 1
+    },
+    {
+      "id": 62337,
+      "name": "召水符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 41737,
+      "name": "召风符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 11727,
+      "name": "召雷符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 29217,
+      "name": "召土符",
+      "subtype": 15,
+      "category": 8,
+      "flags": 5
+    },
+    {
+      "id": 59273,
+      "name": "迟钝符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 61305,
+      "name": "结界符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 48268,
+      "name": "金刚符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 33030,
+      "name": "封力符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 63678,
+      "name": "克金符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 45593,
+      "name": "养身符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 54299,
+      "name": "活源符",
+      "subtype": 15,
+      "category": 23,
+      "flags": 5
+    },
+    {
+      "id": 29729,
+      "name": "封气符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 45580,
+      "name": "修罗符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 35389,
+      "name": "发气符",
+      "subtype": 15,
+      "category": 23,
+      "flags": 5
+    },
+    {
+      "id": 46039,
+      "name": "火爆符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 54811,
+      "name": "水牙符",
+      "subtype": 15,
+      "category": 23,
+      "flags": 5
+    },
+    {
+      "id": 26116,
+      "name": "风箭符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 14466,
+      "name": "雷霆符",
+      "subtype": 15,
+      "category": 25,
+      "flags": 5
+    },
+    {
+      "id": 53226,
+      "name": "土轰符",
+      "subtype": 15,
+      "category": 23,
+      "flags": 5
+    },
+    {
+      "id": 37484,
+      "name": "仙身符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 45079,
+      "name": "燃生符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 59788,
+      "name": "衰气符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 46457,
+      "name": "潜气符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 22722,
+      "name": "散变符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 51944,
+      "name": "宿心升华符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 1029
+    },
+    {
+      "id": 20920,
+      "name": "粹然符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 41852,
+      "name": "飞剑符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 5
+    },
+    {
+      "id": 11256,
+      "name": "操身符",
+      "subtype": 15,
+      "category": 9,
+      "flags": 5
+    },
+    {
+      "id": 63348,
+      "name": "缩地符",
+      "subtype": 15,
+      "category": 7,
+      "flags": 16453
+    }
+  ]
+}

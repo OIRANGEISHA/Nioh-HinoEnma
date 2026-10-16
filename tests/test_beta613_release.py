@@ -5,7 +5,7 @@ from unittest.mock import patch
 import base64, hashlib, json, struct, sys, unittest
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'tools'),str(ROOT/'src')]
-from build_profile import load_plan,load_beta612_plan,source_plan,assemble,relocation_specs,legacy_plans,validate_layout
+from build_profile import load_beta613_plan as load_plan,load_beta612_plan,source_plan,assemble,relocation_specs,legacy_plans,validate_layout
 from hinoenma_beta613_release import apply_release,trial_plan,validate_release,CONFIRMED,TRIAL_CANONICAL_SHA256,digest
 from verify_beta613_items import BASE_SHA,CHANGED,ADDED,verify_gameplay
 from verify_beta56 import expected_layouts
@@ -19,7 +19,7 @@ class Beta613ReleaseTests(unittest.TestCase):
         cls.base=load_beta612_plan();cls.trial=trial_plan(cls.base);cls.plan=load_plan()
 
     def test_release_and_original_gameplay_evidence_identities(self):
-        meta=json.loads((ROOT/'version.json').read_text('utf8'))
+        meta=json.loads((ROOT/'profiles/baseline-beta6.1.3-version.json').read_text('utf8'))
         self.assertEqual((meta['version'],meta['file_version']),('1.0.0-beta.6.1.3','1.0.0.83'))
         self.assertEqual(hashlib.sha256((ROOT/'profiles/baseline-beta6.1.2.json').read_bytes()).hexdigest(),BASE_SHA)
         self.assertEqual(digest(self.trial),TRIAL_CANONICAL_SHA256)

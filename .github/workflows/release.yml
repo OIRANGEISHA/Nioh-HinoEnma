@@ -1,4 +1,4 @@
-name: Publish payload-verified Beta 6.1.3
+name: Publish payload-verified Beta 6.1.4
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: publish-beta613
+  group: publish-beta614
   cancel-in-progress: false
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
     env:
       PYTHONUTF8: '1'
       PYTHONDONTWRITEBYTECODE: '1'
-      RELEASE_STEM: Nioh-HinoEnma-1.0.0-beta.6.1.3
+      RELEASE_STEM: Nioh-HinoEnma-1.0.0-beta.6.1.4
     defaults:
       run:
         shell: pwsh
@@ -48,19 +48,19 @@ jobs:
           $ErrorActionPreference = 'Stop'
           'run=false' >> $env:GITHUB_OUTPUT
           $version = Get-Content -LiteralPath version.json -Raw | ConvertFrom-Json
-          if ($version.version -cne '1.0.0-beta.6.1.3') { exit 0 }
+          if ($version.version -cne '1.0.0-beta.6.1.4') { exit 0 }
           $source = git rev-parse HEAD
           if ($LASTEXITCODE -ne 0 -or $source -cne $env:GITHUB_SHA -or $source -cne $env:EXPECTED_COMMIT -or $source -cnotmatch '^[0-9a-f]{40}$') { throw 'Exact source commit mismatch.' }
-          $publication = Get-Content -LiteralPath docs/beta613-publication.json -Raw | ConvertFrom-Json
-          if ($publication.publication_authorized -ne $true -or $publication.repository -cne 'OIRANGEISHA/Nioh-HinoEnma' -or $publication.version -cne $version.version -or $publication.tag -cne 'v1.0.0-beta.6.1.3' -or $publication.asset_commit -cne '2ff0b2e0ae0963d8ed95a46816e98215c5dd9de8' -or $publication.executable_sha256 -cne '92a3440150efd53194f9683c7c6c2ced91a367d0a4c68b4a29d69ee83f57ea45') { throw 'Authorized exact file scope differs.' }
-          if ((Get-FileHash -LiteralPath profiles/steam-1.24.8.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '7204b9bd34a16e75b2b72b3101c47a599f0ef22a94ae2dd4eefc8bb2018957c5') { throw 'Versioned profile changed.' }
+          $publication = Get-Content -LiteralPath docs/beta614-publication.json -Raw | ConvertFrom-Json
+          if ($publication.publication_authorized -ne $true -or $publication.repository -cne 'OIRANGEISHA/Nioh-HinoEnma' -or $publication.version -cne $version.version -or $publication.tag -cne 'v1.0.0-beta.6.1.4' -or $publication.asset_commit -cne '82d18d4cb62173192bd56f85c6d83134274ed658' -or $publication.executable_sha256 -cne '460daa877d1a09d9a7c290c520d6eadb2724073d35c4aff91cb8fd64e5039f54') { throw 'Authorized exact file scope differs.' }
+          if ((Get-FileHash -LiteralPath profiles/steam-1.24.8.json -Algorithm SHA256).Hash.ToLowerInvariant() -cne '68ed92a4bcc6ebde3903cf678449a961a048dcd4bb4ab1d3d147ff06985fd439') { throw 'Versioned profile changed.' }
           'run=true' >> $env:GITHUB_OUTPUT
 
       - name: Check out only the immutable versioned assets
         if: steps.scope.outputs.run == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: 2ff0b2e0ae0963d8ed95a46816e98215c5dd9de8
+          ref: 82d18d4cb62173192bd56f85c6d83134274ed658
           path: artifacts/asset-source
           fetch-depth: 1
           persist-credentials: false
@@ -78,36 +78,36 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Dependency installation failed.' }
           "PYTHONPATH=$((Resolve-Path artifacts/python-deps).Path)" >> $env:GITHUB_ENV
 
-      - name: Verify source, CT and all 409 current regressions
+      - name: Verify source, CT and all 441 current regressions
         if: steps.scope.outputs.run == 'true'
         run: |
-          python tools/verify_beta613_items.py
+          python tools/verify_beta614_items.py
           if ($LASTEXITCODE -ne 0) { throw 'Warm-item payload equivalence failed.' }
           python tools/build_profile.py --check
           if ($LASTEXITCODE -ne 0) { throw 'Generated source differs.' }
-          python tools/check_source.py | Set-Content -LiteralPath artifacts/beta613/source-checks.json -Encoding utf8
+          python tools/check_source.py | Set-Content -LiteralPath artifacts/beta614/source-checks.json -Encoding utf8
           if ($LASTEXITCODE -ne 0) { throw 'Source check failed.' }
-          python tools/verify_beta613_ct.py --report artifacts/beta613/ct-verification.json
+          python tools/verify_beta614_ct.py --report artifacts/beta614/ct-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'CT verification failed.' }
-          python tools/run_beta613_regressions.py --report artifacts/beta613/regression-tests.json
+          python tools/run_beta614_regressions.py --report artifacts/beta614/regression-tests.json
           if ($LASTEXITCODE -ne 0) { throw 'Current regressions failed.' }
 
       - name: Rebuild and verify both configurations as offline evidence
         if: steps.scope.outputs.run == 'true'
         run: |
-          ./tools/build.ps1 -Configuration Debug -ArtifactRoot artifacts/beta613
+          ./tools/build.ps1 -Configuration Debug -ArtifactRoot artifacts/beta614
           if ($LASTEXITCODE -ne 0) { throw 'Debug build failed.' }
-          ./tools/build.ps1 -Configuration Release -ArtifactRoot artifacts/beta613
+          ./tools/build.ps1 -Configuration Release -ArtifactRoot artifacts/beta614
           if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
-          python tools/verify_beta613.py --exe "artifacts/beta613/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta613/Debug/verification.json
+          python tools/verify_beta614.py --exe "artifacts/beta614/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta614/Debug/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Debug comparison failed.' }
-          python tools/verify_beta613.py --exe "artifacts/beta613/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta613/Release/verification.json
+          python tools/verify_beta614.py --exe "artifacts/beta614/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta614/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release comparison failed.' }
 
       - name: Package verified versioned EXE and final committed UTF-8 source
         if: steps.scope.outputs.run == 'true'
         run: |
-          python .github/scripts/publish_beta613.py --asset-dir artifacts/asset-source --prepare-only
+          python .github/scripts/publish_beta614.py --asset-dir artifacts/asset-source --prepare-only
           if ($LASTEXITCODE -ne 0) { throw 'Exact asset/source preparation failed.' }
 
       - name: Verify Draft downloads and publish the authorized Pre-release
@@ -115,7 +115,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python .github/scripts/publish_beta613.py --asset-dir artifacts/asset-source --publish
+          python .github/scripts/publish_beta614.py --asset-dir artifacts/asset-source --publish
           if ($LASTEXITCODE -ne 0) { throw 'Publication stopped; preserve Draft and inspect readback.' }
-          $receipt = Get-Content -LiteralPath artifacts/publish-beta613/publication-readback.json -Raw | ConvertFrom-Json
-          "Verified published Beta 6.1.3: $($receipt.url). The verified local versioned EXE and all source/asset downloads were verified." >> $env:GITHUB_STEP_SUMMARY
+          $receipt = Get-Content -LiteralPath artifacts/publish-beta614/publication-readback.json -Raw | ConvertFrom-Json
+          "Verified published Beta 6.1.4: $($receipt.url). The verified local versioned EXE and all source/asset downloads were verified." >> $env:GITHUB_STEP_SUMMARY

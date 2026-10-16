@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "version": "1.0.0-beta.6.1.4",
+  "file_version": "1.0.0.84",
+  "validated_utc": "2026-10-15T17:05:05.645851+00:00",
+  "local_package_only": true,
+  "github_published": false,
+  "game_access_during_packaging": false,
+  "tests": {
+    "count": 441,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "source_tree_sha256": "ff5c2a0555d3bb00542bc250ec8f218588407fb2e60898b1ab44300ac99a8c34",
+    "tested_source_unchanged": true,
+    "report_sha256": "cb5d1a9587a3cbc45c5c94b4bcc79c39588f4c021fc5aea1ed3cae5613ae36b2"
+  },
+  "compiled_checks": {
+    "Debug": {
+      "version": "1.0.0-beta.6.1.4",
+      "success": true,
+      "game_access": false,
+      "executable_versions": {
+        "product_version": "1.0.0-beta.6.1.4",
+        "file_version": "1.0.0.84"
+      },
+      "generated_source_matches": true,
+      "generated_source_sha256": "92af4683a76f09ef3f34478ec70de9109e21fec658abb0eade2c53ab1790636e",
+      "profile_sha256": "68ed92a4bcc6ebde3903cf678449a961a048dcd4bb4ab1d3d147ff06985fd439",
+      "verifier_sha256": "1c5d0ea1d2a432fcbbd48e2f7c6177a3d54ef6251b34203e1a4581259491b2a5",
+      "build_script_sha256": "2f8ebbc26da113076a991c9fc571460d277c6c44e4aa1d0c3b21e4497420eacf",
+      "launcher_source_files": {
+        "launcher/app.manifest": "2675e4ee5235c58d7e9846aeb50cba9ef2a3d053e9f1eb7fa48c11e1a288f28d",
+        "launcher/AssemblyInfo.cs": "a1933da7d250b2d31a7e3ec0ee8731f8f6c11d79c42942cfbdd2c7b64c5f42e3",
+        "launcher/Injector.cs": "4bd642f2fc20aa3870f10b7b53e42c2bd1fd7323a91001d433ddef6144a3b90a",
+        "launcher/Native.cs": "e98b68d884b43343cc31928c867f6b8e1ba893282adee738caacdb4ddef6d350",
+        "launcher/Profile.generated.cs": "92af4683a76f09ef3f34478ec70de9109e21fec658abb0eade2c53ab1790636e",
+        "launcher/Program.cs": "3e3782c14fad13f830c77fcd501e7063075be63ed6058a861f27cd4aa7a2e5f2",
+        "launcher/SelfTests.cs": "eda9b5bc0fb42e7b7ab6f886f6fa0405f697df904d956676335368e4ac946c21"
+      },
+      "self_checks": 30,
+      "payload_comparisons": 1008,
+      "layout_count": 12,
+      "hook_count": 84,
+      "legacy_hook_counts": [
+        55,
+        59,
+        60,
+        70,
+        71,
+        71,
+        80,
+        81,
+        81
+      ],
+      "legacy_payload_comparisons": 7536,
+      "legacy_layout_count": 108,
+      "pe_machine": "x64",
+      "executable_bytes": 1005056,
+      "executable_sha256": "62cfbd80d9e68111e42adcafff6965d81858b350db8d97a1a8429d7ee50ba102"
+    },
+    "Release": {
+      "version": "1.0.0-beta.6.1.4",
+      "success": true,
+      "game_access": false,
+      "executable_versions": {
+        "product_version": "1.0.0-beta.6.1.4",
+        "file_version": "1.0.0.84"
+      },
+      "generated_source_matches": true,
+      "generated_source_sha256": "92af4683a76f09ef3f34478ec70de9109e21fec658abb0eade2c53ab1790636e",
+      "profile_sha256": "68ed92a4bcc6ebde3903cf678449a961a048dcd4bb4ab1d3d147ff06985fd439",
+      "verifier_sha256": "1c5d0ea1d2a432fcbbd48e2f7c6177a3d54ef6251b34203e1a4581259491b2a5",
+      "build_script_sha256": "2f8ebbc26da113076a991c9fc571460d277c6c44e4aa1d0c3b21e4497420eacf",
+      "launcher_source_files": {
+        "launcher/app.manifest": "2675e4ee5235c58d7e9846aeb50cba9ef2a3d053e9f1eb7fa48c11e1a288f28d",
+        "launcher/AssemblyInfo.cs": "a1933da7d250b2d31a7e3ec0ee8731f8f6c11d79c42942cfbdd2c7b64c5f42e3",
+        "launcher/Injector.cs": "4bd642f2fc20aa3870f10b7b53e42c2bd1fd7323a91001d433ddef6144a3b90a",
+        "launcher/Native.cs": "e98b68d884b43343cc31928c867f6b8e1ba893282adee738caacdb4ddef6d350",
+        "launcher/Profile.generated.cs": "92af4683a76f09ef3f34478ec70de9109e21fec658abb0eade2c53ab1790636e",
+        "launcher/Program.cs": "3e3782c14fad13f830c77fcd501e7063075be63ed6058a861f27cd4aa7a2e5f2",
+        "launcher/SelfTests.cs": "eda9b5bc0fb42e7b7ab6f886f6fa0405f697df904d956676335368e4ac946c21"
+      },
+      "self_checks": 30,
+      "payload_comparisons": 1008,
+      "layout_count": 12,
+      "hook_count": 84,
+      "legacy_hook_counts": [
+        55,
+        59,
+        60,
+        70,
+        71,
+        71,
+        80,
+        81,
+        81
+      ],
+      "legacy_payload_comparisons": 7536,
+      "legacy_layout_count": 108,
+      "pe_machine": "x64",
+      "executable_bytes": 1001472,
+      "executable_sha256": "460daa877d1a09d9a7c290c520d6eadb2724073d35c4aff91cb8fd64e5039f54"
+    }
+  },
+  "ct_check": {
+    "success": true,
+    "version": "1.0.0-beta.6.1.4",
+    "game_access": false,
+    "hook_count": 84,
+    "layout_count": 12,
+    "three_way_payload_comparisons": 1008,
+    "native_patch_comparisons": 1008,
+    "ct_local_labels": 1452,
+    "source_input_unchanged": true,
+    "negative_guards": 5,
+    "private_dependencies_imported": false,
+    "ct_direct_gameplay_tested": false,
+    "profile_sha256": "68ed92a4bcc6ebde3903cf678449a961a048dcd4bb4ab1d3d147ff06985fd439",
+    "generated_source_sha256": "92af4683a76f09ef3f34478ec70de9109e21fec658abb0eade2c53ab1790636e",
+    "ct_sha256": "6fdcd983ce9eea7d2667ed80e5c6c7916a0d9d7e8628967416ed85d882ee517d",
+    "ct_bytes": 1394426,
+    "verifier_sha256": "dde7b98897a00c7dc029e4d90d33371a471a22ae54242f79e08a5121b5edfe07",
+    "converter_sha256": "3a9819e2dec06bf7e2b73b5e0e73c9c80b797f87687e103e5d859a13e9b4d043"
+  },
+  "installed_trial_equivalence": {
+    "success": true,
+    "version": "1.0.0-beta.6.1.4",
+    "game_access": false,
+    "warm_payload_equivalence": true,
+    "exact_executable_gameplay_validated": false,
+    "sampled_kunai_gameplay_validated": true,
+    "all_jutsu_gameplay_validated": false,
+    "hook_count": 84,
+    "layout_count": 12,
+    "live_payload_comparisons": 1008,
+    "unchanged_previous_payloads": 74,
+    "unchanged_payload_comparisons": 888,
+    "unchanged_native_patch_comparisons": 1008,
+    "added_native_patch_comparisons": 0,
+    "changed_hooks": [
+      "HE_InputA",
+      "HE_InputB",
+      "HE_LivingWeaponDigitNine",
+      "HE_MapNativeIdlePrivate",
+      "HE_MapPreviewCameraDistancePrivate",
+      "HE_MapPreviewCameraHeightPrivate",
+      "HE_MapVisualResourcePrivate",
+      "HE_MapVisualRestorePrivate",
+      "HE_PostDefeatHealScript",
+      "HE_SaltEventCatchup"
+    ],
+    "added_hooks": [],
+    "source_files": {
+      "src/hinoenma_general_jutsu.py": "19a887c48469e88b78d9e33dac0b4bd663e7df1befd236a189d7baeeeab72831",
+      "src/hinoenma_general_jutsu_data.py": "8ded1af84f3eed338e0e1d3e65641a03ef3c8ac91c9c1a2b525fac7798b7975b",
+      "src/hinoenma_general_jutsu_timing.py": "de517500aade48d58e6986802709cf17e686a5b6c670f9255f564c405e8a3cf6",
+      "src/hinoenma_general_jutsu_recovery.py": "c308bdf31a784e54ee5c363786a11318e25cbb41f4c14782cca8b3070808ca32"
+    },
+    "baseline_profile_sha256": "7204b9bd34a16e75b2b72b3101c47a599f0ef22a94ae2dd4eefc8bb2018957c5",
+    "trial_profile_sha256": "2dd5fb23d33cd060749bf733c70ffa3b6d0c3a1bdcabe9b4bb1e3dc9ce9df870",
+    "evidence_sha256": "f1aea82b20f98800cbaad438708071a978522f23585ec5367b3c068460e32d36",
+    "gameplay_evidence_sha256": {
+      "sticky-dispersal-items-trial.json": "003f648d3bb8c99ca44d93d65f6fc92e3d48a42c6432c5345e523c1bf11beb85",
+      "nine-talismans-trial.json": "64dadc1d4a7c3558f27e0230a18a4aa988494bf414faab0a21b6ed39a60a8385",
+      "soul-release-trial.json": "d7fd329c8fd0ae8df8d3d2f1c965904b07fbbd71d645944025610f3ad4c3124d",
+      "general-jutsu-trial.json": "c799fa4090a6e05f353ece86cdc252687bd2aeb70b897977ce20195511f1dc1f"
+    },
+    "profile_sha256": "68ed92a4bcc6ebde3903cf678449a961a048dcd4bb4ab1d3d147ff06985fd439",
+    "generated_source_sha256": "92af4683a76f09ef3f34478ec70de9109e21fec658abb0eade2c53ab1790636e",
+    "verifier_sha256": "87c4652708124666246c4fbf18633182adcdaa7d21e2250ba63016a032ccdfdb"
+  },
+  "sampled_kunai_gameplay_validated": true,
+  "all_jutsu_gameplay_validated": false,
+  "exact_executable_gameplay_validated": false,
+  "ct_direct_gameplay_tested": false,
+  "preview": {
+    "version_and_layout_visually_checked": true,
+    "real_game": false
+  },
+  "previous_beta613_assets_unchanged": true,
+  "original_trial_receipt": "general-jutsu-trial.json",
+  "special_cases_audit": "general-jutsu-special-cases.json",
+  "limitations": [
+    "13-category / 132-definition offline dispatch coverage is not complete gameplay coverage.",
+    "Kunai projectile, consecutive use and sampled injury recovery confirmed by the user.",
+    "The exact 1015 movement-injury transition passed CPU replay, not a new live capture.",
+    "Some Onmyo/ninjutsu, special variants and noncritical items remain unsupported or unverified.",
+    "The newly built EXE has not undergone a complete game restart; CT activation is untested.",
+    "Historical gameplay evidence is retained, not claimed as repeated this round."
+  ]
+}
