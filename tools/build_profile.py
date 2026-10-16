@@ -80,6 +80,15 @@ BETA612_BASELINE_SHA256 = 'b6c5a560dd605ab114870e633e22d87e0b4a6c5dd8da8743dc71e
 
 BETA613_BASELINE_SHA256 = '7204b9bd34a16e75b2b72b3101c47a599f0ef22a94ae2dd4eefc8bb2018957c5'
 
+BETA614_BASELINE_SHA256 = '68ed92a4bcc6ebde3903cf678449a961a048dcd4bb4ab1d3d147ff06985fd439'
+
+def _frozen_beta614() -> dict:
+    raw = (ROOT / 'profiles/baseline-beta6.1.4.json').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != BETA614_BASELINE_SHA256:
+        raise ValueError('Exact delivered Beta6.1.4 basis changed')
+    return json.loads(raw.decode('utf-8'))
+
+
 def _frozen_beta613() -> dict:
     raw = (ROOT / 'profiles/baseline-beta6.1.3.json').read_bytes()
     if hashlib.sha256(raw).hexdigest() != BETA613_BASELINE_SHA256:
@@ -299,6 +308,10 @@ def source_plan_beta563(frozen: dict) -> dict:
 
 
 def source_plan(frozen: dict) -> dict:
+    if frozen.get('beta62_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6.2':
+        from hinoenma_beta62_release import apply_release, validate_release
+        validate_release(frozen)
+        return apply_release(source_plan(_frozen_beta614()))
     if frozen.get('beta614_release_revision') == 1 or frozen.get('tool_version') == '1.0.0-beta.6.1.4':
         from hinoenma_beta614_release import apply_release, validate_release
         validate_release(frozen)
@@ -380,6 +393,10 @@ def legacy_plans(frozen: dict) -> list[dict]:
 
 
 def validate_layout(plan: dict) -> None:
+    if plan.get('beta62_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6.2':
+        from hinoenma_beta62_release import validate_release
+        validate_release(plan)
+        return
     if plan.get('beta614_release_revision') == 1 or plan.get('tool_version') == '1.0.0-beta.6.1.4':
         from hinoenma_beta614_release import validate_release
         validate_release(plan)
@@ -514,6 +531,12 @@ def load_beta612_plan() -> dict:
 def load_beta613_plan() -> dict:
     """Retain the exact baseline used by the general-jutsu live trials."""
     plan = _frozen_beta613()
+    return _validate_loaded_plan(plan, source_plan(plan))
+
+
+def load_beta614_plan() -> dict:
+    """Keep Soul Purge/Kodama trials and historical regressions on their exact input."""
+    plan = _frozen_beta614()
     return _validate_loaded_plan(plan, source_plan(plan))
 
 
@@ -881,7 +904,8 @@ def ct_source(plan: dict, display_version: str) -> str:
         'Beta6.1.2新增禁火/禁水/禁风/禁雷/禁土晴明符；保留原生增益和复用规则，不以数量扣除判断这五种符。\n'
         '保留原生使用动作、效果与次数扣除；迟钝符仅覆盖当前核对过的准备术定义，未泛化全部同名变体。\n'
         'Beta6.1.4纳入通用术法动作分派、早帧投射物生成、苦无连续使用及受击恢复修订；苦无已获本轮实测确认。\n'
-        '特殊术法的变身、爱用度、死亡／受伤触发等仍需分别验证，部分阴阳术使用尚未修复；未声明全部术法可用。\n'
+        'Beta6.2新增木灵变化术及宿心升华符；变身恢复与爱用度增益消耗已实测，其他特殊术法仍需分别验证。\n'
+        '仍有部分忍术、阴阳术和非关键道具尚未修复或验证。\n'
         '上述修订已热接入并获抽样实测确认；本次打包的EXE尚未再次完整重启实测。\n'
         '推荐独立 EXE。本 CT 在 CE 内直接启用尚未实测，同一次游戏请选择 CT 或 EXE 一种方式。\n'
         'Hotfix1 修复梯子途中自动掉下、每步瞬移及离梯过高；当前与待切换公共攀爬动作均使用一致的位移缩放。\n'

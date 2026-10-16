@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-16",
+  "candidate": "Soul Purge revision 1, based on Beta6.1.4",
+  "item_id": 51944,
+  "item_name": "宿心升华符",
+  "user_confirmed": {
+    "first_use_buff": true,
+    "reuse_after_equipping_familiar_weapon_in_melee_slot1": true
+  },
+  "runtime_verified": {
+    "selected_weapon_familiarity_before": 999,
+    "selected_weapon_familiarity_after_effect_ends": 0,
+    "other_equipped_weapon_familiarity_unchanged": 999,
+    "native_buff_keys": [
+      180,
+      181
+    ],
+    "native_attack_multiplier": 1.1878920793533325,
+    "native_luck_amount": 274,
+    "stock_before": 998,
+    "stock_after": 997,
+    "consume_on_native_buff_removal": true,
+    "active_buff_recast_restriction_preserved": true,
+    "minimum_familiarity": 300
+  },
+  "offline_tests": 21,
+  "gameplay_scope": "Live candidate payload; no new packaged EXE yet",
+  "limitations": [
+    "Natural effect expiration and renewed use with a qualifying weapon were verified; no claim of every equipment configuration.",
+    "Kodama transformation remains separate unfinished work."
+  ]
+}

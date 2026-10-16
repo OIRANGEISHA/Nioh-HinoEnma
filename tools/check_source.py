@@ -27,8 +27,8 @@ def main() -> None:
     frozen = json.loads((ROOT / 'profiles/steam-1.24.8.json').read_text('utf-8'))
     original = deepcopy(frozen)
     plan = load_plan()
-    if (len(plan['hooks']) != (84 if plan.get('beta613_release_revision') else 82) or source_plan(frozen)['tool_version'] != plan['tool_version']
-            or plan['tool_version'] not in ('1.0.0-beta.5.6', '1.0.0-beta.5.6.2', '1.0.0-beta.5.6.3', '1.0.0-beta.6', '1.0.0-beta.6.1', '1.0.0-beta.6.1.1', '1.0.0-beta.6.1.2', '1.0.0-beta.6.1.3', '1.0.0-beta.6.1.4')):
+    if (len(plan['hooks']) != (86 if plan.get('beta62_release_revision') else 84 if plan.get('beta613_release_revision') else 82) or source_plan(frozen)['tool_version'] != plan['tool_version']
+            or plan['tool_version'] not in ('1.0.0-beta.5.6', '1.0.0-beta.5.6.2', '1.0.0-beta.5.6.3', '1.0.0-beta.6', '1.0.0-beta.6.1', '1.0.0-beta.6.1.1', '1.0.0-beta.6.1.2', '1.0.0-beta.6.1.3', '1.0.0-beta.6.1.4', '1.0.0-beta.6.2')):
         raise AssertionError('Expected the complete current source chain')
     if frozen != original:
         raise AssertionError('Source reconstruction changed its frozen input')

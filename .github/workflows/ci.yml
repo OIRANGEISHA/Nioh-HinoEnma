@@ -44,27 +44,27 @@ jobs:
 
       - name: Verify generated source, CT and public CPU regressions
         run: |
-          python tools/verify_beta614_items.py
+          python tools/verify_beta62_items.py
           if ($LASTEXITCODE -ne 0) { throw 'Warm-item payload equivalence failed.' }
           python tools/build_profile.py --check
           if ($LASTEXITCODE -ne 0) { throw 'Generated profile differs.' }
           python tools/check_source.py
           if ($LASTEXITCODE -ne 0) { throw 'Portable source or CT checks failed.' }
-          python tools/run_beta614_regressions.py --report artifacts/beta614/regression-tests.json
+          python tools/run_beta62_regressions.py --report artifacts/beta62/regression-tests.json
           if ($LASTEXITCODE -ne 0) { throw 'Complete exact-source regressions failed.' }
-          python tools/verify_beta614_ct.py --report artifacts/beta614/ct-verification.json
+          python tools/verify_beta62_ct.py --report artifacts/beta62/ct-verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Current CT verification failed.' }
 
       - name: Build Debug and optimized x64 Release
         run: |
-          ./tools/build.ps1 -Configuration Debug -ArtifactRoot artifacts/beta614
+          ./tools/build.ps1 -Configuration Debug -ArtifactRoot artifacts/beta62
           if ($LASTEXITCODE -ne 0) { throw 'Debug build failed.' }
-          ./tools/build.ps1 -Configuration Release -ArtifactRoot artifacts/beta614
+          ./tools/build.ps1 -Configuration Release -ArtifactRoot artifacts/beta62
           if ($LASTEXITCODE -ne 0) { throw 'Release build failed.' }
 
       - name: Verify both build profiles and self-checks
         run: |
-          python tools/verify_beta614.py --exe "artifacts/beta614/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta614/Debug/verification.json
+          python tools/verify_beta62.py --exe "artifacts/beta62/Debug/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta62/Debug/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Debug verification failed.' }
-          python tools/verify_beta614.py --exe "artifacts/beta614/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta614/Release/verification.json
+          python tools/verify_beta62.py --exe "artifacts/beta62/Release/${env:RELEASE_STEM}-windows-x64.exe" --report artifacts/beta62/Release/verification.json
           if ($LASTEXITCODE -ne 0) { throw 'Release verification failed.' }

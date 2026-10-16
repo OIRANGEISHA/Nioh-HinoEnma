@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-16",
+  "baseline": "Beta6.1.4 plus verified Soul Purge trial",
+  "item_id": 19707,
+  "item_name": "木灵变化术卷轴",
+  "candidate_revision": 1,
+  "offline_tests": 27,
+  "installed_hooks": 86,
+  "user_feedback": "正常",
+  "user_test_requested": [
+    "enter transformation",
+    "move to cancel",
+    "repeat and attack to cancel",
+    "umbrella and movement/J/I/5"
+  ],
+  "runtime_verified": {
+    "native_enter": 1205,
+    "native_loop": 1206,
+    "visual_template": 408470,
+    "item_quantity_before": 3,
+    "item_quantity_after": 2,
+    "native_visual_attached": true,
+    "native_visual_cleanup_on_exit": true,
+    "request_cleared": true,
+    "returned_to_hino_idle": true,
+    "recorded_transformation_cycles": 1,
+    "injury_routing": "offline CPU validation; not separately observed in this live run"
+  },
+  "native_inventory_damage_model_lifecycle_preserved": true,
+  "scope": "Verified live candidate; source modules ready for the next package. Existing published Beta6.1.4 EXE is unchanged.",
+  "integration_order": [
+    "hinoenma_soul_purge.apply_soul_purge",
+    "hinoenma_kodama_transform.apply_kodama_transform"
+  ],
+  "evidence_sha256": "1d2ac8588caf9ccd248010603b2a7352166d79771c29c2c4d5a108d3e003d65d",
+  "candidate_sha256": "01d758fca58eda125e8e8e3bf43d2e87757852382658ce834777eeb95f015b60"
+}

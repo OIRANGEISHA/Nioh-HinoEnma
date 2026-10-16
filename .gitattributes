@@ -72,3 +72,15 @@ src/hinoenma_beta614_release.py -text whitespace=cr-at-eol
 docs/beta614-live-payload-identities.json -text whitespace=cr-at-eol
 docs/general-jutsu-trial.json -text whitespace=cr-at-eol
 docs/general-jutsu-special-cases.json -text whitespace=cr-at-eol
+
+# Beta6.2 preserves exact trial and baseline bytes.
+src/hinoenma_soul_purge.py -text whitespace=cr-at-eol
+src/hinoenma_kodama_transform.py -text whitespace=cr-at-eol
+src/hinoenma_kodama_transform_data.py -text whitespace=cr-at-eol
+src/hinoenma_beta62_release.py -text whitespace=cr-at-eol
+docs/beta62-live-payload-identities.json -text whitespace=cr-at-eol
+docs/soul-purge-trial.json -text whitespace=cr-at-eol
+docs/kodama-transform-trial.json -text whitespace=cr-at-eol
+profiles/baseline-beta6.1.4.json -text whitespace=cr-at-eol
+profiles/baseline-beta6.1.4-version.json -text whitespace=cr-at-eol
+tests/fixtures/kodama-native.json -text whitespace=cr-at-eol

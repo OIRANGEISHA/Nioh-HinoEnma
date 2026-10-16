@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0-beta.6.2",
+  "repository": "OIRANGEISHA/Nioh-HinoEnma",
+  "tag": "v1.0.0-beta.6.2",
+  "publication_authorized": true,
+  "authorization": "2026-10-16: user requested packaging Beta6.2 and pushing GitHub, with standing permission to publish directly. Only EXE and source ZIP attachments; include usage, key bindings and remaining unsupported Onmyo/items.",
+  "asset_commit": "58d97c138cdd13196a302d8aecf686e0041b3571",
+  "asset_branch": "release-assets/beta62",
+  "executable_sha256": "58c54e7d43058abb63cffe2b8dcf9f5155def495f749a32de9385eaeb45408f5",
+  "profile_sha256": "09fe2bcc64811b276c999ff407bc1e1106ce7f4ed9b90df6bd4cb69c00649c39",
+  "ct_sha256": "47498519ec8afed7c5506453e2df81cc29bcd85d227314ff6c58625e60e4fb28",
+  "original_local_verification_sha256": "7d198d3e9d3589b00d7fd40c352371a6d1b45891e930ad490cb0620ef7c8f381",
+  "exact_executable_gameplay_validated": false,
+  "runtime_gameplay_validated": true,
+  "kodama_live_injury_validated": false,
+  "warm_payload_equivalence": true
+}

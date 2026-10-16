@@ -74,30 +74,30 @@ namespace HinoEnmaTool
                 return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();
         }
 
-        // These exact identities cover the confirmed Beta6 through Beta6.1.4 item delta. Historical
+        // These exact identities cover the confirmed Beta6 through Beta6.2 item delta. Historical
         // equality checks may exempt one only after its full template, fixup
         // sequence and relocated payload/site bytes pass independent hashes.
         private static bool VerifiedCurrentItem(int index)
         {
-            int[] indices={6,7,11,13,36,39,42,48,49,51,52,54,59,61,62,63,65,68,69,82,83};
+            int[] indices={6,7,11,13,36,39,42,48,49,51,52,53,54,59,60,61,62,63,65,68,69,78,79,82,83,84,85};
             int selected=Array.IndexOf(indices,index);
             if(selected<0) return false;
-            string[] names={"HE_InputA","HE_InputB","HE_HimorogiFragment","HE_Consumables","HE_LivingWeaponDigitNine","HE_LadderCommonLookup","HE_ProjectileElementInheritance","HE_SameTemplateUnloadResources","HE_SaltEventCatchup","HE_PostDefeatDamage","HE_PostDefeatRestore","HE_PostDefeatHealScript","HE_InherentDirectElement","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapNativeIdlePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate","HE_SoulReleaseEligibility","HE_SoulReleaseFamiliarity"};
-            uint[] rvas={0x721044U,0x721099U,0x75185dU,0x751862U,0x715d4bU,0x73fa40U,0x7e2959U,0x8b1a10U,0x718950U,0x717caeU,0x70ece0U,0x6ef439U,0x717f06U,0x8c5407U,0x7604e7U,0x760778U,0x9530baU,0x856565U,0x850a85U,0x766455U,0x7e28a9U};
-            int[] offsets={6144,7168,11264,13312,397312,59392,114688,71680,4160,86016,90112,98304,122880,135168,139264,143360,155648,172032,176128,93184,97280};
-            int[] capacities={1024,1024,1024,1024,32768,2048,4096,6144,960,4096,3072,4096,4096,4096,4096,4096,4096,4096,4096,1024,1024};
-            int[] lengths={700,700,971,1001,32458,1899,3192,5837,5,3150,1359,3789,1703,3480,3920,3039,2973,3742,2768,135,117};
-            string[] original={"440fbe420c","440fbe470e","4584f6752d","83bf4c050000007424","498b7338410f2873f0","48895c2408","0f104d070f114f18","e80bff6d00","e8fbc4feff","4c8bb6b0050000","488bc4574154","e872560c00","0f104c24300f114d88","e854fde8ff","4885c00f8450030000","498b85c0000000","488b472048894328","f30f101517809900","f30f103517db9900","4803c88339ff","833c08ff0f8490000000"};
-            string[] templates={"b30c20d536fd0010b3513a4751565aab770b4c13267a776e156a24cfdf87ff84","0a7407ecf6a79852972562567e233d352c3ce5af373d44ae103e866b78bcf088","a39bd07e5a12f76d8513d765ceb04013225ac3538fd0f9732b3402232e0b3e94","b61ccfde922a42e29706d0a7e782d923edbbd1e07283cb45df2b1a8a52245cb2","1dd739709ed0265b20d026942e1f672c0ca3e6b5c50b31c0d8e0e7313722e237","bac1eef3a530116968962dd8ee12a3fa637a8c5c58e3cbe574b2b1cf7f38f742","8a6435503f2618f4afbaf7b1ebe8f73951e6eb039347438bde6e6f7d128959e7","5254effa7be5ccf6dafcf289d47a10dff0d84278b4cef6fe6c79f61304fd07a6","962dfa2976eac6776ef96c64ed943e5436206f78ca8112be72033601b540615d","3036fab63f6425883c59ff1a3539a8588c2b6328c7549fd585990817163153fc","51c06abbc7396d72194ce789d56b452293aed6fedb0fdd51cb3e6d06dca2ad92","e8c58dc3e475b7688e005a37760cd7541c8d517e0098381442e17546063aab9a","a29254be3839c5f03ffcd4573ebc32fede64c26bfe34c18cd69ba3da92e21391","1963b4a7c601a6a41361fd6eb3cb6a33b2f1a96bdc6ebd61e2e9809206a4b38f","3981335e108180b4c1dffe31521ae1769285504bcb37a0db629edd2006cbb530","c1151448d9e1230d0313d6478b4561b8e0d21e40837c3621db9d4dbd57e92065","4d456efc9336f3a162f2a6095688d1df9e4340cdccba939b462e37c49359b215","bc1beb18f69aec1dff11868bfa05e9e16abf00b93a476a2c547fbc919a9ccfab","4b946822458d2af6ba820c7b86f182ffbd77f260c5714ac3a9a1c2006e247207","69f79f40d3355eb3399397c0cd5c8eec2e3c5daa06b67648fe7b34fae00aecb1","e45d61b4a53e6450e58a9dc78f03731efa00407693dddb3dc6a1a0f0a623d6b1"};
-            string[] fixups={"9df20ace3a516bbabe37362746cd81370ffc5b4135f57439717254cfabe2ec44","62c53e676d8957e12efdc75a5cffcb646442b411453aa0ac6bfcc544f7c0ce6b","ccc4899cff026b16e0c4143c1449502f6c5465b992a8068a829f8f08fc2ba14e","cf1035ca88cc901263ccf1b1c0f18202ccb9cc8c476a36dff01eae9d7c81e8e2","6a14a2d47b78218b936d3f3aeb1e813c43e48946f166c228b2e67f2937ffabd6","7987c1442ba07b4fd5801a987709564240f7cc0332c12cd8555483297d3b9415","85bd2643459e19693d5bf502450b54fa28fee1587c2ac4f76f6981e3d8b10dff","a98bb04d41bbbd63de08a57315766ce09f32a7a6bae65933bb28a51ce6d47a9b","e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","777883705f9546e4574539973769d8f1330a9201f1476156ee2878980af38581","8395e2b699f742078c4fc41b23b48f53b780604c4334b136c22d91956f04b061","274b83735d3c9eefeb429b49cdf06b36babe10b39285da767c1d581c0f1a2eeb","87790ad5b5a43c3353fc9ab9dd276f2421eb86743d84bfe43cf21db50bde2737","37ba7ab33a1aad42d0522d95e2e9361b1b4a5467517a78e96959690e6e90ae4a","003a72fbeac452cdc38bd3d52335a769f02ddbcb5c29922e0110174ea8b95918","6a187659a3861944b58534fbc26d6f907a80efc3ad271d92b4de186dca54da5e","f446c82add38658de2d3e5d2191e8db2f7023477bbfbdad85daeb4b003de7729","1715cba227657b8b8f058e1f47950cf35fabc9a309cda39e2b2da7a48b10cbdf","060acd0ee8100f169ae2dbbe08fcd50c088161d07535011468dfaf748c5262a8","a9dbc2fd0cc34c912562c9cbe5050898057cdf278a429ecde6ae23ed1526642d","158bae6d0bfb0aea144246f96a3e2c52734f7d43a886ad0ec9e2420ea515e54b"};
-            string[] relocated={"2570ea9c7a8d599848532b7ff5193fa159b9f5b422aa8cf104aac70bb768bd16","cee6a83f010712728462668e9e200d7af6a88c0a4242aa84f9bad01d76caf358","8a543b6c15d920740c74099caf9a39f1ed0536e10b1f7cc8ff0a03797686d2f5","b277fa0be53248d603173b8a2a9a76b3983ff0fedc6a882fa1b332ad23ca38b0","b443f5e9f19c01229debce0cbf80c28b7ffcf23fb285f874bcb37d18bad48c78","c19e4e3f575d124a6ed8ed3344525986e0f331171cf1ae08ffabea0f1f1421bc","be5ac97a82d500fd3deb4bb2141d7954ba3d06bf3371d0040bc425b3e1959556","1296c3a7ca127f5fae2e9482069ff5d540971f6153761103c5002d521c957479","158351988f41f9d16d4460c1b01318fef594e4929345d510bd0e120fe97b98a1","326e70840d5c2dc204a521b1992222035e220b11c5b16773dc86e9a4663459b4","64abb841941e4d6fe18f16de43eb9f3048ae35b91686a63a01957330df136773","aa6f5966983bfdffbf6e8af0da2a44a21f562fb89d9547356820de908538dc24","0f43bd32405c34a73e3c29b8f28d5cdac53bdf9c368aca282559a177778aab04","f146791f508dc1f6f989311e6965667e5bf58c0f757c61330d8d7defacdea860","822a83b72e90eac28b2e0b44bf9ef3de6b7b82efed9abdcb72ccd22653f82e74","b193ec3f30696c6a36366c4aaae0b64d598b2de53a73a2c397f0eebb0de9c77d","91e136093eaabd605d634fd34dc8d176d1865a67aebeec9cee63b6d632a009f3","5c1942ddc4ec1dcf1cf9d7cc0cc05f5b7d4c3b975f51dd76a354e7f7da40f1e4","9e9f949dda3bce5dda467a708039f6a836b5254462cb19afd133ebd765fcb765","080869cb08b9e0418b1f0995545b249e04ddf340e229eaf2aa5d3509b747e9a4","0e4830df4951256209bb08d1baf2d784ef322b6a8954ca4fd1ae885203dc00c2"};
+            string[] names={"HE_InputA","HE_InputB","HE_HimorogiFragment","HE_Consumables","HE_LivingWeaponDigitNine","HE_LadderCommonLookup","HE_ProjectileElementInheritance","HE_SameTemplateUnloadResources","HE_SaltEventCatchup","HE_PostDefeatDamage","HE_PostDefeatRestore","HE_PostDefeatHealEvent","HE_PostDefeatHealScript","HE_InherentDirectElement","HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapNativeIdlePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate","HE_OrochiZeroLengthRay","HE_OrochiStalledInvalidRayExit","HE_SoulReleaseEligibility","HE_SoulReleaseFamiliarity","HE_SoulPurgeAttackFamiliarity","HE_SoulPurgeLuckFamiliarity"};
+            uint[] rvas={0x721044U,0x721099U,0x75185dU,0x751862U,0x715d4bU,0x73fa40U,0x7e2959U,0x8b1a10U,0x718950U,0x717caeU,0x70ece0U,0x70b180U,0x6ef439U,0x717f06U,0x8c536fU,0x8c5407U,0x7604e7U,0x760778U,0x9530baU,0x856565U,0x850a85U,0x7dcf10U,0x216ac7U,0x766455U,0x7e28a9U,0xa8aee0U,0xa8afebU};
+            int[] offsets={6144,7168,11264,13312,397312,59392,114688,71680,4160,86016,90112,94208,98304,122880,131072,135168,139264,143360,155648,172032,176128,262144,266240,93184,97280,95232,96256};
+            int[] capacities={1024,1024,1024,1024,32768,2048,4096,6144,960,4096,3072,1024,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,4096,1024,1024,1024,1024};
+            int[] lengths={734,734,971,1001,32458,1899,3192,5837,5,3150,1359,800,3789,1703,2931,3480,3920,3280,2973,3742,2943,2967,1370,276,117,112,112};
+            string[] original={"440fbe420c","440fbe470e","4584f6752d","83bf4c050000007424","498b7338410f2873f0","48895c2408","0f104d070f114f18","e80bff6d00","e8fbc4feff","4c8bb6b0050000","488bc4574154","e8fb5f0200","e872560c00","0f104c24300f114d88","8b461c4533e4","e854fde8ff","4885c00f8450030000","498b85c0000000","488b472048894328","f30f101517809900","f30f103517db9900","48895c2408","4d85c07566","4803c88339ff","833c08ff0f8490000000","4803c88339ff","4803c88339ff"};
+            string[] templates={"1aad459c3bbc7eaad1b5bf1b71997a0db306b23d139f8e30ef9a5d376ae182fa","75b1d388ffed4a55d7e1b8f35059c02e4e3664caeb997af7829302c701cb311a","a39bd07e5a12f76d8513d765ceb04013225ac3538fd0f9732b3402232e0b3e94","b61ccfde922a42e29706d0a7e782d923edbbd1e07283cb45df2b1a8a52245cb2","f74120f90430a500e0960a8daf8d967350a06f95878f2388e21264723b959ffe","bac1eef3a530116968962dd8ee12a3fa637a8c5c58e3cbe574b2b1cf7f38f742","8a6435503f2618f4afbaf7b1ebe8f73951e6eb039347438bde6e6f7d128959e7","5254effa7be5ccf6dafcf289d47a10dff0d84278b4cef6fe6c79f61304fd07a6","962dfa2976eac6776ef96c64ed943e5436206f78ca8112be72033601b540615d","3036fab63f6425883c59ff1a3539a8588c2b6328c7549fd585990817163153fc","51c06abbc7396d72194ce789d56b452293aed6fedb0fdd51cb3e6d06dca2ad92","d8aaab0f6a75df6d2322e4f3a328ca308a3eaf8b3fdd374d6f48b7a565d8cfbb","e8c58dc3e475b7688e005a37760cd7541c8d517e0098381442e17546063aab9a","a29254be3839c5f03ffcd4573ebc32fede64c26bfe34c18cd69ba3da92e21391","3c8d9bb28a1f373d0e2b5553616a46c5eb437a4aa1b1fc30c36382e954ecb79a","1963b4a7c601a6a41361fd6eb3cb6a33b2f1a96bdc6ebd61e2e9809206a4b38f","3981335e108180b4c1dffe31521ae1769285504bcb37a0db629edd2006cbb530","a7160e50fb21e381fdee84d4b3cde0bb83f9e1ae91b34801bba39d2275ac9bd0","4d456efc9336f3a162f2a6095688d1df9e4340cdccba939b462e37c49359b215","bc1beb18f69aec1dff11868bfa05e9e16abf00b93a476a2c547fbc919a9ccfab","ea1aeda3186d308c398f1b00dce42ef5849ab0dc9079283515fcbec0e7e1d40e","88df81c56f7457a3969ff045fc9b291740263c31b621fa549262fbfca852c9d6","5d92e5a517da359179c6e239bab7bf78cd6061ee15985650e1f2224a5829f8fb","d3f37e6fea993c610b975a1ab6397e01dc610112a000d99591ba6c80446b6b7c","e45d61b4a53e6450e58a9dc78f03731efa00407693dddb3dc6a1a0f0a623d6b1","eadfaf0bdfe94245430cc12cc434fc727a1698415b7e1dcafa2497cce20cf646","73926cf16b17e7a8b41beef58d5dbf07c0d07ab01aaf39b559b8f8771ff62a45"};
+            string[] fixups={"ae037cf84acf88c0f47fad71bfb81b51b53d166fbbcea6be91a61c0062d38b7a","b7f8cae83a973a7d19002f202d431c6fc11be2f1b6948a4bbd707c67df1c920f","ccc4899cff026b16e0c4143c1449502f6c5465b992a8068a829f8f08fc2ba14e","cf1035ca88cc901263ccf1b1c0f18202ccb9cc8c476a36dff01eae9d7c81e8e2","7ecb644865392d0a68c26c63d20ed0c18b8eafa1833aa2da3b5b08444ab06b6a","7987c1442ba07b4fd5801a987709564240f7cc0332c12cd8555483297d3b9415","85bd2643459e19693d5bf502450b54fa28fee1587c2ac4f76f6981e3d8b10dff","a98bb04d41bbbd63de08a57315766ce09f32a7a6bae65933bb28a51ce6d47a9b","e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","777883705f9546e4574539973769d8f1330a9201f1476156ee2878980af38581","8395e2b699f742078c4fc41b23b48f53b780604c4334b136c22d91956f04b061","d6bdede0a86e34067ba1ab9fa7bbadb25e132ea1783e3114e8f48a7d09bb2c86","274b83735d3c9eefeb429b49cdf06b36babe10b39285da767c1d581c0f1a2eeb","87790ad5b5a43c3353fc9ab9dd276f2421eb86743d84bfe43cf21db50bde2737","9bdafaa1e2b0be3c48e16228f07a6dd103ecde3262ff05c48ea05887c3fcb2a5","37ba7ab33a1aad42d0522d95e2e9361b1b4a5467517a78e96959690e6e90ae4a","003a72fbeac452cdc38bd3d52335a769f02ddbcb5c29922e0110174ea8b95918","6a187659a3861944b58534fbc26d6f907a80efc3ad271d92b4de186dca54da5e","f446c82add38658de2d3e5d2191e8db2f7023477bbfbdad85daeb4b003de7729","1715cba227657b8b8f058e1f47950cf35fabc9a309cda39e2b2da7a48b10cbdf","060acd0ee8100f169ae2dbbe08fcd50c088161d07535011468dfaf748c5262a8","7534c34945f2ab8cb70ac079afc0253efd8934d6c351489beb342e70aa2d8e4f","38e289a176a69a9c9efa2c88bb6aca6d981186689e88cfe4518140f70b923669","39faa7a75100f9bcc0e497cdb2301ada3a0ccf8f1aaf11a1688eaff44773adb3","158bae6d0bfb0aea144246f96a3e2c52734f7d43a886ad0ec9e2420ea515e54b","9d179b2f61c51101057f02e585104deec10725de8da855fff85208929f0ec266","de074791463474a6d55c89e056289547b1c034bda3994b5799db6f5a93da5b66"};
+            string[] relocated={"f9f6273ace5e3a601b1ad79d274ea7fa4b408baed4c61b7485ba7a9ccfb185f8","4ffba4e9f3ce0b871028c4a7c492802ca698058c105c607e3e94f0005ce6fb67","8a543b6c15d920740c74099caf9a39f1ed0536e10b1f7cc8ff0a03797686d2f5","b277fa0be53248d603173b8a2a9a76b3983ff0fedc6a882fa1b332ad23ca38b0","597da05cb5a4e263529774a5e4688a84e45f45733a81c7e533d442a51999991b","c19e4e3f575d124a6ed8ed3344525986e0f331171cf1ae08ffabea0f1f1421bc","be5ac97a82d500fd3deb4bb2141d7954ba3d06bf3371d0040bc425b3e1959556","1296c3a7ca127f5fae2e9482069ff5d540971f6153761103c5002d521c957479","158351988f41f9d16d4460c1b01318fef594e4929345d510bd0e120fe97b98a1","326e70840d5c2dc204a521b1992222035e220b11c5b16773dc86e9a4663459b4","64abb841941e4d6fe18f16de43eb9f3048ae35b91686a63a01957330df136773","96a320a96a04438cdb2f4e68e3d9f6304b6ee90dba4a59c187312a947b8c42df","aa6f5966983bfdffbf6e8af0da2a44a21f562fb89d9547356820de908538dc24","0f43bd32405c34a73e3c29b8f28d5cdac53bdf9c368aca282559a177778aab04","fb3e75e5077aa064acac57275ac871d5328a249cf7cee71e8a33b36e41cee6d6","f146791f508dc1f6f989311e6965667e5bf58c0f757c61330d8d7defacdea860","822a83b72e90eac28b2e0b44bf9ef3de6b7b82efed9abdcb72ccd22653f82e74","9014891a78798ab222383ca1003783da0bc8ff31bc45f8d0a0a49bc9c9be7cf5","91e136093eaabd605d634fd34dc8d176d1865a67aebeec9cee63b6d632a009f3","5c1942ddc4ec1dcf1cf9d7cc0cc05f5b7d4c3b975f51dd76a354e7f7da40f1e4","7784fc893dc557a7382289b368cefb8ed621efed8d3122dda0f6c89bfc373e60","7ba1fa462a1c951be0f9c231ee733db2d21873f30d9f4d943ed70a7a03de3fac","6b6e5f1d063da485bf4317a831ba21631c9cdbc098c8990092a6950b6caa1a1e","68c7283c8d434389abbc49e7f362cc91e07309e7ca0df7b342ae3ed062e92c56","0e4830df4951256209bb08d1baf2d784ef322b6a8954ca4fd1ae885203dc00c2","344e5a69383df952ab8f7ea6f3fbd69ec6ce5fad6827d2a58782d2e8ebaa26db","61e70f99daaba35b8fc3284c8dadebaaf30f201e96ff34b28cf4ee6248973e2a"};
             HookSpec hook=Profile.Hooks[index];
-            Require(Profile.Version=="1.0.0-beta.6.1.4" && hook.Name==names[selected] &&
+            Require(Profile.Version=="1.0.0-beta.6.2" && hook.Name==names[selected] &&
                 hook.Rva==rvas[selected] && hook.CodeOffset==offsets[selected] &&
                 hook.CodeCapacity==capacities[selected] && hook.Template.Length==lengths[selected] &&
                 BitConverter.ToString(hook.Original).Replace("-", "").ToLowerInvariant()==original[selected],
-                "Exact confirmed Beta6.1.4 item hook geometry: "+hook.Name);
-            Require(Sha256(hook.Template)==templates[selected],"Exact confirmed Beta6.1.4 item template: "+hook.Name);
+                "Exact confirmed Beta6.2 item hook geometry: "+hook.Name);
+            Require(Sha256(hook.Template)==templates[selected],"Exact confirmed Beta6.2 item template: "+hook.Name);
             using(MemoryStream bytes=new MemoryStream())
             using(BinaryWriter writer=new BinaryWriter(bytes))
             {
@@ -107,7 +107,7 @@ namespace HinoEnmaTool
                     writer.Write(fixup.Target); writer.Write(fixup.Next);
                 }
                 writer.Flush();
-                Require(Sha256(bytes.ToArray())==fixups[selected],"Exact Beta6.1.4 item relocation specification: "+hook.Name);
+                Require(Sha256(bytes.ToArray())==fixups[selected],"Exact Beta6.2 item relocation specification: "+hook.Name);
             }
             using(MemoryStream bytes=new MemoryStream())
             {
@@ -118,7 +118,7 @@ namespace HinoEnmaTool
                         byte[] payload=hook.Payload(module,at),jump=hook.Jump(module,at);
                         bytes.Write(payload,0,payload.Length); bytes.Write(jump,0,jump.Length);
                     }
-                Require(Sha256(bytes.ToArray())==relocated[selected],"Exact Beta6.1.4 item payload and entry at twelve layouts: "+hook.Name);
+                Require(Sha256(bytes.ToArray())==relocated[selected],"Exact Beta6.2 item payload and entry at twelve layouts: "+hook.Name);
             }
             return true;
         }
@@ -281,7 +281,7 @@ namespace HinoEnmaTool
                 { long a; Require(Checks.Inspect(Memory(true).Read, Module, out a) == HookState.Ours && a == Allocation, "Own state"); });
                 test("complete Beta 5.1 and Hotfix 1 remain read-only restart identities", delegate
                 {
-                    Require(Profile.Hooks.Length==84 && Profile.LegacyProfiles.Length==9,"Complete local and prior release identities");
+                    Require(Profile.Hooks.Length==86 && Profile.LegacyProfiles.Length==9,"Complete local and prior release identities");
                     int index=0; int[] counts={55,59,60,70,71,71,80,81,81}; int[] allocations={0x19000,0x1B000,0x20000,0x2D000,0x36000,0x36000,0x43000,0x43000,0x51000};
                     foreach(LegacyProfile previous in Profile.LegacyProfiles)
                     {
@@ -368,7 +368,7 @@ namespace HinoEnmaTool
                 test("all eleven menu entries require complete payloads and native sites", delegate
                 {
                     string[] names={"HE_MapVisualReadyPrivate","HE_MapVisualSpawnPrivate","HE_MapVisualResourcePrivate","HE_MapVisualRestorePrivate","HE_MapAppearancePrivate","HE_MapNativeIdlePrivate","HE_MapIdleSelectionPrivate","HE_MapLoadoutAppearancePrivate","HE_MapPreviewCameraDistancePrivate","HE_MapPreviewCameraHeightPrivate","HE_MapPreviewAuraCopiedHash"};
-                    Require(Profile.Hooks.Length==84,"Exact total execution build inventory");
+                    Require(Profile.Hooks.Length==86,"Exact total execution build inventory");
                     for(int i=60;i<71;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
@@ -385,8 +385,8 @@ namespace HinoEnmaTool
                 test("all ten execution entries are required and preserve the previous71 profile", delegate
                 {
                     string[] names={"HE_OrochiHeavyTransition","HE_OrochiWeaponBankRead","HE_OrochiWeaponMotionRead","HE_OrochiWeaponMotionPresence","HE_OrochiWeaponEventRead","HE_OrochiWeaponBlendPresence","HE_OrochiWeaponBlendRead","HE_OrochiZeroLengthRay","HE_OrochiStalledInvalidRayExit","HE_OrochiPendingLivingWeaponGuard"};
-                    Require(Profile.Hooks.Length==84,"Exact complete execution inventory");
-                    Require(VerifiedCurrentItem(82) && VerifiedCurrentItem(83),"Both owned Soul Release native views match their tested identities");
+                    Require(Profile.Hooks.Length==86,"Exact complete execution inventory");
+                    Require(VerifiedCurrentItem(82) && VerifiedCurrentItem(83) && VerifiedCurrentItem(84) && VerifiedCurrentItem(85),"All owned Soul Release/Purge native views match their tested identities");
                     for(int i=71;i<81;i++)
                     {
                         HookSpec hook=Profile.Hooks[i];
@@ -421,7 +421,7 @@ namespace HinoEnmaTool
                     for(int i=0;i<71;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta532.Hooks[i];
-                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==0xC00 && old.CodeCapacity==0x1000 : current.CodeCapacity==old.CodeCapacity)),"Previous hook slot identity");
+                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==(i==53 ? 0x400 : 0xC00) && old.CodeCapacity==0x1000 : current.CodeCapacity==old.CodeCapacity)),"Previous hook slot identity");
                         if(VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Previous encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
@@ -450,7 +450,7 @@ namespace HinoEnmaTool
                     for(int i=0;i<60;i++)
                     {
                         HookSpec current=Profile.Hooks[i],old=beta52.Hooks[i];
-                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==0xC00 && old.CodeCapacity==0x1000 : current.CodeCapacity==old.CodeCapacity)),"Original slot identity");
+                        Require(current.Name==old.Name && current.Rva==old.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==old.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==(i==53 ? 0x400 : 0xC00) && old.CodeCapacity==0x1000 : current.CodeCapacity==old.CodeCapacity)),"Original slot identity");
                         if(VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39) continue;
                         Require(Checks.Equal(current.Template,old.Template) && Checks.Equal(current.Original,old.Original) && current.Fixups.Length==old.Fixups.Length,"Original encoded template");
                         for(int f=0;f<current.Fixups.Length;f++)
@@ -470,8 +470,8 @@ namespace HinoEnmaTool
                     for(int i=0;i<81;i++)
                     {
                         HookSpec current=Profile.Hooks[i],prior=old.Hooks[i];
-                        Require(current.Name==prior.Name && current.Rva==prior.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==prior.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==0xC00 && prior.CodeCapacity==0x1000 : current.CodeCapacity==prior.CodeCapacity)) && Checks.Equal(current.Original,prior.Original),"Every previous native and scoped private slot identity");
-                        bool changed=VerifiedCurrentItem(i) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
+                        Require(current.Name==prior.Name && current.Rva==prior.Rva && (i==36 ? current.CodeOffset==0x61000 && current.CodeCapacity==0x8000 : current.CodeOffset==prior.CodeOffset && (i==52 || i==53 ? current.CodeCapacity==(i==53 ? 0x400 : 0xC00) && prior.CodeCapacity==0x1000 : current.CodeCapacity==prior.CodeCapacity)) && Checks.Equal(current.Original,prior.Original),"Every previous native and scoped private slot identity");
+                        bool changed=(VerifiedCurrentItem(i) && i!=53) || i==1 || i==8 || i==9 || i==15 || i==36 || i==37 || i==38 || i==39 || i==70 || (i>=72 && i<=77);
                         Require(Checks.Equal(current.Template,prior.Template)!=changed,"Only reviewed lifetime, LW and growth bodies differ");
                         foreach(long module in new long[]{Module,0x7FF83AA00000})
                             foreach(int slot in new int[]{0,37,511})
